@@ -24,5 +24,12 @@ namespace HumanResourcesManagement.Controllers
             var users = _userService.GetAllUsers();
             return Ok(users);
         }
+
+        [HttpGet]
+        public IActionResult GetAllUsers2()
+        {
+            var users = _userService.GetAllUsers();
+            return Ok(users);
+        }
     }
 }
