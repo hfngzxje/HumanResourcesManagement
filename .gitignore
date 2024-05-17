@@ -1,0 +1,9 @@
+# Thư mục và file tạm thời của Visual Studio
+.vs/
+*.user
+*.suo
+
+# Các file build
+**/obj/
+**/bin/
+**/.vs/
