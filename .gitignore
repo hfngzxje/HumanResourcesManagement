@@ -2,6 +2,7 @@
 .vs/
 *.user
 *.suo
+.vs/
 
 # Các file build
 **/obj/
