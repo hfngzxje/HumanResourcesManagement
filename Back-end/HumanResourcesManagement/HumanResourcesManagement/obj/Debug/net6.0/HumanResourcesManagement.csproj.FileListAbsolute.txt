@@ -5,6 +5,8 @@ D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesMana
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\HumanResourcesManagement.runtimeconfig.json
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\HumanResourcesManagement.dll
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\HumanResourcesManagement.pdb
+D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\AutoMapper.dll
+D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\Humanizer.dll
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
@@ -53,6 +55,7 @@ D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesMana
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\HumanResourcesManagement.csproj.CoreCompileInputs.cache
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\HumanResourcesManagement.MvcApplicationPartsAssemblyInfo.cs
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\HumanResourcesManagement.MvcApplicationPartsAssemblyInfo.cache
+D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\HumanResourcesManagement.sourcelink.json
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\staticwebassets.build.json
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\staticwebassets.development.json
 D:\HumanResourcesManagement\Back-end\HumanResourcesManagement\HumanResourcesManagement\obj\Debug\net6.0\staticwebassets\msbuild.HumanResourcesManagement.Microsoft.AspNetCore.StaticWebAssets.props

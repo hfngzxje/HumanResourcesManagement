@@ -3,6 +3,7 @@ using HumanResourcesManagement.Service.IService;
 using HumanResourcesManagement.Service;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using HumanResourcesManagement.Models;
+using HumanResourcesManagement.Config.Mapper;
 
 public class Program
 {
@@ -11,7 +12,10 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<INhanVienService, NhanVienService>();
 
+
+        builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
         builder.Services.AddSession(options =>
         {
