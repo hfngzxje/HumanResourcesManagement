@@ -9,7 +9,6 @@ namespace HumanResourcesManagement.Config.Mapper
     {
         public NhanVienMapper()
         {
-            CreateMap<NhanVienRequest, TblNhanVien>();
 
             CreateMap<NhanVienRequest, TblNhanVien>()
                 .ForMember(dest => dest.Ma, opt => opt.Ignore());
