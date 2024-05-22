@@ -62,5 +62,55 @@ namespace HumanResourcesManagement.Service
             _context.TblNhanViens.Remove(existingNhanVien);
             _context.SaveChanges();
         }
+
+        public TblDanhMucDanToc GetDanTocById(int id)
+        {
+            var danToc = _context.TblDanhMucDanTocs.Find(id);
+            if (danToc == null)
+            {
+                throw new Exception("ID dân tộc không tồn tại");
+            }
+            return danToc;
+        }
+
+        public TblDanhMucNgachCongChuc GetNgachCongChucById(int id)
+        {
+            var congChuc = _context.TblDanhMucNgachCongChucs.Find(id);
+            if (congChuc == null)
+            {
+                throw new Exception("ID công chức không tồn tại");
+            }
+            return congChuc;
+        }
+
+        public TblDanhMucTo GetToById(int id)
+        {
+            var to = _context.TblDanhMucTos.Find(id);
+            if (to == null)
+            {
+                throw new Exception("ID tổ không tồn tại");
+            }
+            return to;
+        }
+
+        public TblDanhMucPhongBan GetPhongBanById(int id)
+        {
+            var phong = _context.TblDanhMucPhongBans.Find(id);
+            if (phong == null)
+            {
+                throw new Exception("ID Phòng không tồn tại");
+            }
+            return phong;
+        }
+
+        public TblDanhMucTonGiao GetTonGiaoById(int id)
+        {
+            var tonGiao = _context.TblDanhMucTonGiaos.Find(id);
+            if (tonGiao == null)
+            {
+                throw new Exception("ID tôn giáo không tồn tại");
+            }
+            return tonGiao;
+        }
     }
 }

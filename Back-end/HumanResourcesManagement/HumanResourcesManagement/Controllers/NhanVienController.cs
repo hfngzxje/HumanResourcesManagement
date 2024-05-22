@@ -63,5 +63,79 @@ namespace HumanResourcesManagement.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+        [HttpGet("getDanTocById/{id}")]
+        public IActionResult GetDanTocById(int id)
+        {
+            try
+            {
+                var danToc = _nhanVienService.GetDanTocById(id);
+                return Ok(danToc);
+            }catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
+
+        [HttpGet("getTonGiaoById/{id}")]
+        public IActionResult GetTonGiaoById(int id)
+        {
+            try
+            {
+                var tonGiao = _nhanVienService.GetTonGiaoById(id);
+                return Ok(tonGiao);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
+
+        [HttpGet("getNgachCongChucById/{id}")]
+        public IActionResult GetNgachCongChucById(int id)
+        {
+            try
+            {
+                var congChuc = _nhanVienService.GetNgachCongChucById(id);
+                return Ok(congChuc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
+
+        [HttpGet("getPhongById/{id}")]
+        public IActionResult GetPhongById(int id)
+        {
+            try
+            {
+                var phong = _nhanVienService.GetPhongBanById(id);
+                return Ok(phong);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
+
+        [HttpGet("getToById/{id}")]
+        public IActionResult GetToById(int id)
+        {
+            try
+            {
+                var to = _nhanVienService.GetToById(id);
+                return Ok(to);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
     }
 }
