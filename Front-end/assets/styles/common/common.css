@@ -1,7 +1,9 @@
 * {
-    margin: 0;
+  margin: 0;
 }
-
-.zIndexSideBar {
-    z-index: 1;
+.zIndexSideBar{
+  z-index: 2;
+}
+.zIndexBody{
+  z-index: 1;
 }
