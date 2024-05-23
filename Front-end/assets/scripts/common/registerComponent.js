@@ -45,7 +45,7 @@ class CustomSidebar extends HTMLElement {
               >
             </div>
           </div>
-          <div class="border-b border-gray-200">
+          <div class="border-b border-gray-200 ">
             <div
             class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu1"">
               <span class="w-10">
