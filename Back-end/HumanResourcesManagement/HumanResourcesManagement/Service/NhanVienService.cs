@@ -171,5 +171,15 @@ namespace HumanResourcesManagement.Service
             }
             return chucVu;
         }
+
+        public TblNhanVien GetNhanVienByMa(string ma)
+        {
+            var nv = _context.TblNhanViens.Find(ma);
+            if (nv == null)
+            {
+                throw new KeyNotFoundException("not found");
+            }
+            return nv;
+        }
     }
 }
