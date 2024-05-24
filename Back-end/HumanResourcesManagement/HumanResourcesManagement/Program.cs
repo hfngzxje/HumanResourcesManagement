@@ -14,6 +14,7 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<INhanVienService, NhanVienService>();
         builder.Services.AddScoped<INguoiThanService, NguoiThanService>();
+        builder.Services.AddScoped<IHopDongService, HopDongService>();
 
 
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
