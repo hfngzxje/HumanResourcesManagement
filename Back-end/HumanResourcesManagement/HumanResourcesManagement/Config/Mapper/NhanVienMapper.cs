@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using System.Net;
 
@@ -12,6 +13,8 @@ namespace HumanResourcesManagement.Config.Mapper
 
             CreateMap<NhanVienRequest, TblNhanVien>()
                 .ForMember(dest => dest.Ma, opt => opt.Ignore());
+
+            CreateMap<TblNhanVien, NhanVienResponse>();
         }
     }
 }

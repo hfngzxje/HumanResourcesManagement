@@ -50,6 +50,21 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpGet("id")]
+        public IActionResult GetNhanVienById(string id)
+        {
+            try
+            {
+                var nhanVien = _nhanVienService.GetNhanVienById(id);
+                return Ok(nhanVien);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+
         [HttpDelete("xoaNhanVien/{id}")]
         public IActionResult DeleteNhanVien(string id)
         {
@@ -130,6 +145,21 @@ namespace HumanResourcesManagement.Controllers
             {
                 var to = _nhanVienService.GetToById(id);
                 return Ok(to);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+
+            }
+        }
+
+        [HttpGet("getChucVuById/{id}")]
+        public IActionResult getChucVuById(int id)
+        {
+            try
+            {
+                var chucVu = _nhanVienService.GetChucVuById(id);
+                return Ok(chucVu);
             }
             catch (Exception ex)
             {

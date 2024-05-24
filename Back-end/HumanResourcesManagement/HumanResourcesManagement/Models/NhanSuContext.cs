@@ -510,9 +510,7 @@ namespace HumanResourcesManagement.Models
                     .HasColumnName("bhyt")
                     .IsFixedLength();
 
-                entity.Property(e => e.Chucvuhientai)
-                    .HasMaxLength(50)
-                    .HasColumnName("chucvuhientai");
+                entity.Property(e => e.Chucvuhientai).HasColumnName("chucvuhientai");
 
                 entity.Property(e => e.Cmnd)
                     .HasMaxLength(9)

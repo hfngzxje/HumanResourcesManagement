@@ -27,7 +27,7 @@ namespace HumanResourcesManagement.Models
         public int? Dantoc { get; set; }
         public int? Tongiao { get; set; }
         public string? Nghenghiep { get; set; }
-        public string? Chucvuhientai { get; set; }
+        public int? Chucvuhientai { get; set; }
         public DateTime? Ngaytuyendung { get; set; }
         public string? Congviecchinh { get; set; }
         public DateTime? Ngayvaoban { get; set; }

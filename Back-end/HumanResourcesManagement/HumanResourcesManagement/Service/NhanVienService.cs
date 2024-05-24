@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 
@@ -15,10 +16,36 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper;
         }
 
-        public List<TblNhanVien> GetAllNhanVien()
+        public List<NhanVienResponse> GetAllNhanVien()
         {
-            return _context.TblNhanViens.ToList();
+            var nhanViens = _context.TblNhanViens.ToList();
+            if (!nhanViens.Any())
+            {
+                throw new Exception("List không có nhân viên nào!!");
+            }
+
+            var nhanVienResponses = new List<NhanVienResponse>();
+
+            foreach (var nhanVien in nhanViens)
+            {
+                var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
+                var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
+                var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
+                var to = _context.TblDanhMucTos.Find(nhanVien.To);
+
+                var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
+
+                nhanVienResponse.tenDantoc = danToc?.Ten;
+                nhanVienResponse.tenTongiao = tonGiao?.Ten;
+                nhanVienResponse.tenPhong = phong?.Ten;
+                nhanVienResponse.tenTo = to?.Ten;
+
+                nhanVienResponses.Add(nhanVienResponse);
+            }
+
+            return nhanVienResponses;
         }
+
 
         public void AddNhanVien(NhanVienRequest request)
         {
@@ -111,6 +138,38 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("ID tôn giáo không tồn tại");
             }
             return tonGiao;
+        }
+
+        public NhanVienResponse  GetNhanVienById(string id)
+        {
+            var nhanVien = _context.TblNhanViens.Find(id);
+            if (nhanVien == null)
+            {
+                throw new Exception("ID không tồn tại!");
+            }
+
+            var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
+            var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
+            var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
+            var to = _context.TblDanhMucTos.Find(nhanVien.To);
+
+            var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
+            nhanVienResponse.tenDantoc = danToc?.Ten;
+            nhanVienResponse.tenTongiao = tonGiao?.Ten;
+            nhanVienResponse.tenPhong = phong?.Ten;
+            nhanVienResponse.tenTo = to?.Ten;
+
+            return nhanVienResponse;
+        }
+
+        public TblDanhMucChucDanh GetChucVuById(int id)
+        {
+            var chucVu = _context.TblDanhMucChucDanhs.Find(id);
+            if (chucVu == null)
+            {
+                throw new Exception("ID chức vụ không tồn tại");
+            }
+            return chucVu;
         }
     }
 }

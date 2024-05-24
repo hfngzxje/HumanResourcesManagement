@@ -57,7 +57,7 @@ namespace HumanResourcesManagement.Models
 
         public string? Nghenghiep { get; set; }
 
-        public string? Chucvuhientai { get; set; }
+        public int? Chucvuhientai { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? Ngaytuyendung { get; set; }
