@@ -45,12 +45,15 @@ namespace HumanResourcesManagement.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetConnectionString("MyDB"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("server =(local); database = NhanSu; uid=sa;pwd=123456;Trusted_Connection=True;Encrypt=False");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
             modelBuilder.Entity<TblDanhMucChucDanh>(entity =>
             {
                 entity.ToTable("tblDanhMucChucDanh");
@@ -131,6 +134,26 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucKhenThuongKyLuat");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Khenthuongkiluat).HasColumnName("khenthuongkiluat");
+
+                entity.Property(e => e.Lido)
+                    .HasMaxLength(100)
+                    .HasColumnName("lido");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ngay)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ngay");
+
+                entity.Property(e => e.Noidung)
+                    .HasMaxLength(100)
+                    .HasColumnName("noidung");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
