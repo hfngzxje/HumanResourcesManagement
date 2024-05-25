@@ -1,0 +1,7 @@
+* {
+    margin: 0;
+}
+
+.zIndexSideBar {
+    z-index: 1;
+}
