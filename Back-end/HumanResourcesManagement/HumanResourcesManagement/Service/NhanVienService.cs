@@ -40,7 +40,7 @@ namespace HumanResourcesManagement.Service
                 nhanVienResponse.tenTongiao = tonGiao?.Ten;
                 nhanVienResponse.tenPhong = phong?.Ten;
                 nhanVienResponse.tenTo = to?.Ten;
-                nhanVienResponse.Chucvuhientai = to?.Ten;
+                nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
 
                 nhanVienResponses.Add(nhanVienResponse);
             }
@@ -161,7 +161,7 @@ namespace HumanResourcesManagement.Service
             nhanVienResponse.tenTongiao = tonGiao?.Ten;
             nhanVienResponse.tenPhong = phong?.Ten;
             nhanVienResponse.tenTo = to?.Ten;
-            nhanVienResponse.Chucvuhientai = to?.Ten;
+            nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
 
             return nhanVienResponse;
         }
