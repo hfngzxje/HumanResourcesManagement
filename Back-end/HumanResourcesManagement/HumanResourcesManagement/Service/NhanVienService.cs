@@ -32,6 +32,7 @@ namespace HumanResourcesManagement.Service
                 var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
                 var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
                 var to = _context.TblDanhMucTos.Find(nhanVien.To);
+                var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
 
                 var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
 
@@ -39,6 +40,7 @@ namespace HumanResourcesManagement.Service
                 nhanVienResponse.tenTongiao = tonGiao?.Ten;
                 nhanVienResponse.tenPhong = phong?.Ten;
                 nhanVienResponse.tenTo = to?.Ten;
+                nhanVienResponse.Chucvuhientai = to?.Ten;
 
                 nhanVienResponses.Add(nhanVienResponse);
             }
@@ -152,12 +154,14 @@ namespace HumanResourcesManagement.Service
             var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
             var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
             var to = _context.TblDanhMucTos.Find(nhanVien.To);
+            var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
 
             var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
             nhanVienResponse.tenDantoc = danToc?.Ten;
             nhanVienResponse.tenTongiao = tonGiao?.Ten;
             nhanVienResponse.tenPhong = phong?.Ten;
             nhanVienResponse.tenTo = to?.Ten;
+            nhanVienResponse.Chucvuhientai = to?.Ten;
 
             return nhanVienResponse;
         }
