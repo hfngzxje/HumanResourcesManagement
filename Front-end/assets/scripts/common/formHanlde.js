@@ -52,3 +52,36 @@ function getFormValues(formId) {
 
   return formData;
 }
+
+function setFormValue(formId, formValue) {
+  var form = document.getElementById(formId);
+
+  if (!form) {
+    console.error("Form not found");
+    return null;
+  }
+
+  var elements = form.querySelectorAll("input, select, textarea");
+
+  elements.forEach(element => {
+    const name = element.name
+
+    if (!(name in formValue)) return
+
+    const defaultValue = formValue[name]
+
+    if (element.tagName === 'INPUT') {
+      if (element.type === "radio") {
+        element.checked = element.value === defaultValue
+      } else if (element.type === "checkbox") {
+        element.checked = defaultValue
+      } else {
+        element.value = defaultValue
+      }
+      return
+    }
+
+    element.value = defaultValue
+
+  })
+}
