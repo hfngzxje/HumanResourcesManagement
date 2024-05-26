@@ -167,5 +167,47 @@ namespace HumanResourcesManagement.Controllers
 
             }
         }
+
+        [HttpGet("danToc")]
+        public IActionResult GetAllDanToc()
+        {
+            var danToc = _nhanVienService.GetAllDanToc();
+            return Ok(danToc);
+        }
+
+        [HttpGet("tonGiao")]
+        public IActionResult GetAllTonGiao()
+        {
+            var tonGiao = _nhanVienService.GetAllTonGiao();
+            return Ok(tonGiao);
+        }
+
+        [HttpGet("chucDanh")]
+        public IActionResult GetAllChucDanh()
+        {
+            var chucDanh = _nhanVienService.GetAllChucDanh();
+            return Ok(chucDanh);
+        }
+
+        [HttpGet("ngachCongChuc")]
+        public IActionResult GetAllNgachCongChuc()
+        {
+            var ngachCongChuc = _nhanVienService.GetAllNgachCongChuc();
+            return Ok(ngachCongChuc);
+        }
+
+        [HttpGet("phong")]
+        public IActionResult GetAllPhong()
+        {
+            var phong = _nhanVienService.GetAllPhong();
+            return Ok(phong);
+        }
+
+        [HttpGet("to")]
+        public IActionResult GetAllTo()
+        {
+            var to = _nhanVienService.GetAllTo();
+            return Ok(to);
+        }
     }
 }
