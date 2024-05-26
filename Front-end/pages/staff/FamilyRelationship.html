@@ -1,32 +1,237 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" xmlns="">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Quan hệ gia đình</title>
+    <title>Sơ yếu lý lịch</title>
 </head>
 
 <body class="text-gray-600">
     <div class="h-screen w-screen flex flex-col overflow-auto ">
-        <layout-header></layout-header>
+        <layout-header class="box"></layout-header>
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="flex-1 bg-gray-200 p-3">
-                <div class="h-full w-full bg-white rounded-lg p-3">
-                    <div class="flex justify-between">
-                        <p class="text-xl">Quan hệ gia đình</p>
+            <div class="flex-1 bg-gray-200 p-3 overflow-auto ">
+                <div class="h-fit w-full bg-white rounded-lg p-3">
+                    <div class="flex border-b border-solid pb-3">
+                        <div class="w-[300px]">
+                            <span class="text-gray-400">Mã số: </span>
+                            <span class="text-gray-700 text-xl font-medium">
+                                <!-- Mã -->
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Họ tên: </span>
+                            <span class="text-gray-700 text-xl font-me">
+                                <!-- Điền tên  -->
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+                    </div>
+                    <div class="mt-3">
+                        <div id="content_1" class="tabContent">
+                            <div class="flex gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                                    <base-input class="col-span-2" label="Họ và tên"></base-input>
+                                    <base-datepicker label="Ngày sinh"> </base-datepicker>
+                                    <base-input-phone label="Số điện thoại"></base-input-phone>
+                                    <div>
+                                        <label-form-item name="Giới tính"></label-form-item>
+                                        <div class="flex gap-5">
+                                            <base-radio label="Nam"></base-radio>
+                                            <base-radio label="Nữ"></base-radio>
+                                        </div>
+                                    </div>
+                                    <base-input-phone label="Di động"></base-input-phone>
+                                    <base-input-number label="CMND"></base-input-number>
+                                    <base-datepicker label="Ngày cấp"> </base-datepicker>
+                                    <base-input class="col-span-2" label="Nơi sính"></base-input>
+                                    <base-input class="col-span-2" label="Quê quán"></base-input>
+                                    <base-input label="Nghề nghiệp"></base-input>
+                                    <base-datepicker label="Ngày tuyển dụng"> </base-datepicker>
+                                    <base-input class="col-span-2" label="Chức vụ hiện tại"></base-input>
+                                    <base-input label="Cơ quan tuyển dụng"></base-input>
+                                    <base-select label="Nghạch công chức"></base-select>
+                                    <base-datepicker label="Ngày vào đảng"> </base-datepicker>
+                                    <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội">
+                                    </base-datepicker>
+                                    <base-input class="col-span-2" label="Nơi tham gia"></base-input>
+                                    <div class="col-span-2 flex items-center gap-x-5">
+                                        <base-checkbox label="Là thương binh hạng" class="!mb-0"></base-checkbox>
+                                        <base-input class="flex-1" hide-label="true"></base-input>
+                                    </div>
+                                    <base-input label="Mã số BHXH"></base-input>
+                                    <base-input label="Mã số BHYT"></base-input>
+                                </div>
+                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
+                                    <div class="col-span-1 flex flex-col gap-y-2">
+                                        <base-select label="Tình trạng hôn nhân"></base-select>
+                                        <base-select label="Dân tộc"></base-select>
+                                        <base-select label="Tôn giáo"></base-select>
+                                        <base-select label="Nơi cấp"></base-select>
+                                    </div>
+                                    <div class="col-span-1 h-[300px]">
+                                        <base-upload />
+                                    </div>
+                                    <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường chú"></base-input>
+                                    <base-input class="col-span-2" label="Nơi ở hiện nay"></base-input>
+                                    <base-input class="col-span-2" label="Công việc chính"></base-input>
+                                    <base-datepicker label="Ngày vào ban">
+                                    </base-datepicker>
+                                    <base-datepicker label="Ngày công tác">
+                                    </base-datepicker>
+                                    <base-datepicker label="Ngày nhập ngũ"> </base-datepicker>
+                                    <base-datepicker label="Ngày xuất ngũ"> </base-datepicker>
+                                    <base-input class="col-span-2" label="Quân hàm cao nhất"></base-input>
+                                    <base-input class="col-span-2"
+                                        label="Danh hiệu được phong tặng cao nhất"></base-input>
+                                    <div class="col-span-2 flex items-center gap-x-5">
+                                        <base-checkbox label="Là con gia đình chính sách" class="!mb-0"></base-checkbox>
+                                        <base-input class="flex-1" hide-label="true"></base-input>
+                                    </div>
+                                    <base-input label="Số thẻ ATM"></base-input>
+                                    <base-input label="Ngân hàng"></base-input>
+                                </div>
+                            </div>
+                            <div class="flex gap-x-5 mt-5 justify-end">
+                                <base-button label="Thêm" icon="bx bx-plus" type="green"></base-button>
+                                <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
+                                <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                                <base-button label="Lưu" icon="bx bx-save"></base-button>
+                                <base-button label="In" icon="bx bx-printer" type="plain"></base-button>
+                            </div>
+                        </div>
+                        <div id="content_2" class="tabContent hidden">
+                        </div>
+                        <div id="content_3" class="tabContent hidden">3</div>
+
+
+                        <div id="content_4" class="tabContent hidden">
+                            <div class="flex gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                                    <base-input class="col-span-1" label="Họ và tên"></base-input>
+                                    <div>
+                                        <label-form-item name="Giới tính"></label-form-item>
+                                        <div class="flex gap-5">
+                                            <base-radio label="Nam"></base-radio>
+                                            <base-radio label="Nữ"></base-radio>
+                                        </div>
+                                    </div>
+                                    <base-select label="Quan hệ"></base-select>
+                                    <base-input class="col-span-1" label="Nghề nghiệp"></base-input>
+                                </div>
+                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
+                                    <base-datepicker label="Ngày sinh" style="border: 50%;"> </base-datepicker>
+                                    <base-input-phone label="Số điện thoại"></base-input-phone>
+                                    <base-input class="col-span-2" label="Địa chỉ"></base-input>
+                                    <base-input class="col-span-4" label="Thông tin khác"></base-input>
+                                </div>
+                            </div>
+                            <div class="flex gap-x-5 mt-5 justify-end">
+                                <base-button label="Thêm" icon="bx bx-plus" type="green"></base-button>
+                                <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
+                                <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                                <base-button label="Lưu" icon="bx bx-save"></base-button>
+                                <base-button label="In" icon="bx bx-printer" type="plain"></base-button>
+                            </div>
+                            <div class="flex justify-between" style="color: blue; margin-top: 5%;">
+                                <p class="text-xl">Danh sách người thân</p>
+                            </div>
+                            <div class="overflow-x-auto mt-4">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Họ và tên
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Giới tính
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Quan hệ
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Nghề nghiệp
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Ngày sinh
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Số điện thoại
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Địa chỉ
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Thông tin khác
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="family-relationship-list" class="bg-white divide-y divide-gray-200">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-6 flex justify-end">
+                                <nav aria-label="Page navigation example">
+                                    <ul class="inline-flex -space-x-px text-sm">
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 ">Previous</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">3</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">4</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">5</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 ">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+
+                        <div id="content_5" class="tabContent hidden">5</div>
+                        <div id="content_6" class="tabContent hidden">6</div>
+                        <div id="content_7" class="tabContent hidden">7</div>
+                        <div id="content_8" class="tabContent hidden">8</div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="../../assets/scripts/pages/staff/FamilyRelationship.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/pages/staff/FamilyRelationship.js"></script>
 </body>
 
-</html> -->
+</html>
