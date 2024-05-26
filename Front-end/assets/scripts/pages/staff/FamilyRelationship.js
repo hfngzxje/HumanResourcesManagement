@@ -148,17 +148,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
 
 // Function to render a row in the family relationship table
 function renderFamilyRow(person) {
+    const formattedNgaySinh = formatDate(person.ngaysinh);
     const row = document.createElement('tr');
     row.innerHTML = `
         <td class="px-6 py-3">${person.ten}</td>
         <td class="px-6 py-3">${person.gioitinh ? 'Nam' : 'Nữ'}</td>
-        <td class="px-6 py-3">${person.quanhe}</td>
+        <td class="px-6 py-3">${person.quanheTen}</td>
         <td class="px-6 py-3">${person.nghenghiep}</td>
-        <td class="px-6 py-3">${person.ngaysinh}</td>
+        <td class="px-6 py-3">${formattedNgaySinh}</td>
         <td class="px-6 py-3">${person.dienthoai}</td>
         <td class="px-6 py-3">${person.diachi}</td>
         <td class="px-6 py-3">${person.khac}</td>
@@ -227,51 +234,18 @@ function renderFamilyRelationship(data) {
 
 
 
-
-
-
-
-
-// Function to handle click on "Thêm" button
-function handleAddButtonClick() {
-    // Lấy giá trị từ các ô input
-    const hoTen = document.querySelector('base-input[label="Họ và tên"]').value;
-    const gioiTinh = document.querySelector('input[name="gioitinh"]:checked').value;
-    const quanHe = document.querySelector('base-select[label="Quan hệ"]').value;
-    const ngaySinh = document.querySelector('base-datepicker[label="Ngày sinh"]').value;
-    const soDienThoai = document.querySelector('base-input-phone[label="Số điện thoại"]').value;
-    const diaChi = document.querySelector('base-input[label="Địa chỉ"]').value;
-
-    // Tạo một đối tượng chứa dữ liệu quan hệ gia đình
-    const newRelationship = {
-        hoTen: hoTen,
-        gioiTinh: gioiTinh,
-        quanHe: quanHe,
-        ngaySinh: ngaySinh,
-        soDienThoai: soDienThoai,
-        diaChi: diaChi
-    };
-
-    // Gửi dữ liệu lên máy chủ thông qua yêu cầu POST
-    fetch('https://localhost:7141/api/NguoiThan/addNguoiThan', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newRelationship)
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            // Nếu thành công, hiển thị thông báo alert
-            alert('Thêm mới quan hệ thành công');
-            // Refresh danh sách quan hệ gia đình
-            getFamilyRelationship(maNV);
-        })
-        .catch(error => {
-            console.error('Error adding family relationship:', error);
-            // Nếu xảy ra lỗi, hiển thị thông báo alert khác
-            alert('Thêm mới quan hệ thất bại');
-        });
-}
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const maNV = params.get('maNV');
+    if (maNV) {
+        getFamilyRelationship(maNV)
+            .then(data => {
+                renderFamilyRelationship(data);
+            })
+            .catch(error => {
+                console.error('Error getting family relationship data:', error);
+            });
+    } else {
+        console.error('Employee ID not found in URL');
+    }
+});
