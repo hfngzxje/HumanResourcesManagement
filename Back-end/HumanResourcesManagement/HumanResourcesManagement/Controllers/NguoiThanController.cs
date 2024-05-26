@@ -20,7 +20,15 @@ namespace HumanResourcesManagement.Controllers
             _context = context;
         }
 
+        //get danh muc nguoi than
+        [HttpGet("getDanhMucNguoiThan")]
+        public async Task<IActionResult> GetDanhMucNguoiThan()
+        {
 
+            var danhMuc = await _nguoiThanService.GetDanhMucNguoiThan();
+            return Ok(danhMuc);
+
+        }
 
         //get nhan vien by ma
         [HttpGet("getNguoiThanByMaNV/{maNV}")]
