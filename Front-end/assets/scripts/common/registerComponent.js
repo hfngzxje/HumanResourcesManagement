@@ -258,28 +258,29 @@ class CustomSidebar extends HTMLElement {
     }
 }
 class BaseInput extends HTMLElement {
-    static observedAttributes = ["label", "hide-label"];
+    static observedAttributes = ["label", "hide-label", "name"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
         const hideLabel = !this.getAttribute("hide-label");
+        const name = this.getAttribute("name");
 
         this.innerHTML = `
     <div class="">
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${
-        hideLabel ? "" : "hidden"
+      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
       }">${label}</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
     }
 }
 
 class BaseDatePicker extends HTMLElement {
-    static observedAttributes = ["label"];
+    static observedAttributes = ["label", "name"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
+        const name = this.getAttribute("name")
 
         this.innerHTML = `
     <div>
@@ -290,7 +291,7 @@ class BaseDatePicker extends HTMLElement {
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
         </div>
-        <input datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+        <input datepicker type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
       </div>
     </div>
     `;
@@ -298,44 +299,48 @@ class BaseDatePicker extends HTMLElement {
 }
 
 class BaseInputPhone extends HTMLElement {
-    static observedAttributes = ["label"];
+    static observedAttributes = ["label", "name"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
+        const name = this.getAttribute("name");
 
         this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
     }
 }
 
 class BaseInputNumber extends HTMLElement {
-    static observedAttributes = ["label"];
+    static observedAttributes = ["label", "name"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
+        const name = this.getAttribute("name");
 
         this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
     }
 }
 
 class BaseRadio extends HTMLElement {
-    static observedAttributes = ["label"];
+    static observedAttributes = ["label", "name", "value"];
 
     connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
+        const label = this.getAttribute("label");
+        const name = this.getAttribute("name");
+        const value = this.getAttribute("value");
 
         this.innerHTML = `
     <div class="flex items-center mb-4">
-      <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
+      <input type="radio" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
   </div>
     `;
@@ -355,35 +360,44 @@ class LabelFormItem extends HTMLElement {
 }
 
 class BaseSelect extends HTMLElement {
-    static observedAttributes = ["label"];
+    static observedAttributes = ["label", "name", "options"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
+        const name = this.getAttribute("name");
+        const optionsKey = this.getAttribute("options");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const options = window[optionsKey] || []
+            options.forEach(({ value, label }) => {
+                const option = document.createElement('option')
+                option.value = value
+                option.innerText = label
+                this.querySelector('select').append(option)
+            })
+        })
 
         this.innerHTML = `
     <div class="max-w-sm mx-auto">
-      <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <select id="countries" class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-        <option selected>Choose a country</option>
-        <option value="US">United States</option>
-        <option value="CA">Canada</option>
-        <option value="FR">France</option>
-        <option value="DE">Germany</option>
+      <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
+      <select name="${name}"  class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
     }
 }
 class BaseCheckbox extends HTMLElement {
-    static observedAttributes = ["label", "class"];
+    static observedAttributes = ["label", "class", "value", "name"];
 
     connectedCallback() {
         const label = this.getAttribute("label") || "Base input";
         const contentClass = this.getAttribute("class") || "";
+        const name = this.getAttribute("name") || "";
+        const value = this.getAttribute("value") || "";
 
         this.innerHTML = `
     <div class="flex items-center mb-4 ${contentClass}">
-        <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+        <input type="checkbox" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
         <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900">${label}</label>
     </div>
     `;
@@ -421,8 +435,6 @@ class BaseButton extends HTMLElement {
             const label = this.getAttribute("label") || "Base input";
             const type = this.getAttribute("type") || "primary";
             const icon = this.getAttribute("icon");
-            console.log("icon ", icon);
-
             // Các class chung
             const commonClasses =
                 "focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5";
@@ -444,8 +456,8 @@ class BaseButton extends HTMLElement {
     `;
   }
 }
-
-customElements.define("layout-header", CustomHeader);
+//  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
+customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);
 customElements.define("base-datepicker", BaseDatePicker);
