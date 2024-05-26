@@ -185,5 +185,65 @@ namespace HumanResourcesManagement.Service
             }
             return nv;
         }
+
+        public List<TblDanhMucDanToc> GetAllDanToc()
+        {
+            var danToc = _context.TblDanhMucDanTocs.ToList();
+            if (!danToc.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return danToc;
+        }
+
+        public List<TblDanhMucTonGiao> GetAllTonGiao()
+        {
+            var tonGiao = _context.TblDanhMucTonGiaos.ToList();
+            if (!tonGiao.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return tonGiao;
+        }
+
+        public List<TblDanhMucChucDanh> GetAllChucDanh()
+        {
+            var chucDanh = _context.TblDanhMucChucDanhs.ToList();
+            if (!chucDanh.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return chucDanh;
+        }
+
+        public List<TblDanhMucNgachCongChuc> GetAllNgachCongChuc()
+        {
+            var nghachCongChuc = _context.TblDanhMucNgachCongChucs.ToList();
+            if (!nghachCongChuc.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return nghachCongChuc;
+        }
+
+        public List<TblDanhMucPhongBan> GetAllPhong()
+        {
+            var phong = _context.TblDanhMucPhongBans.ToList();
+            if (!phong.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return phong;
+        }
+
+        public List<TblDanhMucTo> GetAllTo()
+        {
+            var to = _context.TblDanhMucTos.ToList();
+            if (!to.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return to;
+        }
     }
 }

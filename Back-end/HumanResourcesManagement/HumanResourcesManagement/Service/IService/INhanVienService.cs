@@ -1,5 +1,6 @@
 ﻿using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResourcesManagement.Service.IService
 {
@@ -17,5 +18,13 @@ namespace HumanResourcesManagement.Service.IService
         TblDanhMucTo GetToById(int id);
         TblDanhMucPhongBan GetPhongBanById(int id);
         TblDanhMucChucDanh GetChucVuById(int id);
+
+        List<TblDanhMucDanToc> GetAllDanToc();
+        List<TblDanhMucTonGiao> GetAllTonGiao();
+        List<TblDanhMucChucDanh> GetAllChucDanh();
+        List<TblDanhMucNgachCongChuc> GetAllNgachCongChuc();
+        List<TblDanhMucPhongBan> GetAllPhong();
+        List<TblDanhMucTo> GetAllTo();
+
     }
 }
