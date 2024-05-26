@@ -444,8 +444,8 @@ class BaseButton extends HTMLElement {
     `;
   }
 }
-
-customElements.define("layout-header", CustomHeader);
+//  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
+customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);
 customElements.define("base-datepicker", BaseDatePicker);
