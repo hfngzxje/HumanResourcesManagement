@@ -128,5 +128,14 @@ namespace HumanResourcesManagement.Service
             }
             
         }
+        public async Task<IEnumerable<TblDanhMucNguoiThan>> GetDanhMucNguoiThan()
+        {
+            var list = await _context.TblDanhMucNguoiThans.ToListAsync();
+            if (list == null)
+            {
+                throw new Exception("Empty list!!");
+            }
+            return list;
+        }
     }
 }
