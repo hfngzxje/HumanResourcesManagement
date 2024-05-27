@@ -1,6 +1,6 @@
 class CustomHeader extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `
+  connectedCallback() {
+    this.innerHTML = `
     <header class="bg-gray-700 p-3 flex">
       <div class="flex items-center text-white w-[300px]">
         <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
@@ -28,12 +28,12 @@ class CustomHeader extends HTMLElement {
       </div>
     </header>
       `;
-    }
+  }
 }
 
 class CustomSidebar extends HTMLElement {
-    connectedCallback() {
-        this.innerHTML = `
+  connectedCallback() {
+    this.innerHTML = `
         <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
           <div class="p-3 flex items-center border-b border-gray-200">
             <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
@@ -203,86 +203,86 @@ class CustomSidebar extends HTMLElement {
           </div>
         </div>`;
 
-        const menuItem = this.querySelector("#menu1");
-        const subMenu = this.querySelector("#submenu1");
+    const menuItem = this.querySelector("#menu1");
+    const subMenu = this.querySelector("#submenu1");
 
-        menuItem.addEventListener("mouseenter", function() {
-            subMenu.classList.remove("hidden");
-        });
+    menuItem.addEventListener("mouseenter", function () {
+      subMenu.classList.remove("hidden");
+    });
 
-        menuItem.addEventListener("mouseleave", function() {
-            subMenu.classList.add("hidden");
-        });
+    menuItem.addEventListener("mouseleave", function () {
+      subMenu.classList.add("hidden");
+    });
 
-        const menuItem2 = this.querySelector("#menu2");
-        const subMenu2 = this.querySelector("#submenu2");
+    const menuItem2 = this.querySelector("#menu2");
+    const subMenu2 = this.querySelector("#submenu2");
 
-        menuItem2.addEventListener("mouseenter", function() {
-            subMenu2.classList.remove("hidden");
-        });
+    menuItem2.addEventListener("mouseenter", function () {
+      subMenu2.classList.remove("hidden");
+    });
 
-        menuItem2.addEventListener("mouseleave", function() {
-            subMenu2.classList.add("hidden");
-        });
+    menuItem2.addEventListener("mouseleave", function () {
+      subMenu2.classList.add("hidden");
+    });
 
-        const menuItem3 = this.querySelector("#menu3");
-        const subMenu3 = this.querySelector("#submenu3");
+    const menuItem3 = this.querySelector("#menu3");
+    const subMenu3 = this.querySelector("#submenu3");
 
-        menuItem3.addEventListener("mouseenter", function() {
-            subMenu3.classList.remove("hidden");
-        });
+    menuItem3.addEventListener("mouseenter", function () {
+      subMenu3.classList.remove("hidden");
+    });
 
-        menuItem3.addEventListener("mouseleave", function() {
-            subMenu3.classList.add("hidden");
-        });
-        const menuItem4 = this.querySelector("#menu4");
-        const subMenu4 = this.querySelector("#submenu4");
-        const menu4Child = this.querySelector("#menu-child4");
-        const submenu4Child = this.querySelector("#submenu4-child");
+    menuItem3.addEventListener("mouseleave", function () {
+      subMenu3.classList.add("hidden");
+    });
+    const menuItem4 = this.querySelector("#menu4");
+    const subMenu4 = this.querySelector("#submenu4");
+    const menu4Child = this.querySelector("#menu-child4");
+    const submenu4Child = this.querySelector("#submenu4-child");
 
-        menuItem4.addEventListener("mouseenter", function() {
-            subMenu4.classList.remove("hidden");
-        });
+    menuItem4.addEventListener("mouseenter", function () {
+      subMenu4.classList.remove("hidden");
+    });
 
-        menuItem4.addEventListener("mouseleave", function() {
-            subMenu4.classList.add("hidden");
-        });
+    menuItem4.addEventListener("mouseleave", function () {
+      subMenu4.classList.add("hidden");
+    });
 
-        menu4Child.addEventListener("mouseenter", function() {
-            submenu4Child.classList.remove("hidden");
-        });
+    menu4Child.addEventListener("mouseenter", function () {
+      submenu4Child.classList.remove("hidden");
+    });
 
-        menu4Child.addEventListener("mouseleave", function() {
-            submenu4Child.classList.add("hidden");
-        });
-    }
+    menu4Child.addEventListener("mouseleave", function () {
+      submenu4Child.classList.add("hidden");
+    });
+  }
 }
 class BaseInput extends HTMLElement {
-    static observedAttributes = ["label", "hide-label", "name"];
+  static observedAttributes = ["label", "hide-label", "name"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const hideLabel = !this.getAttribute("hide-label");
-        const name = this.getAttribute("name");
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const hideLabel = !this.getAttribute("hide-label");
+    const name = this.getAttribute("name");
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
       }">${label}</label>
       <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
-    }
+  }
 }
 
 class BaseDatePicker extends HTMLElement {
-    static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const name = this.getAttribute("name")
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name")
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
       <div class="relative max-w-sm">
@@ -295,123 +295,144 @@ class BaseDatePicker extends HTMLElement {
       </div>
     </div>
     `;
-    }
+  }
 }
 
 class BaseInputPhone extends HTMLElement {
-    static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const name = this.getAttribute("name");
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
       <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
-    }
+  }
 }
 
 class BaseInputNumber extends HTMLElement {
-    static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const name = this.getAttribute("name");
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
       <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
-    }
+  }
 }
 
 class BaseRadio extends HTMLElement {
-    static observedAttributes = ["label", "name", "value"];
+  static observedAttributes = ["label", "name", "value"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label");
-        const name = this.getAttribute("name");
-        const value = this.getAttribute("value");
+  connectedCallback() {
+    const label = this.getAttribute("label");
+    const name = this.getAttribute("name");
+    const value = this.getAttribute("value");
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="flex items-center mb-4">
       <input type="radio" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
   </div>
     `;
-    }
+  }
 }
 
 class LabelFormItem extends HTMLElement {
-    static observedAttributes = ["name"];
+  static observedAttributes = ["name"];
 
-    connectedCallback() {
-        const name = this.getAttribute("name") || "Base input";
+  connectedCallback() {
+    const name = this.getAttribute("name") || "Base input";
 
-        this.innerHTML = `
+    this.innerHTML = `
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${name}</label>
     `;
-    }
+  }
 }
 
 class BaseSelect extends HTMLElement {
-    static observedAttributes = ["label", "name", "options"];
+  static observedAttributes = ["label", "name", "options", "api", "keyValue", "keyLabel"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const name = this.getAttribute("name");
-        const optionsKey = this.getAttribute("options");
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
+    const optionsKey = this.getAttribute("options");
+    const api = this.getAttribute("api");
+    const keyValue = this.getAttribute("keyValue") || 'value';
+    const keyLabel = this.getAttribute("keyLabel") || 'lable';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const options = window[optionsKey] || []
-            options.forEach(({ value, label }) => {
-                const option = document.createElement('option')
-                option.value = value
-                option.innerText = label
-                this.querySelector('select').append(option)
-            })
+    document.addEventListener('DOMContentLoaded', () => {
+      if(!!api) {
+        $.ajax({
+          url: api,
+          method: 'GET',
+          success: (data) => {
+            data.forEach((item) => {
+              const option = document.createElement('option')
+              option.value = item[keyValue]
+              option.innerText = item[keyLabel]
+              this.querySelector('select').append(option)
+            })   
+          },
+          error: (err) => {
+            console.log('fetchDantoc err :: ', err);
+          }
         })
+        return
+      }
+      const options = window[optionsKey] || []
+      options.forEach(({ value, label }) => {
+        const option = document.createElement('option')
+        option.value = value
+        option.innerText = label
+        this.querySelector('select').append(option)
+      })
+    })
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="max-w-sm mx-auto">
       <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
       <select name="${name}"  class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
-    }
+  }
 }
 class BaseCheckbox extends HTMLElement {
-    static observedAttributes = ["label", "class", "value", "name"];
+  static observedAttributes = ["label", "class", "value", "name"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const contentClass = this.getAttribute("class") || "";
-        const name = this.getAttribute("name") || "";
-        const value = this.getAttribute("value") || "";
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const contentClass = this.getAttribute("class") || "";
+    const name = this.getAttribute("name") || "";
+    const value = this.getAttribute("value") || "";
 
-        this.innerHTML = `
+    this.innerHTML = `
     <div class="flex items-center mb-4 ${contentClass}">
         <input type="checkbox" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
         <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900">${label}</label>
     </div>
     `;
-    }
+  }
 }
 
 class BaseUpload extends HTMLElement {
-    static observedAttributes = ["label", "class"];
+  static observedAttributes = ["label", "class"];
 
-    connectedCallback() {
-        const label = this.getAttribute("label") || "Base input";
-        const contentClass = this.getAttribute("class") || "";
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const contentClass = this.getAttribute("class") || "";
 
-        this.innerHTML = `
+    this.innerHTML = `
       <div class="flex items-center justify-center w-full h-full">
           <label for="dropzone-file" class="flex flex-col items-center justify-center w-full min-h-64 h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50">
               <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -425,31 +446,31 @@ class BaseUpload extends HTMLElement {
           </label>
       </div> 
     `;
-    }
+  }
 }
 
 class BaseButton extends HTMLElement {
-    static observedAttributes = ["label", "type", "icon"];
+  static observedAttributes = ["label", "type", "icon"];
 
-    connectedCallback() {
-            const label = this.getAttribute("label") || "Base input";
-            const type = this.getAttribute("type") || "primary";
-            const icon = this.getAttribute("icon");
-            // Các class chung
-            const commonClasses =
-                "focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5";
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const type = this.getAttribute("type") || "primary";
+    const icon = this.getAttribute("icon");
+    // Các class chung
+    const commonClasses =
+      "focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5";
 
-            // Các class riêng cho từng button
-            const BtnClass = {
-                primary: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300",
-                green: "text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300",
-                red: "text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300",
-                plain: "py-2.5 px-5 text-sm font-medium text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
-            };
+    // Các class riêng cho từng button
+    const BtnClass = {
+      primary: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300",
+      green: "text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300",
+      red: "text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300",
+      plain: "py-2.5 px-5 text-sm font-medium text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
+    };
 
-            const contentClass = BtnClass[type] || BtnClass.primary;
+    const contentClass = BtnClass[type] || BtnClass.primary;
 
-            this.innerHTML = `
+    this.innerHTML = `
       <button type="button" class="${commonClasses} ${contentClass}">
         ${icon ? `<i class='${icon} mr-1'></i>` : ""} ${label}
       </button>

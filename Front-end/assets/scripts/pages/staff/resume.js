@@ -3,22 +3,43 @@ const id = params.get("id");
 const isEdit = !!id
 
 var MaritalOptions = [
-    { label: 'Đã kết hôn', value: 0 },
-    { label: 'Chưa kết hôn', value: 1 },
+    { label: 'Đã kết hôn', value: 1 },
+    { label: 'Chưa kết hôn', value: 0 },
+]
+var ngachCongChucGroups =[
+    {
+        value: '1', label: '1'
+    }
+]
+var tonGiaoGroups =[
+    {
+        value: '1', label: '1'
+    }
 ]
 
 function backToList() {
     window.location.replace("/pages/staff/list.html");
 }
 
+function buildPayload(formValue) {
+    const formClone = {...formValue}
+    const dateKey = ['ngaysinh','cmndngaycap','ngaytuyendung','ngayvaoban','ngaychinhthuc','ngayvaodang','ngayvaodangchinhthuc','ngaynhapngu','ngayxuatngu','ngayvaodoan']
+    dateKey.forEach(key => {
+        if(!formClone[key]) return
+        formClone[key] = convertToISODate(formClone[key])
+    })
+    console.log('gioitinh', formClone['gioitinh']);
+    formClone['gioitinh'] = formClone['gioitinh'] === '1'
+    return formClone
+}
+
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/' + id,
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
         method: 'GET',
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            // setFormValue('resume_form', formValue)
+            setFormValue('resume_form', data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -28,20 +49,56 @@ function fetchEmployee() {
         }
     });
 }
+function fetchDantoc(){
+    setLoading(true)
+    $.ajax({
+        url:'https://localhost:7141/api/NhanVien/danToc',
+        method: 'GET',
+        success: function(data){
+            // setFormValue('dantoc_select', data);
+        },
+        error: (err) => {
+            console.log('fetchDantoc err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    })
+}
+
+function fetchTonGiao(){
+    setLoading(true)
+    $.ajax({
+        url:'https://localhost:7141/api/NhanVien/tonGiao',
+        method: 'GET',
+        success: function(data){
+            setFormValue('tongiao_select', data);
+        },
+        error: (err) => {
+            console.log('fetchTongiao err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    })
+}
 
 function handleCreate() {
     const formValue = getFormValues('resume_form')
+    const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/',
+        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
         method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            backToList()
+            // backToList()
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Xóa không thành công!")
+            console.log('handleCreate err :: ', err);
+            alert("Tạo mới không thành công!")
         },
         complete: () => {
             setLoading(false)
@@ -54,7 +111,7 @@ function handleRemove() {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/' + id,
+        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -72,12 +129,13 @@ function handleRemove() {
 
 function handleSave() {
     const formValue = getFormValues('resume_form')
+    const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/' + id,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
         method: 'PUT',
         contentType: 'application/json',
-        data: JSON.stringify(formValue),
+        data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
             backToList()
@@ -103,9 +161,7 @@ function renderActionByStatus() {
     }
     if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        createBtn.addEventListener('click', () => {
-            backToList()
-        })
+        createBtn.addEventListener('click', handleCreate)
         actionEl.append(createBtn)
         return
     }
@@ -125,4 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (id) {
         fetchEmployee()
     }
+ 
+
 })
+

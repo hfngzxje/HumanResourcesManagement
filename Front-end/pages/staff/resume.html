@@ -13,14 +13,14 @@
 
 <body class="text-gray-600">
     <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header class="box"></layout-header>
+        <layout-header></layout-header>
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
                 <div class="h-fit w-full bg-white rounded-lg p-3">
                     <div class="flex border-b border-solid pb-3">
                         <div class="w-[300px]">
-                            <span class="text-gray-400">Mã số: </span>
+                            <span class="text-gray-400">Mã số <span style="color: red;">(*)</span>: </span>
                             <span class="text-gray-700 text-xl font-medium">1123826</span>
                         </div>
                         <div>
@@ -38,61 +38,77 @@
                     <div class="mt-3">
                         <form id="resume_form" class="flex gap-x-5">
                             <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <base-input class="col-span-2" label="Họ và tên" name="full_name"></base-input>
-                                <base-datepicker label="Ngày sinh" name="birth_date"></base-datepicker>
-                                <base-input-phone label="Số điện thoại" name="phone_number"></base-input-phone>
+                                <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
+                                <base-input class="col-span-2" label="Họ và tên (*)" name="ten"></base-input>
+                                <base-datepicker label="Ngày sinh(*)" name="ngaysinh"></base-datepicker>
+                                <base-input-phone label="Số điện thoại" name="dienthoai"></base-input-phone>
                                 <div>
-                                    <label-form-item name="gender"></label-form-item>
+                                    <label-form-item name="Giới tính(*)"></label-form-item>
                                     <div class="flex gap-5">
-                                        <base-radio label="Nam" name="gender" value="male"></base-radio>
-                                        <base-radio label="Nữ" name="gender" value="female"></base-radio>
+                                        <base-radio label="Nam" name="gioitinh" value="1"></base-radio>
+                                        <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
                                     </div>
                                 </div>
-                                <base-input-phone label="Di động" name="mobile"></base-input-phone>
-                                <base-input-number label="CMND" name="id_card"></base-input-number>
-                                <base-datepicker label="Ngày cấp" name="issue_date"></base-datepicker>
-                                <base-input class="col-span-2" label="Nơi sinh" name="birth_place"></base-input>
-                                <base-input class="col-span-2" label="Quê quán" name="hometown"></base-input>
-                                <base-input label="Nghề nghiệp" name="occupation"></base-input>
-                                <base-datepicker label="Ngày tuyển dụng" name="recruitment_date"></base-datepicker>
-                                <base-input class="col-span-2" label="Chức vụ hiện tại" name="current_position"></base-input>
-                                <base-input label="Cơ quan tuyển dụng" name="recruiting_agency"></base-input>
-                                <base-select label="Ngạch công chức" name="civil_servant_rank"></base-select>
-                                <base-datepicker label="Ngày vào đảng" name="party_join_date"></base-datepicker>
-                                <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội" name="social_political_organization_join_date"></base-datepicker>
-                                <base-input class="col-span-2" label="Nơi tham gia" name="participation_place"></base-input>
+                                <base-input-phone label="Di động(*)" name="didong"></base-input-phone>
+                                <base-input-number label="CMND(*)" name="cmnd"></base-input-number>
+                                <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"></base-datepicker>
+                                <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"></base-input>
+                                <base-input class="col-span-2" label="Quê quán(*)" name="quequan"></base-input>
+                                <base-input label="Nghề nghiệp" name="nghenghiep"></base-input>
+                                <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung"></base-datepicker>
+                                <base-input class="col-span-2" label="Chức vụ hiện tại"
+                                    name="chucvuhientai"></base-input>
+                                <base-input-number label="Phòng" name="phong"></base-input-number>
+                                <base-input-number label="Tổ" name="to"></base-input-number>
+                                <base-input label="Cơ quan tuyển dụng" name="coquantuyendung"></base-input>
+                                <base-select label="Ngạch công chức" name="ngachcongchuc"
+                                    options="ngachCongChucGroups"></base-select>
+                                <base-datepicker label="Ngày vào đảng" name="ngayvaodang"></base-datepicker>
+                                <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội"
+                                    name="social_political_organization_join_date"></base-datepicker>
+                                <base-input class="col-span-2" label="Nơi tham gia" name="noithamgia"></base-input>
                                 <div class="col-span-2 flex items-center gap-x-5">
-                                    <base-checkbox label="Là thương binh hạng" class="!mb-0" name="war_invalid_rank"></base-checkbox>
-                                    <base-input class="flex-1" hide-label="true" name="invalid_rank_details"></base-input>
+                                    <base-checkbox label="Là thương binh hạng" class="!mb-0"
+                                        name="lathuongbinh"></base-checkbox>
+                                    <base-input class="flex-1" hide-label="true" name="thuongbinh"></base-input>
                                 </div>
-                                <base-input label="Mã số BHXH" name="social_security_number"></base-input>
-                                <base-input label="Mã số BHYT" name="health_insurance_number"></base-input>
+                                <base-input label="Mã số BHXH" name="bhxh"></base-input>
+                                <base-input label="Mã số BHYT" name="bhyt"></base-input>
                             </div>
                             <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
                                 <div class="col-span-1 flex flex-col gap-y-2">
-                                    <base-select label="Tình trạng hôn nhân" name="marital_status" options="MaritalOptions"></base-select>
-                                    <base-select label="Dân tộc" name="ethnicity"></base-select>
-                                    <base-select label="Tôn giáo" name="religion"></base-select>
-                                    <base-select label="Nơi cấp" name="issuing_place"></base-select>
+                                    <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
+                                        options="MaritalOptions"></base-select>
+
+                                    <base-select label="Dân tộc(*)" name="dantoc" api="https://localhost:7141/api/NhanVien/danToc" keyValue="id" keyLabel="ten" ></base-select>
+
+                                    <base-select label="Tôn giáo" name="tongiao" api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id" keyLabel="ten"></base-select>
+
+                                    <base-input label="Nơi cấp(*)" name="cmndnoicap"></base-input>
                                 </div>
                                 <div class="col-span-1 h-[300px]">
                                     <base-upload></base-upload>
                                 </div>
-                                <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú" name="permanent_residence"></base-input>
-                                <base-input class="col-span-2" label="Nơi ở hiện nay" name="current_residence"></base-input>
-                                <base-input class="col-span-2" label="Công việc chính" name="main_job"></base-input>
-                                <base-datepicker label="Ngày vào ban" name="committee_entry_date"></base-datepicker>
-                                <base-datepicker label="Ngày công tác" name="work_start_date"></base-datepicker>
-                                <base-datepicker label="Ngày nhập ngũ" name="military_enlistment_date"></base-datepicker>
-                                <base-datepicker label="Ngày xuất ngũ" name="military_discharge_date"></base-datepicker>
-                                <base-input class="col-span-2" label="Quân hàm cao nhất" name="highest_military_rank"></base-input>
-                                <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất" name="highest_awarded_title"></base-input>
+                                <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
+                                    name="thuongtru"></base-input>
+                                <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"></base-input>
+                                <base-input class="col-span-2" label="Công việc chính"
+                                    name="congviecchinh"></base-input>
+                                <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker>
+                                <base-datepicker label="Ngày công tác" name="ngaychinhthuc"></base-datepicker>
+                                <base-datepicker label="Ngày nhập ngũ" name="ngaynhapngu"></base-datepicker>
+                                <base-datepicker label="Ngày xuất ngũ" name="ngayxuatngu"></base-datepicker>
+                                <base-input class="col-span-2" label="Quân hàm cao nhất"
+                                    name="quanhamcaonhat"></base-input>
+                                <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất"
+                                    name="danhhieucaonhat"></base-input>
                                 <div class="col-span-2 flex items-center gap-x-5">
-                                    <base-checkbox label="Là con gia đình chính sách" class="!mb-0" name="policy_family_child"></base-checkbox>
-                                    <base-input class="flex-1" hide-label="true" name="policy_family_details"></base-input>
+                                    <base-checkbox label="Là con gia đình chính sách" class="!mb-0"
+                                        name="laconchinhsach"></base-checkbox>
+                                    <base-input class="flex-1" hide-label="true" name="chinhsach"></base-input>
                                 </div>
-                                <base-input label="Số thẻ ATM" name="atm_card_number"></base-input>
-                                <base-input label="Ngân hàng" name="bank"></base-input>
+                                <base-input label="Số thẻ ATM" name="atm"></base-input>
+                                <base-input label="Ngân hàng(*)" name="nganhang"></base-input>
                             </div>
                         </form>
                         <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
@@ -104,6 +120,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/common/transform.js"></script>
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>

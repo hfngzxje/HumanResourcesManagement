@@ -72,7 +72,7 @@ function setFormValue(formId, formValue) {
 
     if (element.tagName === 'INPUT') {
       if (element.type === "radio") {
-        element.checked = element.value === defaultValue
+        element.checked = element.value === (+defaultValue).toString()
       } else if (element.type === "checkbox") {
         element.checked = defaultValue
       } else {
