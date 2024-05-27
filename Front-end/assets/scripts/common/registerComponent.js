@@ -374,6 +374,7 @@ class BaseSelect extends HTMLElement {
     `;
     }
 }
+
 class BaseCheckbox extends HTMLElement {
     static observedAttributes = ["label", "class"];
 

@@ -88,11 +88,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
-
-
-
-
+// call api get danh sách người thân by id của nhân viên
 function getFamilyRelationship(maNV) {
     return fetch(`https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/${maNV}`)
         .then(response => {
@@ -191,10 +187,6 @@ function renderFamilyRow(person) {
     return row;
 }
 
-// Function to handle click on edit button
-function handleEditButtonClick(person) {
-}
-
 // Function to handle click on delete button
 function handleDeleteButtonClick(id) {
     const confirmDelete = confirm('Bạn có muốn xóa quan hệ này không?');
@@ -207,7 +199,7 @@ function handleDeleteButtonClick(id) {
                     throw new Error('Network response was not ok');
                 }
                 // If successful, show success message
-                alert('Xóa thành công');
+                alert('Xóa quan hệ thành công');
                 // Refresh family list
                 getFamilyRelationship(maNV);
             })
@@ -249,3 +241,54 @@ window.addEventListener('DOMContentLoaded', () => {
         console.error('Employee ID not found in URL');
     }
 });
+
+
+
+// call api get all danh muc nguoi than
+function getFamilyRelationshipCategory() {
+    return fetch(`https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Assuming the data is an array of categories
+            return data.map(category => ({
+                id: category.id,
+                name: category.ten
+            }));
+        })
+        .catch(error => {
+            console.error('Error fetching family relationship category data:', error);
+        });
+}
+
+function populateFamilyRelationshipCategory() {
+    const selectElement = document.getElementById('relationship');
+    if (!selectElement) {
+        console.error('Select element not found');
+        return;
+    }
+    selectElement.innerHTML = ''; // Clear previous options
+    getFamilyRelationshipCategory()
+        .then(data => {
+            data.forEach(category => {
+                const optionElement = document.createElement('option');
+                optionElement.value = category.id;
+                optionElement.textContent = category.name;
+                selectElement.appendChild(optionElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error populating family relationship category:', error);
+        });
+}
+
+// Call populateFamilyRelationshipCategory when DOM content is loaded
+window.addEventListener('DOMContentLoaded', () => {
+    populateFamilyRelationshipCategory();
+});
+
+
