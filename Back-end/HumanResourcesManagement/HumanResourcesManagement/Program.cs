@@ -19,7 +19,6 @@ public class Program
         builder.Services.AddScoped<ITrinhDoVanHoaService, TrinhDoVanHoaService>();
         builder.Services.AddScoped<INgoaiNguService, NgoaiNguService>();
         builder.Services.AddScoped<IKhenThuongKiLuatService, KhenThuongKiLuatService>();
-        builder.Services.AddScoped<IDanhMucDanTocService, DanhMucDanTocService>();
 
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
