@@ -51,16 +51,41 @@ namespace HumanResourcesManagement.Service
 
         public void AddNhanVien(NhanVienRequest request)
         {
-            if (IsIdExist(request.Ma))
+            if (string.IsNullOrEmpty(request.Ten))
             {
-                throw new Exception("ID already exists.");
+                throw new Exception("Tên không được để trống");
+            }
+
+            string maNhanVien = GenerateEmployeeCode(request.Ten);
+            int suffix = 1;
+            string originalMaNhanVien = maNhanVien;
+
+            while (_context.TblNhanViens.Any(nv => nv.Ma == maNhanVien))
+            {
+                maNhanVien = originalMaNhanVien + suffix.ToString();
+                suffix++;
             }
 
             var nhanVien = _mapper.Map<TblNhanVien>(request);
-            nhanVien.Ma = request.Ma;
+            nhanVien.Ma = maNhanVien;
             _context.TblNhanViens.Add(nhanVien);
             _context.SaveChanges();
         }
+
+        private string GenerateEmployeeCode(string fullName)
+        {
+            var nameParts = fullName.Split(' ');
+            if (nameParts.Length == 0)
+            {
+                throw new Exception("Tên không hợp lệ");
+            }
+
+            var lastName = nameParts.Last().ToLower();
+            var initials = string.Join("", nameParts.Take(nameParts.Length - 1).Select(name => name[0].ToString().ToLower()));
+
+            return lastName + initials;
+        }
+
 
         private bool IsIdExist(string id)
         {

@@ -5,9 +5,6 @@ namespace HumanResourcesManagement.Models
 {
     public class NhanVienRequest
     {
-        [Required(ErrorMessage = "Ma is required")]
-        public string Ma { get; set; } = null!;
-
         [Required(ErrorMessage = "Ten is required")]
         public string? Ten { get; set; }
 
