@@ -16,36 +16,14 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper;
         }
 
-        public List<NhanVienResponse> GetAllNhanVien()
+        public List<TblNhanVien> GetAllNhanVien()
         {
             var nhanViens = _context.TblNhanViens.ToList();
             if (!nhanViens.Any())
             {
                 throw new Exception("List không có nhân viên nào!!");
             }
-
-            var nhanVienResponses = new List<NhanVienResponse>();
-
-            foreach (var nhanVien in nhanViens)
-            {
-                var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
-                var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
-                var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
-                var to = _context.TblDanhMucTos.Find(nhanVien.To);
-                var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
-
-                var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
-
-                nhanVienResponse.tenDantoc = danToc?.Ten;
-                nhanVienResponse.tenTongiao = tonGiao?.Ten;
-                nhanVienResponse.tenPhong = phong?.Ten;
-                nhanVienResponse.tenTo = to?.Ten;
-                nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
-
-                nhanVienResponses.Add(nhanVienResponse);
-            }
-
-            return nhanVienResponses;
+            return nhanViens;
         }
 
 
@@ -167,28 +145,14 @@ namespace HumanResourcesManagement.Service
             return tonGiao;
         }
 
-        public NhanVienResponse  GetNhanVienById(string id)
+        public TblNhanVien GetNhanVienById(string id)
         {
             var nhanVien = _context.TblNhanViens.Find(id);
             if (nhanVien == null)
             {
                 throw new Exception("ID không tồn tại!");
             }
-
-            var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
-            var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
-            var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
-            var to = _context.TblDanhMucTos.Find(nhanVien.To);
-            var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
-
-            var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
-            nhanVienResponse.tenDantoc = danToc?.Ten;
-            nhanVienResponse.tenTongiao = tonGiao?.Ten;
-            nhanVienResponse.tenPhong = phong?.Ten;
-            nhanVienResponse.tenTo = to?.Ten;
-            nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
-
-            return nhanVienResponse;
+            return nhanVien;
         }
 
         public TblDanhMucChucDanh GetChucVuById(int id)
