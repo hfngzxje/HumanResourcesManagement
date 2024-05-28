@@ -102,48 +102,6 @@ function getFamilyRelationship(maNV) {
         });
 }
 
-function renderFamilyRelationship(data) {
-    const familyList = document.getElementById('family-relationship-list');
-    if (!familyList) {
-        console.error('Family relationship list element not found');
-        return;
-    }
-    familyList.innerHTML = ''; // Clear previous data
-    data.forEach(person => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="px-6 py-3">${person.ten}</td>
-            <td class="px-6 py-3">${person.gioitinh}</td>
-            <td class="px-6 py-3">${person.quanhe}</td>
-            <td class="px-6 py-3">${person.nghenghiep}</td>
-            <td class="px-6 py-3">${person.ngaysinh}</td>
-            <td class="px-6 py-3">${person.dienthoai}</td>
-            <td class="px-6 py-3">${person.diachi}</td>
-            <td class="px-6 py-3">${person.khac}</td>
-        `;
-        familyList.appendChild(row);
-    });
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    const params = new URLSearchParams(window.location.search);
-    const maNV = params.get('maNV');
-    if (maNV) {
-        getFamilyRelationship(maNV)
-            .then(data => {
-                renderFamilyRelationship(data);
-            })
-            .catch(error => {
-                console.error('Error getting family relationship data:', error);
-            });
-    } else {
-        console.error('Employee ID not found in URL');
-    }
-});
-
-
-
-
 function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');

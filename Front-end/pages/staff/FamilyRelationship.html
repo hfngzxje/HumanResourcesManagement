@@ -153,22 +153,26 @@
                                 </div>
                                 <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
                                     <div class="">
-                                        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Ngày sinh</label>
-                                        <input type="date" id="ngaysinh"
+                                        <label for="base-input"
+                                            class="block mb-2 text-sm font-medium text-gray-900">Ngày sinh</label>
+                                        <input type="datetime-local" id="ngaysinh"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
                                     <div class="">
-                                        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Điện thoại</label>
+                                        <label for="base-input"
+                                            class="block mb-2 text-sm font-medium text-gray-900">Điện thoại</label>
                                         <input type="text" id="dienthoai"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
                                     <div class="">
-                                        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Địa chỉ</label>
+                                        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Địa
+                                            chỉ</label>
                                         <input type="text" id="diachi"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
                                     <div class="">
-                                        <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Khác</label>
+                                        <label for="base-input"
+                                            class="block mb-2 text-sm font-medium text-gray-900">Khác</label>
                                         <input type="text" id="khac"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
@@ -177,6 +181,9 @@
                             <div class="flex gap-x-5 mt-5 justify-end">
                                 <base-button label="Thêm" onclick="addRelationship()" icon="bx bx-plus"
                                     type="green"></base-button>
+                                <base-button label="Lưu" onclick="saveFamilyRelationship(person.id)" icon="bx bx-save"
+                                    ></base-button>
+                                <base-button label="Xóa" icon="bx bx-trash" type="red" onclick="handleDeleteButtonClick(person.id)"></base-button>
                                 <!-- <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
                                 <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
                                 <base-button label="Lưu" icon="bx bx-save"></base-button>
@@ -233,6 +240,7 @@
                             </div>
                             <div class="mt-6 flex justify-end">
                                 <nav aria-label="Page navigation example">
+                                    <!-- <ul id="pagination" class="inline-flex -space-x-px text-sm"></ul> -->
                                     <ul class="inline-flex -space-x-px text-sm">
                                         <li>
                                             <a href="#"
@@ -242,21 +250,6 @@
                                             <a href="#"
                                                 class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">1</a>
                                         </li>
-                                        <li>
-                                            <a href="#"
-                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
-                                        </li>
-                                        <li>
-                                            <a href="#" aria-current="page"
-                                                class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">3</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">4</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 ">5</a>
                                         </li>
                                         <li>
                                             <a href="#"
@@ -281,6 +274,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
     <script src="../../assets/scripts/pages/staff/FamilyRelationship/FamilyRelationship.js"></script>
     <script src="../../assets/scripts/pages/staff/FamilyRelationship/AddFamilyRelationship.js"></script>
+    <script src="../../assets/scripts/pages/staff/FamilyRelationship/EditFamilyRelationship.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
