@@ -118,10 +118,13 @@
                             <div class="flex gap-x-5">
                                 <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
                                     <div class="">
+                                        <input type="hidden" id="id"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
                                         <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Họ
                                             và tên</label>
                                         <input type="text" id="ten"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+
                                     </div>
                                     <div>
                                         <label-form-item name="Giới tính"></label-form-item>
@@ -138,7 +141,7 @@
                                     </div>
                                     <div class="max-w-sm mx-auto">
                                         <label for="relationship"
-                                            class="block mb-2 text-sm font-medium text-gray-900">Quan hệ gia
+                                            class="block mb-2 text-sm font-medium text-gray-900 margin: 0">Quan hệ gia
                                             đình</label>
                                         <select id="relationship"
                                             class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -178,16 +181,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex gap-x-5 mt-5 justify-end">
+                            <div id="form_relationship" class="flex gap-x-5 mt-5 justify-end">
                                 <base-button label="Thêm" onclick="addRelationship()" icon="bx bx-plus"
                                     type="green"></base-button>
-                                <base-button label="Lưu" onclick="saveFamilyRelationship(person.id)" icon="bx bx-save"
-                                    ></base-button>
-                                <base-button label="Xóa" icon="bx bx-trash" type="red" onclick="handleDeleteButtonClick(person.id)"></base-button>
-                                <!-- <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
-                                <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
-                                <base-button label="Lưu" icon="bx bx-save"></base-button>
-                                <base-button label="In" icon="bx bx-printer" type="plain"></base-button> -->
+                                <base-button label="Lưu" onclick="saveFamilyRelationship()"
+                                    icon="bx bx-save"></base-button>
+                                <base-button label="Xóa" icon="bx bx-trash" type="red"
+                                    onclick="handleDeleteButtonClick(person.id)"></base-button>
+                           
                             </div>
                             <div class="flex justify-between" style="color: blue; margin-top: 5%;">
                                 <p class="text-xl">Danh sách người thân</p>
@@ -196,6 +197,7 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
+                                           
                                             <th scope="col"
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Họ và tên

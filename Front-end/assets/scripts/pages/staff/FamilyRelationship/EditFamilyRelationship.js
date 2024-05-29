@@ -1,4 +1,5 @@
 function handleEditButtonClick(person) {
+    document.getElementById('id').value = person.id
     document.getElementById('ten').value = person.ten;
     document.querySelector('input[name="gioitinh"][value="' + person.gioitinh + '"]').checked = true;
     document.getElementById('ngaysinh').value = person.ngaysinh;
@@ -20,36 +21,57 @@ function handleEditButtonClick(person) {
     document.querySelector('base-button[label="Xóa"]').style.display = 'inline-block';
 }
 
-function saveFamilyRelationship(id) {
-    const data = {
-        id: id,
-        ten: document.getElementById('ten').value,
-        gioitinh: document.querySelector('input[name="gioitinh"]:checked').value === 'true',
-        ngaysinh: document.getElementById('ngaysinh').value,
-        quanhe: document.getElementById('relationship').value,
-        nghenghiep: document.getElementById('nghenghiep').value,
-        diachi: document.getElementById('diachi').value,
-        dienthoai: document.getElementById('dienthoai').value,
-        khac: document.getElementById('khac').value
-    };
-    console.log(data)
-    fetch(`https://localhost:7141/api/NguoiThan/updateNguoiThan`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        // If successful, show success message
-        alert('Cập nhật thông tin thành công');
-        // Refresh family list
-        getFamilyRelationship(maNV);
-    })
-    .catch(error => {
-        console.error('Error updating family relationship:', error);
-    });
+function getIdValue() {
+    const idInput = document.getElementById('id');
+    if (idInput) {
+        return idInput.value;
+    } else {
+        console.error('Input field with id "id" not found');
+        return null;
+    }
 }
+
+
+
+function saveFamilyRelationship() {
+    const id = getIdValue();
+    if (id !== null) {
+        const data = {
+            id: id,
+            ten: document.getElementById('ten').value,
+            gioitinh: document.querySelector('input[name="gioitinh"]:checked').value === 'true',
+            ngaysinh: document.getElementById('ngaysinh').value,
+            quanhe: document.getElementById('relationship').value,
+            nghenghiep: document.getElementById('nghenghiep').value,
+            diachi: document.getElementById('diachi').value,
+            dienthoai: document.getElementById('dienthoai').value,
+            khac: document.getElementById('khac').value
+        };
+        console.log(data);
+        fetch(`https://localhost:7141/api/NguoiThan/updateNguoiThan`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // If successful, show success message
+            alert('Cập nhật thông tin thành công');
+            // Refresh family list
+            // getFamilyRelationship(maNV);
+        })
+        .catch(error => {
+            console.error('Error updating family relationship:', error);
+        });
+    } else {
+        console.error('Could not get id value to save family relationship');
+    }
+}
+
+
+
+
