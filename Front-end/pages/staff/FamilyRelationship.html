@@ -139,9 +139,10 @@
                                                 class="ms-2 text-sm font-medium text-gray-900 ">Nữ</label>
                                         </div>
                                     </div>
-                                    <div class="max-w-sm mx-auto">
+                                    <!-- <div class="max-w-sm mx-auto"> -->
+                                    <div class="max-w-sm" style="margin: 0; padding: 0; position: relative; top: 0;">
                                         <label for="relationship"
-                                            class="block mb-2 text-sm font-medium text-gray-900 margin: 0">Quan hệ gia
+                                            class="block mb-2 text-sm font-medium text-gray-900">Quan hệ gia
                                             đình</label>
                                         <select id="relationship"
                                             class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
@@ -188,7 +189,7 @@
                                     icon="bx bx-save"></base-button>
                                 <base-button label="Xóa" icon="bx bx-trash" type="red"
                                     onclick="handleDeleteButtonClick(person.id)"></base-button>
-                           
+
                             </div>
                             <div class="flex justify-between" style="color: blue; margin-top: 5%;">
                                 <p class="text-xl">Danh sách người thân</p>
@@ -197,7 +198,7 @@
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                           
+
                                             <th scope="col"
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Họ và tên
