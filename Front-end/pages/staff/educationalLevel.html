@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
+    <style>
+        .empty-gray-space {
+          background-color: #d3d3d3; /* Light gray background */
+          height: 200px; /* Adjust height as needed */
+        }
+        .dropdown-container {
+      max-width: 300px;
+      margin: 50px auto;}
+        </style>
+    <title>Sơ yếu lý lịch</title>
+</head>
+
+<body class="text-gray-600">
+    <div class="h-screen w-screen flex flex-col overflow-auto ">
+        <layout-header class="box"></layout-header>
+        <div class="flex flex-1 overflow-auto">
+            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
+            <div class="flex-1 bg-gray-200 p-3 overflow-auto ">
+                <div class="h-fit w-full bg-white rounded-lg p-3">
+                    <div class="flex border-b border-solid pb-3">
+                        <div class="w-[300px]">
+                            <span class="text-gray-400">Mã số: </span>
+                            <span class="text-gray-700 text-xl font-medium">1123826</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Họ tên: </span>
+                            <span class="text-gray-700 text-xl font-me">
+                                Nguyễn Sinh Duy
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+                    </div>
+                    
+                    <div class="flex gap-x-5 mt-5">
+                        <div class="flex-1 h-fit grid grid-cols-2 gap-y-3 gap-x-5">
+                            <!-- Left Part -->
+                            <base-input  label="Tên trường"></base-input>
+                            <base-datepicker label="Từ thời gian"></base-datepicker>
+                            <base-select label="Hình thức đào tạo"></base-select>
+
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
+                            <!-- Right Part -->
+                            <base-select label="Chuyên ngành"></base-select>
+                            <base-datepicker label="Đến thời gian"></base-datepicker>
+                            <base-select label="Trình độ (diplomas, certificates)"></base-select>
+
+                        </div>
+                    </div>
+
+                    <!-- Table Section -->
+                    <div class="relative overflow-x-auto">
+                        <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">School's name</th>
+                                    <th scope="col" class="px-6 py-3">Specialized</th>
+                                    <th scope="col" class="px-6 py-3">Level</th>
+                                    <th scope="col" class="px-6 py-3">From</th>
+                                    <th scope="col" class="px-6 py-3">Arrive</th>
+                                    <th scope="col" class="px-6 py-3">Forms of training</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically added here -->
+                                <tr class="empty-gray-space">
+                                    <td colspan="6"></td>
+                                  </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Button Group -->
+                    <div class="flex gap-x-5 mt-5 justify-end">
+                        <base-button label="Thêm" icon="bx bx-plus" type="green"></base-button>
+                        <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
+                        <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                        <base-button label="Lưu" icon="bx bx-save"></base-button>
+                    </div>
+
+                    <!-- Second Form Section -->
+                    <div class="flex gap-x-5 mt-5">
+                        <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                            <!-- Left Part -->
+                            <base-input class="col-span-2" label="Hình thức đào tạo"></base-input>
+                            <base-input label="Trình độ"></base-input>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
+                            <!-- Right Part -->
+                            <base-datepicker class="col-span-2" label="Ngày cấp"></base-datepicker>
+                            <base-input label="Nơi cấp"></base-input>
+                        </div>
+                    </div>
+
+                    <!-- Second Table Section -->
+                    <div class="relative overflow-x-auto">
+                        <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Foreign Language</th>
+                                    <th scope="col" class="px-6 py-3">Date Range</th>
+                                    <th scope="col" class="px-6 py-3">Issued by</th>
+                                    <th scope="col" class="px-6 py-3">Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows will be dynamically added here -->
+                                <tr class="empty-gray-space">
+                                    <td colspan="6"></td>
+                                  </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Second Button Group -->
+                    <div class="flex gap-x-5 mt-5 justify-end">
+                        <base-button label="Thêm" icon="bx bx-plus" type="green"></base-button>
+                        <base-button label="Sửa" icon="bx bx-pencil" type="plain"></base-button>
+                        <base-button label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                        <base-button label="Lưu" icon="bx bx-save"></base-button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/pages/staff/resume.js"></script>
+    
+</body>
+
+</html>
