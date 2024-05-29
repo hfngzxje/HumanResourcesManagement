@@ -56,13 +56,25 @@
                                 <base-input class="col-span-2" label="Quê quán(*)" name="quequan"></base-input>
                                 <base-input label="Nghề nghiệp" name="nghenghiep"></base-input>
                                 <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung"></base-datepicker>
-                                <base-input class="col-span-2" label="Chức vụ hiện tại"
-                                    name="chucvuhientai"></base-input>
-                                <base-input-number label="Phòng" name="phong"></base-input-number>
-                                <base-input-number label="Tổ" name="to"></base-input-number>
+
+                                <base-select label="Chúc Vụ Hiện Tại" name="chucvuhientai"
+                                    api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
+                                    keyLabel="ten"></base-select>
+
+                               <base-select label="Phòng" name="phong"
+                                    api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
+                                    keyLabel="ten"></base-select>
+
+                                <base-select label="Tổ" name="to"
+                                    api="https://localhost:7141/api/NhanVien/to" keyValue="id"
+                                    keyLabel="ten"></base-select>
+
                                 <base-input label="Cơ quan tuyển dụng" name="coquantuyendung"></base-input>
+
                                 <base-select label="Ngạch công chức" name="ngachcongchuc"
-                                    options="ngachCongChucGroups"></base-select>
+                                api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
+                                keyLabel="ten"></base-select>
+
                                 <base-datepicker label="Ngày vào đảng" name="ngayvaodang"></base-datepicker>
                                 <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội"
                                     name="social_political_organization_join_date"></base-datepicker>
@@ -80,9 +92,13 @@
                                     <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
                                         options="MaritalOptions"></base-select>
 
-                                    <base-select label="Dân tộc(*)" name="dantoc" api="https://localhost:7141/api/NhanVien/danToc" keyValue="id" keyLabel="ten" ></base-select>
+                                    <base-select label="Dân tộc(*)" name="dantoc"
+                                        api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
+                                        keyLabel="ten"></base-select>
 
-                                    <base-select label="Tôn giáo" name="tongiao" api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id" keyLabel="ten"></base-select>
+                                    <base-select label="Tôn giáo" name="tongiao"
+                                        api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
+                                        keyLabel="ten"></base-select>
 
                                     <base-input label="Nơi cấp(*)" name="cmndnoicap"></base-input>
                                 </div>

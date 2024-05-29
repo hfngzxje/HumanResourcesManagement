@@ -399,7 +399,7 @@ class BaseSelect extends HTMLElement {
     })
 
     this.innerHTML = `
-    <div class="max-w-sm mx-auto">
+    <div class="max-w-sm mx-auto" style="margin: 0;">
       <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
       <select name="${name}"  class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
