@@ -16,51 +16,54 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper;
         }
 
-        public List<NhanVienResponse> GetAllNhanVien()
+        public List<TblNhanVien> GetAllNhanVien()
         {
             var nhanViens = _context.TblNhanViens.ToList();
             if (!nhanViens.Any())
             {
                 throw new Exception("List không có nhân viên nào!!");
             }
-
-            var nhanVienResponses = new List<NhanVienResponse>();
-
-            foreach (var nhanVien in nhanViens)
-            {
-                var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
-                var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
-                var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
-                var to = _context.TblDanhMucTos.Find(nhanVien.To);
-                var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
-
-                var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
-
-                nhanVienResponse.tenDantoc = danToc?.Ten;
-                nhanVienResponse.tenTongiao = tonGiao?.Ten;
-                nhanVienResponse.tenPhong = phong?.Ten;
-                nhanVienResponse.tenTo = to?.Ten;
-                nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
-
-                nhanVienResponses.Add(nhanVienResponse);
-            }
-
-            return nhanVienResponses;
+            return nhanViens;
         }
 
 
         public void AddNhanVien(NhanVienRequest request)
         {
-            if (IsIdExist(request.Ma))
+            if (string.IsNullOrEmpty(request.Ten))
             {
-                throw new Exception("ID already exists.");
+                throw new Exception("Tên không được để trống");
+            }
+
+            string maNhanVien = GenerateEmployeeCode(request.Ten);
+            int suffix = 1;
+            string originalMaNhanVien = maNhanVien;
+
+            while (_context.TblNhanViens.Any(nv => nv.Ma == maNhanVien))
+            {
+                maNhanVien = originalMaNhanVien + suffix.ToString();
+                suffix++;
             }
 
             var nhanVien = _mapper.Map<TblNhanVien>(request);
-            nhanVien.Ma = request.Ma;
+            nhanVien.Ma = maNhanVien;
             _context.TblNhanViens.Add(nhanVien);
             _context.SaveChanges();
         }
+
+        private string GenerateEmployeeCode(string fullName)
+        {
+            var nameParts = fullName.Split(' ');
+            if (nameParts.Length == 0)
+            {
+                throw new Exception("Tên không hợp lệ");
+            }
+
+            var lastName = nameParts.Last().ToLower();
+            var initials = string.Join("", nameParts.Take(nameParts.Length - 1).Select(name => name[0].ToString().ToLower()));
+
+            return lastName + initials;
+        }
+
 
         private bool IsIdExist(string id)
         {
@@ -142,28 +145,14 @@ namespace HumanResourcesManagement.Service
             return tonGiao;
         }
 
-        public NhanVienResponse  GetNhanVienById(string id)
+        public TblNhanVien GetNhanVienById(string id)
         {
             var nhanVien = _context.TblNhanViens.Find(id);
             if (nhanVien == null)
             {
                 throw new Exception("ID không tồn tại!");
             }
-
-            var danToc = _context.TblDanhMucDanTocs.Find(nhanVien.Dantoc);
-            var tonGiao = _context.TblDanhMucTonGiaos.Find(nhanVien.Tongiao);
-            var phong = _context.TblDanhMucPhongBans.Find(nhanVien.Phong);
-            var to = _context.TblDanhMucTos.Find(nhanVien.To);
-            var chucVuHienTai = _context.TblDanhMucChucDanhs.Find(nhanVien.Chucvuhientai);
-
-            var nhanVienResponse = _mapper.Map<NhanVienResponse>(nhanVien);
-            nhanVienResponse.tenDantoc = danToc?.Ten;
-            nhanVienResponse.tenTongiao = tonGiao?.Ten;
-            nhanVienResponse.tenPhong = phong?.Ten;
-            nhanVienResponse.tenTo = to?.Ten;
-            nhanVienResponse.Chucvuhientai = chucVuHienTai?.Ten;
-
-            return nhanVienResponse;
+            return nhanVien;
         }
 
         public TblDanhMucChucDanh GetChucVuById(int id)
