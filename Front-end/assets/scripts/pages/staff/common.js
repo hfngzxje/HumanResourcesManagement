@@ -1,5 +1,5 @@
 const TAB = {
-  RESUME: 1,
+  RESUME: 1 ,
   PERSON_HISTORY: 2,
   CULTURAL_PROFICIENCY: 3,
   FAMILY_RELATIONSHIP: 4,
@@ -28,7 +28,9 @@ const TAB_LIST = [
     label: "Trình độ văn hóa",
     activeByPath: "",
   },
-  { key: TAB.FAMILY_RELATIONSHIP, label: "Quan hệ gia đình", activeByPath: "" },
+  { key: TAB.FAMILY_RELATIONSHIP, 
+    label: "Quan hệ gia đình", 
+    activeByPath: "/pages/staff/FamilyRelationship.html" },
   {
     key: TAB.EMPLOYMENT_CONTRACT,
     label: "Hợp đồng lao động",

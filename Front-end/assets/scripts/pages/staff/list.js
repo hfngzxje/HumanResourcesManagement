@@ -111,3 +111,8 @@ $(document).ready(function () {
         }
     });
 });
+
+$('#employee-table').on('click', '.edit-button', function () {
+    const employeeId = $(this).closest('tr').find('td:nth-child(2)').text().trim();
+    window.location.href = `FamilyRelationship.html?maNV=${employeeId}`;
+});

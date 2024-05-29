@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
 </head>
 
@@ -20,11 +21,13 @@
                     <div class="flex justify-between">
                         <p class="text-xl">Danh sách nhân viên</p>
                         <div class="flex gap-3">
-                            <button type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700">
+                            <button type="button"
+                                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700">
                                 <i class="bx bxs-download mr-1"></i>
                                 Xuất file
                             </button>
-                            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+                            <button type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
                                 <i class="bx bx-plus mr-1"></i>
                                 Thêm mới
                             </button>
@@ -33,7 +36,9 @@
                     <div class="mt-3">
                         <div class="mb-6 grid grid-cols-12 gap-3">
                             <div class="col-span-3">
-                                <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nhập từ khóa" required />
+                                <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Nhập từ khóa" required />
                             </div>
                         </div>
                         <div class="relative overflow-x-auto">
@@ -64,9 +69,12 @@
         </div>
     </div>
 
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/common/transform.js"></script>
+    <script src="../../assets/scripts/common/loading.js"></script>
+    <script src="../../assets/scripts/pages/staff/common.js"></script>
+    <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/list.js"></script>
 </body>
 

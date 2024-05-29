@@ -274,6 +274,22 @@ class BaseInput extends HTMLElement {
     `;
   }
 }
+class BaseTextArea extends HTMLElement {
+  static observedAttributes = ["label", "hide-label", "name"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const hideLabel = !this.getAttribute("hide-label");
+    const name = this.getAttribute("name");
+
+    this.innerHTML = `
+    <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
+    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
+      <textarea rows="8" cols="50" name="${name}"  class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+    </div>
+    `;
+  }
+}
 
 class BaseDatePicker extends HTMLElement {
   static observedAttributes = ["label", "name"];
@@ -371,7 +387,7 @@ class BaseSelect extends HTMLElement {
     const keyLabel = this.getAttribute("keyLabel") || 'lable';
 
     document.addEventListener('DOMContentLoaded', () => {
-      if(!!api) {
+      if (!!api) {
         $.ajax({
           url: api,
           method: 'GET',
@@ -381,7 +397,7 @@ class BaseSelect extends HTMLElement {
               option.value = item[keyValue]
               option.innerText = item[keyLabel]
               this.querySelector('select').append(option)
-            })   
+            })
           },
           error: (err) => {
             console.log('fetchDantoc err :: ', err);
@@ -456,6 +472,8 @@ class BaseButton extends HTMLElement {
     const label = this.getAttribute("label") || "Base input";
     const type = this.getAttribute("type") || "primary";
     const icon = this.getAttribute("icon");
+    console.log("icon ", icon);
+
     // Các class chung
     const commonClasses =
       "focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5";
@@ -471,16 +489,17 @@ class BaseButton extends HTMLElement {
     const contentClass = BtnClass[type] || BtnClass.primary;
 
     this.innerHTML = `
-      <button type="button" class="${commonClasses} ${contentClass}">
-        ${icon ? `<i class='${icon} mr-1'></i>` : ""} ${label}
-      </button>
-    `;
+    <button type="button" class="${commonClasses} ${contentClass}">
+      ${icon ? `<i class='${icon} mr-1'></i>` : ""} ${label}
+    </button>
+  `;
   }
 }
 //  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
 customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);
+customElements.define("base-textarea", BaseTextArea);
 customElements.define("base-datepicker", BaseDatePicker);
 customElements.define("base-input-phone", BaseInputPhone);
 customElements.define("base-radio", BaseRadio);
