@@ -34,7 +34,7 @@ const TAB_LIST = [
   {
     key: TAB.EMPLOYMENT_CONTRACT,
     label: "Hợp đồng lao động",
-    activeByPath: "",
+    activeByPath: "/pages/staff/laborContract.html",
   },
   { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương", activeByPath: "" },
   {
@@ -70,7 +70,7 @@ function renderTab() {
       _class += " text-white bg-blue-600";
     }
     aElement.id = getTabId(tab.key);
-    aElement.href = "#";
+    aElement.href = tab.activeByPath;
     aElement.className = _class;
     aElement.textContent = tab.label;
 

@@ -49,41 +49,10 @@ function fetchEmployee() {
         }
     });
 }
-function fetchDantoc(){
-    setLoading(true)
-    $.ajax({
-        url:'https://localhost:7141/api/NhanVien/danToc',
-        method: 'GET',
-        success: function(data){
-            // setFormValue('dantoc_select', data);
-        },
-        error: (err) => {
-            console.log('fetchDantoc err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    })
-}
-
-function fetchTonGiao(){
-    setLoading(true)
-    $.ajax({
-        url:'https://localhost:7141/api/NhanVien/tonGiao',
-        method: 'GET',
-        success: function(data){
-            setFormValue('tongiao_select', data);
-        },
-        error: (err) => {
-            console.log('fetchTongiao err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    })
-}
 
 function handleCreate() {
+    const valid = validateForm('resume_form')
+    if(!valid) return
     const formValue = getFormValues('resume_form')
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -128,6 +97,9 @@ function handleRemove() {
 }
 
 function handleSave() {
+    const valid = validateForm('resume_form')
+    if(!valid) return
+    
     const formValue = getFormValues('resume_form')
     const payload = buildPayload(formValue)
     setLoading(true)

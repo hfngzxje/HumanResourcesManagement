@@ -258,45 +258,48 @@ class CustomSidebar extends HTMLElement {
   }
 }
 class BaseInput extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name"];
+  static observedAttributes = ["label", "hide-label", "name", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
-
+    const required = this.getAttribute("required");
+    
     this.innerHTML = `
-    <div class="">
+    <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
       }">${label}</label>
-      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
 }
 class BaseTextArea extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name"];
+  static observedAttributes = ["label", "hide-label", "name", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
     <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <textarea rows="8" cols="50" name="${name}"  class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+      <textarea rows="8" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
   }
 }
 
 class BaseDatePicker extends HTMLElement {
-  static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name")
+    const required = this.getAttribute("required");
 
     this.innerHTML = `
     <div>
@@ -307,7 +310,7 @@ class BaseDatePicker extends HTMLElement {
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
         </div>
-        <input datepicker type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+        <input datepicker type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
       </div>
     </div>
     `;
@@ -315,32 +318,34 @@ class BaseDatePicker extends HTMLElement {
 }
 
 class BaseInputPhone extends HTMLElement {
-  static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
 
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
 }
 
 class BaseInputNumber extends HTMLElement {
-  static observedAttributes = ["label", "name"];
+  static observedAttributes = ["label", "name", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
 
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
@@ -376,7 +381,7 @@ class LabelFormItem extends HTMLElement {
 }
 
 class BaseSelect extends HTMLElement {
-  static observedAttributes = ["label", "name", "options", "api", "keyValue", "keyLabel"];
+  static observedAttributes = ["label", "name", "options", "api", "keyValue", "keyLabel", "required"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
@@ -384,7 +389,8 @@ class BaseSelect extends HTMLElement {
     const optionsKey = this.getAttribute("options");
     const api = this.getAttribute("api");
     const keyValue = this.getAttribute("keyValue") || 'value';
-    const keyLabel = this.getAttribute("keyLabel") || 'lable';
+    const keyLabel = this.getAttribute("keyLabel") || 'label';
+    const required = this.getAttribute("required");
 
     document.addEventListener('DOMContentLoaded', () => {
       if (!!api) {
@@ -400,7 +406,7 @@ class BaseSelect extends HTMLElement {
             })
           },
           error: (err) => {
-            console.log('fetchDantoc err :: ', err);
+            console.log('Base select api err :: ', err);
           }
         })
         return
@@ -417,7 +423,7 @@ class BaseSelect extends HTMLElement {
     this.innerHTML = `
     <div class="max-w-sm mx-auto" style="margin: 0;">
       <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <select name="${name}"  class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <select name="${name}" required="${required}" class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
