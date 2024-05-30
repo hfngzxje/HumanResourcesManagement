@@ -2,7 +2,7 @@
 
 namespace HumanResourcesManagement.DTOS.Request
 {
-    public class HopDongRequest
+    public class UpdateHopDongRequest
     {
         [Required(ErrorMessage = "Ma hop dong is required")]
         public string Mahopdong { get; set; } = null!;
@@ -20,5 +20,6 @@ namespace HumanResourcesManagement.DTOS.Request
         public string? Ghichu { get; set; }
         [Required(ErrorMessage = "Ma is required")]
         public string? Ma { get; set; }
+        public int? trangThai { get; set; }
     }
 }

@@ -320,6 +320,8 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Chucdanh).HasColumnName("chucdanh");
 
+                entity.Property(e => e.TrangThai).HasColumnName("trangThai");
+
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(300)
                     .HasColumnName("ghichu");
