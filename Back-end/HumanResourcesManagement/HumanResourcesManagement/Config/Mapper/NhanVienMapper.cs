@@ -15,6 +15,10 @@ namespace HumanResourcesManagement.Config.Mapper
                 .ForMember(dest => dest.Ma, opt => opt.Ignore());
 
             CreateMap<TblNhanVien, NhanVienResponse>();
+            CreateMap<ChuyenMonRequest, TblDanhMucChuyenMon>();
+            CreateMap<TblDanhMucChuyenMon, ChuyenMonResponse>();
+            CreateMap<TrinhDoRequest, TblDanhMucTrinhDo>();
+            CreateMap<TblDanhMucTrinhDo, TrinhDoResponse>();
         }
     }
 }
