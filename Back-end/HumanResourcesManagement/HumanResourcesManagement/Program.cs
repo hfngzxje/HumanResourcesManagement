@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using HumanResourcesManagement.Service.IService;
 using HumanResourcesManagement.Service;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Config.Mapper;
 
@@ -23,6 +22,11 @@ public class Program
         builder.Services.AddScoped<IDanhMucTonGiaoService, DanhMucTonGiaoService>();
         builder.Services.AddScoped<IChuyenMonService, ChuyenMonService>();
         builder.Services.AddScoped<ITrinhDoService, TrinhDoService>();
+        builder.Services.AddScoped<IHoSoLuongService, HoSoLuongService>();
+
+
+
+
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
         builder.Services.AddSession(options =>
