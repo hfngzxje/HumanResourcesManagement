@@ -22,7 +22,7 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpPost("TaoMoiHopDong")]
-        public IActionResult CreateHopDong([FromBody] HopDongRequest request)
+        public IActionResult CreateHopDong([FromBody] InsertHopDongRequest request)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpPut("SuaMoiHopDong/{id}")]
-        public IActionResult UpdateHopDong(string id, [FromBody] HopDongRequest request)
+        public IActionResult UpdateHopDong(string id, [FromBody] UpdateHopDongRequest request)
         {
             try
             {
@@ -82,6 +82,34 @@ namespace HumanResourcesManagement.Controllers
             {
                 return NotFound(new { Message = ex.Message });
             }
+        }
+
+        [HttpGet("GetHopDongByMaNV/id")]
+        public IActionResult GetHopDongByMaNV(string id)
+        {
+            try
+            {
+                var hopDong = _hopDongService.GetAllHopDongByMaNV(id);
+                return Ok(hopDong);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("loaiHopDong")]
+        public IActionResult GetAllLoaiHopDong()
+        {
+            var loaiHopDong = _hopDongService.GetAllLoaiHopDong();
+            return Ok(loaiHopDong);
+        }
+
+        [HttpGet("chucDanh")]
+        public IActionResult GetAllChucDanh()
+        {
+            var chucDanh = _hopDongService.GetAllChucDanh();
+            return Ok(chucDanh);
         }
     }
 }
