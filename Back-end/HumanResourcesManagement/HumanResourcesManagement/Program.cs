@@ -21,7 +21,8 @@ public class Program
         builder.Services.AddScoped<IKhenThuongKiLuatService, KhenThuongKiLuatService>();
         builder.Services.AddScoped<IDanhMucDanTocService, DanhMucDanTocService>();
         builder.Services.AddScoped<IDanhMucTonGiaoService, DanhMucTonGiaoService>();
-
+        builder.Services.AddScoped<IChuyenMonService, ChuyenMonService>();
+        builder.Services.AddScoped<ITrinhDoService, TrinhDoService>();
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
         builder.Services.AddSession(options =>
