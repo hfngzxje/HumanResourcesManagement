@@ -23,6 +23,8 @@ public class Program
         builder.Services.AddScoped<IChuyenMonService, ChuyenMonService>();
         builder.Services.AddScoped<ITrinhDoService, TrinhDoService>();
         builder.Services.AddScoped<IHoSoLuongService, HoSoLuongService>();
+        builder.Services.AddScoped<IChucDanhService, ChucDanhService>();
+        builder.Services.AddScoped<IPhongBanService, PhongBanService>();
 
 
 

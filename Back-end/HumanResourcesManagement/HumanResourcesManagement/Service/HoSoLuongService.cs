@@ -117,5 +117,26 @@ namespace HumanResourcesManagement.Service
             _context.TblLuongs.Remove(hoSoLuong);
             _context.SaveChanges();
         }
+
+        public List<TblLuong> getAllHoSoLuongByMaNV(string maNV)
+        {
+            var maHopDongs = _context.TblHopDongs
+                                     .Where(hd => hd.Ma == maNV)
+                                     .Select(hd => hd.Mahopdong)
+                                     .ToList();
+
+            if (!maHopDongs.Any())
+            {
+                throw new Exception("Không tìm thấy hợp đồng nào cho mã nhân viên này.");
+            }
+
+            var hoSoLuongs = _context.TblLuongs
+                                     .Where(l => maHopDongs.Contains(l.Mahopdong))
+                                     .ToList();
+
+            return hoSoLuongs;
+        }
+
+
     }
 }

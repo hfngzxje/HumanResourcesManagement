@@ -75,5 +75,19 @@ namespace HumanResourcesManagement.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+        [HttpGet("getAllLuongByMaNV/{maNV}")]
+        public IActionResult GetAllLuongByMaNV(string maNV)
+        {
+            try
+            {
+                var hoSoLuong = _hoSoLuongService.getAllHoSoLuongByMaNV(maNV);
+                return Ok(hoSoLuong);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
     }
 }
