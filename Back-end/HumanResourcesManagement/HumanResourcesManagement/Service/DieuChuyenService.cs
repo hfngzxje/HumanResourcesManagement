@@ -34,6 +34,20 @@ namespace HumanResourcesManagement.Service
             return ht;
         }
 
+        public async Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV)
+        {
+            var dc = await _context.TblDieuChuyens.Where(nv => nv.Manv == maNV)
+                .Select(dc => new DieuChuyenResponseDto
+                {
+                    Id = dc.Id,
+                    NgayDieuChuyen = dc.Ngayhieuluc,
+                    Phong = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == dc.Phong).Ten,
+                    To = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == dc.To).Ten,
+                    ChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(d => d.Id == dc.Chucvu).Ten,
+                    ChiTiet = dc.Chitiet,
+                }).ToListAsync();
+            return dc;
+        }
         public async Task<TblDieuChuyen> AddDieuChuyen(InsertDieuChuyenRequest req)
         {
             try
