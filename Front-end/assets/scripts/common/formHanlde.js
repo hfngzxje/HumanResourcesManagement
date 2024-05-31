@@ -110,8 +110,20 @@ function validateForm(formId) {
     const isRequired = element.getAttribute('required') === 'true';
 
     if(!isRequired) continue
+
     const value = getElValue(element)
-    if(!value) {
+    if (name === 'didong') {
+      if (isNaN(value) || value.length < 10 || value.length > 10) {
+        valid = false;
+        element.value = '';
+        element.classList.add(...inputErrClass);
+        element.placeholder = "Vui lòng nhập số điện thoại hợp lệ";
+      }
+      else {
+        element.classList.remove(...inputErrClass);
+      }
+    }
+    else if(!value) {
       valid = false
       element.classList.add(...inputErrClass)
       element.placeholder = "Vui lòng nhập thông tin"

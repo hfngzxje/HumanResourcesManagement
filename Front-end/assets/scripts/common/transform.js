@@ -1,7 +1,7 @@
 function convertToISODate(dateString) {
     try {
         // Tách chuỗi theo dấu "/"
-        const [month, day, year] = dateString.split('/');
+        const [day, month, year] = dateString.split('/');
 
         // Kiểm tra nếu các giá trị không hợp lệ
         if (!day || !month || !year) {
@@ -9,7 +9,7 @@ function convertToISODate(dateString) {
         }
 
         // Tạo chuỗi theo định dạng ISO
-        const isoDateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00:00`;
+        const isoDateString = `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}T00:00:00`;
 
         return isoDateString;
     } catch (error) {

@@ -33,8 +33,8 @@ function buildPayload(formValue) {
         }
     })
     
-    console.log('trangThai', formClone['trangThai']);
-    formClone['trangThai'] = formClone['trangThai'] === '1'
+   
+    formClone['trangThai'] = Number(formClone['trangThai']) === '1' ? 1:0
     return formClone
 }
 
