@@ -6,8 +6,8 @@ namespace HumanResourcesManagement.DTOS.Response
     {
         public string Ma { get; set; }
         public DateTime? Ngaychinhthuc { get; set; }
-        public int? Phong { get; set; }
-        public int? To { get; set; }
+        public string? Phong { get; set; }
+        public string? To { get; set; }
         public string? Chucvuhientai { get; set; }
     }
 }
