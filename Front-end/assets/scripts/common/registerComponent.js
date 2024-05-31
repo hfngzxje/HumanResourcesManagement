@@ -391,8 +391,10 @@ class BaseSelect extends HTMLElement {
     const keyValue = this.getAttribute("keyValue") || 'value';
     const keyLabel = this.getAttribute("keyLabel") || 'label';
     const required = this.getAttribute("required");
+    
 
     document.addEventListener('DOMContentLoaded', () => {
+      
       if (!!api) {
         $.ajax({
           url: api,

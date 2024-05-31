@@ -36,7 +36,8 @@ const TAB_LIST = [
     label: "Hợp đồng lao động",
     activeByPath: "/pages/staff/laborContract.html",
   },
-  { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương", activeByPath: "" },
+  { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương",
+    activeByPath: "/pages/staff/salaryRecord.html" },
   {
     key: TAB.EMPLOYMENT_HISTORY,
     label: "Quá trình công tác",

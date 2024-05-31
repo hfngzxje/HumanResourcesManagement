@@ -2,14 +2,13 @@ const params = new URL(document.location.toString()).searchParams;
 const id = params.get("id");
 const isEdit = !!id
 
-var MaritalOptions = [
-    { label: 'Đã kết hôn', value: 1 },
-    { label: 'Chưa kết hôn', value: 0 },
-]
+
 
 function backToList() {
     window.location.replace("/pages/staff/list.html");
 }
+
+
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
@@ -56,13 +55,13 @@ function fetchEmployee() {
 }
 
 function handleCreate() {
-    const valid = validateForm('resume_form')
+    const valid = validateForm('salaryRecord_form')
     if(!valid) return
-    const formValue = getFormValues('resume_form')
+    const formValue = getFormValues('salaryRecord_form')
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+        url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -85,7 +84,7 @@ function handleRemove() {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
+        url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -128,7 +127,8 @@ function handleSave() {
 }
 
 function renderActionByStatus() {
-    const actionEl = document.getElementById('resume_form_action')
+    const actionEl = document.getElementById('tinhluong_form_Action')
+    const actionE2 = document.getElementById('salary_form_action');
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
@@ -136,21 +136,20 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
-        return
-    }
+    const tinhLuong = buildButton('Tính lương', '', 'bx bx-save')
+    tinhLuong.addEventListener('click', handleSave)
 
+    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
 
+
+    createBtn.addEventListener('click', handleCreate)
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(tinhLuong)
+    actionE2.append(createBtn,saveBtn,removeBtn)
 }
 
 document.addEventListener('DOMContentLoaded', () => {

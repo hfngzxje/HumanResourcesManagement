@@ -3,43 +3,48 @@ const id = params.get("id");
 const isEdit = !!id
 
 var MaritalOptions = [
-    { label: 'Đã kết hôn', value: 1 },
-    { label: 'Chưa kết hôn', value: 0 },
-]
-var ngachCongChucGroups =[
-    {
-        value: '1', label: '1'
-    }
-]
-var tonGiaoGroups =[
-    {
-        value: '1', label: '1'
-    }
-]
+    { label: 'Hợp đồng còn thời hạn', value: 1 },
+    { label: 'Hợp đồng quá hạn', value: 0 },
+];
 
 function backToList() {
-    window.location.replace("/pages/staff/list.html");
+    window.location.replace("/pages/staff/laborContract.html");
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const dateKey = ['ngaysinh','cmndngaycap','ngaytuyendung','ngayvaoban','ngaychinhthuc','ngayvaodang','ngayvaodangchinhthuc','ngaynhapngu','ngayxuatngu','ngayvaodoan']
+    const phoneKey = ['']
+    const dateKey = ['hopdongdenngay','hopdongtungay']
     dateKey.forEach(key => {
-        if(!formClone[key]) return
-        formClone[key] = convertToISODate(formClone[key])
+        if(!formClone[key]) {
+            formClone[key] = null;
+        }
+        else{
+            formClone[key] = convertToISODate(formClone[key])
+        }
+        
     })
-    console.log('gioitinh', formClone['gioitinh']);
-    formClone['gioitinh'] = formClone['gioitinh'] === '1'
+    
+    phoneKey.forEach(key => {
+        if(!formClone[key]) {
+            formClone[key] = null
+        } else {
+            formClone[key] = convertToPhoneNumber(formClone[key])
+        }
+    })
+    
+    console.log('trangThai', formClone['trangThai']);
+    formClone['trangThai'] = formClone['trangThai'] === '1'
     return formClone
 }
 
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
+        url: 'https://localhost:7141/api/HopDong/id?id=' + id,
         method: 'GET',
         success: function(data) {
-            setFormValue('resume_form', data)
+            setFormValue('laborContract_form', data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -49,46 +54,17 @@ function fetchEmployee() {
         }
     });
 }
-function fetchDantoc(){
-    setLoading(true)
-    $.ajax({
-        url:'https://localhost:7141/api/NhanVien/danToc',
-        method: 'GET',
-        success: function(data){
-            // setFormValue('dantoc_select', data);
-        },
-        error: (err) => {
-            console.log('fetchDantoc err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    })
-}
 
-function fetchTonGiao(){
-    setLoading(true)
-    $.ajax({
-        url:'https://localhost:7141/api/NhanVien/tonGiao',
-        method: 'GET',
-        success: function(data){
-            setFormValue('tongiao_select', data);
-        },
-        error: (err) => {
-            console.log('fetchTongiao err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    })
-}
+
 
 function handleCreate() {
-    const formValue = getFormValues('resume_form')
+    const valid = validateForm('laborContract_form')
+    if(!valid) return
+    const formValue = getFormValues('laborContract_form')
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -111,7 +87,7 @@ function handleRemove() {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
+        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -132,7 +108,7 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + id,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
