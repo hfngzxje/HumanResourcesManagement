@@ -7,13 +7,46 @@ var MaritalOptions = [
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
 
+var TableColumns = [
+    {
+      label: 'Mã hợp đồng',
+      key: 'mahopdong'
+    },
+    {
+      label: 'Lương cơ bản',
+      key: 'luongcoban',
+      type: 'currency'
+    },
+    {
+      label: 'Từ ngày',
+      key: 'hopdongtungay',
+      type: 'datetime'
+    },
+    {
+      label: 'Đến ngày',
+      key: 'hopdongdenngay',
+      type: 'datetime'
+    },
+    {
+      label: 'Ghi chú',
+      key: 'ghichu'
+    },
+    {
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: () => { console.log('click') } },
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
+      ]
+    }
+  ]
+
 function backToList() {
     window.location.replace("/pages/staff/laborContract.html");
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const phoneKey = ['']
     const dateKey = ['hopdongdenngay','hopdongtungay']
     dateKey.forEach(key => {
         if(!formClone[key]) {
@@ -21,20 +54,11 @@ function buildPayload(formValue) {
         }
         else{
             formClone[key] = convertToISODate(formClone[key])
-        }
-        
+        }  
     })
     
-    phoneKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null
-        } else {
-            formClone[key] = convertToPhoneNumber(formClone[key])
-        }
-    })
+    formClone['trangThai'] = Number(formClone['trangThai'])
     
-   
-    formClone['trangThai'] = Number(formClone['trangThai']) === '1' ? 1:0
     return formClone
 }
 
@@ -61,6 +85,7 @@ function handleCreate() {
     const valid = validateForm('laborContract_form')
     if(!valid) return
     const formValue = getFormValues('laborContract_form')
+    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({

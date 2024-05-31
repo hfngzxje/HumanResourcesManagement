@@ -66,12 +66,12 @@ function renderTab() {
     const aElement = document.createElement("a");
     let _class =
       "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100";
-    const isActive = tab?.activeByPath === currentPath;
+    const isActive = tab?.activeByPath !== "" && currentPath.includes(tab?.activeByPath) ;
     if (isActive) {
       _class += " text-white bg-blue-600";
     }
     aElement.id = getTabId(tab.key);
-    aElement.href = tab.activeByPath;
+    aElement.href = '../..' + tab.activeByPath + '?id=' + id;
     aElement.className = _class;
     aElement.textContent = tab.label;
 
