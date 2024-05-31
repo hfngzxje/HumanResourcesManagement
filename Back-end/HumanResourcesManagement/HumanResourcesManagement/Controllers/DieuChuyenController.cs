@@ -62,5 +62,19 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
+
+        [HttpGet("GetAllDieuChuyen")]
+        public async Task<IActionResult> GetAllDieuChuyen(string maNV)
+        {
+            try
+            {
+                var ht = await _dieuChuyenService.GetAllDieuChuyen(maNV);
+                return StatusCode(200, ht);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
     }
 }
