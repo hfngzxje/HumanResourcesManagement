@@ -9,5 +9,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<CongViecHienTaiDto> GetCongViecHienTai(string maNV);
         Task<TblDieuChuyen> AddDieuChuyen(InsertDieuChuyenRequest req);
         Task RemoveDieuChuyen(int id);
+        Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV);
     }
 }
