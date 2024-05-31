@@ -13,7 +13,6 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const phoneKey = ['']
     const dateKey = ['hopdongdenngay','hopdongtungay']
     dateKey.forEach(key => {
         if(!formClone[key]) {
@@ -21,20 +20,10 @@ function buildPayload(formValue) {
         }
         else{
             formClone[key] = convertToISODate(formClone[key])
-        }
-        
+        }  
     })
     
-    phoneKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null
-        } else {
-            formClone[key] = convertToPhoneNumber(formClone[key])
-        }
-    })
-    
-    console.log('trangThai', formClone['trangThai']);
-    formClone['trangThai'] = formClone['trangThai'] === '1'
+    formClone['trangThai'] = Number(formClone['trangThai'])
     return formClone
 }
 
@@ -61,6 +50,7 @@ function handleCreate() {
     const valid = validateForm('laborContract_form')
     if(!valid) return
     const formValue = getFormValues('laborContract_form')
+    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({

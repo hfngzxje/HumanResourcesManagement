@@ -33,7 +33,6 @@ function buildPayload(formValue) {
         }
     })
     
-    console.log('gioitinh', formClone['gioitinh']);
     formClone['gioitinh'] = formClone['gioitinh'] === '1'
     return formClone
 }
