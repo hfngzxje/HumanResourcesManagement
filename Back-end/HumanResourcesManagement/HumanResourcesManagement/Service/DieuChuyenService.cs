@@ -14,7 +14,7 @@ namespace HumanResourcesManagement.Service
         public DieuChuyenService(NhanSuContext context, INhanVienService nhanVienService)
         {
             _context = context;
-            _nhanVienService= nhanVienService;
+            _nhanVienService = nhanVienService;
         }
         public async Task<CongViecHienTaiDto> GetCongViecHienTai(string maNV)
         {
@@ -24,8 +24,8 @@ namespace HumanResourcesManagement.Service
                     Ma = nt.Ma,
                     Chucvuhientai = _context.TblDanhMucChucDanhs.FirstOrDefault(c => c.Id == nt.Chucvuhientai).Ten,
                     Ngaychinhthuc = nt.Ngaychinhthuc,
-                    Phong = nt.Phong,
-                    To = nt.To,
+                    Phong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == nt.Phong).Ten,
+                    To = _context.TblDanhMucTos.FirstOrDefault(p => p.Id == nt.To).Ten,
                 }).FirstAsync();
             if (ht == null)
             {
@@ -54,7 +54,9 @@ namespace HumanResourcesManagement.Service
             {
                 var ht = await GetCongViecHienTai(req.Ma);
                 var cv = _context.TblDanhMucChucDanhs.FirstOrDefault(c => c.Ten == ht.Chucvuhientai).Id;
-                if ((ht.Phong == req.Phong && ht.To == req.To && cv == req.Chucvu))
+                var phongHienTai = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == req.Phong).Ten;
+                var toHienTai = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == req.To).Ten;
+                if ((ht.Phong == phongHienTai && ht.To == toHienTai && cv == req.Chucvu))
                 {
                     throw new Exception("dieu chuyen phai khac voi hien tai.");
                 }
