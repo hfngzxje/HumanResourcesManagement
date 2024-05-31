@@ -53,7 +53,7 @@ namespace HumanResourcesManagement.Models
         public string? Nganhang { get; set; }
         public int? Phong { get; set; }
         public int? To { get; set; }
-        public byte[]? Anh { get; set; }
+        public string? Anh { get; set; }
 
         public virtual TblLichSuBanThan? TblLichSuBanThan { get; set; }
         public virtual ICollection<TblTrinhDoVanHoa> TblTrinhDoVanHoas { get; set; }
