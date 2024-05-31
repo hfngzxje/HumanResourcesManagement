@@ -7,6 +7,40 @@ var MaritalOptions = [
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
 
+var TableColumns = [
+    {
+      label: 'Mã hợp đồng',
+      key: 'mahopdong'
+    },
+    {
+      label: 'Lương cơ bản',
+      key: 'luongcoban',
+      type: 'currency'
+    },
+    {
+      label: 'Từ ngày',
+      key: 'hopdongtungay',
+      type: 'datetime'
+    },
+    {
+      label: 'Đến ngày',
+      key: 'hopdongdenngay',
+      type: 'datetime'
+    },
+    {
+      label: 'Ghi chú',
+      key: 'ghichu'
+    },
+    {
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: () => { console.log('click') } },
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
+      ]
+    }
+  ]
+
 function backToList() {
     window.location.replace("/pages/staff/laborContract.html");
 }
