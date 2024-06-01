@@ -1,5 +1,3 @@
-const params = new URL(document.location.toString()).searchParams;
-const id = params.get("id");
 const isEdit = !!id
 
 var MaritalOptions = [
@@ -154,6 +152,7 @@ function renderActionByStatus() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    console.log('id ', id);
     if (id) {
         fetchEmployee()
     }

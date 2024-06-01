@@ -1,59 +1,104 @@
-const params = new URL(document.location.toString()).searchParams;
+const isEdit = !!id
 
+let maHopDongHienTai = null
 
 var MaritalOptions = [
-    { label: 'Đã kết hôn', value: 1 },
-    { label: 'Chưa kết hôn', value: 0 },
-]
-var ngachCongChucGroups =[
+    { label: 'Hợp đồng còn thời hạn', value: 1 },
+    { label: 'Hợp đồng quá hạn', value: 0 },
+];
+
+var TableColumns = [
     {
-        value: '1', label: '1'
-    }
-]
-var tonGiaoGroups =[
+      label: 'Họ Tên',
+      key: 'ten'
+    },
     {
-        value: '1', label: '1'
+      label: 'Quan Hệ',
+      key: 'quanhe',
+      type: 'int',
+      formatter: (value) => {
+        const relationship = relationshipOptions.find(item => item.id === value);
+        return relationship ? relationship.id : 'Không xác định';}
+    },
+    {
+      label: 'Ngày Sinh',
+      key: 'ngaysinh',
+      type: 'datetime'
+    },
+    {
+      label: 'Địa chỉ',
+      key: 'diachi',
+    },
+    {
+      label: 'Điện thoại',
+      key: 'dienthoai'
+    },
+    {
+        label: 'Nghề nghiệp',
+        key: 'nghenghiep'
+      },
+      {
+        label: 'Thông tin khác',
+        key: 'khac'
+      },
+    {
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.mahopdong)} },
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
+      ]
     }
-]
+  ]
 
 function backToList() {
-    window.location.replace("/pages/staff/list.html");
+    window.location.replace("/pages/staff/familyRelationship.html");
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const dateKey = ['ngaysinh','cmndngaycap','ngaytuyendung','ngayvaoban','ngaychinhthuc','ngayvaodang','ngayvaodangchinhthuc','ngaynhapngu','ngayxuatngu','ngayvaodoan']
+    const dateKey = ['hopdongdenngay','hopdongtungay']
     dateKey.forEach(key => {
-        if(!formClone[key]) return
-        formClone[key] = convertToISODate(formClone[key])
+        if(!formClone[key]) {
+            formClone[key] = null;
+        }
+        else{
+            formClone[key] = convertToISODate(formClone[key])
+        }  
     })
-    console.log('gioitinh', formClone['gioitinh']);
-    formClone['gioitinh'] = formClone['gioitinh'] === '1'
+    
+    formClone['trangThai'] = Number(formClone['trangThai'])
+
     return formClone
 }
 
-
-
-function getInputValueByName(id) {
-    const inputElement = document.querySelector(`base-input[name="${id}"] input`);
-    if (inputElement) {
-        return inputElement.value;
-    } else {
-        console.error(`Input field with name "${id}" not found`);
-        return null;
-    }
+function fetchEmployee(maHD) {
+    setLoading(true)
+    maHopDongHienTai = maHD
+    $.ajax({
+        url: 'https://localhost:7141/api/HopDong/id?id=' + maHD,
+        method: 'GET',
+        success: function(data) {
+            setFormValue('laborContract_form', data)
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
 function handleCreate() {
+    const valid = validateForm('relationship_form')
+    if(!valid) return
     const formValue = getFormValues('relationship_form')
-    
+    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
-    const idValue = getInputValueByName('id');
-
-    payload = idValue;
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
+        url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -70,22 +115,13 @@ function handleCreate() {
         }
     });
 }
-function getInputValueByName(id) {
-    const inputElement = document.querySelector(`base-input[name="${id}"] input`);
-    if (inputElement) {
-        return inputElement.value;
-    } else {
-        console.error(`Input field with name "${id}" not found`);
-        return null;
-    }
-}
 
 function handleRemove() {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
+        url: 'hhttps://localhost:7141/api/NguoiThan/removeNguoiThan/' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -102,38 +138,41 @@ function handleRemove() {
 }
 
 function handleSave() {
-    const formValue = getFormValues('relationship_form');
-    const id = getInputValueByName('id');
-    
-    if (!id) {
-        alert('ID không được tìm thấy hoặc không hợp lệ.');
-        setLoading(false);
-        return;
-    }
-    const payload = buildPayload(formValue);
-    payload.id = id;
-    setLoading(true);
-    
-    fetch('https://localhost:7141/api/NguoiThan/updateNguoiThan', {
+    const formValue = getFormValues('laborContract_form')
+    const payload = buildPayload(formValue)
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            // backToList()
         },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('fetchEmployee res :: ', data);
-        backToList();
-    })
-    .catch(error => {
-        console.log('fetchEmployee err :: ', error);
-        alert("Cập nhật thất bại!");
-    })
-    .finally(() => {
-        setLoading(false);
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+            }
+           
+            
+        },
+        complete: () => {
+            setLoading(false)
+        }
     });
 }
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (label, type, icon) => {
@@ -143,11 +182,12 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-
+    if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
         createBtn.addEventListener('click', handleCreate)
         actionEl.append(createBtn)
-  
+        return
+    }
 
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
@@ -161,8 +201,8 @@ function renderActionByStatus() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-   
- 
-
+    // if (id) {
+    //     fetchEmployee()
+    // }
 })
 

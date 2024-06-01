@@ -566,7 +566,7 @@ class BaseTable extends HTMLElement {
                   btnEl.setAttribute('type', type)
                   btnEl.setAttribute('icon', icon)
                   btnEl.setAttribute('mini', "true")
-                  btnEl.addEventListener('click', onClick)
+                  btnEl.addEventListener('click', () => onClick(row))
                   thEl.appendChild(btnEl)
                 })
               } else {

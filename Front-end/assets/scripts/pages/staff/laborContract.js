@@ -1,6 +1,7 @@
-const params = new URL(document.location.toString()).searchParams;
-const id = params.get("id");
 const isEdit = !!id
+
+let maHopDongHienTai = null
+
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -35,7 +36,7 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: () => { console.log('click') } },
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.mahopdong)} },
         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
       ]
     }
@@ -58,14 +59,15 @@ function buildPayload(formValue) {
     })
     
     formClone['trangThai'] = Number(formClone['trangThai'])
-    
+
     return formClone
 }
 
-function fetchEmployee() {
+function fetchEmployee(maHD) {
     setLoading(true)
+    maHopDongHienTai = maHD
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/id?id=' + id,
+        url: 'https://localhost:7141/api/HopDong/id?id=' + maHD,
         method: 'GET',
         success: function(data) {
             setFormValue('laborContract_form', data)
@@ -78,8 +80,6 @@ function fetchEmployee() {
         }
     });
 }
-
-
 
 function handleCreate() {
     const valid = validateForm('laborContract_form')
@@ -112,7 +112,7 @@ function handleRemove() {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + id,
+        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -133,17 +133,30 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + id,
+        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            backToList()
+            // backToList()
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Cập nhật thất bại!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+            }
+           
+            
         },
         complete: () => {
             setLoading(false)
@@ -179,10 +192,8 @@ function renderActionByStatus() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-    if (id) {
-        fetchEmployee()
-    }
- 
-
+    // if (id) {
+    //     fetchEmployee()
+    // }
 })
 
