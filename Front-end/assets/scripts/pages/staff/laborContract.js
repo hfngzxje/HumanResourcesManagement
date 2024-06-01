@@ -2,7 +2,6 @@ const isEdit = !!id
 
 let maHopDongHienTai = null
 
-
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
@@ -188,6 +187,10 @@ function renderActionByStatus() {
     saveBtn.addEventListener('click', handleSave)
 
     actionEl.append(removeBtn, saveBtn, exportBtn)
+}
+
+function buildApiUrl() {
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id
 }
 
 document.addEventListener('DOMContentLoaded', () => {

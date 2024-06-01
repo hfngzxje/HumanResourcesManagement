@@ -516,6 +516,11 @@ class BaseTable extends HTMLElement {
     const api = this.getAttribute('api')
     const columnsKey = this.getAttribute('columns')
 
+    function getApiUrl() {
+      if(!window[api]) return api
+      return window[api]()
+    }
+
     function formatDateTime(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
       const year = dateTime.getFullYear();
@@ -545,7 +550,7 @@ class BaseTable extends HTMLElement {
       headEl.appendChild(headTrEl)
 
       $.ajax({
-        url: api,
+        url: getApiUrl(),
         method: 'GET',
         success: (tableData) => {
           const bodyEl = this.querySelector('tbody')
