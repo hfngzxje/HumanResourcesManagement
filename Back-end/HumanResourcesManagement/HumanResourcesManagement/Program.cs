@@ -27,7 +27,8 @@ public class Program
         builder.Services.AddScoped<IPhongBanService, PhongBanService>();
         builder.Services.AddScoped<IDanhMucQuanHeService, DanhMucQuanHeService>();
         builder.Services.AddScoped<IImageService, ImageService>();
-
+        builder.Services.AddScoped<IDanhMucNgoaiNguService, DanhMucNgoaiNguService>();
+        builder.Services.AddScoped<IDanhMucToService, DanhMucToService>();
 
 
 
