@@ -209,5 +209,18 @@ namespace HumanResourcesManagement.Controllers
             var to = _nhanVienService.GetAllTo();
             return Ok(to);
         }
+
+        [HttpGet("getByPhongBan")]
+        public async Task<IActionResult> GetByPhongBan(int idPhong, bool? gioiTinh)
+        {
+            try
+            {
+                var list = await _nhanVienService.getNhanVienByPhongBan(idPhong, gioiTinh);
+                return Ok(list);
+            }catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
