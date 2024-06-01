@@ -11,26 +11,6 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const phoneKey = ['dienthoai']
-    const dateKey = ['ngaysinh','cmndngaycap','ngaytuyendung','ngayvaoban','ngaychinhthuc','ngayvaodang','ngayvaodangchinhthuc','ngaynhapngu','ngayxuatngu','ngayvaodoan']
-    dateKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null;
-        }
-        else{
-            formClone[key] = convertToISODate(formClone[key])
-        }
-        
-    })
-    
-    phoneKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null
-        } else {
-            formClone[key] = convertToPhoneNumber(formClone[key])
-        }
-    })
-    
     formClone['gioitinh'] = formClone['gioitinh'] === '1'
     return formClone
 }
@@ -53,8 +33,8 @@ function fetchEmployee() {
 }
 
 function handleCreate() {
-    const valid = validateForm('resume_form')
-    if(!valid) return
+    // const valid = validateForm('resume_form')
+    // if(!valid) return
     const formValue = getFormValues('resume_form')
     const payload = buildPayload(formValue)
     setLoading(true)

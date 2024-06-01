@@ -1,9 +1,45 @@
+function formatDate(isoDate) {
+  // Create a new Date object from the ISO 8601 date string
+  const date = new Date(isoDate);
+
+  // Get the month, day, and year from the Date object
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  // Format the date as MM/DD/YYYY
+  return `${month}/${day}/${year}`;
+}
+
+function convertToISODate(dateString) {
+  try {
+      // Tách chuỗi theo dấu "/"
+      const [day, month, year] = dateString.split('/');
+
+      // Kiểm tra nếu các giá trị không hợp lệ
+      if (!day || !month || !year) {
+          throw new Error("Invalid date format");
+      }
+
+      // Tạo chuỗi theo định dạng ISO
+      const isoDateString = `${year}-${day.padStart(2, '0')}-${month.padStart(2, '0')}T00:00:00`;
+
+      return isoDateString;
+  } catch (error) {
+      return null;
+  }
+
+}
+
 function getElValue (element) {
   let value = "";
 
   // Xử lý các loại thẻ input khác nhau
   if (element.tagName === "INPUT") {
-    if (element.type === "radio") {
+
+    if(element.getAttribute('datepicker') !== null) {
+      value = convertToISODate(element.value)
+    } else if (element.type === "radio") {
       if (element.checked) {
         value = element.value;
       }
@@ -50,9 +86,9 @@ function getFormValues(formId) {
     const name = element.name;
     const value = getElValue(element)
     // Thêm vào object formData
-    if (name) {
-      formData[name] = value;
-    }
+    if (!name) return
+    
+    formData[name] = value;
   });
 
   return formData;
@@ -76,7 +112,9 @@ function setFormValue(formId, formValue) {
     const defaultValue = formValue[name]
 
     if (element.tagName === 'INPUT') {
-      if (element.type === "radio") {
+      if(element.getAttribute('datepicker') !== null) {
+        element.value = formatDate(defaultValue)
+      } else if (element.type === "radio") {
         element.checked = element.value === (+defaultValue).toString()
       } else if (element.type === "checkbox") {
         element.checked = defaultValue
@@ -92,6 +130,18 @@ function setFormValue(formId, formValue) {
 }
 
 const inputErrClass = ['bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700', 'focus:ring-red-500', '!focus:border-red-500']
+
+function isValidVietnamPhoneNumber(phoneNumber) {
+  // Remove all non-digit characters
+  const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+  // Regular expression to validate Vietnamese phone numbers
+  const phoneRegex = /^(03|05|07|08|09)\d{8}$/;
+
+  // Test the cleaned phone number against the regex
+  return phoneRegex.test(cleanedPhoneNumber);
+}
+
 
 function validateForm(formId) {
   const form = document.getElementById(formId);
@@ -112,10 +162,9 @@ function validateForm(formId) {
     if(!isRequired) continue
 
     const value = getElValue(element)
-    if (name === 'didong') {
-      if (isNaN(value) || value.length < 10 || value.length > 10) {
+    if (element.type === 'tel') {
+      if (!isValidVietnamPhoneNumber(value)) {
         valid = false;
-        element.value = '';
         element.classList.add(...inputErrClass);
         element.placeholder = "Vui lòng nhập số điện thoại hợp lệ";
       }
