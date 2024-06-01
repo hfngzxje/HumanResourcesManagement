@@ -52,8 +52,6 @@ namespace HumanResourcesManagement.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<TblDanhMucChucDanh>(entity =>
             {
                 entity.ToTable("tblDanhMucChucDanh");
@@ -143,9 +141,7 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Ma)
                     .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("ma")
-                    .IsFixedLength();
+                    .HasColumnName("ma");
 
                 entity.Property(e => e.Ngay)
                     .HasColumnType("datetime")
@@ -320,8 +316,6 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Chucdanh).HasColumnName("chucdanh");
 
-                entity.Property(e => e.TrangThai).HasColumnName("trangThai");
-
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(300)
                     .HasColumnName("ghichu");
@@ -343,6 +337,8 @@ namespace HumanResourcesManagement.Models
                     .IsUnicode(false)
                     .HasColumnName("ma")
                     .IsFixedLength();
+
+                entity.Property(e => e.TrangThai).HasColumnName("trangThai");
             });
 
             modelBuilder.Entity<TblLichSuBanThan>(entity =>
@@ -514,9 +510,7 @@ namespace HumanResourcesManagement.Models
                     .HasColumnName("ma")
                     .IsFixedLength();
 
-                entity.Property(e => e.Anh)
-                    .HasColumnType("image")
-                    .HasColumnName("anh");
+                entity.Property(e => e.Anh).HasColumnName("anh");
 
                 entity.Property(e => e.Atm)
                     .HasMaxLength(20)

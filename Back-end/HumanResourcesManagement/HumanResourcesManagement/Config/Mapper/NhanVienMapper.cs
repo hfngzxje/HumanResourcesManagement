@@ -19,6 +19,11 @@ namespace HumanResourcesManagement.Config.Mapper
             CreateMap<TblDanhMucChuyenMon, ChuyenMonResponse>();
             CreateMap<TrinhDoRequest, TblDanhMucTrinhDo>();
             CreateMap<TblDanhMucTrinhDo, TrinhDoResponse>();
+            CreateMap<DanhMucNgoaiNguRequest, TblDanhMucNgoaiNgu>();
+            CreateMap<TblDanhMucNgoaiNgu, DanhMucNgoaiNguResponse>();
+
+            CreateMap<DanhMucToRequest, TblDanhMucTo>();
+            CreateMap<TblDanhMucTo, DanhMucToResponse>();
         }
     }
 }
