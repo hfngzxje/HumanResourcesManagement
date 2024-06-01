@@ -18,7 +18,7 @@ var TableColumns = [
       type: 'int',
       formatter: (value) => {
         const relationship = relationshipOptions.find(item => item.id === value);
-        return relationship ? relationship.id : 'Không xác định';}
+        return relationship ? relationship.name : 'Không xác định';}
     },
     {
       label: 'Ngày Sinh',

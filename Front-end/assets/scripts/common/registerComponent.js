@@ -575,11 +575,16 @@ class BaseTable extends HTMLElement {
                   thEl.appendChild(btnEl)
                 })
               } else {
-                if(col.type === 'datetime') {
+                if (col.type === 'datetime') {
                   value = formatDateTime(value)
                 } else if(col.type === 'currency') {
                   value = formatCurrency(value)
                 }
+
+                if(col.formatter) {
+                  value = formatter(value)
+                }
+                
                 thEl.innerText = value
               }
 
