@@ -34,7 +34,7 @@ class CustomHeader extends HTMLElement {
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-        <div class="hidden w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
+        <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
           <div class="p-3 flex items-center border-b border-gray-200">
             <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
             <div class="ml-3">
