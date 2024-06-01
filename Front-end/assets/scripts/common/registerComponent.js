@@ -582,7 +582,8 @@ class BaseTable extends HTMLElement {
                 }
 
                 if(col.formatter) {
-                  value = formatter(value)
+                  console.log(value)
+                  value = col.formatter(value)
                 }
                 
                 thEl.innerText = value

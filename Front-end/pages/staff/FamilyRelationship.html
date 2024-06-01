@@ -40,7 +40,7 @@
                             <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
                                 <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
                                 <base-input label="Họ và tên (*)" name="ten"></base-input> <br>
-                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten"></base-select>
+                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
                                 <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"></base-input>
                              
 
@@ -74,7 +74,7 @@
                 </div>
                 <div class="mt-3">
                     <base-table 
-                        api="https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/NV0206"
+                        api="buildApiUrl"
                         columns="TableColumns"
                     >
                     </base-table>

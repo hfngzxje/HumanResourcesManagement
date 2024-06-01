@@ -6,7 +6,7 @@ var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
-
+var relationshipOptions = []
 var TableColumns = [
     {
       label: 'Họ Tên',
@@ -14,11 +14,8 @@ var TableColumns = [
     },
     {
       label: 'Quan Hệ',
-      key: 'quanhe',
-      type: 'int',
-      formatter: (value) => {
-        const relationship = relationshipOptions.find(item => item.id === value);
-        return relationship ? relationship.name : 'Không xác định';}
+      key: 'quanheTen',
+      
     },
     {
       label: 'Ngày Sinh',
@@ -45,7 +42,7 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.mahopdong)} },
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.id)} },
         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
       ]
     }
@@ -76,10 +73,10 @@ function fetchEmployee(maHD) {
     setLoading(true)
     maHopDongHienTai = maHD
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/id?id=' + maHD,
+        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + maHD,
         method: 'GET',
         success: function(data) {
-            setFormValue('laborContract_form', data)
+            setFormValue('relationship_form', data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -199,10 +196,27 @@ function renderActionByStatus() {
     actionEl.append(removeBtn, saveBtn, exportBtn)
 }
 
+function buildApiUrl() {
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + id
+}
+
+function getNameQuanHe(){
+  
+    $.ajax({
+        url: 'https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan',
+        method: 'GET',
+        success: function(data) {
+            relationshipOptions = data;
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        }
+    });
+}
+
+getNameQuanHe()
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-    // if (id) {
-    //     fetchEmployee()
-    // }
+    
 })
 
