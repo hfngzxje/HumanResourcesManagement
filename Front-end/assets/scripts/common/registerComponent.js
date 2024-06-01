@@ -34,7 +34,7 @@ class CustomHeader extends HTMLElement {
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-        <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
+        <div class="hidden w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
           <div class="p-3 flex items-center border-b border-gray-200">
             <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
             <div class="ml-3">
@@ -268,8 +268,7 @@ class BaseInput extends HTMLElement {
     
     this.innerHTML = `
     <div>
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
-      }">${label}</label>
+      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
       <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
@@ -328,7 +327,7 @@ class BaseInputPhone extends HTMLElement {
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
+      <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
     </div>
     `;
   }
@@ -352,18 +351,19 @@ class BaseInputNumber extends HTMLElement {
 }
 
 class BaseRadio extends HTMLElement {
-  static observedAttributes = ["label", "name", "value"];
+  static observedAttributes = ["label", "name", "value", "checked"];
 
   connectedCallback() {
     const label = this.getAttribute("label");
     const name = this.getAttribute("name");
     const value = this.getAttribute("value");
+    const checked = this.getAttribute('checked')
 
     this.innerHTML = `
     <div class="flex items-center mb-4">
-      <input type="radio" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
+      <input type="radio" value="${value}" name="${name}" ${checked !== null ? "checked" : ''} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
-  </div>
+    </div>
     `;
   }
 }
