@@ -74,7 +74,7 @@ function renderTab() {
       _class += " text-white bg-blue-600";
     }
     aElement.id = getTabId(tab.key);
-    aElement.href = '../..' + tab.activeByPath + '?id=' + id;
+    aElement.href = '../..' + tab.activeByPath + '?id=' + id; // chuyển trang kèm id
     aElement.className = _class;
     aElement.textContent = tab.label;
 
