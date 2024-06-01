@@ -2,6 +2,7 @@
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResourcesManagement.Service
 {
@@ -233,6 +234,32 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Empty list!!");
             }
             return to;
+        }
+
+        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh)
+        {
+            try
+            {
+                var query = _context.TblNhanViens.Where(n => n.Phong == idPhong);
+
+                if (gioiTinh.HasValue)
+                {
+                    query = query.Where(n => n.Gioitinh == gioiTinh.Value);
+                }
+
+                var list = await query.ToListAsync();
+
+                if (list == null || !list.Any())  
+                {
+                    throw new Exception("Khong co nhan vien nao");
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
         }
     }
 }
