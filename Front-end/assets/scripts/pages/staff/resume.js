@@ -33,8 +33,8 @@ function fetchEmployee() {
 }
 
 function handleCreate() {
-    // const valid = validateForm('resume_form')
-    // if(!valid) return
+    const valid = validateForm('resume_form')
+    if(!valid) return
     const formValue = getFormValues('resume_form')
     const payload = buildPayload(formValue)
     setLoading(true)
