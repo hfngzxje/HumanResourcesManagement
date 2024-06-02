@@ -1,22 +1,28 @@
 const isEdit = !!id
 
-function fetchCongViecHienTaiByID(maHD) {
-    setLoading(true)
-    maHopDongHienTai = maHD
-    $.ajax({
-        url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + maHD,
-        method: 'GET',
-        success: function (data) {
-            setFormValue('Working_Process_formm', data)
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+// function buildPayload(formValue) {
+//     const formClone = {...formValue}
+//     formClone['gioitinh'] = formClone['gioitinh'] === '1'
+//     return formClone
+// }
+
+// function fetchCongViecHienTaiByID(maHD) {
+//     setLoading(true)
+//     maHopDongHienTai = maHD
+//     $.ajax({
+//         url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + maHD,
+//         method: 'GET',
+//         success: function (data) {
+//             setFormValue('Working_Process_formm', data)
+//         },
+//         error: (err) => {
+//             console.log('fetchEmployee err :: ', err);
+//         },
+//         complete: () => {
+//             setLoading(false)
+//         }
+//     });
+// }
 
 var TableColumns = [
     {
@@ -59,30 +65,35 @@ function buildApiUrl() {
 }
 
 function handleCreate() {
-    const valid = validateForm('Working_Process_form')
-    if(!valid) return
-    const formValue = getFormValues('Working_Process_form')
+    const valid = validateForm('Working_Process_form');
+    if (!valid) return;
+
+    const formValue = getFormValues('Working_Process_form');
+    formValue.maNhanVien = id; // Add employee ID to the form values
+
     console.log('formValue ', formValue);
-    const payload = buildPayload(formValue)
-    setLoading(true)
+
+    setLoading(true);
     $.ajax({
         url: 'https://localhost:7141/api/DieuChuyen/DieuChuyen',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(data) {
+        data: JSON.stringify(formValue),
+        success: function (data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            alert("Tạo mới thành công!");
+            backToList();
         },
         error: (err) => {
             console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
+            alert("Tạo mới không thành công!");
         },
         complete: () => {
-            setLoading(false)
+            setLoading(false);
         }
     });
 }
+
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('Working_Process_form_action')
@@ -93,12 +104,10 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
         createBtn.addEventListener('click', handleCreate)
         actionEl.append(createBtn)
-        return
-    }
+
 
     // const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     // const saveBtn = buildButton('Lưu', '', 'bx bx-save')
@@ -131,3 +140,52 @@ function renderActionByStatus() {
 //         }
 //     });
 // }
+
+function fetchCongViecHienTaiByID() {
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
+        method: 'GET',
+        success: function(data) {
+            setFormValue('Working_Process_formm', data)
+        },
+        error: (err) => {
+            console.log('fetchCongViecHienTai err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        } 
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderActionByStatus()
+    console.log('id: ', id);
+    if (id) {
+        fetchCongViecHienTaiByID()
+    }
+})
+
+
+function handleRemove(event) {
+    const id = event.target.dataset.id
+    const isConfirm = confirm('Xác nhận xóa')
+    if (!isConfirm) return
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/DieuChuyen/RemoveDieuChuyen/' + id,
+        method: 'DELETE',
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            alert("Xóa thành công!")
+            backToList()
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+            alert("Xóa thất bại!")
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}
