@@ -9,10 +9,10 @@ var MaritalOptions = [
 
 var TableColumns = [
     {
-      label: 'Mã hợp đồng',
+      label: 'Mã hợp đồng', 
       key: 'mahopdong'
     },
-    {
+    { 
       label: 'Lương cơ bản',
       key: 'luongcoban',
       type: 'currency'
@@ -40,6 +40,8 @@ var TableColumns = [
       ]
     }
   ]
+
+  console.log(TableColumns)
 
 function backToList() {
     window.location.replace("/pages/staff/laborContract.html");

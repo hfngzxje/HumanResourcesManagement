@@ -12,4 +12,4 @@ function setLoading(loading = true) {
     return
   }
   bodyEL.append(loadingEl)
-}
+} 

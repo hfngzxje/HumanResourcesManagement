@@ -19,7 +19,7 @@ function convertToISODate(dateString) {
 }
 
 function convertToPhoneNumber(phoneString) {
-    try {
+    try { 
         // Xóa bỏ tất cả ký tự không phải số
         const cleanedPhoneNumber = phoneString.replace(/\D/g, '');
 

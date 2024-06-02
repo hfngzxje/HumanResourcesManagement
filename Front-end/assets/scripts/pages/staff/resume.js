@@ -28,7 +28,7 @@ function fetchEmployee() {
         },
         complete: () => {
             setLoading(false)
-        }
+        } 
     });
 }
 
@@ -45,7 +45,6 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
         },
         error: (err) => {
             console.log('handleCreate err :: ', err);

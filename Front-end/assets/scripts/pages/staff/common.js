@@ -2,7 +2,7 @@ const params = new URL(document.location.toString()).searchParams;
 const id = params.get("id");
 
 const TAB = {
-  RESUME: 1 ,
+  RESUME: 1,
   PERSON_HISTORY: 2,
   CULTURAL_PROFICIENCY: 3,
   FAMILY_RELATIONSHIP: 4,
@@ -31,20 +31,24 @@ const TAB_LIST = [
     label: "Trình độ văn hóa",
     activeByPath: "",
   },
-  { key: TAB.FAMILY_RELATIONSHIP, 
-    label: "Quan hệ gia đình", 
-    activeByPath: "/pages/staff/FamilyRelationship.html" },
+  {
+    key: TAB.FAMILY_RELATIONSHIP,
+    label: "Quan hệ gia đình",
+    activeByPath: "/pages/staff/FamilyRelationship.html"
+  },
   {
     key: TAB.EMPLOYMENT_CONTRACT,
     label: "Hợp đồng lao động",
     activeByPath: "/pages/staff/laborContract.html",
   },
-  { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương",
-    activeByPath: "/pages/staff/salaryRecord.html" },
+  {
+    key: TAB.SALARY_PROFILE, label: "Hồ sơ lương",
+    activeByPath: "/pages/staff/salaryRecord.html"
+  },
   {
     key: TAB.EMPLOYMENT_HISTORY,
     label: "Quá trình công tác",
-    activeByPath: "",
+    activeByPath: "/pages/staff/WorkingProcess.html",
   },
   {
     key: TAB.REWARDS_DISCIPLINE,
@@ -69,7 +73,7 @@ function renderTab() {
     const aElement = document.createElement("a");
     let _class =
       "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100";
-    const isActive = tab?.activeByPath !== "" && currentPath.includes(tab?.activeByPath) ;
+    const isActive = tab?.activeByPath !== "" && currentPath.includes(tab?.activeByPath);
     if (isActive) {
       _class += " text-white bg-blue-600";
     }
