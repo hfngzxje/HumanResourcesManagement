@@ -1,6 +1,6 @@
 const isEdit = !!id
 
-let maHopDongHienTai = null
+let idNguoiThan = null
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -49,7 +49,9 @@ var TableColumns = [
   ]
 
 function backToList() {
-    window.location.replace("/pages/staff/familyRelationship.html");
+    const url = new URL("/pages/staff/FamilyRelationship.html", window.location.origin);
+    url.searchParams.set("id", id);
+    window.location.replace(url.toString());
 }
 
 function buildPayload(formValue) {
@@ -65,15 +67,16 @@ function buildPayload(formValue) {
     })
     
     formClone['trangThai'] = Number(formClone['trangThai'])
-
+    formClone['id'] = idNguoiThan
+    // formClone['ma'] = employeeId
     return formClone
 }
 
-function fetchEmployee(maHD) {
+function fetchEmployee(id) {
     setLoading(true)
-    maHopDongHienTai = maHD
+    idNguoiThan = id
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + maHD,
+        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
         success: function(data) {
             setFormValue('relationship_form', data)
@@ -91,8 +94,15 @@ function handleCreate() {
     const valid = validateForm('relationship_form')
     if(!valid) return
     const formValue = getFormValues('relationship_form')
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const employeeId = urlParams.get('id');
+
+    formValue['ma'] = employeeId;
+
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
+    
     setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
@@ -101,7 +111,7 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            backToList()
         },
         error: (err) => {
             console.log('handleCreate err :: ', err);
@@ -115,10 +125,11 @@ function handleCreate() {
 
 function handleRemove() {
     const isConfirm = confirm('Xác nhận xóa')
+    console.log("fdf")
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'hhttps://localhost:7141/api/NguoiThan/removeNguoiThan/' + id,
+        url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
@@ -135,34 +146,24 @@ function handleRemove() {
 }
 
 function handleSave() {
-    const formValue = getFormValues('laborContract_form')
+    const valid = validateForm('relationship_form')
+    if(!valid) return
+    
+    const formValue = getFormValues('relationship_form')
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            backToList()
         },
         error: (err) => {
-            console.log('err ', err);
-            try {
-                if(!err.responseJSON) {
-                    alert(err.responseText)
-                    return 
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
-            }
-           
-            
+            console.log('fetchEmployee err :: ', err);
+            alert("Cập nhật thất bại!")
         },
         complete: () => {
             setLoading(false)
@@ -179,12 +180,10 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
         createBtn.addEventListener('click', handleCreate)
         actionEl.append(createBtn)
-        return
-    }
+
 
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')

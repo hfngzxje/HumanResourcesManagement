@@ -41,8 +41,9 @@ function getElValue (element) {
       value = convertToISODate(element.value)
     } else if (element.type === "radio") {
       if (element.checked) {
-        value = element.value;
+        value = element.value == "1" ? true : false;
       }
+      
     }
     else if (element.type === "checkbox") {
       value = element.checked

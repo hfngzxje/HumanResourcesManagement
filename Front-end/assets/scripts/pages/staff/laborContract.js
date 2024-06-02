@@ -63,9 +63,11 @@ function buildPayload(formValue) {
 }
 
 function fetchEmployee(maHD) {
+    console.log(maHD);
     setLoading(true)
     maHopDongHienTai = maHD
     $.ajax({
+        
         url: 'https://localhost:7141/api/HopDong/id?id=' + maHD,
         method: 'GET',
         success: function(data) {

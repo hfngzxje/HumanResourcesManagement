@@ -4,7 +4,9 @@ class CustomHeader extends HTMLElement {
     <header class="bg-gray-700 p-3 flex">
       <div class="flex items-center text-white w-[300px]">
         <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
-        <span class="ml-3 text-xl font-bold">HR App</span>
+        <span class="ml-3 text-xl font-bold">
+          <a href="/pages/staff/list.html">HRM<a/>
+        </span>
       </div>
       <div class="flex-1 flex gap-3">
         <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
