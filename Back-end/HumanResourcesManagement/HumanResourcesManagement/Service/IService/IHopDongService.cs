@@ -6,11 +6,16 @@ namespace HumanResourcesManagement.Service.IService
 {
     public interface IHopDongService
     {
-        void TaoHopDong(HopDongRequest request);
-        void SuaHopDong(string id, HopDongRequest request);
+        void TaoHopDong(InsertHopDongRequest request);
+        void SuaHopDong(string id, UpdateHopDongRequest request);
         void XoaHopDong(string id);
-        List<HopDongResponse> GetAllHopDong();
+        List<TblHopDong> GetAllHopDong();
 
-        HopDongResponse GetHopDongByMaHopDong(string id);
+        TblHopDong GetHopDongByMaHopDong(string id);
+
+        List<TblHopDong> GetAllHopDongByMaNV(string id);
+
+        List<TblDanhMucLoaiHopDong> GetAllLoaiHopDong();
+        List<TblDanhMucChucDanh> GetAllChucDanh();
     }
 }

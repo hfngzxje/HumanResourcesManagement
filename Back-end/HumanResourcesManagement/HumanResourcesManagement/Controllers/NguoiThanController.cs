@@ -40,6 +40,21 @@ namespace HumanResourcesManagement.Controllers
 
         }
 
+        [HttpGet("getNguoiThanById/{id}")]
+        public async Task<IActionResult> GetNguoiThanById(int id)
+        {
+            try
+            {
+                var nt = await _nguoiThanService.GetNguoiThanById(id);
+                return StatusCode(200, nt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
+        }
+
         //them nguoi than
         [HttpPost("addNguoiThan")]
         public async Task<IActionResult> AddNguoiThan([FromBody] InsertNguoiThanRequest req)

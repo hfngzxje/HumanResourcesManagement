@@ -2,7 +2,7 @@
 
 namespace HumanResourcesManagement.DTOS.Request
 {
-    public class HopDongRequest
+    public class InsertHopDongRequest
     {
         [Required(ErrorMessage = "Ma hop dong is required")]
         public string Mahopdong { get; set; } = null!;
@@ -10,6 +10,7 @@ namespace HumanResourcesManagement.DTOS.Request
         public int? Loaihopdong { get; set; }
         [Required(ErrorMessage = "Chuc danh is required")]
         public int? Chucdanh { get; set; }
+        [Required(ErrorMessage = "Luong co ban is required")]
         public double? Luongcoban { get; set; }
         [Required(ErrorMessage = "Ngay hieu luc is required")]
         [DataType(DataType.Date)]
