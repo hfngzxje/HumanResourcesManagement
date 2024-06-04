@@ -43,7 +43,7 @@ var TableColumns = [
       key: 'action',
       actions: [
         { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id) } }
       ]
     }
   ]
@@ -56,15 +56,15 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const dateKey = ['hopdongdenngay','hopdongtungay']
-    dateKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null;
-        }
-        else{
-            formClone[key] = convertToISODate(formClone[key])
-        }  
-    })
+    // const dateKey = ['hopdongdenngay','hopdongtungay']
+    // dateKey.forEach(key => {
+    //     if(!formClone[key]) {
+    //         formClone[key] = null;
+    //     }
+    //     else{
+    //         formClone[key] = convertToISODate(formClone[key])
+    //     }  
+    // })
     
     formClone['trangThai'] = Number(formClone['trangThai'])
     formClone['id'] = idNguoiThan
@@ -130,6 +130,27 @@ function handleRemove() {
     setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
+        method: 'DELETE',
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            backToList()
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+            alert("Xóa thất bại!")
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}
+function handleRemoveRow(id) {
+    const isConfirm = confirm('Xác nhận xóa')
+    console.log("fdf")
+    if (!isConfirm) return
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchEmployee res :: ', data);

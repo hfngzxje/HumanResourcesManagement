@@ -47,15 +47,15 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    const dateKey = ['hopdongdenngay','hopdongtungay']
-    dateKey.forEach(key => {
-        if(!formClone[key]) {
-            formClone[key] = null;
-        }
-        else{
-            formClone[key] = convertToISODate(formClone[key])
-        }  
-    })
+    // const dateKey = ['hopdongdenngay','hopdongtungay']
+    // dateKey.forEach(key => {
+    //     if(!formClone[key]) {
+    //         formClone[key] = null;
+    //     }
+    //     else{
+    //         formClone[key] = convertToISODate(formClone[key])
+    //     }  
+    // })
     
     formClone['trangThai'] = Number(formClone['trangThai'])
 
@@ -99,8 +99,21 @@ function handleCreate() {
             // backToList()
         },
         error: (err) => {
-            console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Tạo mới không thành công!")
+            }
+           
+            
         },
         complete: () => {
             setLoading(false)
@@ -174,12 +187,10 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
         createBtn.addEventListener('click', handleCreate)
         actionEl.append(createBtn)
-        return
-    }
+ 
 
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
