@@ -169,8 +169,6 @@ function handleSave() {
             } catch (error) {
                 alert("Cập nhật thất bại!")
             }
-           
-            
         },
         complete: () => {
             setLoading(false)

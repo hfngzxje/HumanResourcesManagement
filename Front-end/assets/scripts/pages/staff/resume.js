@@ -15,6 +15,24 @@ function buildPayload(formValue) {
     return formClone
 }
 
+function getImage() {
+    $.ajax({
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + id,
+        method: 'GET',
+        success: function(data) {
+            const imgEl = document.querySelector('#employeeImage')
+            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
+            imgEl.classList.remove('opacity-0')
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}
+
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
@@ -35,8 +53,8 @@ function fetchEmployee() {
 function handleCreate() {
     const valid = validateForm('resume_form')
     if(!valid) return
-    const formValue = getFormValues('resume_form')
-    const payload = buildPayload(formValue)
+    const {anh, ...rest} = getFormValues('resume_form')
+    const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
@@ -82,8 +100,10 @@ function handleSave() {
     const valid = validateForm('resume_form')
     if(!valid) return
     
+    const {anh, ...rest} = getFormValues('resume_form')
+
     const formValue = getFormValues('resume_form')
-    const payload = buildPayload(formValue)
+    const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
@@ -91,8 +111,7 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
+            // backToList()
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -102,6 +121,27 @@ function handleSave() {
             setLoading(false)
         }
     });
+
+    if(anh) {
+        const payloadUploadImage = new FormData()
+        payloadUploadImage.append('maNV', id)
+        payloadUploadImage.append('file', anh)
+
+        $.ajax({
+            url: 'https://localhost:7141/api/Image/uploadImage',
+            method: 'PUT',
+            contentType: false,
+            processData: false,
+            data: payloadUploadImage,
+            success: function(data) {
+            },
+            error: (err) => {
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }
 }
 
 function renderActionByStatus() {
@@ -135,8 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('id ', id);
     if (id) {
         fetchEmployee()
+        getImage()
     }
- 
-
 })
 
