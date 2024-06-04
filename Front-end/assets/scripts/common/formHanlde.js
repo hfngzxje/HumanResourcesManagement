@@ -48,6 +48,9 @@ function getElValue (element) {
     else if (element.type === "checkbox") {
       value = element.checked
     }
+    else if (element.type === "file") {
+      value = element.files[0]
+    }
     else {
       value = element.value;
     }
