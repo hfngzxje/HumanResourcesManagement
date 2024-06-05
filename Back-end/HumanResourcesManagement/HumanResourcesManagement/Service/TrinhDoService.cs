@@ -25,12 +25,11 @@ namespace HumanResourcesManagement.Service
             {
                 throw new ArgumentNullException(nameof(req), "TrinhDoRequest cannot be null.");
             }
-            using (var dbContext = new NhanSuContext())
-            {
+            
                 var trinhDo = _mapper.Map<TblDanhMucTrinhDo>(req);
-                dbContext.TblDanhMucTrinhDos.Add(trinhDo);
-                await dbContext.SaveChangesAsync();
-            }
+            _context.TblDanhMucTrinhDos.Add(trinhDo);
+                await _context.SaveChangesAsync();
+            
         }
 
 

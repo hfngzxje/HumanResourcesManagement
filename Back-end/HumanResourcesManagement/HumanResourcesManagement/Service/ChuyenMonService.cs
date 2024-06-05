@@ -30,13 +30,12 @@ namespace HumanResourcesManagement.Service
                 throw new ArgumentException("Ma cannot be longer than 5 characters.", nameof(req.Ma));
             }
 
-            using (var dbContext = new NhanSuContext())
-            {
+           
                 var chuyenMon = _mapper.Map<TblDanhMucChuyenMon>(req);
                 Console.WriteLine(chuyenMon);
-                dbContext.TblDanhMucChuyenMons.Add(chuyenMon);
-                await dbContext.SaveChangesAsync();
-            }
+            _context.TblDanhMucChuyenMons.Add(chuyenMon);
+                await _context.SaveChangesAsync();
+            
         }
 
         public async Task DeleteChuyenMon(int id)

@@ -23,12 +23,11 @@ namespace HumanResourcesManagement.Service
                 throw new ArgumentNullException(nameof(req), "DanhMucTo cannot be null.");
             }
 
-            using (var dbContext = new NhanSuContext())
-            {
+           
                 var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
-                dbContext.TblDanhMucTos.Add(danhMucTo);
-                await dbContext.SaveChangesAsync();
-            }
+            _context.TblDanhMucTos.Add(danhMucTo);
+                await _context.SaveChangesAsync();
+           
         }
 
         public async Task DeleteDanhMucTo(int id)
