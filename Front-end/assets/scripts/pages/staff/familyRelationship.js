@@ -200,7 +200,6 @@ function buildApiUrl() {
 }
 
 function getNameQuanHe(){
-  
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan',
         method: 'GET',

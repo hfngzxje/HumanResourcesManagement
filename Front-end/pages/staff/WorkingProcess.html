@@ -48,22 +48,16 @@
                                         api="https://localhost:7141/api/NhanVien/phong"></base-select>
                                     <base-select label="Tổ" name="to" keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/NhanVien/to"></base-select>
-
                                     <base-select disabled label="Chức vụ công tác" name="chucvuhientai" keyValue="id"
-                                        keyLabel="ten"
-                                        api="https://localhost:7141/api/NhanVien/chucDanh"></base-select>
+                                        keyLabel="ten" api="https://localhost:7141/api/NhanVien/chucDanh"></base-select>
                                     <base-datepicker class="ml-auto" label="Ngày hiệu lực" style="margin: 0"
-                                        name="ngaychinhthuc" ></base-datepicker>
+                                        name="ngaychinhthuc"></base-datepicker>
                                 </div>
                                 <base-textarea label="Chi tiết" name="chitiet"></base-textarea>
                         </form>
                         <!-- <div id="Working_Process_form_action" class="flex gap-x-5 mt-5 justify-end"></div> -->
                     </div>
-                    <div class="flex items-center mb-4" style="margin-bottom:  5%;">
-                        <input type="checkbox" value="" name=""
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                        &nbsp;&nbsp;Cho phép điều chuyển
-                    </div>
+
                     <div class="mt-3">
                         <div class="flex justify-between" style="color: blue; margin-top: 2%; margin-bottom: 2%;">
                             <p class="text-xl">Vị trí công tác chuyển đến</p>
@@ -78,15 +72,26 @@
 
                                     <base-select label="Chức vụ công tác" name="chucvu" keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/ChucDanh/getAllChucDanh"></base-select>
-                                    <base-datepicker class="ml-auto" label="Ngày hiệu lực" style="margin: 0"
-                                        name="ngayhieuluc"></base-datepicker>
+                                    <!-- <base-datepicker class="ml-auto" label="Ngày hiệu lực" style="margin: 0"
+                                        name="ngayhieuluc"></base-datepicker> -->
+                                    <div>
+                                        <div class="relative max-w-sm">
+                                            <div class="">
+                                                <label for="base-input"
+                                                    class="block mb-2 text-sm font-medium text-gray-900">Ngày hiệu
+                                                    lực</label>
+                                                <input type="datetime-local" id="ngayHieuLuc" name="ngayHieuLuc"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <base-textarea label="Chi tiết" name="chitiet"></base-textarea>
+                                <base-textarea label="Chi tiết" name="chiTiet"></base-textarea>
                         </form>
                         <div id="Working_Process_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
 
-                    
+
                     <div class="mt-3">
                         <base-table api="buildApiUrl" columns="TableColumns">
                         </base-table>

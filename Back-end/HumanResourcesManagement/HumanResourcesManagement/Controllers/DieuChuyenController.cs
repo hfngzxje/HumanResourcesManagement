@@ -49,7 +49,7 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("RemoveDieuChuyen")]
+        [HttpDelete("RemoveDieuChuyen/{id}")]
         public async Task<IActionResult> RemoveDieuChuyen(int id)
         {
             try
@@ -63,7 +63,7 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpGet("GetAllDieuChuyen")]
+        [HttpGet("GetAllDieuChuyen/{maNV}")]
         public async Task<IActionResult> GetAllDieuChuyen(string maNV)
         {
             try
