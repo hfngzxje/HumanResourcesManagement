@@ -18,7 +18,7 @@ namespace HumanResourcesManagement.Controllers
             _context = context;
         }
         [HttpGet("getKhenThuongKiLuatByMaNV/{maNV}/{khenThuongOrKiLuat}")]
-        public async Task<IActionResult> GetNgoaiNguByMaNV(string maNV,int khenThuongOrKiLuat)
+        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV,int khenThuongOrKiLuat)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace HumanResourcesManagement.Controllers
 
         }
         [HttpPost("addKhenThuongKiLuat")]
-        public async Task<IActionResult> AddddKhenThuongKiLuat([FromBody] TblDanhMucKhenThuongKyLuat req)
+        public async Task<IActionResult> AddddKhenThuongKiLuat([FromBody] TblKhenThuongKyLuat req)
         {
             try
             {

@@ -42,6 +42,32 @@ namespace HumanResourcesManagement.Controllers
             }
 
         }
+        [HttpGet("getDanhMucToById/{id}")]
+        public async Task<IActionResult> GetDanhMucToById(int id)
+        {
+            try
+            {
+                var listDanhMucTo = await _danhMucToService.GetDanhMucToById(id);
+                return Ok(listDanhMucTo);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
+            }
+
+        }
         [HttpPost("addDanhMucTo")]
         public async Task<IActionResult> AddDanhMucTo([FromBody] DanhMucToRequest req)
         {

@@ -58,6 +58,26 @@ namespace HumanResourcesManagement.Service
 
             return listDanhMucNgoaiNgu;
         }
+        public async Task<IEnumerable<DanhMucNgoaiNguResponse>> GetDanhMucNgoaiNguById(int id)
+        {
+            var listDanhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
+            if (listDanhMucNgoaiNgu == null)
+            {
+                throw new KeyNotFoundException($"not found {id}");
+            }
+            var listNgoaiNgu = await _context.TblDanhMucNgoaiNgus.Where(nv => nv.Id == id)
+                .Select(cm => new DanhMucNgoaiNguResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten,
+                }).ToListAsync();
+            if (listNgoaiNgu == null)
+            {
+                throw new KeyNotFoundException($"list is empty");
+            }
+
+            return listNgoaiNgu;
+        }
 
         public async Task UpdateDanhMucNgoaiNgu(DanhMucNgoaiNguRequest req, int id)
         {
@@ -81,5 +101,6 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

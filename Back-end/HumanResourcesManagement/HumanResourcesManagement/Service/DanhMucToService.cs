@@ -59,6 +59,28 @@ namespace HumanResourcesManagement.Service
 
             return listDanhMucTo;
         }
+        public async Task<IEnumerable<DanhMucToResponse>> GetDanhMucToById(int id)
+        {
+            var danhmucto = await _context.TblDanhMucTos.FindAsync(id);
+            if (danhmucto == null)
+            {
+                throw new KeyNotFoundException($"not found {id}");
+            }
+            var listDanhMucTo = await _context.TblDanhMucTos.Where(nv => nv.Id == id)
+                .Select(cm => new DanhMucToResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten,
+                    Idphong =   cm.Idphong,
+                    Ma = cm.Ma.Trim()
+                }).ToListAsync();
+            if (listDanhMucTo == null)
+            {
+                throw new KeyNotFoundException($"list is empty");
+            }
+
+            return listDanhMucTo;
+        }
 
         public async Task UpdateDanhMucTo(DanhMucToRequest req, int id)
         {

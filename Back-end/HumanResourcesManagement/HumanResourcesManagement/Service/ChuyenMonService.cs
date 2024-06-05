@@ -67,6 +67,28 @@ namespace HumanResourcesManagement.Service
             return listChuyenMon;
         }
 
+        public async Task<IEnumerable<ChuyenMonResponse>> GetChuyenMonById(int id)
+        {
+            var chuyenmon = await _context.TblDanhMucChuyenMons.FindAsync(id);
+            if (chuyenmon == null)
+            {
+                throw new KeyNotFoundException($"not found {id}");
+            }
+            var listChuyenMon = await _context.TblDanhMucChuyenMons.Where(nv => nv.Id == id)
+                .Select(cm => new ChuyenMonResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten,
+                    Ma = cm.Ma.Trim()
+                }).ToListAsync();
+            if (listChuyenMon == null)
+            {
+                throw new KeyNotFoundException($"list is empty");
+            }
+
+            return listChuyenMon;
+        }
+
         public async Task UpdateChuyenMon(ChuyenMonRequest req, int id)
         {
             try

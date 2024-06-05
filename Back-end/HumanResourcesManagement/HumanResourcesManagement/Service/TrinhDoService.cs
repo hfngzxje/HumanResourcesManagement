@@ -33,6 +33,7 @@ namespace HumanResourcesManagement.Service
             }
         }
 
+
         public async Task DeleteTrinhDo(int id)
         {
             var trinhDo = await _context.TblDanhMucTrinhDos.FindAsync(id);
@@ -59,6 +60,27 @@ namespace HumanResourcesManagement.Service
 
             return listTrinhDo;
         }
+        public async Task<IEnumerable<TrinhDoResponse>> GetTrinhDoById(int id)
+        {
+            var trinhdo = await _context.TblDanhMucTrinhDos.FindAsync(id);
+            if (trinhdo == null)
+            {
+                throw new KeyNotFoundException($"not found {id}");
+            }
+            var listTrinhDo = await _context.TblDanhMucTrinhDos.Where(nv => nv.Id == id)
+                .Select(cm => new TrinhDoResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten,
+                }).ToListAsync();
+            if (listTrinhDo == null)
+            {
+                throw new KeyNotFoundException($"list is empty");
+            }
+
+            return listTrinhDo;
+        }
+
 
         public async Task UpdateTrinhDo(TrinhDoRequest req, int id)
         {

@@ -43,6 +43,32 @@ namespace HumanResourcesManagement.Controllers
             }
 
         }
+        [HttpGet("getDanhMucNgoaiNguById/{id}")]
+        public async Task<IActionResult> GetDanhMucNgoaiNguById(int id)
+        {
+            try
+            {
+                var listDanhMucNgoaiNgu = await _danhMucNgoaiNguService.GetDanhMucNgoaiNguById(id);
+                return Ok(listDanhMucNgoaiNgu);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
+            }
+
+        }
         [HttpPost("addDanhMucNgoaiNgu")]
         public async Task<IActionResult> AddDanhMucNgoaiNgu([FromBody] DanhMucNgoaiNguRequest req)
         {
