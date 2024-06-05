@@ -22,13 +22,10 @@ namespace HumanResourcesManagement.Service
             {
                 throw new ArgumentNullException(nameof(req), "DanhMucNgoaiNgu cannot be null.");
             }
-
-            using (var dbContext = new NhanSuContext())
-            {
-                var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
-                dbContext.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
-                await dbContext.SaveChangesAsync();
-            }
+            var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
+            _context.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
+                await _context.SaveChangesAsync();
+           
         }
 
         public async Task DeleteDanhMucNgoaiNgu(int id)
