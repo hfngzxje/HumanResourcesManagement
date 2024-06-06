@@ -36,47 +36,46 @@
                     </div>
                     <!-- Nội dung form theo từng màn hình -->
                     <div class="mt-3">
-                        <form id="relationship_form" class="flex gap-x-5">
-                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
-                                <base-input label="Họ và tên (*)" name="ten"></base-input> <br>
-                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
-                                <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"></base-input>
-                             
+                        <form id="salaryRecord_form" >
+                            <div class="flex gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full">
 
-                            </div>
-                            <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
-                                <div class="col-span-2 flex flex-col gap-y-2">
-                                    <div class="flex items-center gap-5">
-                                        <div>
-                                            <label-form-item name="Giới tính(*)"></label-form-item>
-                                            <div class="flex gap-5">
-                                                <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
-                                                <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
-                                            </div>
-                                        </div>
-                                        <base-datepicker class="ml-auto" label="Năm sinh(*)"
-                                            name="ngaysinh"></base-datepicker> <!-- Thêm lớp ml-auto -->
-                                    </div>
-                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)"
-                                        name="nghenghiep"></base-input>
-                                    <base-input-phone label="Số điện thoại" name="dienthoai"></base-input-phone>
+                                    <base-select label="Mã hợp đồng(*)" name="mahopdong" keyValue="mahopdong" required="true"
+                                        keyLabel="mahopdong" api="buildApiHopDong"></base-select> <br>
+                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true"></base-input-number>
+                                    <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                            required="true"></base-select> 
+                                    <base-input-number label="Phụ cấp khác"required="true" name="phucapkhac"></base-input-number>
+                                    <base-input-number label="Thời hạn lên lương"required="true" name="thoihanlenluong"></base-input-number>
+                                   
                                 </div>
+                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                               
+
+                                        <!-- gioi han 0-7 -->
+                                        <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
+                                            required="true"></base-select> <br> 
+                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem"></base-input-number>
+                                        <base-input-number label="Tiền lương"required="true" name="tongluong" readonly  ></base-input-number>
+                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
+                                        name="ngayhieuluc"></base-datepicker>
+                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
+                                        name="ngayketthuc"></base-datepicker>    
+                                </div>
+                                <div id="tinhluong_form_Action" class="flex gap-x-5 mt-5 justify-end" style="margin-top:auto"></div>
                             </div>
-                            <base-textarea label="Ghi chú" name="khac"></base-textarea>
+                             <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+  
                         </form>
-                        <div id="relationship_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                       
                     </div>
-                    
+                    <div id="salary_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                 </div>
                 <div class="flex justify-between" style="color: blue; margin-top: 5%;">
-                    <p class="text-xl">Danh sách người thân</p>
+                    <p class="text-xl">Danh sách Lương</p>
                 </div>
                 <div class="mt-3">
-                    <base-table 
-                        api="buildApiUrl"
-                        columns="TableColumns"
-                    >
+                    <base-table api="buildApiUrl" columns="TableColumns">
                     </base-table>
                 </div>
             </div>
@@ -89,7 +88,7 @@
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/familyRelationshio.js"></script>
+    <script src="../../assets/scripts/pages/staff/salaryRecord.js"></script>
 </body>
 
 </html>

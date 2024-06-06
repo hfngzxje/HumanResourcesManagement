@@ -31,52 +31,46 @@
                         </div>
                     </div>
 
+                    <a href="../../"></a>
+
                     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
                         <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
                     </div>
                     <!-- Nội dung form theo từng màn hình -->
                     <div class="mt-3">
-                        <form id="relationship_form" class="flex gap-x-5">
-                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
-                                <base-input label="Họ và tên (*)" name="ten"></base-input> <br>
-                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
-                                <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"></base-input>
-                             
-
-                            </div>
-                            <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
-                                <div class="col-span-2 flex flex-col gap-y-2">
-                                    <div class="flex items-center gap-5">
-                                        <div>
-                                            <label-form-item name="Giới tính(*)"></label-form-item>
-                                            <div class="flex gap-5">
-                                                <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
-                                                <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
-                                            </div>
-                                        </div>
-                                        <base-datepicker class="ml-auto" label="Năm sinh(*)"
-                                            name="ngaysinh"></base-datepicker> <!-- Thêm lớp ml-auto -->
+                        <form id="award_form">
+                            <!-- <base-input label="Mã nhân viên(*)" required="true" name="ma"></base-input> -->
+                            <div class="flex gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                                    <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian(*)"
+                                        name="ngay" required="true"></base-datepicker>
+                                     <base-input label="Nội dung(*)" required="true" name="noidung"></base-input>
+                                </div>
+                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                                    <base-input label="Lý do(*)" required="true" name="lido"></base-input>
+                                    <base-select label="Trạng Thái" name="khenthuongkiluat" options="MaritalOptions"
+                                            required="true"></base-select>
+                                    <div>
                                     </div>
-                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)"
-                                        name="nghenghiep"></base-input>
-                                    <base-input-phone label="Số điện thoại" name="dienthoai"></base-input-phone>
                                 </div>
                             </div>
-                            <base-textarea label="Ghi chú" name="khac"></base-textarea>
                         </form>
-                        <div id="relationship_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                        <div id="award_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
-                    
                 </div>
                 <div class="flex justify-between" style="color: blue; margin-top: 5%;">
-                    <p class="text-xl">Danh sách người thân</p>
+                    <p class="text-xl">Danh sách khen thưởng</p>
                 </div>
                 <div class="mt-3">
-                    <base-table 
-                        api="buildApiUrl"
-                        columns="TableColumns"
-                    >
+                    <base-table api="buildApiUrlKhenThuong" columns="TableColumns">
+                    </base-table>
+                </div>
+
+                <div class="flex justify-between" style="color: blue; margin-top: 5%;">
+                    <p class="text-xl">Danh sách kỷ luật</p>
+                </div>
+                <div class="mt-3">
+                    <base-table api="buildApiUrlKyLuat" columns="TableColumns">
                     </base-table>
                 </div>
             </div>
@@ -89,7 +83,7 @@
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/familyRelationshio.js"></script>
+    <script src="../../assets/scripts/pages/staff/award.js"></script>
 </body>
 
 </html>
