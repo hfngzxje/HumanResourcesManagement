@@ -9,6 +9,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<TblDanhMucKhenThuongKyLuat> AddDanhMucKhenThuongKyLuat(TblDanhMucKhenThuongKyLuat req);
         Task<TblDanhMucKhenThuongKyLuat> UpDateDanhMucKhenThuongKyLuat(TblDanhMucKhenThuongKyLuat req);
         Task DeleteDanhMucKhenThuongKyLuat(int id);
-        Task<IEnumerable<TblDanhMucKhenThuongKyLuat>> GetDanhMucKhenThuongKyLuatById(int id);
+        Task<TblDanhMucKhenThuongKyLuat> GetDanhMucKhenThuongKyLuatById(int id);
     }
 }

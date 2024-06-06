@@ -22,18 +22,22 @@ namespace HumanResourcesManagement.Service
         {
             if (req == null)
             {
-                throw new ArgumentNullException(nameof(req), "ChuyenMonRequest cannot be null.");
+                throw new ArgumentNullException(nameof(req), "chuyenmon khoong duoc de trong");
             }
 
             if (req.Ma.Length > 5)
             {
-                throw new ArgumentException("Ma cannot be longer than 5 characters.", nameof(req.Ma));
+                throw new ArgumentException("ma phai nho hon 5 ki tu.", nameof(req.Ma));
+            }
+            var exists = await _context.TblDanhMucChuyenMons.AnyAsync(cm => cm.Ma == req.Ma);
+            if (exists)
+            {
+                throw new InvalidOperationException($"Ma '{req.Ma}' da ton tai.");
             }
 
-           
-                var chuyenMon = _mapper.Map<TblDanhMucChuyenMon>(req);
-                Console.WriteLine(chuyenMon);
-            _context.TblDanhMucChuyenMons.Add(chuyenMon);
+
+            var chuyenMon = _mapper.Map<TblDanhMucChuyenMon>(req);
+                _context.TblDanhMucChuyenMons.Add(chuyenMon);
                 await _context.SaveChangesAsync();
             
         }

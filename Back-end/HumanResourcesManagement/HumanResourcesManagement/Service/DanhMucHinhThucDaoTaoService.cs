@@ -49,7 +49,7 @@ namespace HumanResourcesManagement.Service
             }
             return listHinhthucdaotao;
         }
-        public async Task<IEnumerable<TblHinhThucDaoTao>> GetDanhMucHinhThucDaoTaoById(int id)
+        public async Task<TblHinhThucDaoTao> GetDanhMucHinhThucDaoTaoById(int id)
         {
             var listHinhthucdaotao = await _context.TblHinhThucDaoTaos.FindAsync(id);
             if (listHinhthucdaotao == null)
@@ -61,7 +61,7 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
-                }).ToListAsync();
+                }).FirstOrDefaultAsync();
             if (listhinhthucdaotao == null)
             {
                 throw new KeyNotFoundException($"list is empty");

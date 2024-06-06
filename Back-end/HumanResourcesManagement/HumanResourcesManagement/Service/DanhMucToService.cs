@@ -20,11 +20,16 @@ namespace HumanResourcesManagement.Service
         {
             if (req == null)
             {
-                throw new ArgumentNullException(nameof(req), "DanhMucTo cannot be null.");
+                throw new ArgumentNullException(nameof(req), "DanhMucTo khong duoc de trong.");
+            }
+            var exists = await _context.TblDanhMucTos.AnyAsync(cm => cm.Ma == req.Ma);
+            if (exists)
+            {
+                throw new InvalidOperationException($"Ma '{req.Ma}' da ton tai.");
             }
 
-           
-                var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
+
+            var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
             _context.TblDanhMucTos.Add(danhMucTo);
                 await _context.SaveChangesAsync();
            
