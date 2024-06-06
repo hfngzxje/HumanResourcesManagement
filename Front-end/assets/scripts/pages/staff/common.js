@@ -49,7 +49,7 @@ const TAB_LIST = [
   {
     key: TAB.REWARDS_DISCIPLINE,
     label: "Khen thưởng & Kỷ luật",
-    activeByPath: "",
+    activeByPath: "/pages/staff/award.html",
   },
 ];
 

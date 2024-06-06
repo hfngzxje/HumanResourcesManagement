@@ -66,6 +66,7 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchReligion res :: ', data);
+            alert('Tạo Thành Công!');
             backToList()
         },
         error: (err) => {
@@ -89,26 +90,7 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiaoHienTai,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchReligions res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchReligions err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
@@ -122,6 +104,7 @@ function handleRemoveRow(id) {
         },
         error: (err) => {
             console.log('fetchReligions err :: ', err);
+            alert('Xóa Thành Công!');
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -141,6 +124,7 @@ function handleSave() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
+            alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
@@ -174,14 +158,12 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn,removeBtn, saveBtn)
+    actionEl.append(createBtn,saveBtn)
 }
 
 function buildApiUrl() {

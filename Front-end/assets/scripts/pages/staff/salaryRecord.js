@@ -3,8 +3,21 @@ const isEdit = !!id
 let idLuongHienTai = null
 
 var MaritalOptions = [
-    { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 0 },
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 }
+];
+
+var MaritalOptionsBacLuong = [
+    { label: '1/7', value: '1/7' },
+    { label: '2/7', value: '2/7' },
+    { label: '3/7', value: '3/7' },
+    { label: '4/7', value: '4/7' },
+    { label: '5/7', value: '5/7' },
+    { label: '6/7', value: '6/7' },
+    { label: '7/7', value: '7/7' }
 ];
 
 var TableColumns = [
@@ -98,12 +111,27 @@ function fetchSalary(id) {
     });
 }
 
-function handleCreate() {
+async function handleCreate() {
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
 
-    console.log('formValue ', formValue);
+    // alert(fetchContractCodeStatus(formValue.mahopdong));
+    try {
+        // Lấy trạng thái mã hợp đồng
+        const contractCodeStatus = await fetchContractCodeStatus(formValue.mahopdong);
+        console.log('contractCodeStatus', contractCodeStatus);
+        // Kiểm tra trạng thái mã hợp đồng
+        if (contractCodeStatus === 0) {
+            alert('Đây là hợp đồng chưa chính thức, không thể tạo bảng lương.');
+            return;
+        }
+    } catch (error) {
+        console.error('Error fetching contract code status:', error);
+        alert('Xảy ra lỗi khi lấy trạng thái mã hợp đồng. Vui lòng thử lại.');
+        return;
+    }
+
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
@@ -134,6 +162,14 @@ function handleCreate() {
             setLoading(false)
         }
     });
+}
+
+async function fetchContractCodeStatus(mahopdong) {
+    const response = await $.ajax({
+        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        method: 'GET',
+    });
+    return response.trangThai; // Giả sử API trả về trạng thái của mã hợp đồng trong phản hồi
 }
 
 function handleRemove() {
@@ -179,7 +215,7 @@ function handleRemoveRow(id) {
 }
 
 function handleSave() {
-    const formValue = getFormValues('salary_form_action')
+    const formValue = getFormValues('salaryRecord_form')
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
@@ -213,6 +249,36 @@ function handleSave() {
     });
 }
 
+async function fetchSalary() {
+    const formValue = getFormValues('salaryRecord_form');
+    const payload = buildPayload(formValue);
+    setLoading(true);
+
+    try {
+        const salary = await $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/TinhLuong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+        });
+
+        // Gán giá trị lương vào trường input số
+        const inputElement = document.querySelector('base-input-number[name="tongluong"]');
+        if (inputElement instanceof BaseInputNumber) {
+
+            inputElement.value = salary;
+        }
+
+        alert(salary);
+        return salary;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    } finally {
+        setLoading(false);
+    }
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
     const buildButton = (label, type, icon) => {
@@ -222,23 +288,38 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
+    const actionE2 = document.getElementById('tinhluong_form_Action');
+    const buildButton2 = (label, type, icon) => {
+        const btnE2 = document.createElement('base-button')
+        btnE2.setAttribute('label', label)
+        btnE2.setAttribute('type', type)
+        btnE2.setAttribute('icon', icon)
+        return btnE2
+    }
+
+    const tinhLuong = buildButton2('Tính lương', 'green', 'bx bxs-calculator')
+    tinhLuong.addEventListener('click', fetchSalary)
+
+
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn, removeBtn, saveBtn)
+    actionEl.append(createBtn, saveBtn)
+    actionE2.append(tinhLuong)
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' +id ;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id;
+}
+async function buildApiHopDongA(id) {
+    return 'https://localhost:7141/api/HopDong/id?id=' + id;
 }
 
-function buildApiUrl(){
-    return'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + id;
+function buildApiUrl() {
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + id;
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()

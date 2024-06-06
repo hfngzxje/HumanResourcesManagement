@@ -56,16 +56,7 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    // const dateKey = ['hopdongdenngay','hopdongtungay']
-    // dateKey.forEach(key => {
-    //     if(!formClone[key]) {
-    //         formClone[key] = null;
-    //     }
-    //     else{
-    //         formClone[key] = convertToISODate(formClone[key])
-    //     }  
-    // })
-    
+
     formClone['trangThai'] = Number(formClone['trangThai'])
     formClone['id'] = idNguoiThan
     // formClone['ma'] = employeeId

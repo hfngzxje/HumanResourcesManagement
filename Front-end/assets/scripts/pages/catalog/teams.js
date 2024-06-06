@@ -44,9 +44,10 @@ function fetchTo(id) {
     setLoading(true)
     idToHienTai = id
     $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/getPhongBanById/' + id,
+        url: 'https://localhost:7141/api/DanhMucTo/getDanhMucToById/' + id,
         method: 'GET',
         success: function(data) {
+            setFormValue('teams_form', data, 'fetch');
             setFormValue('teams_form', data)
         },
         error: (err) => {
@@ -73,7 +74,8 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            alert("Thêm thành công !")
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);
@@ -96,26 +98,6 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchPhongBan res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchPhongBan err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
@@ -125,6 +107,7 @@ function handleRemoveRow(id) {
         method: 'DELETE',
         success: function(data) {
             console.log('fetchPhongBan res :: ', data);
+            alert("Xóa thành công !")
             backToList()
         },
         error: (err) => {
@@ -136,18 +119,19 @@ function handleRemoveRow(id) {
         }
     });
 }
-
 function handleSave() {
-    const formValue = getFormValues('departments_form')
+    const formValue = getFormValues('teams_form')
     const payload = buildPayload(formValue)
     setLoading(true)
+    console.log('maTo: ', idToHienTai)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai ,
+        url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
+            console.log('fetchLanguage res :: ', data);
+            alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
@@ -181,14 +165,12 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn,removeBtn, saveBtn)
+    actionEl.append(createBtn, saveBtn)
 }
 
 function buildApiUrl() {

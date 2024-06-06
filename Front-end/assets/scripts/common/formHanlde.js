@@ -100,7 +100,7 @@ function getFormValues(formId) {
   return formData;
 }
 
-function setFormValue(formId, formValue) {
+function setFormValue(formId, formValue,mode = 'create') {
   var form = document.getElementById(formId);
 
   if (!form) {
@@ -111,27 +111,35 @@ function setFormValue(formId, formValue) {
   var elements = form.querySelectorAll("input, select, textarea");
 
   elements.forEach(element => {
-    const name = element.name
+    try {
+      const name = element.name
 
-    if (!(name in formValue)) return
+      if (!(name in formValue)) return
 
-    const defaultValue = formValue[name]
+      const defaultValue = formValue[name]
 
-    if (element.tagName === 'INPUT') {
-      if(element.getAttribute('datepicker') !== null) {
-        element.value = formatDate(defaultValue)
-      } else if (element.type === "radio") {
-        element.checked = element.value === (+defaultValue).toString()
-      } else if (element.type === "checkbox") {
-        element.checked = defaultValue
-      } else {
-        element.value = defaultValue
+      if (element.tagName === 'INPUT') {
+        if(element.getAttribute('datepicker') !== null) {
+          element.value = formatDate(defaultValue)
+        } else if (element.type === "radio") {
+          element.checked = element.value === (+defaultValue).toString()
+        } else if (element.type === "checkbox") {
+          element.checked = defaultValue
+        } else {
+          if (mode === 'fetch' && element.name === 'ma' || mode === 'fetch' && element.name === 'mahopdong') {
+            element.readOnly = true;
+        } else {
+            element.value = defaultValue;
+        }
+        }
+        return
       }
-      return
+
+      element.value = defaultValue
+    } catch (e) {
+      console.log('name ', element.name);
+      console.log('e ', e);
     }
-
-    element.value = defaultValue
-
   })
 }
 

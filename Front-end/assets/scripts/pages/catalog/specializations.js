@@ -45,6 +45,7 @@ function fetchChuyenMon(id) {
         url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
         success: function(data) {
+            setFormValue('specializations_form', data, 'fetch');
             setFormValue('specializations_form', data)
         },
         error: (err) => {
@@ -70,7 +71,8 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            alert('Tạo Thành Công!');
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);
@@ -95,27 +97,6 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMonHienTai,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchChuyenMon res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchChuyenMon err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
@@ -125,6 +106,7 @@ function handleRemoveRow(id) {
         method: 'DELETE',
         success: function(data) {
             console.log('fetchChuyenMon res :: ', data);
+            alert('Xóa Thành Công!');
             backToList()
         },
         error: (err) => {
@@ -148,6 +130,7 @@ function handleSave() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchChuyenMon res :: ', data);
+            alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
@@ -182,14 +165,12 @@ function renderActionByStatus() {
     }
         
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn,removeBtn, saveBtn)
+    actionEl.append(createBtn, saveBtn)
 }
 
 function buildApiUrl() {

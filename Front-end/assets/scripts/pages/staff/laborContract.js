@@ -49,15 +49,6 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
-    // const dateKey = ['hopdongdenngay','hopdongtungay']
-    // dateKey.forEach(key => {
-    //     if(!formClone[key]) {
-    //         formClone[key] = null;
-    //     }
-    //     else{
-    //         formClone[key] = convertToISODate(formClone[key])
-    //     }  
-    // })
 
     formClone['trangThai'] = Number(formClone['trangThai'])
 
@@ -73,6 +64,7 @@ function fetchContract(mahopdong) {
         url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
+            setFormValue('laborContract_form', data, 'fetch');
             setFormValue('laborContract_form', data)
         },
         error: (err) => {
@@ -91,13 +83,14 @@ function handleCreate() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const employeeId = urlParams.get('id');
-
     formValue['ma'] = employeeId;
 
+    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
+        
         url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
         method: 'POST',
         contentType: 'application/json',
@@ -173,6 +166,12 @@ function handleRemoveRow(mahopdong) {
 
 function handleSave() {
     const formValue = getFormValues('laborContract_form')
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const employeeId = urlParams.get('id');
+
+    formValue['ma'] = employeeId;
+
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({

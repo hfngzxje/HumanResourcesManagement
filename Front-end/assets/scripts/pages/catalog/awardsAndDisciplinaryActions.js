@@ -18,27 +18,6 @@ var TableColumns = [
         key: 'ten'
       },
     {
-        label: 'Mã',
-        key: 'ma'
-      },
-    
-    {
-        label: 'Ngày',
-        key: 'ngay'
-      },
-      {
-        label: 'Nội dung',
-        key: 'noidung'
-      },
-      {
-        label: 'Lý Do',
-        key: 'lydo'
-      },
-      {
-        label: 'Khen Thưởng Kỷ Luật',
-        key: 'khenthuongkiluat'
-      },
-    {
       label: 'Hành động',
       key: 'action',
       actions: [
@@ -63,7 +42,7 @@ function fetchAward(id) {
     setLoading(true)
     idKhenThuong = id
     $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/getPhongBanById/' + id,
+        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
         method: 'GET',
         success: function(data) {
             setFormValue('award_form', data)
@@ -211,7 +190,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo' 
+    return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat' 
 }
 
 document.addEventListener('DOMContentLoaded', () => {

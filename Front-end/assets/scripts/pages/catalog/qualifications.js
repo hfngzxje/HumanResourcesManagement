@@ -16,7 +16,7 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTonGiao(row.id)} },
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTrinhDo(row.id)} },
         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
       ]
     }
@@ -28,22 +28,21 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    // formClone['id'] = idTrinhDoHienTai
+    formClone['id'] = idTrinhDoHienTai
     return formClone
 }
 
-function fetchTonGiao(id) {
-    console.log("Name:" , id);
+function fetchTrinhDo(id) {
     setLoading(true)
     idTrinhDoHienTai = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://localhost:7141/api/TrinhDo/getTrinhDoById/' + id,
         method: 'GET',
         success: function(data) {
-            setFormValue('religions_form', data)
+            setFormValue('qualifications_form', data)
         },
         error: (err) => {
-            console.log('fetchReligion err :: ', err);
+            console.log('fetchTrinhDo err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -66,6 +65,7 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchTrinhDo res :: ', data);
+            alert('Tạo Thành Công!');
             backToList()
         },
         error: (err) => {
@@ -89,26 +89,7 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/TrinhDo/deleteTrinhDo/' + idTrinhDoHienTai,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchTrinhDo res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchTrinhDo err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
@@ -118,6 +99,7 @@ function handleRemoveRow(id) {
         method: 'DELETE',
         success: function(data) {
             console.log('fetchTrinhDo res :: ', data);
+            alert('Xóa Thành Công!');
             backToList()
         },
         error: (err) => {
@@ -135,12 +117,12 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao' ,
+        url: 'https://localhost:7141/api/TrinhDo/updateTrinhDo/' +idTrinhDoHienTai ,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchTrinhDo res :: ', data);
+            alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
@@ -174,14 +156,12 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn,removeBtn, saveBtn)
+    actionEl.append(createBtn,saveBtn)
 }
 
 function buildApiUrl() {

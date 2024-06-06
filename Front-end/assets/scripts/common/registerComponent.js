@@ -267,7 +267,7 @@ class BaseInput extends HTMLElement {
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
-    
+
     this.innerHTML = `
     <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
@@ -335,23 +335,75 @@ class BaseInputPhone extends HTMLElement {
   }
 }
 
+// class BaseInputNumber extends HTMLElement {
+//   static observedAttributes = ["label", "name", "required"];
+
+//   connectedCallback() {
+//     const label = this.getAttribute("label") || "Base input";
+//     const name = this.getAttribute("name");
+//     const required = this.getAttribute("required");
+
+//     this.innerHTML = `
+//     <div class="">
+//       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
+//       <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+//     </div>
+//     `;
+//   }
+// }
+
 class BaseInputNumber extends HTMLElement {
-  static observedAttributes = ["label", "name", "required"];
+  static observedAttributes = ["label", "name", "required", "value", "readonly"];
+
+  constructor() {
+    super();
+    this._value = "";
+    this._readonly = false;
+  }
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const value = this.getAttribute("value") || "";
+    this._readonly = this.hasAttribute("readonly");
 
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? 'readonly' : ''}>
     </div>
     `;
+
+    this.inputElement = this.querySelector("input");
+    this.inputElement.addEventListener("input", this.handleInputChange.bind(this));
+  }
+
+  set value(newValue) {
+    this._value = newValue;
+    this.inputElement.value = newValue;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set readonly(newValue) {
+    this._readonly = newValue;
+    this.inputElement.readOnly = newValue;
+  }
+
+  get readonly() {
+    return this._readonly;
+  }
+
+  handleInputChange(event) {
+    if (!this._readonly) {
+      this._value = event.target.value;
+      this.dispatchEvent(new Event("value-changed"));
+    }
   }
 }
-
 class BaseRadio extends HTMLElement {
   static observedAttributes = ["label", "name", "value", "checked"];
 
@@ -393,14 +445,14 @@ class BaseSelect extends HTMLElement {
     const keyValue = this.getAttribute("keyValue") || 'value';
     const keyLabel = this.getAttribute("keyLabel") || 'label';
     const required = this.getAttribute("required");
-    
+
     function getApiUrl() {
-      if(!window[api]) return api
+      if (!window[api]) return api
       return window[api]()
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      
+
       if (!!api) {
         $.ajax({
           url: getApiUrl(),
@@ -509,12 +561,12 @@ class BaseButton extends HTMLElement {
     // Các class chung
     let commonClasses =
       "focus:outline-none font-medium rounded-lg text-sm";
-    
-      if(mini) {
-        commonClasses += ' py-1 px-2'
-      } else {
-        commonClasses += ' py-2.5 px-5'
-      }
+
+    if (mini) {
+      commonClasses += ' py-1 px-2'
+    } else {
+      commonClasses += ' py-2.5 px-5'
+    }
 
     // Các class riêng cho từng button
     const BtnClass = {
@@ -541,7 +593,7 @@ class BaseTable extends HTMLElement {
     const columnsKey = this.getAttribute('columns')
 
     function getApiUrl() {
-      if(!window[api]) return api
+      if (!window[api]) return api
       return window[api]()
     }
 
@@ -552,12 +604,12 @@ class BaseTable extends HTMLElement {
       const day = String(dateTime.getDate()).padStart(2, '0');
       const hours = String(dateTime.getHours()).padStart(2, '0');
       const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-      
+
       return `${day}-${month}-${year} `;
     }
 
     function formatCurrency(val) {
-      return val.toLocaleString('it-IT', {style : 'currency', currency : 'VND'})
+      return val.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -581,14 +633,14 @@ class BaseTable extends HTMLElement {
           const tableDataDisplay = tableData.slice(0, 10)
           tableDataDisplay.forEach(row => {
             const trEl = document.createElement('tr')
-            trEl.setAttribute('class','bg-white border-b')
+            trEl.setAttribute('class', 'bg-white border-b')
             columns.forEach(col => {
               const thEl = document.createElement('th')
               thEl.setAttribute('scope', 'col')
               thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
               let value = row[col.key]
 
-              if(col.key === 'action') {
+              if (col.key === 'action') {
                 col.actions.forEach(({ label, type, icon, onClick }) => {
                   const btnEl = document.createElement('base-button')
                   btnEl.setAttribute('label', label)
@@ -601,15 +653,15 @@ class BaseTable extends HTMLElement {
               } else {
                 if (col.type === 'datetime') {
                   value = formatDateTime(value)
-                } else if(col.type === 'currency') {
+                } else if (col.type === 'currency') {
                   value = formatCurrency(value)
                 }
 
-                if(col.formatter) {
+                if (col.formatter) {
                   console.log(value)
                   value = col.formatter(value)
                 }
-                
+
                 thEl.innerText = value
               }
 
