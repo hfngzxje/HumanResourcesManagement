@@ -1,88 +1,298 @@
-const TAB = {
-  RESUME: 1,
-  PERSON_HISTORY: 2,
-  CULTURAL_PROFICIENCY: 3,
-  FAMILY_RELATIONSHIP: 4,
-  EMPLOYMENT_CONTRACT: 5,
-  SALARY_PROFILE: 6,
-  EMPLOYMENT_HISTORY: 7,
-  REWARDS_DISCIPLINE: 8,
-};
-const tabList = document.querySelector("#tabList");
-let tabActive = TAB.RESUME; // text-white bg-blue-600 active
-const tabListEl = [];
+const isEdit = !!id
 
-const TAB_LIST = [
-  { key: TAB.RESUME, label: "Sơ yếu lý lịch" },
-  { key: TAB.PERSON_HISTORY, label: "Lịch sử bản thân" },
-  { key: TAB.CULTURAL_PROFICIENCY, label: "Trình độ văn hóa" },
-  { key: TAB.FAMILY_RELATIONSHIP, label: "Quan hệ gia đình" },
-  { key: TAB.EMPLOYMENT_CONTRACT, label: "Hợp đồng lao động" },
-  { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương" },
-  { key: TAB.EMPLOYMENT_HISTORY, label: "Quá trình công tác" },
-  { key: TAB.REWARDS_DISCIPLINE, label: "Khen thưởng & Kỷ luật" },
-];
+var MaritalOptions = [
+    { label: 'Đã kết hôn', value: 1 },
+    { label: 'Chưa kết hôn', value: 0 },
+]
 
-function getTabId(key) {
-  return "tab_" + key;
+function backToListDelete() {
+    window.location.replace("/pages/staff/list.html");
+}
+function backToListUpdate() {
+    const url = new URL("/pages/staff/resume.html", window.location.origin);
+    url.searchParams.set("id", id);
+    window.location.replace(url.toString());
 }
 
-function getContentId(key) {
-  return "content_" + key;
+function buildPayload(formValue) {
+    const formClone = {...formValue}
+  
+    return formClone
 }
 
-function renderTab() {
-  TAB_LIST.forEach((tab) => {
-    const liElement = document.createElement("li");
-    liElement.className = "me-2";
-
-    const aElement = document.createElement("a");
-    aElement.id = getTabId(tab.key);
-    aElement.href = "#";
-    aElement.className =
-      "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100";
-    aElement.onclick = () => changeActiveTab(tab.key);
-    aElement.textContent = tab.label;
-
-    liElement.appendChild(aElement);
-    tabList.appendChild(liElement);
-    tabListEl.push(liElement);
-  });
+function getImage() {
+    $.ajax({
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + id,
+        method: 'GET',
+        success: function(data) {
+            const imgEl = document.querySelector('#employeeImage')
+            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
+            imgEl.classList.remove('opacity-0')
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
-function handleTabInactive(key) {
-  const tabId = getTabId(key);
-  const tabEL = document.querySelector("#" + tabId);
-  tabEL.classList.add("hover:text-gray-900", "hover:bg-gray-100");
-  tabEL.classList.remove("text-white", "bg-blue-600", "active");
-  const contentId = getContentId(key);
-  const contentEl = document.querySelector("#" + contentId);
-  console.log("contentEl ", contentEl);
-  contentEl.classList.add("hidden");
+function fetchEmployee() {
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
+        method: 'GET',
+        success: function(data) {
+            setFormValue('resume_form', data)
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
-function handleTabActive(key) {
-  const tabId = getTabId(key);
-  const tabEL = document.querySelector("#" + tabId);
-  tabEL.classList.remove("hover:text-gray-900", "hover:bg-gray-100");
-  tabEL.classList.add("text-white", "bg-blue-600", "active");
-  const contentId = getContentId(key);
-  const contentEl = document.querySelector("#" + contentId);
-  contentEl.classList.remove("hidden");
+function handleCreate() {
+    const valid = validateForm('resume_form')
+    if(!valid) return
+    const {anh, ...rest} = getFormValues('resume_form')
+    const payload = buildPayload(rest)
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            // backToList()
+        },
+      
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Tạo thất bại!")
+            }
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
-function init() {
-  renderTab();
-  handleTabActive(tabActive);
+function handleRemove() {
+    const isConfirm = confirm('Xác nhận xóa')
+    if (!isConfirm) return
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
+        method: 'DELETE',
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            backToList()
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+            alert("Xóa thất bại!")
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
-function changeActiveTab(tabKey) {
-  if (tabKey === tabActive) return;
-  handleTabInactive(tabActive);
-  tabActive = tabKey;
-  handleTabActive(tabActive);
+// function handleSave() {
+//     const valid = validateForm('resume_form')
+//     if(!valid) return
+    
+//     const {anh, ...rest} = getFormValues('resume_form')
+
+//     const formValue = getFormValues('resume_form')
+//     const payload = buildPayload(rest)
+//     setLoading(true)
+//     $.ajax({
+//         url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+//         method: 'PUT',
+//         contentType: 'application/json',
+//         data: JSON.stringify(payload),
+//         success: function(data) {
+//             alert('Lưu thành công!');
+//             backToListUpdate();
+//         },
+//         error: (err) => {
+//             console.log('err ', err);
+//             try {
+//                 if(!err.responseJSON) {
+//                     alert(err.responseText)
+//                     return 
+//                 }
+//                 const errObj = err.responseJSON.errors
+//                 const firtErrKey = Object.keys(errObj)[0]
+//                 const message = errObj[firtErrKey][0]
+//                 alert(message)
+//             } catch (error) {
+//                 alert("Cập nhật thất bại!")
+//             }
+//         },
+//         complete: () => {
+            
+//         }
+//     });
+
+//     if(anh) {
+//         const payloadUploadImage = new FormData()
+//         payloadUploadImage.append('maNV', id)
+//         payloadUploadImage.append('file', anh)
+
+//         $.ajax({
+//             url: 'https://localhost:7141/api/Image/uploadImage',
+//             method: 'POST',
+//             contentType: false,
+//             processData: false,
+//             data: payloadUploadImage,
+//             success: function(data) {
+//             },
+//             error: (err) => {
+//             },
+//             complete: () => {
+//                 setLoading(false)
+//             }
+//         });
+//     } else {
+//         setLoading(false)
+//     }
+// }
+
+function handleSave() {
+    const valid = validateForm('resume_form')
+    if(!valid) return
+    
+    const {anh, ...rest} = getFormValues('resume_form')
+
+    const formValue = getFormValues('resume_form')
+    const payload = buildPayload(rest)
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(data) {
+            // Lưu thông tin nhân viên thành công
+            if (anh) {
+                uploadImage(anh);
+            } else {
+                setLoading(false);
+                backToListUpdate();
+            }
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    setLoading(false)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+                setLoading(false)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+                setLoading(false)
+            }
+        },
+        complete: () => {
+            
+        }
+    });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  init();
-});
+function uploadImage(anh) {
+    const payloadUploadImage = new FormData()
+    payloadUploadImage.append('maNV', id)
+    payloadUploadImage.append('file', anh)
+
+    $.ajax({
+        url: 'https://localhost:7141/api/Image/uploadImage',
+        method: 'POST',
+        contentType: false,
+        processData: false,
+        data: payloadUploadImage,
+        success: function(data) {
+            setLoading(false);
+            backToListUpdate();
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    setLoading(false)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+                setLoading(false)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+                setLoading(false)
+            }
+        },
+        complete: () => {
+            
+        }
+    });
+}
+
+function renderActionByStatus() {
+    const actionEl = document.getElementById('resume_form_action')
+    const buildButton = (label, type, icon) => {
+        const btnEl = document.createElement('base-button')
+        btnEl.setAttribute('label', label)
+        btnEl.setAttribute('type', type)
+        btnEl.setAttribute('icon', icon)
+        return btnEl
+    }
+    if (!isEdit) {
+        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+        createBtn.addEventListener('click', handleCreate)
+        actionEl.append(createBtn)
+        return
+    }
+
+    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
+    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
+
+    removeBtn.addEventListener('click', handleRemove)
+    saveBtn.addEventListener('click', handleSave)
+
+    actionEl.append(removeBtn, saveBtn, exportBtn)
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderActionByStatus()
+    console.log('id ', id);
+    if (id) {
+        fetchEmployee()
+        getImage()
+    }
+})
+
