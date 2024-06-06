@@ -55,26 +55,31 @@ namespace HumanResourcesManagement.Service
 
             return listDanhMucNgoaiNgu;
         }
-        public async Task<IEnumerable<DanhMucNgoaiNguResponse>> GetDanhMucNgoaiNguById(int id)
+        public async Task<DanhMucNgoaiNguResponse> GetDanhMucNgoaiNguById(int id)
         {
-            var listDanhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
-            if (listDanhMucNgoaiNgu == null)
+            var danhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
+            if (danhMucNgoaiNgu == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
             }
-            var listNgoaiNgu = await _context.TblDanhMucNgoaiNgus.Where(nv => nv.Id == id)
+
+            var ngoaiNguResponse = await _context.TblDanhMucNgoaiNgus
+                .Where(nv => nv.Id == id)
                 .Select(cm => new DanhMucNgoaiNguResponse
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
-                }).ToListAsync();
-            if (listNgoaiNgu == null)
+                })
+                .FirstOrDefaultAsync();
+
+            if (ngoaiNguResponse == null)
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
             }
 
-            return listNgoaiNgu;
+            return ngoaiNguResponse;
         }
+
 
         public async Task UpdateDanhMucNgoaiNgu(DanhMucNgoaiNguRequest req, int id)
         {

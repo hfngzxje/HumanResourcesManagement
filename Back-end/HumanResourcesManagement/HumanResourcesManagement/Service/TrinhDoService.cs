@@ -59,26 +59,31 @@ namespace HumanResourcesManagement.Service
 
             return listTrinhDo;
         }
-        public async Task<IEnumerable<TrinhDoResponse>> GetTrinhDoById(int id)
+        public async Task<TrinhDoResponse> GetTrinhDoById(int id)
         {
             var trinhdo = await _context.TblDanhMucTrinhDos.FindAsync(id);
             if (trinhdo == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy trình độ với id {id}");
             }
-            var listTrinhDo = await _context.TblDanhMucTrinhDos.Where(nv => nv.Id == id)
+
+            var trinhDoResponse = await _context.TblDanhMucTrinhDos
+                .Where(nv => nv.Id == id)
                 .Select(cm => new TrinhDoResponse
                 {
                     Id = cm.Id,
-                    Ten = cm.Ten,
-                }).ToListAsync();
-            if (listTrinhDo == null)
+                    Ten = cm.Ten
+                })
+                .FirstOrDefaultAsync();
+
+            if (trinhDoResponse == null)
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
             }
 
-            return listTrinhDo;
+            return trinhDoResponse;
         }
+
 
 
         public async Task UpdateTrinhDo(TrinhDoRequest req, int id)

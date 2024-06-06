@@ -9,6 +9,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<IEnumerable<ChuyenMonResponse>> GetChuyenMon();
         Task DeleteChuyenMon(int id);
         Task AddChuyenMon(ChuyenMonRequest req);
-        Task<IEnumerable<ChuyenMonResponse>> GetChuyenMonById(int id);
+        Task<ChuyenMonResponse> GetChuyenMonById(int id);
     }
 }

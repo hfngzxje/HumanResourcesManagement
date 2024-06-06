@@ -58,28 +58,33 @@ namespace HumanResourcesManagement.Service
 
             return listDanhMucTo;
         }
-        public async Task<IEnumerable<DanhMucToResponse>> GetDanhMucToById(int id)
+        public async Task<DanhMucToResponse> GetDanhMucToById(int id)
         {
             var danhmucto = await _context.TblDanhMucTos.FindAsync(id);
             if (danhmucto == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy tổ với id {id}");
             }
-            var listDanhMucTo = await _context.TblDanhMucTos.Where(nv => nv.Id == id)
+
+            var danhMucToResponse = await _context.TblDanhMucTos
+                .Where(nv => nv.Id == id)
                 .Select(cm => new DanhMucToResponse
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
-                    Idphong =   cm.Idphong,
+                    Idphong = cm.Idphong,
                     Ma = cm.Ma.Trim()
-                }).ToListAsync();
-            if (listDanhMucTo == null)
+                })
+                .FirstOrDefaultAsync();
+
+            if (danhMucToResponse == null)
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
             }
 
-            return listDanhMucTo;
+            return danhMucToResponse;
         }
+
 
         public async Task UpdateDanhMucTo(DanhMucToRequest req, int id)
         {

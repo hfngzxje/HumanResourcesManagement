@@ -9,6 +9,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<IEnumerable<TrinhDoResponse>> GetTrinhDo();
         Task DeleteTrinhDo(int id);
         Task AddTrinhDo(TrinhDoRequest req);
-        Task<IEnumerable<TrinhDoResponse>> GetTrinhDoById(int id);
+        Task<TrinhDoResponse> GetTrinhDoById(int id);
     }
 }
