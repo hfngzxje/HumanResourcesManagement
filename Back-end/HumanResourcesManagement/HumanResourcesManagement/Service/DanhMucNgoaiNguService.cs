@@ -22,13 +22,10 @@ namespace HumanResourcesManagement.Service
             {
                 throw new ArgumentNullException(nameof(req), "DanhMucNgoaiNgu cannot be null.");
             }
-
-            using (var dbContext = new NhanSuContext())
-            {
-                var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
-                dbContext.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
-                await dbContext.SaveChangesAsync();
-            }
+            var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
+            _context.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
+                await _context.SaveChangesAsync();
+           
         }
 
         public async Task DeleteDanhMucNgoaiNgu(int id)
@@ -58,6 +55,31 @@ namespace HumanResourcesManagement.Service
 
             return listDanhMucNgoaiNgu;
         }
+        public async Task<DanhMucNgoaiNguResponse> GetDanhMucNgoaiNguById(int id)
+        {
+            var danhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
+            if (danhMucNgoaiNgu == null)
+            {
+                throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
+            }
+
+            var ngoaiNguResponse = await _context.TblDanhMucNgoaiNgus
+                .Where(nv => nv.Id == id)
+                .Select(cm => new DanhMucNgoaiNguResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten,
+                })
+                .FirstOrDefaultAsync();
+
+            if (ngoaiNguResponse == null)
+            {
+                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
+            }
+
+            return ngoaiNguResponse;
+        }
+
 
         public async Task UpdateDanhMucNgoaiNgu(DanhMucNgoaiNguRequest req, int id)
         {
@@ -81,5 +103,6 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

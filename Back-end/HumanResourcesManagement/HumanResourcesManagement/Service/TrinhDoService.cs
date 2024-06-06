@@ -25,13 +25,13 @@ namespace HumanResourcesManagement.Service
             {
                 throw new ArgumentNullException(nameof(req), "TrinhDoRequest cannot be null.");
             }
-            using (var dbContext = new NhanSuContext())
-            {
+            
                 var trinhDo = _mapper.Map<TblDanhMucTrinhDo>(req);
-                dbContext.TblDanhMucTrinhDos.Add(trinhDo);
-                await dbContext.SaveChangesAsync();
-            }
+            _context.TblDanhMucTrinhDos.Add(trinhDo);
+                await _context.SaveChangesAsync();
+            
         }
+
 
         public async Task DeleteTrinhDo(int id)
         {
@@ -59,6 +59,32 @@ namespace HumanResourcesManagement.Service
 
             return listTrinhDo;
         }
+        public async Task<TrinhDoResponse> GetTrinhDoById(int id)
+        {
+            var trinhdo = await _context.TblDanhMucTrinhDos.FindAsync(id);
+            if (trinhdo == null)
+            {
+                throw new KeyNotFoundException($"Không tìm thấy trình độ với id {id}");
+            }
+
+            var trinhDoResponse = await _context.TblDanhMucTrinhDos
+                .Where(nv => nv.Id == id)
+                .Select(cm => new TrinhDoResponse
+                {
+                    Id = cm.Id,
+                    Ten = cm.Ten
+                })
+                .FirstOrDefaultAsync();
+
+            if (trinhDoResponse == null)
+            {
+                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
+            }
+
+            return trinhDoResponse;
+        }
+
+
 
         public async Task UpdateTrinhDo(TrinhDoRequest req, int id)
         {

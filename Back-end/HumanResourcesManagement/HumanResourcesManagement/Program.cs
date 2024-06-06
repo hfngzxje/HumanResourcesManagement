@@ -29,6 +29,8 @@ public class Program
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IDanhMucNgoaiNguService, DanhMucNgoaiNguService>();
         builder.Services.AddScoped<IDanhMucToService, DanhMucToService>();
+        builder.Services.AddScoped<IDanhMucKhenThuongKyLuatService, DanhMucKhenThuongKyLuatService>();
+        builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
 
 
 

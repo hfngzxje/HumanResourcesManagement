@@ -13,7 +13,7 @@ namespace HumanResourcesManagement.Service
         {
             _context = context;
         }
-        public async Task<TblDanhMucKhenThuongKyLuat> AddKhenThuongKyLuat(TblDanhMucKhenThuongKyLuat req)
+        public async Task<TblKhenThuongKyLuat> AddKhenThuongKyLuat(TblKhenThuongKyLuat req)
         {
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);
             if (nv == null)
@@ -21,7 +21,7 @@ namespace HumanResourcesManagement.Service
                 throw new KeyNotFoundException($"not found {req.Ma}");
             }
            
-            var ktkl = new TblDanhMucKhenThuongKyLuat
+            var ktkl = new TblKhenThuongKyLuat
             {
                 Ngay = req.Ngay,
                 Noidung = req.Noidung,
@@ -29,76 +29,86 @@ namespace HumanResourcesManagement.Service
                 Khenthuongkiluat = req.Khenthuongkiluat,
                 Ma = req.Ma
             };
-            _context.TblDanhMucKhenThuongKyLuats.Add(ktkl);
+            _context.TblKhenThuongKyLuats.Add(ktkl);
             await _context.SaveChangesAsync();
             return ktkl;
         }
 
         public async Task DeleteKhenThuongKyLuat(int id)
         {
-            var ktkl = await _context.TblDanhMucKhenThuongKyLuats.FindAsync(id);
+            var ktkl = await _context.TblKhenThuongKyLuats.FindAsync(id);
             if (ktkl == null)
             {
                 throw new KeyNotFoundException($"not found {id}");
             }
-            _context.TblDanhMucKhenThuongKyLuats.Remove(ktkl);
+            _context.TblKhenThuongKyLuats.Remove(ktkl);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TblDanhMucKhenThuongKyLuat>> GetKhenThuongKyLuatByMaNV(string maNV, int khenThuongOrKiLuat)
+        public async Task<IEnumerable<TblKhenThuongKyLuat>> GetKhenThuongKyLuatByMaNV(string maNV, int khenThuongOrKiLuat)
         {
             if (string.IsNullOrWhiteSpace(maNV))
             {
-                throw new ArgumentException("maNV không được để trống ", nameof(maNV));
+                throw new ArgumentException("maNV không được để trống", nameof(maNV));
             }
-            var exists = await _context.TblDanhMucKhenThuongKyLuats.AnyAsync(nv => nv.Ma == maNV);
+
+            var exists = await _context.TblKhenThuongKyLuats.AnyAsync(nv => nv.Ma == maNV);
             if (!exists)
             {
                 throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {maNV}");
             }
 
-            if (_context.TblDanhMucKhenThuongKyLuats == null)
+            if (_context.TblKhenThuongKyLuats == null)
             {
                 throw new InvalidOperationException("no data");
             }
-            var listKhenThuongKiLuat =new List<TblDanhMucKhenThuongKyLuat>();
+
+            var listKhenThuongKiLuat = new List<TblKhenThuongKyLuat>();
+
             if (khenThuongOrKiLuat == 1)
             {
-                var listKhenThuong= await _context.TblDanhMucKhenThuongKyLuats.Where(nv => nv.Ma == maNV &&nv.Khenthuongkiluat == 1)
-                    .Select(kt => new TblDanhMucKhenThuongKyLuat
+                var listKhenThuong = await _context.TblKhenThuongKyLuats
+                    .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 1)
+                    .Select(kt => new TblKhenThuongKyLuat
                     {
                         Id = kt.Id,
-                        Ngay = kt.Ngay,
+                        Ten = kt.Ten,
+                        Ngay = kt.Ngay ?? DateTime.MinValue, // Handle nullable DateTime
                         Noidung = kt.Noidung,
                         Lido = kt.Lido,
                         Ma = kt.Ma.Trim()
-                    }).ToListAsync();
+                    })
+                    .ToListAsync();
+
                 listKhenThuongKiLuat = listKhenThuong;
-                if (listKhenThuong == null)
+                if (!listKhenThuong.Any())
                 {
                     throw new KeyNotFoundException($"list is empty {maNV}");
                 }
             }
             else
             {
-                var listKiLuat = await _context.TblDanhMucKhenThuongKyLuats.Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 2)
-                   .Select(kt => new TblDanhMucKhenThuongKyLuat
-                   {
-                       Id = kt.Id,
-                       Ngay = kt.Ngay,
-                       Noidung = kt.Noidung,
-                       Lido = kt.Lido,
-                       Ma = kt.Ma.Trim()
-                   }).ToListAsync();
+                var listKiLuat = await _context.TblKhenThuongKyLuats
+                    .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 2)
+                    .Select(kt => new TblKhenThuongKyLuat
+                    {
+                        Id = kt.Id,
+                        Ten = kt.Ten,
+                        Ngay = kt.Ngay ?? DateTime.MinValue, // Handle nullable DateTime
+                        Noidung = kt.Noidung,
+                        Lido = kt.Lido,
+                        Ma = kt.Ma.Trim()
+                    })
+                    .ToListAsync();
+
                 listKhenThuongKiLuat = listKiLuat;
-                if (listKiLuat == null)
+                if (!listKiLuat.Any())
                 {
                     throw new KeyNotFoundException($"list is empty {maNV}");
                 }
             }
+
             return listKhenThuongKiLuat;
-
-
         }
     }
 }
