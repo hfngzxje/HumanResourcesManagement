@@ -5,13 +5,18 @@ var MaritalOptions = [
     { label: 'Chưa kết hôn', value: 0 },
 ]
 
-function backToList() {
+function backToListDelete() {
     window.location.replace("/pages/staff/list.html");
+}
+function backToListUpdate() {
+    const url = new URL("/pages/staff/resume.html", window.location.origin);
+    url.searchParams.set("id", id);
+    window.location.replace(url.toString());
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    formClone['gioitinh'] = formClone['gioitinh'] === '1'
+  
     return formClone
 }
 
@@ -65,9 +70,21 @@ function handleCreate() {
             console.log('fetchEmployee res :: ', data);
             // backToList()
         },
+      
         error: (err) => {
-            console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Tạo thất bại!")
+            }
         },
         complete: () => {
             setLoading(false)
@@ -111,14 +128,26 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            // backToList()
+            alert('Lưu thành công!');
+            backToListUpdate();
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Cập nhật thất bại!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+            }
         },
         complete: () => {
-            setLoading(false)
+            
         }
     });
 
@@ -129,7 +158,7 @@ function handleSave() {
 
         $.ajax({
             url: 'https://localhost:7141/api/Image/uploadImage',
-            method: 'PUT',
+            method: 'POST',
             contentType: false,
             processData: false,
             data: payloadUploadImage,
@@ -141,6 +170,8 @@ function handleSave() {
                 setLoading(false)
             }
         });
+    } else {
+        setLoading(false)
     }
 }
 

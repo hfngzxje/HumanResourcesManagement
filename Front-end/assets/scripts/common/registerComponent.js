@@ -90,31 +90,31 @@ class CustomSidebar extends HTMLElement {
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục chức danh </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="/pages/catalog/specializations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục chuyên môn </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/qualifications.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục trình độ </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/foreignLanguages.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục ngoại ngữ </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/teams.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục tổ </span>
                 </a> 
-               <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+               <a href="/pages/catalog/religions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
-                     <span> Danh mục tôn giáp </span>
+                     <span> Danh mục tôn giáo </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
+                <a href="/pages/catalog/awardsAndDisciplinaryActions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục khen thưởng-kỷ luật </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/departments.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục phòng ban </span>
                 </a>
@@ -394,12 +394,16 @@ class BaseSelect extends HTMLElement {
     const keyLabel = this.getAttribute("keyLabel") || 'label';
     const required = this.getAttribute("required");
     
+    function getApiUrl() {
+      if(!window[api]) return api
+      return window[api]()
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       
       if (!!api) {
         $.ajax({
-          url: api,
+          url: getApiUrl(),
           method: 'GET',
           success: (data) => {
             data.forEach((item) => {
@@ -549,7 +553,7 @@ class BaseTable extends HTMLElement {
       const hours = String(dateTime.getHours()).padStart(2, '0');
       const minutes = String(dateTime.getMinutes()).padStart(2, '0');
       
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      return `${day}-${month}-${year} `;
     }
 
     function formatCurrency(val) {

@@ -42,8 +42,9 @@ function getElValue (element) {
     } else if (element.type === "radio") {
       if (element.checked) {
         value = element.value == "1" ? true : false;
+      } else {
+        value = undefined;
       }
-      
     }
     else if (element.type === "checkbox") {
       value = element.checked
@@ -89,8 +90,9 @@ function getFormValues(formId) {
   elements.forEach(function (element) {
     const name = element.name;
     const value = getElValue(element)
+    console.log('name ', name , value);
     // Thêm vào object formData
-    if (!name) return
+    if (!name || value === undefined ) return
     
     formData[name] = value;
   });

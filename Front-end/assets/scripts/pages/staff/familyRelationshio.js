@@ -125,7 +125,6 @@ function handleCreate() {
 
 function handleRemove() {
     const isConfirm = confirm('Xác nhận xóa')
-    console.log("fdf")
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -146,7 +145,6 @@ function handleRemove() {
 }
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
-    console.log("fdf")
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -180,11 +178,22 @@ function handleSave() {
         data: JSON.stringify(payload),
         success: function(data) {
             console.log('fetchEmployee res :: ', data);
-            backToList()
+            // backToList()
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Cập nhật thất bại!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+            }
         },
         complete: () => {
             setLoading(false)
