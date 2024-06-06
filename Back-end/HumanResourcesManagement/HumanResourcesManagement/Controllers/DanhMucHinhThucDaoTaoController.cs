@@ -7,51 +7,30 @@ namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChuyenMonController : ControllerBase
+    public class DanhMucHinhThucDaoTaoController : ControllerBase
     {
-        private readonly IChuyenMonService _chuyenMonService;
+        private readonly IDanhMucHinhThucDaoTaoService  _danhMucHinhThucDaoTaoService;
         private readonly NhanSuContext _context;
-        public ChuyenMonController(IChuyenMonService chuyenMonService, NhanSuContext context)
+        public DanhMucHinhThucDaoTaoController(IDanhMucHinhThucDaoTaoService danhMucHinhThucDaoTaoService, NhanSuContext context)
         {
-            _chuyenMonService = chuyenMonService;
+            _danhMucHinhThucDaoTaoService = danhMucHinhThucDaoTaoService;
             _context = context;
         }
-
-
-
-        [HttpGet("getChuyenMon")]
-        public async Task<IActionResult> GetChuyenMon()
+        [HttpGet("getDanhMucHinhThucDaoTao")]
+        public async Task<IActionResult> GetDanhMucHinhThucDaoTao()
         {
-            try
-            {
-                var listChuyenMon = await _chuyenMonService.GetChuyenMon();
-                return Ok(listChuyenMon);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
-            }
+
+            var listDanhMucHinhThucDaoTao = await _danhMucHinhThucDaoTaoService.GetDanhMucHinhThucDaoTao();
+            return Ok(listDanhMucHinhThucDaoTao);
 
         }
-        [HttpGet("getChuyenMonById/{id}")]
-        public async Task<IActionResult> GetChuyenMonById(int id)
+        [HttpGet("getDanhMucHinhThucDaoTaoById/{id}")]
+        public async Task<IActionResult> GetDanhMucHinhThucDaoTaoById(int id)
         {
             try
             {
-                var listChuyenMon = await _chuyenMonService.GetChuyenMonById(id);
-                return Ok(listChuyenMon);
+                var listDanhMucHinhThucDaoTao = await _danhMucHinhThucDaoTaoService.GetDanhMucHinhThucDaoTaoById(id);
+                return Ok(listDanhMucHinhThucDaoTao);
             }
             catch (ArgumentException ex)
             {
@@ -73,12 +52,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpPost("addChuyenMon")]
-        public async Task<IActionResult> AddChuyenMon([FromBody] ChuyenMonRequest req)
+        [HttpPost("addDanhMucHinhThucDaoTao")]
+        public async Task<IActionResult> AddDanhMucHinhThucDaoTao([FromBody] TblHinhThucDaoTao req)
         {
             try
             {
-                await _chuyenMonService.AddChuyenMon(req);
+                var newDanhMucHinhThucDaoTao = await _danhMucHinhThucDaoTaoService.AddDanhMucHinhThucDaoTao(req);
                 return StatusCode(200, "add thanh cong");
             }
             catch (KeyNotFoundException ex)
@@ -91,12 +70,12 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("deleteChuyenMon/{id}")]
-        public async Task<IActionResult> DeleteChuyenMon(int id)
+        [HttpDelete("deleteDanhMucHinhThucDaoTao/{id}")]
+        public async Task<IActionResult> DeleteDanhMucHinhThucDaoTao(int id)
         {
             try
             {
-                await _chuyenMonService.DeleteChuyenMon(id);
+                await _danhMucHinhThucDaoTaoService.DeleteDanhMucHinhThucDaoTao(id);
                 return StatusCode(200, "xoa thanh cong");
             }
             catch (KeyNotFoundException ex)
@@ -109,12 +88,12 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpPut("updateChuyenMon/{id}")]
-        public async Task<IActionResult> UpdateChuyenMon([FromBody] ChuyenMonRequest req , int id)
+        [HttpPut("updateDanhMucHinhThucDaoTao")]
+        public async Task<IActionResult> UpdateDanhMucHinhThucDaoTao([FromBody] TblHinhThucDaoTao req)
         {
             try
             {
-                await _chuyenMonService.UpdateChuyenMon(req ,id);
+                await _danhMucHinhThucDaoTaoService.UpDateDanhMucHinhThucDaoTao(req);
                 return StatusCode(200, "sua thanh cong");
             }
             catch (Exception ex)
@@ -122,6 +101,5 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-    
     }
 }

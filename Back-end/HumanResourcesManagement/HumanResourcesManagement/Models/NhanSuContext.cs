@@ -33,6 +33,7 @@ namespace HumanResourcesManagement.Models
         public virtual DbSet<TblDieuChuyen> TblDieuChuyens { get; set; } = null!;
         public virtual DbSet<TblHinhThucDaoTao> TblHinhThucDaoTaos { get; set; } = null!;
         public virtual DbSet<TblHopDong> TblHopDongs { get; set; } = null!;
+        public virtual DbSet<TblKhenThuongKyLuat> TblKhenThuongKyLuats { get; set; } = null!;
         public virtual DbSet<TblLichSuBanThan> TblLichSuBanThans { get; set; } = null!;
         public virtual DbSet<TblLuong> TblLuongs { get; set; } = null!;
         public virtual DbSet<TblNgoaiNgu> TblNgoaiNgus { get; set; } = null!;
@@ -52,6 +53,8 @@ namespace HumanResourcesManagement.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
             modelBuilder.Entity<TblDanhMucChucDanh>(entity =>
             {
                 entity.ToTable("tblDanhMucChucDanh");
@@ -132,24 +135,6 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucKhenThuongKyLuat");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Khenthuongkiluat).HasColumnName("khenthuongkiluat");
-
-                entity.Property(e => e.Lido)
-                    .HasMaxLength(100)
-                    .HasColumnName("lido");
-
-                entity.Property(e => e.Ma)
-                    .HasMaxLength(10)
-                    .HasColumnName("ma");
-
-                entity.Property(e => e.Ngay)
-                    .HasColumnType("datetime")
-                    .HasColumnName("ngay");
-
-                entity.Property(e => e.Noidung)
-                    .HasMaxLength(100)
-                    .HasColumnName("noidung");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -337,8 +322,37 @@ namespace HumanResourcesManagement.Models
                     .IsUnicode(false)
                     .HasColumnName("ma")
                     .IsFixedLength();
+            });
 
-                entity.Property(e => e.TrangThai).HasColumnName("trangThai");
+            modelBuilder.Entity<TblKhenThuongKyLuat>(entity =>
+            {
+                entity.ToTable("tblKhenThuongKyLuat");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Khenthuongkiluat).HasColumnName("khenthuongkiluat");
+
+                entity.Property(e => e.Lido)
+                    .HasMaxLength(100)
+                    .HasColumnName("lido");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ngay)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ngay");
+
+                entity.Property(e => e.Noidung)
+                    .HasMaxLength(100)
+                    .HasColumnName("noidung");
+
+                entity.Property(e => e.Ten)
+                    .HasMaxLength(50)
+                    .HasColumnName("ten");
             });
 
             modelBuilder.Entity<TblLichSuBanThan>(entity =>

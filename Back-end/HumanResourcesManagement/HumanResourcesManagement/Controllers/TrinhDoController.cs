@@ -45,6 +45,32 @@ namespace HumanResourcesManagement.Controllers
             }
 
         }
+        [HttpGet("getTrinhDoById/{id}")]
+        public async Task<IActionResult> GetTrinhDoById(int id)
+        {
+            try
+            {
+                var listTrinhDo = await _trinhDoService.GetTrinhDoById(id);
+                return Ok(listTrinhDo);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
+            }
+
+        }
 
 
         [HttpPost("addTrinhDo")]

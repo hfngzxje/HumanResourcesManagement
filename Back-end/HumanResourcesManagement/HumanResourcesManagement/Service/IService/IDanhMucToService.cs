@@ -9,5 +9,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<IEnumerable<DanhMucToResponse>> GetDanhMucTo();
         Task DeleteDanhMucTo(int id);
         Task AddDanhMucTo(DanhMucToRequest req);
+        Task<DanhMucToResponse> GetDanhMucToById(int id);
     }
 }
