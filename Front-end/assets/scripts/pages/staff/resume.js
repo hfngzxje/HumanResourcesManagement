@@ -113,6 +113,68 @@ function handleRemove() {
     });
 }
 
+// function handleSave() {
+//     const valid = validateForm('resume_form')
+//     if(!valid) return
+    
+//     const {anh, ...rest} = getFormValues('resume_form')
+
+//     const formValue = getFormValues('resume_form')
+//     const payload = buildPayload(rest)
+//     setLoading(true)
+//     $.ajax({
+//         url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+//         method: 'PUT',
+//         contentType: 'application/json',
+//         data: JSON.stringify(payload),
+//         success: function(data) {
+//             alert('Lưu thành công!');
+//             backToListUpdate();
+//         },
+//         error: (err) => {
+//             console.log('err ', err);
+//             try {
+//                 if(!err.responseJSON) {
+//                     alert(err.responseText)
+//                     return 
+//                 }
+//                 const errObj = err.responseJSON.errors
+//                 const firtErrKey = Object.keys(errObj)[0]
+//                 const message = errObj[firtErrKey][0]
+//                 alert(message)
+//             } catch (error) {
+//                 alert("Cập nhật thất bại!")
+//             }
+//         },
+//         complete: () => {
+            
+//         }
+//     });
+
+//     if(anh) {
+//         const payloadUploadImage = new FormData()
+//         payloadUploadImage.append('maNV', id)
+//         payloadUploadImage.append('file', anh)
+
+//         $.ajax({
+//             url: 'https://localhost:7141/api/Image/uploadImage',
+//             method: 'POST',
+//             contentType: false,
+//             processData: false,
+//             data: payloadUploadImage,
+//             success: function(data) {
+//             },
+//             error: (err) => {
+//             },
+//             complete: () => {
+//                 setLoading(false)
+//             }
+//         });
+//     } else {
+//         setLoading(false)
+//     }
+// }
+
 function handleSave() {
     const valid = validateForm('resume_form')
     if(!valid) return
@@ -128,7 +190,51 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            alert('Lưu thành công!');
+            // Lưu thông tin nhân viên thành công
+            if (anh) {
+                uploadImage(anh);
+            } else {
+                setLoading(false);
+                backToListUpdate();
+            }
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    setLoading(false)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+                setLoading(false)
+            } catch (error) {
+                alert("Cập nhật thất bại!")
+                setLoading(false)
+            }
+        },
+        complete: () => {
+            
+        }
+    });
+}
+
+function uploadImage(anh) {
+    const payloadUploadImage = new FormData()
+    payloadUploadImage.append('maNV', id)
+    payloadUploadImage.append('file', anh)
+
+    $.ajax({
+        url: 'https://localhost:7141/api/Image/uploadImage',
+        method: 'POST',
+        contentType: false,
+        processData: false,
+        data: payloadUploadImage,
+        success: function(data) {
+            setLoading(false);
             backToListUpdate();
         },
         error: (err) => {
@@ -136,43 +242,23 @@ function handleSave() {
             try {
                 if(!err.responseJSON) {
                     alert(err.responseText)
+                    setLoading(false)
                     return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
+                setLoading(false)
             } catch (error) {
                 alert("Cập nhật thất bại!")
+                setLoading(false)
             }
         },
         complete: () => {
             
         }
     });
-
-    if(anh) {
-        const payloadUploadImage = new FormData()
-        payloadUploadImage.append('maNV', id)
-        payloadUploadImage.append('file', anh)
-
-        $.ajax({
-            url: 'https://localhost:7141/api/Image/uploadImage',
-            method: 'POST',
-            contentType: false,
-            processData: false,
-            data: payloadUploadImage,
-            success: function(data) {
-            },
-            error: (err) => {
-            },
-            complete: () => {
-                setLoading(false)
-            }
-        });
-    } else {
-        setLoading(false)
-    }
 }
 
 function renderActionByStatus() {

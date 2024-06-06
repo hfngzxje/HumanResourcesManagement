@@ -269,7 +269,7 @@ async function fetchSalary() {
             inputElement.value = salary;
         }
 
-        alert(salary);
+        // alert(salary);
         return salary;
     } catch (error) {
         console.error(error);
