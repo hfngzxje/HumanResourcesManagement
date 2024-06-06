@@ -16,6 +16,7 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        //them moi danhmucto
         public async Task AddDanhMucTo(DanhMucToRequest req)
         {
             if (req == null)
@@ -27,7 +28,7 @@ namespace HumanResourcesManagement.Service
             {
                 throw new InvalidOperationException($"Ma '{req.Ma}' da ton tai.");
             }
-
+            
 
             var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
             _context.TblDanhMucTos.Add(danhMucTo);
