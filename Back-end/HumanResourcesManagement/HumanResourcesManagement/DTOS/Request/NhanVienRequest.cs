@@ -46,6 +46,7 @@ namespace HumanResourcesManagement.Models
 
         [Required(ErrorMessage = "Dantoc is required")]
         public int? Dantoc { get; set; }
+        
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }

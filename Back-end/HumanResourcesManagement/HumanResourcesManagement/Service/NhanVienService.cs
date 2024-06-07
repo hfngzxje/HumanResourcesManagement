@@ -3,7 +3,10 @@ using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HumanResourcesManagement.Service
 {
@@ -36,6 +39,16 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Tên không được để trống");
             }
 
+            if (_context.TblNhanViens.Any(nv => nv.Email == request.Email))
+            {
+                throw new Exception("Email đã tồn tại!");
+            }
+
+            if (_context.TblNhanViens.Any(nv => nv.Didong == request.Didong))
+            {
+                throw new Exception("Số điện thoại đã tồn tại!");
+            }
+
             string maNhanVien = GenerateEmployeeCode(request.Ten);
             int suffix = 1;
             string originalMaNhanVien = maNhanVien;
@@ -47,45 +60,66 @@ namespace HumanResourcesManagement.Service
             }
             string password = GenerateRandomPassword();
 
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                UseDefaultCredentials = false,
-                Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "acoe joeu tlxf qbgq"),
-                Port = 587,
-                EnableSsl = true
-            };
+            string hashedPassword = HashPassword(password);
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress("buiduchung300802@gmail.com"),
-                Subject = "Thông tin tài khoản nhân viên mới",
-                Body = $"Xin chào {request.Ten},<br><br>" +
-                       $"Tài khoản của bạn đã được tạo thành công.<br>" +
-                       $"Mã nhân viên (username): {maNhanVien}<br>" +
-                       $"Mật khẩu: {password}<br><br>" +
-                       "Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu.<br><br>" +
-                       "Trân trọng,<br>Phòng Nhân Sự",
-                IsBodyHtml = true
-            };
+            var nhanVien = _mapper.Map<TblNhanVien>(request);
+            nhanVien.Ma = maNhanVien;
+            nhanVien.VaiTroId = 2;
+            nhanVien.MatKhau = hashedPassword;
 
-            mailMessage.To.Add(request.Email);
+            _context.TblNhanViens.Add(nhanVien);
+            _context.SaveChanges();
+
+            RemoveVietnameseDiacritics(maNhanVien);
 
             try
             {
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "acoe joeu tlxf qbgq"),
+                    Port = 587,
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("buiduchung300802@gmail.com"),
+                    Subject = "Thông tin tài khoản nhân viên mới",
+                    Body = $"Xin chào {request.Ten},<br><br>" +
+                           $"Tài khoản của bạn đã được tạo thành công.<br>" +
+                           $"Mã nhân viên (username): {maNhanVien}<br>" +
+                           $"Mật khẩu: {password}<br><br>" +
+                           "Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu.<br><br>" +
+                           "Trân trọng,<br>Phòng Nhân Sự",
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(request.Email);
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
             {
                 throw new Exception("Failed to send email: " + ex.Message);
             }
-
-            var nhanVien = _mapper.Map<TblNhanVien>(request);
-            nhanVien.Ma = maNhanVien;
-            nhanVien.VaiTroId = 2;
-            nhanVien.MatKhau = password;
-            _context.TblNhanViens.Add(nhanVien);
-            _context.SaveChanges();
         }
+
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
 
 
 
@@ -104,11 +138,28 @@ namespace HumanResourcesManagement.Service
         }
 
 
+        public static string RemoveVietnameseDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
 
 
         private string GenerateEmployeeCode(string fullName)
         {
-            var nameParts = fullName.Split(' ');
+            string cleanedName = RemoveVietnameseDiacritics(fullName).ToLower();
+            var nameParts = cleanedName.Split(' ');
             if (nameParts.Length == 0)
             {
                 throw new Exception("Tên không hợp lệ");
@@ -119,6 +170,7 @@ namespace HumanResourcesManagement.Service
 
             return lastName + initials;
         }
+
 
 
         private bool IsIdExist(string id)

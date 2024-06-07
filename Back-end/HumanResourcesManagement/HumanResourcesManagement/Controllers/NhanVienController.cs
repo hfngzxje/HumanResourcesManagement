@@ -18,8 +18,15 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet]
         public IActionResult GetAllNhanVien()
         {
-            var nhanVien = _nhanVienService.GetAllNhanVien();
-            return Ok(nhanVien);
+            try
+            {
+                var nhanVien = _nhanVienService.GetAllNhanVien();
+                return Ok(nhanVien);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("TaoMoiNhanVien")]
