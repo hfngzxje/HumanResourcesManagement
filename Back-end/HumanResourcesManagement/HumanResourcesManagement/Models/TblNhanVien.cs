@@ -15,7 +15,6 @@ namespace HumanResourcesManagement.Models
         public short Honnhan { get; set; }
         public DateTime? Ngaysinh { get; set; }
         public bool Gioitinh { get; set; }
-        public string? Dienthoai { get; set; }
         public string? Didong { get; set; }
         public string? Cmnd { get; set; }
         public DateTime? Cmndngaycap { get; set; }
@@ -54,6 +53,9 @@ namespace HumanResourcesManagement.Models
         public int? Phong { get; set; }
         public int? To { get; set; }
         public string? Anh { get; set; }
+        public string? Email { get; set; }
+        public string? MatKhau { get; set; }
+        public int? VaiTroId { get; set; }
 
         public virtual TblLichSuBanThan? TblLichSuBanThan { get; set; }
         public virtual ICollection<TblTrinhDoVanHoa> TblTrinhDoVanHoas { get; set; }

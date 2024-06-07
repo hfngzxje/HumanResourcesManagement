@@ -31,6 +31,7 @@ public class Program
         builder.Services.AddScoped<IDanhMucToService, DanhMucToService>();
         builder.Services.AddScoped<IDanhMucKhenThuongKyLuatService, DanhMucKhenThuongKyLuatService>();
         builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
+        builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
 
 
 

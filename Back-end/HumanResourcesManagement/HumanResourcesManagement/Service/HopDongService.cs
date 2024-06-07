@@ -77,11 +77,6 @@ namespace HumanResourcesManagement.Service
 
         public void TaoHopDong(InsertHopDongRequest request)
         {
-            if (IsIdExist(request.Mahopdong))
-            {
-                throw new Exception("Ma hop dong da ton tai.");
-            }
-
             var nhanVien = _context.TblNhanViens.FirstOrDefault(nv => nv.Ma == request.Ma);
             if (nhanVien == null)
             {
@@ -90,12 +85,24 @@ namespace HumanResourcesManagement.Service
 
             if (request.Hopdongtungay > request.Hopdongdenngay)
             {
-                throw new Exception("Ngay tao hop dong phai nho hon ngay het han!!");
+                throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
             }
+
+            var newMaNv = request.Ma.ToUpper();
+
+            string baseMaHopDong = newMaNv + "HD";
+            int suffix = 1;
+
+            while (_context.TblHopDongs.Any(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
+            {
+                suffix++;
+            }
+
+            string newMaHopDong = baseMaHopDong + suffix.ToString("D2");
 
             var hopDong = new TblHopDong()
             {
-                Mahopdong = request.Mahopdong,
+                Mahopdong = newMaHopDong,
                 Loaihopdong = request.Loaihopdong,
                 Chucdanh = request.Chucdanh,
                 Luongcoban = request.Luongcoban,
@@ -104,11 +111,13 @@ namespace HumanResourcesManagement.Service
                 Ghichu = request.Ghichu,
                 Ma = request.Ma,
                 TrangThai = 1,
-                
             };
+
             _context.TblHopDongs.Add(hopDong);
             _context.SaveChanges();
         }
+
+
 
         public void XoaHopDong(string id)
         {

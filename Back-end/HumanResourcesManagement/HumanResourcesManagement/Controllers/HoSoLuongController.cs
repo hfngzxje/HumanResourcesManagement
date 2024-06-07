@@ -89,5 +89,19 @@ namespace HumanResourcesManagement.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+        [HttpGet("getLuongById/{id}")]
+        public IActionResult GetLuongById(int id)
+        {
+            try
+            {
+                var hoSoLuong = _hoSoLuongService.getHoSoLuongById(id);
+                return Ok(hoSoLuong);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
     }
 }
