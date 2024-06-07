@@ -72,7 +72,7 @@ var TableColumns = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchSalary(row.id) } },
+            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchSalaryToEdit(row.id) } },
             { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
         ]
     }
@@ -91,19 +91,19 @@ function buildPayload(formValue) {
     return formClone
 }
 
-function fetchSalary(id) {
-    console.log(mahopdong);
+function fetchSalaryToEdit(id) {
+    alert("dsd")
     setLoading(true)
     idLuongHienTai = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + id,
+        url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('laborContract_form', data)
+            setFormValue('salaryRecord_form', data)
         },
         error: (err) => {
-            console.log('fetchContract err :: ', err);
+            console.log('fetchSalary err :: ', err);
         },
         complete: () => {
             setLoading(false)

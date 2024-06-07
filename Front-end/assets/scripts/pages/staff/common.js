@@ -29,7 +29,7 @@ const TAB_LIST = [
   {
     key: TAB.CULTURAL_PROFICIENCY,
     label: "Trình độ văn hóa",
-    activeByPath: "",
+    activeByPath: "/pages/staff/qualifications.html",
   },
   { key: TAB.FAMILY_RELATIONSHIP, 
     label: "Quan hệ gia đình", 

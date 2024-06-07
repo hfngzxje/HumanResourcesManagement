@@ -630,7 +630,7 @@ class BaseTable extends HTMLElement {
         method: 'GET',
         success: (tableData) => {
           const bodyEl = this.querySelector('tbody')
-          const tableDataDisplay = tableData.slice(0, 10)
+          const tableDataDisplay = tableData.slice(0, 30)
           tableDataDisplay.forEach(row => {
             const trEl = document.createElement('tr')
             trEl.setAttribute('class', 'bg-white border-b')
