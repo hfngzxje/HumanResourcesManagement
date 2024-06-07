@@ -3,6 +3,7 @@ using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace HumanResourcesManagement.Service
 {
@@ -28,7 +29,7 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public void AddNhanVien(NhanVienRequest request)
+        public async Task AddNhanVienAsync(NhanVienRequest request)
         {
             if (string.IsNullOrEmpty(request.Ten))
             {
@@ -44,12 +45,66 @@ namespace HumanResourcesManagement.Service
                 maNhanVien = originalMaNhanVien + suffix.ToString();
                 suffix++;
             }
+            string password = GenerateRandomPassword();
+
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                UseDefaultCredentials = false,
+                Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "acoe joeu tlxf qbgq"),
+                Port = 587,
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("buiduchung300802@gmail.com"),
+                Subject = "Thông tin tài khoản nhân viên mới",
+                Body = $"Xin chào {request.Ten},<br><br>" +
+                       $"Tài khoản của bạn đã được tạo thành công.<br>" +
+                       $"Mã nhân viên (username): {maNhanVien}<br>" +
+                       $"Mật khẩu: {password}<br><br>" +
+                       "Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu.<br><br>" +
+                       "Trân trọng,<br>Phòng Nhân Sự",
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(request.Email);
+
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to send email: " + ex.Message);
+            }
 
             var nhanVien = _mapper.Map<TblNhanVien>(request);
             nhanVien.Ma = maNhanVien;
+            nhanVien.VaiTroId = 2;
+            nhanVien.MatKhau = password;
             _context.TblNhanViens.Add(nhanVien);
             _context.SaveChanges();
         }
+
+
+
+
+
+        private static readonly char[] AvailableCharacters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+        public static string GenerateRandomPassword(int length = 8)
+        {
+            if (length <= 0) throw new ArgumentException("Password length must be greater than 0.", nameof(length));
+
+            var random = new Random();
+            return new string(Enumerable.Repeat(AvailableCharacters, length)
+                                        .Select(chars => chars[random.Next(chars.Length)]).ToArray());
+        }
+
+
+
 
         private string GenerateEmployeeCode(string fullName)
         {
@@ -261,5 +316,6 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message); 
             }
         }
+
     }
 }

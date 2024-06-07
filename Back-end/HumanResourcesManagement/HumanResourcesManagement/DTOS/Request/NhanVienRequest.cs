@@ -18,9 +18,6 @@ namespace HumanResourcesManagement.Models
         [Required(ErrorMessage = "Gioitinh is required")]
         public bool Gioitinh { get; set; }
 
-        [Phone(ErrorMessage = "Invalid phone number format")]
-        public string? Dienthoai { get; set; }
-
         [Required(ErrorMessage = "Didong is required")]
         [Phone(ErrorMessage = "Invalid phone number format")]
         public string? Didong { get; set; }
@@ -49,6 +46,9 @@ namespace HumanResourcesManagement.Models
 
         [Required(ErrorMessage = "Dantoc is required")]
         public int? Dantoc { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string? Email { get; set; }
 
         public int? Tongiao { get; set; }
 

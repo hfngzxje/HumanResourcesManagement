@@ -23,14 +23,14 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpPost("TaoMoiNhanVien")]
-        public IActionResult CreateNhanVien([FromBody] NhanVienRequest request)
+        public async Task<IActionResult> CreateNhanVien([FromBody] NhanVienRequest request)
         {
             try
             {
-                _nhanVienService.AddNhanVien(request);
-                return Ok("Them moi nhan vien thanh cong!!");
+                await _nhanVienService.AddNhanVienAsync(request);
+                return Ok("Thêm mới nhân viên thành công!!");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
