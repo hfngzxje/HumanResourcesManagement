@@ -137,6 +137,15 @@ namespace HumanResourcesManagement.Service
             return hoSoLuongs;
         }
 
+        public TblLuong getHoSoLuongById(int id)
+        {
+            var hoSoLuong = _context.TblLuongs.Find(id);
+            if (hoSoLuong == null)
+            {
+                throw new Exception("ID không tồn tại!");
+            }
+            return hoSoLuong;
+        }
 
     }
 }

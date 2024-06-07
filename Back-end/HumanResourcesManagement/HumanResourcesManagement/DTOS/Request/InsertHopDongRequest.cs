@@ -4,8 +4,6 @@ namespace HumanResourcesManagement.DTOS.Request
 {
     public class InsertHopDongRequest
     {
-        [Required(ErrorMessage = "Ma hop dong is required")]
-        public string Mahopdong { get; set; } = null!;
         [Required(ErrorMessage = "Loai hop dong is required")]
         public int? Loaihopdong { get; set; }
         [Required(ErrorMessage = "Chuc danh is required")]
