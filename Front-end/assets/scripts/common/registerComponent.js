@@ -508,13 +508,14 @@ class BaseCheckbox extends HTMLElement {
 }
 
 class BaseUpload extends HTMLElement {
-  static observedAttributes = ["label", "class", "name", 'idImage'];
+  static observedAttributes = ["label", "class", "name", 'idImage', 'accept'];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const contentClass = this.getAttribute("class") || "";
     const name = this.getAttribute("name")
     const idImage = this.getAttribute("idImage")
+    const accept = this.getAttribute("accept")
 
     this.innerHTML = `
       <div class="flex items-center justify-center w-full h-full">
@@ -531,7 +532,7 @@ class BaseUpload extends HTMLElement {
                   <p class="mb-2 text-sm text-gray-50 "><span class="font-semibold">Click to upload</span> or drag and drop</p>
                   <p class="text-xs text-gray-500"> PNG, JPG or JPEG (MAX. 800x400px)</p>
               </div>
-              <input id="dropzone-file" type="file" name="${name}" accept="image/*" class="hidden" />
+              <input id="dropzone-file" type="file" name="${name}" accept="${accept}" class="hidden" />
           </label>
       </div> 
     `;
