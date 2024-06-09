@@ -32,6 +32,7 @@ public class Program
         builder.Services.AddScoped<IDanhMucKhenThuongKyLuatService, DanhMucKhenThuongKyLuatService>();
         builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
         builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
+        builder.Services.AddScoped<IDangNhapService, DangNhapService>();
 
 
 
@@ -48,6 +49,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddSession();
         builder.Services.AddCors(opts =>
         {
             opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));
@@ -72,6 +74,7 @@ public class Program
         app.UseCors("CORSPolicy");
         app.MapControllers();
         app.UseRouting();
+        app.UseSession();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();
