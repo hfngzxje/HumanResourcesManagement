@@ -1,6 +1,6 @@
 const isEdit = !!id
 
-let idTonGiaoHienTai = null
+let idDanTocHienTai = null
 
 
 var TableColumns = [
@@ -23,21 +23,21 @@ var TableColumns = [
   ]
 
 function backToList() {
-    window.location.replace("/pages/catalog/nations.html");
+    window.location.replace("/pages/catalog/Nations.html");
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    formClone['id'] = idTonGiaoHienTai
+    formClone['id'] = idDanTocHienTai
     return formClone
 }
 
 function fetchTonGiao(id) {
     console.log("Name:" , id);
     setLoading(true)
-    idTonGiaoHienTai = id
+    idDanTocHienTai = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function(data) {
             setFormValue('religions_form', data)
@@ -60,7 +60,7 @@ function handleCreate() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/addDanhMucTonGiao',
+        url: 'https://localhost:7141/api/DanhMucDanToc/addDanhMucDanToc',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -96,7 +96,7 @@ function handleRemoveRow(id) {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + id,
+        url: 'https://localhost:7141/api/DanhMucDanToc/removeDanToc?id=' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchReligions res :: ', data);
@@ -118,7 +118,7 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao' ,
+        url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc' ,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -167,7 +167,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiao' 
+    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc' 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
