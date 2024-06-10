@@ -50,6 +50,10 @@ namespace HumanResourcesManagement.Service
             }
 
             string maNhanVien = GenerateEmployeeCode(request.Ten);
+            if (maNhanVien.Length > 10) 
+            {
+                maNhanVien = maNhanVien.Substring(0, 10);
+            }
             int suffix = 1;
             string originalMaNhanVien = maNhanVien;
 
