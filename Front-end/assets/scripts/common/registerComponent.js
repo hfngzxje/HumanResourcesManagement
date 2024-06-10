@@ -82,7 +82,7 @@ class CustomSidebar extends HTMLElement {
               </span>
               <span> Danh mục </span>
               <div class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/Nations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục dân tộc </span>
                 </a> 
@@ -118,23 +118,23 @@ class CustomSidebar extends HTMLElement {
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục phòng ban </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="/pages/catalog/TypeOfContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục loại hợp đồng </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/SalaryGroup.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục nhóm lương </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="/pages/catalog/FormOfTraining.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục hình thức đào tạo </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="/pages/catalog/CivilServantRank.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục ngạch công chức </span>
                 </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="/pages/catalog/Relationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục quan hệ </span>
                 </a>

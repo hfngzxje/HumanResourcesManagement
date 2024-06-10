@@ -1,6 +1,6 @@
 const isEdit = !!id
 
-let idTonGiaoHienTai = null
+let idQuanHe = null
 
 
 var TableColumns = [
@@ -23,21 +23,21 @@ var TableColumns = [
   ]
 
 function backToList() {
-    window.location.replace("/pages/catalog/religions.html");
+    window.location.replace("/pages/catalog/Relationship.html");
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-    formClone['id'] = idTonGiaoHienTai
+    formClone['id'] = idQuanHe
     return formClone
 }
 
 function fetchTonGiao(id) {
     console.log("Name:" , id);
     setLoading(true)
-    idTonGiaoHienTai = id
+    idQuanHe = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function(data) {
             setFormValue('religions_form', data)
@@ -60,7 +60,7 @@ function handleCreate() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/addDanhMucTonGiao',
+        url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -96,11 +96,11 @@ function handleRemoveRow(id) {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + id,
+        url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + id,
         method: 'DELETE',
         success: function(data) {
             console.log('fetchReligions res :: ', data);
-            alert('Xóa Tôn Giáo Thành Công!');
+            alert('Xóa Quan Hệ Thành Công!');
             backToList()
         },
         error: (err) => {
@@ -118,7 +118,7 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao' ,
+        url: 'https://localhost:7141/api/DanhMucQuanHe/updateQuanHe' ,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -138,7 +138,6 @@ function handleSave() {
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
-                console.log(message)
             } catch (error) {
                 alert("Cập nhật thất bại!")
             }
@@ -168,7 +167,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiao' 
+    return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc' 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
