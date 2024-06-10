@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../../assets/styles/pages/login.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
+</head>
+
+<body class="login-bg">
+    <div class="login-container">
+
+        <form>
+            <div class="form-header">
+                <h2>HRM Login</h2>
+            </div>
+            <base-input label="Email" name="email" required="true" placeholder="Email"></base-input>
+            <base-input type="password" label="Password" name="password" required="true"
+                placeholder="Password"></base-input>
+
+            <button type="button" onclick="login()">Login</button>
+            <div class="form-footer">
+                <a href="#" class="forgot-password">Forgotten password?</a>
+            </div>
+        </form>
+    </div>
+
+
+</body>
+
+</html>

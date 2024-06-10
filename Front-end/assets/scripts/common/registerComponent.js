@@ -260,18 +260,21 @@ class CustomSidebar extends HTMLElement {
   }
 }
 class BaseInput extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name", "required"];
+  static observedAttributes = ["label", "hide-label", "name", "required","type","placeholder"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const type = this.getAttribute("type") || "text";
+    const placeholder = this.getAttribute("placeholder");
+
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" placeholder="${placeholder}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
