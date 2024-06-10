@@ -23,7 +23,7 @@ var TableColumns = [
   ]
 
 function backToList() {
-    window.location.replace("/pages/catalog/nations.html");
+    window.location.replace("/pages/catalog/religions.html");
 }
 
 function buildPayload(formValue) {
@@ -100,11 +100,11 @@ function handleRemoveRow(id) {
         method: 'DELETE',
         success: function(data) {
             console.log('fetchReligions res :: ', data);
+            alert('Xóa Tôn Giáo Thành Công!');
             backToList()
         },
         error: (err) => {
             console.log('fetchReligions err :: ', err);
-            alert('Xóa Thành Công!');
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -138,6 +138,7 @@ function handleSave() {
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
+                console.log(message)
             } catch (error) {
                 alert("Cập nhật thất bại!")
             }

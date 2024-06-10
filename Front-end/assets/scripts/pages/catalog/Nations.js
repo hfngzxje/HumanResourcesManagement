@@ -100,11 +100,11 @@ function handleRemoveRow(id) {
         method: 'DELETE',
         success: function(data) {
             console.log('fetchReligions res :: ', data);
+            alert('Xóa Dân Tộc Thành Công!');
             backToList()
         },
         error: (err) => {
             console.log('fetchReligions err :: ', err);
-            alert('Xóa Thành Công!');
             alert("Xóa thất bại!")
         },
         complete: () => {
