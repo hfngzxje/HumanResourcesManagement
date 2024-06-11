@@ -29,6 +29,11 @@ var TableColumns = [
     }
   ]
 
+  window.history.pushState(null, null, window.location.href);
+  window.onpopstate = function () {
+      window.history.pushState(null, null, window.location.href);
+  };
+
   function backToList(id) {
 
     window.location.replace(`/pages/staff/resume.html?id=${id}`);

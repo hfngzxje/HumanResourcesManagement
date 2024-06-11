@@ -5,6 +5,7 @@ var MaritalOptions = [
     { label: 'Chưa kết hôn', value: 0 },
 ]
 
+
 function backToListDelete() {
     window.location.replace("/pages/staff/list.html");
 }
@@ -113,67 +114,7 @@ function handleRemove() {
     });
 }
 
-// function handleSave() {
-//     const valid = validateForm('resume_form')
-//     if(!valid) return
-    
-//     const {anh, ...rest} = getFormValues('resume_form')
 
-//     const formValue = getFormValues('resume_form')
-//     const payload = buildPayload(rest)
-//     setLoading(true)
-//     $.ajax({
-//         url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
-//         method: 'PUT',
-//         contentType: 'application/json',
-//         data: JSON.stringify(payload),
-//         success: function(data) {
-//             alert('Lưu thành công!');
-//             backToListUpdate();
-//         },
-//         error: (err) => {
-//             console.log('err ', err);
-//             try {
-//                 if(!err.responseJSON) {
-//                     alert(err.responseText)
-//                     return 
-//                 }
-//                 const errObj = err.responseJSON.errors
-//                 const firtErrKey = Object.keys(errObj)[0]
-//                 const message = errObj[firtErrKey][0]
-//                 alert(message)
-//             } catch (error) {
-//                 alert("Cập nhật thất bại!")
-//             }
-//         },
-//         complete: () => {
-            
-//         }
-//     });
-
-//     if(anh) {
-//         const payloadUploadImage = new FormData()
-//         payloadUploadImage.append('maNV', id)
-//         payloadUploadImage.append('file', anh)
-
-//         $.ajax({
-//             url: 'https://localhost:7141/api/Image/uploadImage',
-//             method: 'POST',
-//             contentType: false,
-//             processData: false,
-//             data: payloadUploadImage,
-//             success: function(data) {
-//             },
-//             error: (err) => {
-//             },
-//             complete: () => {
-//                 setLoading(false)
-//             }
-//         });
-//     } else {
-//         setLoading(false)
-//     }
-// }
 
 function handleSave() {
     const valid = validateForm('resume_form')
@@ -276,7 +217,6 @@ function renderActionByStatus() {
         actionEl.append(createBtn)
         return
     }
-
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const exportBtn = buildButton('In', 'plain', 'bx bx-printer')

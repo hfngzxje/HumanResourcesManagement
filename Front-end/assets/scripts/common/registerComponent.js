@@ -8,7 +8,14 @@ class CustomHeader extends HTMLElement {
           <a href="/pages/staff/list.html">HRM<a/>
         </span>
       </div>
-      <div class="flex-1 flex gap-3">
+      
+      </div>
+    </header>
+      `;
+  }
+}
+
+{/* <div class="flex-1 flex gap-3">
         <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
           <i class='bx bx-calendar-minus text-lg text-white' ></i>
           <span class="text-sm text-white mx-1">Đơn nghỉ phép</span>
@@ -26,12 +33,7 @@ class CustomHeader extends HTMLElement {
         <div class="bg-gray-500 px-1 flex items-center rounded-full cursor-pointer transition hover:brightness-90">
           <i class='bx bxs-user-circle text-2xl text-white' ></i>
           <i class='bx bxs-down-arrow text-xs ml-2 text-white' ></i>
-        </div>
-      </div>
-    </header>
-      `;
-  }
-}
+        </div> */}
 
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
@@ -56,10 +58,11 @@ class CustomSidebar extends HTMLElement {
               <span> Hệ thống </span>
               <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đăng xuất</a>
-                <a href="/pages/authentic/changePassword.html"  class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
+                <a id="btn"  class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close All</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Thoát</a>
+               
               </div>
             </div>
             <div
@@ -81,7 +84,7 @@ class CustomSidebar extends HTMLElement {
               <i class='bx bx-category-alt'></i>
               </span>
               <span> Danh mục </span>
-              <div class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
+              <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
                 <a href="/pages/catalog/Nations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục dân tộc </span>
@@ -203,8 +206,24 @@ class CustomSidebar extends HTMLElement {
               <span> Quản lý tài khoản </span>
             </div>
           </div>
-        </div>`;
-      
+        </div>
+       
+       <div id="myModal" class="modal">
+          <div class="change-container">
+           <span class="close">&times;</span>
+            <form id="change_form">
+                <div class="form-header">
+                   <h2>Đổi Mật Khẩu</h2>
+                </div>
+              <base-input label="Mã Nhân Viên" name="maNhanVien" required="true" ></base-input>
+              <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+              <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+              <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+           </form>
+          <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+         </div>
+        </div>
+        `;
 
     const menuItem = this.querySelector("#menu1");
     const subMenu = this.querySelector("#submenu1");
@@ -258,41 +277,12 @@ class CustomSidebar extends HTMLElement {
     menu4Child.addEventListener("mouseleave", function () {
       submenu4Child.classList.add("hidden");
     });
-  
-    // this.addModalFunctionality();
+
   }
 
-  // addModalFunctionality() {
-   
-  //   var modal = document.getElementById("myModal");
-
-  //   var btn = document.querySelector("#myBtn");
-
-  //   // Get the <span> element that closes the modal
-  //   var span = document.getElementsByClassName("close")[0];
-
-  //   console.log("Duy sinh: ", btn)
-  //   console.log("Linh: ", modal)
-  //   // When the user clicks the button, open the modal 
-  //   btn.onclick = function() {
-  //     modal.style.display = "block";
-  //   }
-
-  //   // When the user clicks on <span> (x), close the modal
-  //   span.onclick = function() {
-  //     modal.style.display = "none";
-  //   }
-
-  //   // When the user clicks anywhere outside of the modal, close it
-  //   window.onclick = function(event) {
-  //     if (event.target == modal) {
-  //       modal.style.display = "none";
-  //     }
-  //   }
-  // }
 }
 class BaseInput extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name", "required","type"];
+  static observedAttributes = ["label", "hide-label", "name", "required", "type"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
