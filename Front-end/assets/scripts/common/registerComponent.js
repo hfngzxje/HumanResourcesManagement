@@ -56,7 +56,7 @@ class CustomSidebar extends HTMLElement {
               <span> Hệ thống </span>
               <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đăng xuất</a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đổi mật khẩu</a>
+                <a href="/pages/authentic/changePassword.html"  class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close All</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Thoát</a>
@@ -204,6 +204,7 @@ class CustomSidebar extends HTMLElement {
             </div>
           </div>
         </div>`;
+      
 
     const menuItem = this.querySelector("#menu1");
     const subMenu = this.querySelector("#submenu1");
@@ -257,10 +258,41 @@ class CustomSidebar extends HTMLElement {
     menu4Child.addEventListener("mouseleave", function () {
       submenu4Child.classList.add("hidden");
     });
+  
+    // this.addModalFunctionality();
   }
+
+  // addModalFunctionality() {
+   
+  //   var modal = document.getElementById("myModal");
+
+  //   var btn = document.querySelector("#myBtn");
+
+  //   // Get the <span> element that closes the modal
+  //   var span = document.getElementsByClassName("close")[0];
+
+  //   console.log("Duy sinh: ", btn)
+  //   console.log("Linh: ", modal)
+  //   // When the user clicks the button, open the modal 
+  //   btn.onclick = function() {
+  //     modal.style.display = "block";
+  //   }
+
+  //   // When the user clicks on <span> (x), close the modal
+  //   span.onclick = function() {
+  //     modal.style.display = "none";
+  //   }
+
+  //   // When the user clicks anywhere outside of the modal, close it
+  //   window.onclick = function(event) {
+  //     if (event.target == modal) {
+  //       modal.style.display = "none";
+  //     }
+  //   }
+  // }
 }
 class BaseInput extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name", "required","type","placeholder"];
+  static observedAttributes = ["label", "hide-label", "name", "required","type"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
@@ -268,13 +300,12 @@ class BaseInput extends HTMLElement {
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const type = this.getAttribute("type") || "text";
-    const placeholder = this.getAttribute("placeholder");
 
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <input type="${type}" placeholder="${placeholder}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
