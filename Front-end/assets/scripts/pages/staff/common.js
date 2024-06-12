@@ -44,7 +44,7 @@ const TAB_LIST = [
   {
     key: TAB.EMPLOYMENT_HISTORY,
     label: "Quá trình công tác",
-    activeByPath: "",
+    activeByPath: "/pages/staff/WorkingProcess.html",
   },
   {
     key: TAB.REWARDS_DISCIPLINE,

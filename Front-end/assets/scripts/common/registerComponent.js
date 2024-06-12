@@ -85,59 +85,59 @@ class CustomSidebar extends HTMLElement {
               </span>
               <span> Danh mục </span>
               <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
-                <a href="/pages/catalog/Nations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/Nations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục dân tộc </span>
                 </a> 
-               <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+               <a href="../catalog/JobTittle.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục chức danh </span>
                 </a>
-                <a href="/pages/catalog/specializations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="../catalog/specializations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục chuyên môn </span>
                 </a>
-                <a href="/pages/catalog/qualifications.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/qualifications.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục trình độ </span>
                 </a>
-                <a href="/pages/catalog/foreignLanguages.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/foreignLanguages.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục ngoại ngữ </span>
                 </a>
-                <a href="/pages/catalog/teams.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/teams.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục tổ </span>
                 </a> 
-               <a href="/pages/catalog/religions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+               <a href="../catalog/religions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục tôn giáo </span>
                 </a>
-                <a href="/pages/catalog/awardsAndDisciplinaryActions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
+                <a href="../catalog/awardsAndDisciplinaryActions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục khen thưởng-kỷ luật </span>
                 </a>
-                <a href="/pages/catalog/departments.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/departments.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục phòng ban </span>
                 </a>
-                <a href="/pages/catalog/TypeOfContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="../catalog/TypeOfContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục loại hợp đồng </span>
                 </a>
-                <a href="/pages/catalog/SalaryGroup.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/SalaryGroup.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục nhóm lương </span>
                 </a>
-                <a href="/pages/catalog/FormOfTraining.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="../catalog/FormOfTraining.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục hình thức đào tạo </span>
                 </a>
-                <a href="/pages/catalog/CivilServantRank.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
+                <a href="../catalog/CivilServantRank.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục ngạch công chức </span>
                 </a>
-                <a href="/pages/catalog/Relationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
+                <a href="../catalog/Relationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
                      <i class='bx bxs-detail'></i> 
                      <span> Danh mục quan hệ </span>
                 </a>

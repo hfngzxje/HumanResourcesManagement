@@ -39,7 +39,7 @@ var TableColumns = [
   };
 
   function backToList(id) {
-    window.location.replace(`/pages/staff/resume.html?id=${id}`);
+    window.location.replace(`../staff/resume.html?id=${id}`);
 }
 
 
