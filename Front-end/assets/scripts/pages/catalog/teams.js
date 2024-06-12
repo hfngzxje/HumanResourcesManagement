@@ -1,54 +1,72 @@
 const isEdit = !!id
+let Eid = null;
 
 let idToHienTai = null
 
 var TableColumns = [
     {
-      label: 'ID',
-      key: 'id'
+        label: 'ID',
+        key: 'id'
     },
     {
         label: 'Mã',
         key: 'ma'
-      },
+    },
     {
-      label: 'Tên',
-      key: 'ten'
+        label: 'Tên',
+        key: 'ten'
     },
     {
         label: 'Tên phòng',
         key: 'idphong'
-      },
+    },
     {
-      label: 'Hành động',
-      key: 'action',
-      actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTo(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-      ]
+        label: 'Hành động',
+        key: 'action',
+        actions: [
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    Eid = row.id
+                    fetchTo(row.id);
+                    var modal = document.getElementById("editTeam");
+                    modal.style.display = "block";
+                    btn.onclick = function () {
+                        modal.style.display = "block";
+                        console.log("fdf")
+                    }
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                            clearFormValues('editTeam')
+                        }
+                    }
+                }
+            },
+            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+        ]
     }
-  ]
+]
 
 function backToList() {
     window.location.replace("/pages/catalog/teams.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = {...formValue}
-    // formClone['id'] = idPhongBanHienTai
+    const formClone = { ...formValue }
+    formClone['id'] = Eid
     return formClone
 }
 
 function fetchTo(id) {
-    console.log("Name:" , id);
+    console.log("Name:", id);
     setLoading(true)
     idToHienTai = id
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucTo/getDanhMucToById/' + id,
         method: 'GET',
-        success: function(data) {
-            setFormValue('teams_form', data, 'fetch');
-            setFormValue('teams_form', data)
+        success: function (data) {
+            setFormValue('editTeam', data, 'fetch');
+            setFormValue('editTeam', data)
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -60,9 +78,9 @@ function fetchTo(id) {
 }
 
 function handleCreate() {
-    const valid = validateForm('teams_form')
-    if(!valid) return
-    const formValue = getFormValues('teams_form')
+    const valid = validateForm('editTeam')
+    if (!valid) return
+    const formValue = getFormValues('editTeam')
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -72,7 +90,7 @@ function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             console.log('fetchEmployee res :: ', data);
             alert("Thêm thành công !")
             backToList()
@@ -80,9 +98,9 @@ function handleCreate() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -90,7 +108,7 @@ function handleCreate() {
                 alert(message)
             } catch (error) {
                 alert("Tạo mới không thành công!")
-            }  
+            }
         },
         complete: () => {
             setLoading(false)
@@ -105,7 +123,7 @@ function handleRemoveRow(id) {
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + id,
         method: 'DELETE',
-        success: function(data) {
+        success: function (data) {
             console.log('fetchPhongBan res :: ', data);
             alert("Xóa thành công !")
             backToList()
@@ -120,7 +138,7 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
-    const formValue = getFormValues('teams_form')
+    const formValue = getFormValues('editTeam')
     const payload = buildPayload(formValue)
     setLoading(true)
     console.log('maTo: ', idToHienTai)
@@ -129,7 +147,7 @@ function handleSave() {
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             console.log('fetchLanguage res :: ', data);
             alert('Lưu Thành Công!');
             backToList();
@@ -137,9 +155,9 @@ function handleSave() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -155,29 +173,85 @@ function handleSave() {
     });
 }
 
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('teams_form_action')
+    const actionE2 = document.getElementById('editTeam_Action');
+    const actionE3 = document.getElementById('createTeam_Action')
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
-        return btnEl
+
+        const btnE2 = document.createElement('base-button')
+        btnE2.setAttribute('label', label)
+        btnE2.setAttribute('type', type)
+        btnE2.setAttribute('icon', icon)
+
+        const btnE3 = document.createElement('base-button')
+        btnE3.setAttribute('label', label)
+        btnE3.setAttribute('type', type)
+        btnE3.setAttribute('icon', icon)
+        return btnEl, btnE2, btnE3
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const saveCreateBtn = buildButton('Thêm', '', 'bx bx-save')
 
-    createBtn.addEventListener('click', handleCreate)
+
+    createBtn.addEventListener('click', function () {
+        saveBtn.style.display = "none";
+        saveCreateBtn.style.display = "block";
+    });
     saveBtn.addEventListener('click', handleSave)
+    saveCreateBtn.addEventListener('click', handleCreate)
 
-    actionEl.append(createBtn, saveBtn)
+    actionEl.append(createBtn)
+    actionE2.append(saveBtn)
+    actionE3.append(saveCreateBtn)
+
+    if (Eid) {
+        // saveBtn.style.display = "none"
+        saveCreateBtn.style.display = "block"
+    }
+    else {
+        // saveBtn.style.display = "block"
+        saveCreateBtn.style.display = "none"
+
+    }
+    // -----------------------------------------------------------------------
+    var modal = document.getElementById("editTeam");
+    createBtn.onclick = function () {
+        modal.style.display = "block";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValue
+        }
+    }
+    // ------------------------------------------------------------------------
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo' 
+    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo'
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
 })
+
 

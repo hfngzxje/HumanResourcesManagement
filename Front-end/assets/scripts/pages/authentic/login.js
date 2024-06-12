@@ -1,10 +1,11 @@
+let Eid = null;
+
 function LoginSuccess() {
     window.location.replace("/pages/staff/list.html");
 }
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
-
     return formClone
 }
 
@@ -23,8 +24,18 @@ function handleCreate() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
+
+        const vaitroID = data.nhanVien.vaiTroId;
+
+        alert(vaitroID)
+        if(vaitroID == 1){
             LoginSuccess();
             alert("Đăng Nhập Thành Công")
+        }
+        else{
+            alert("Bạn không phải admin")
+        }
+            
         },
         error: (err) => {
             console.log('err ', err);

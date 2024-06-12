@@ -18,7 +18,7 @@
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
+                <!-- <div class="h-fit w-full bg-white rounded-lg p-3">
                     <div class="flex border-b border-solid pb-3">
                         <div class="w-[300px]">
 
@@ -46,7 +46,7 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                </div> -->
                 <div id="teams_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
                 <div class="flex justify-between" style="color: blue; margin-top: 5%;">
                     <p class="text-xl">Danh sách tổ</p>
@@ -58,6 +58,23 @@
             </div>
         </div>
     </div>
+    <div id="editTeam" class="modal">
+        <div class="change-container">
+         <span class="close">&times;</span>
+          <form id="change_form">
+              <div class="form-header">
+                 <h2>Sửa Tiêu Đề Tổ</h2>
+              </div>
+              <base-input label="Mã" required="true" name="ma"></base-input>
+              <base-input label="Tên tổ(*)" required="true" name="ten"></base-input>
+              <base-select label="Tên phòng(*)" required="true" name="idphong"
+              keyValue="id" keyLabel="ten"
+              api="https://localhost:7141/api/NhanVien/phong"></base-select>
+         </form>
+        <div id="editTeam_Action" class="flex gap-x-5 mt-5 justify-center"></div>
+        <div id="createTeam_Action" class="flex gap-x-5 mt-5 justify-center"></div>
+       </div>
+      </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
