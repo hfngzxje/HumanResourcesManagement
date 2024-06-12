@@ -20,6 +20,10 @@ var TableColumns = [
       key: 'phong',
     },
     {
+      label: 'Tổ',
+      key: 'to',
+    },
+    {
       label: 'Hành động',
       key: 'action',
       actions: [
@@ -35,7 +39,6 @@ var TableColumns = [
   };
 
   function backToList(id) {
-
     window.location.replace(`/pages/staff/resume.html?id=${id}`);
 }
 
