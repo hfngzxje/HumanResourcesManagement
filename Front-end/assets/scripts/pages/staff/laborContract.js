@@ -7,10 +7,11 @@ var MaritalOptions = [
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
 
+// Khai báo giá trị định nghĩa columns biến "var" là biến toàn cục
 var TableColumns = [
     {
         label: 'Mã hợp đồng',
-        key: 'mahopdong'
+        key: 'mahopdong',
     },
     {
         label: 'Lương cơ bản',
@@ -30,16 +31,25 @@ var TableColumns = [
     {
         label: 'Ghi chú',
         key: 'ghichu'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchContract(row.mahopdong) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
-        ]
     }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+            
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
+    //     ]
+    // }
 ]
+// ctrl K 0
+// Biến định nghĩa các sự kiện của table
+var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchContract(row.mahopdong)
+    }
+}
+
 
 function backToList() {
     const url = new URL("/pages/staff/laborContract.html", window.location.origin);

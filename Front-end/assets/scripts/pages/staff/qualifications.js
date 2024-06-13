@@ -1,4 +1,3 @@
-const isEdit = !!id
 
 let idTrinhDo = null
 let idNgoaiNgu = null
@@ -36,11 +35,16 @@ var TableColumns1 = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchContract(row.mahopdong) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
+            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRowTrinhDo(row.id) } }
         ]
     }
 ]
+var tableEventQualification = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchTrinhDo(row.idTrinhDo)
+    }
+}
 
 var TableColumns2 = [
     {
@@ -64,13 +68,18 @@ var TableColumns2 = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchContract(row.mahopdong) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
+            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRowNgoaiNgu(row.id) } }
         ]
     }
 ]
+var tableEventLanguage = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchNgoaiNgu(row.idNgoaiNgu)
+    }
+}
 function backToList() {
-    const url = new URL("/pages/staff/laborContract.html", window.location.origin);
+    const url = new URL("/pages/staff/qualifications.html", window.location.origin);
     url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
@@ -159,7 +168,7 @@ function handleRemoveRowTrinhDo(id) {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/TrinhDoVanHoa/addTrinhDoVanHoa' + id,
+        url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + id,
         method: 'DELETE',
         success: function (data) {
             alert('Xóa Thành Công!');
@@ -344,27 +353,21 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    createBtn.addEventListener('click', handleCreateTrinhDo)
-    saveBtn.addEventListener('click', handleSaveTrinhDo)
+    const createTrinhDo = buildButton('Thêm', 'green', 'bx bx-plus')
+    const saveTrinhDo = buildButton('Lưu', '', 'bx bx-save')
+    createTrinhDo.addEventListener('click', handleCreateTrinhDo)
+    saveTrinhDo.addEventListener('click', handleSaveTrinhDo)
 
-    actionEl.append(createBtn, saveBtn)
+    actionEl.append(createTrinhDo, saveTrinhDo)
 
     const actionE2 = document.getElementById('Language_form_action')
-    const buildButton2 = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnE2.setAttribute('label', label)
-        btnE2.setAttribute('type', type)
-        btnE2.setAttribute('icon', icon)
-        return btnE2
-    }
-    const createBtn2 = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn2 = buildButton('Lưu', '', 'bx bx-save')
-    createBtn.addEventListener('click', handleCreateNgoaiNgu)
-    saveBtn.addEventListener('click', handleSaveNgoaiNgu)
 
-    actionE2.append(createBtn2, saveBtn2)
+    const createNgoaiNgu = buildButton('Thêm', 'green', 'bx bx-plus')
+    const saveNgoaiNgu = buildButton('Lưu', '', 'bx bx-save')
+    createNgoaiNgu.addEventListener('click', handleCreateNgoaiNgu)
+    saveNgoaiNgu.addEventListener('click', handleSaveNgoaiNgu)
+
+    actionE2.append(createNgoaiNgu, saveNgoaiNgu)
 }
 
 function buildApiUrl1() {

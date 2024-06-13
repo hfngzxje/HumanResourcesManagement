@@ -42,12 +42,17 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id) } }
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id)  } }
       ]
     }
   ]
 
+  var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchRelationship(row.id)
+    }
+}
 function backToList() {
     const url = new URL("/pages/staff/FamilyRelationship.html", window.location.origin);
     url.searchParams.set("id", id);
@@ -56,14 +61,10 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-
-    formClone['trangThai'] = Number(formClone['trangThai'])
-    formClone['id'] = idNguoiThan
-    // formClone['ma'] = employeeId
     return formClone
 }
 
-function fetchEmployee(id) {
+function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
@@ -90,7 +91,6 @@ function handleCreate() {
     const employeeId = urlParams.get('id');
 
     formValue['ma'] = employeeId;
-
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     
@@ -101,7 +101,7 @@ function handleCreate() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
+            alert("Thêm thành công!")
             backToList()
         },
         error: (err) => {
@@ -171,6 +171,7 @@ function handleSave() {
     if(!valid) return
     
     const formValue = getFormValues('relationship_form')
+    formValue['id'] = idNguoiThan
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
@@ -179,8 +180,9 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
+            alert("Sửa thành công!")
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);

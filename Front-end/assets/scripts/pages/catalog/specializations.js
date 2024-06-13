@@ -1,8 +1,6 @@
-const isEdit = !!id
-let Eid = null;
-let temp = false
 let isPopupEdit = false
-
+const popupCreateBtn = document.getElementById("createBtn")
+const popupSaveBtn = document.getElementById("saveBtn")
 
 let idChuyenMon = null
 
@@ -13,7 +11,8 @@ var TableColumns = [
     },
     {
         label: 'Mã Chuyên Môn',
-        key: 'ma'    },
+        key: 'ma'
+    },
     {
         label: 'Tên Chuyên Môn',
         key: 'ten'
@@ -24,8 +23,6 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    // temp = true
-                    Eid = row.id
                     isPopupEdit = true
                     fetchChuyenMon(row.id);
                     var modal = document.getElementById("editChuyenMon");
@@ -43,7 +40,6 @@ function backToList() {
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
-    formClone['id'] = Eid
     return formClone
 }
 
@@ -55,7 +51,7 @@ function fetchChuyenMon(id) {
         url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('editChuyenMon', data, 'fetch');
+            // setFormValue('editChuyenMon', data, 'fetch');
             setFormValue('editChuyenMon', data)
         },
         error: (err) => {
@@ -128,7 +124,7 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
-    const formValue = getFormValues('editTeam')
+    const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
     setLoading(true)
     console.log('maTo: ', idChuyenMon)
@@ -178,44 +174,19 @@ function clearFormValues(formId) {
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('specializations_form_action')
-    const actionE2 = document.getElementById('editChuyenMon_Action');
-    const actionE3 = document.getElementById('createChuyenMon_Action')
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
-
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const saveCreateBtn = buildButton('Thêm', '', 'bx bx-save')
-
-
     createBtn.addEventListener('click', function () {
         isPopupEdit = false
-        temp = true
-        saveBtn.style.display = "none";
-        saveCreateBtn.style.display = "block";
         showPopup()
     });
-    saveBtn.addEventListener('click', handleSave)
-    saveCreateBtn.addEventListener('click', handleCreate)
-
     actionEl.append(createBtn)
-    actionE2.append(saveBtn)
-    actionE3.append(saveCreateBtn)
-
-
-    saveBtn.style.display = 'none';
-    saveCreateBtn.style.display = 'none';
-    if (!temp) {
-        saveBtn.style.display = 'block';
-        saveCreateBtn.style.display = 'none';
-    }
-    // -----------------------------------------------------------------------
-    // ------------------------------------------------------------------------
 }
 
 function buildApiUrl() {
@@ -227,21 +198,29 @@ function showPopup() {
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
-            temp = false
             modal.style.display = "none";
-            clearFormValues('editChuyenMon')
         }
     }
+
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Chuyên Môn"
+        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
+        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Chuyên Môn"
+        popupTitle.textContent = "Thêm mới Tiêu Chuyên Môn"
+        popupSaveBtn.classList.add('hidden') // Ẩn sửa
+        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
+    popupCreateBtn.addEventListener("click", handleCreate)
 })
 

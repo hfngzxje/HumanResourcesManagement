@@ -63,7 +63,8 @@
                     <p class="text-xl">Danh sách người thân</p>
                 </div>
                 <div class="mt-3">
-                    <base-table api="buildApiUrl" columns="TableColumns">
+                    <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
+                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
                     </base-table>
                 </div>
             </div>

@@ -1,7 +1,6 @@
-const isEdit = !!id
-let Eid = null;
-let temp = false
 let isPopupEdit = false
+const popupCreateBtn = document.getElementById("createBtn")
+const popupSaveBtn = document.getElementById("saveBtn")
 
 
 
@@ -22,8 +21,6 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    // temp = true
-                    Eid = row.id
                     isPopupEdit = true
                     fetchNgoaiNgu(row.id);
                     var modal = document.getElementById("editChuyenMon");
@@ -175,8 +172,6 @@ function clearFormValues(formId) {
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('Language_form_action')
-    const actionE2 = document.getElementById('editNgoaiNgu_Action');
-    const actionE3 = document.getElementById('createNgoaiNgu_Action')
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
@@ -186,59 +181,52 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const saveCreateBtn = buildButton('Thêm', '', 'bx bx-save')
 
 
     createBtn.addEventListener('click', function () {
         isPopupEdit = false
-        temp = true
-        saveBtn.style.display = "none";
-        saveCreateBtn.style.display = "block";
         showPopup()
     });
-    saveBtn.addEventListener('click', handleSave)
-    saveCreateBtn.addEventListener('click', handleCreate)
-
     actionEl.append(createBtn)
-    actionE2.append(saveBtn)
-    actionE3.append(saveCreateBtn)
 
-
-    saveBtn.style.display = 'none';
-    saveCreateBtn.style.display = 'none';
-    if (!temp) {
-        saveBtn.style.display = 'block';
-        saveCreateBtn.style.display = 'none';
-    }
-    // -----------------------------------------------------------------------
-    // ------------------------------------------------------------------------
 }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
 }
 
+
 function showPopup() {
     var modal = document.getElementById("editNgoaiNgu");
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
-            temp = false
             modal.style.display = "none";
-            clearFormValues('editNgoaiNgu')
+            setFormValue('editTeam', { ma: "", ten: "", tenPhong: "", })
         }
     }
+
+    console.log('isPopupEdit ', isPopupEdit);
+
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Ngoại Ngữ"
+        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
+        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Ngoại Ngữ"
+        popupSaveBtn.classList.add('hidden') // Ẩn sửa
+        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
+    popupCreateBtn.addEventListener("click", handleCreate)
 })
 

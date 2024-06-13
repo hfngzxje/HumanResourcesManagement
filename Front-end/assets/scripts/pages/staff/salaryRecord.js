@@ -1,5 +1,3 @@
-const isEdit = !!id
-
 let idLuongHienTai = null
 
 var MaritalOptions = [
@@ -52,7 +50,8 @@ var TableColumns = [
     },
     {
         label: 'Thời Hạn Lên Lương',
-        key: 'thoihanlenluong'
+        key: 'thoihanlenluong',
+        formatter: (giatri) => giatri + ' năm'
     },
     {
         label: 'Ngày Hiệu Lực',
@@ -72,11 +71,18 @@ var TableColumns = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchSalaryToEdit(row.id) } },
             { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
         ]
     }
 ]
+var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchSalaryToEdit(row.id)
+    }
+}
+
+
 
 function backToList() {
     const url = new URL("/pages/staff/salaryRecord.html", window.location.origin);
@@ -92,7 +98,6 @@ function buildPayload(formValue) {
 }
 
 function fetchSalaryToEdit(id) {
-    alert("dsd")
     setLoading(true)
     idLuongHienTai = id
     $.ajax({
@@ -265,7 +270,6 @@ async function fetchSalary() {
         // Gán giá trị lương vào trường input số
         const inputElement = document.querySelector('base-input-number[name="tongluong"]');
         if (inputElement instanceof BaseInputNumber) {
-
             inputElement.value = salary;
         }
 
@@ -279,6 +283,31 @@ async function fetchSalary() {
     }
 }
 
+const hesoluongInput = document.querySelector('base-input-number[name="hesoluong"]');
+const phucaptrachnhiemInput = document.querySelector('base-input-number[name="phucaptrachnhiem"]');
+const phucapkhacInput = document.querySelector('base-input-number[name="phucapkhac"]');
+
+hesoluongInput.addEventListener('input', handleInputChange);
+phucaptrachnhiemInput.addEventListener('input', handleInputChange);
+phucapkhacInput.addEventListener('input', handleInputChange);
+
+function handleInputChange() {
+    // Lấy giá trị từ các trường input
+    const hesoluongValue = hesoluongInput.value;
+    const phucaptrachnhiemValue = phucaptrachnhiemInput.value;
+    const phucapkhacValue = phucapkhacInput.value;
+
+    // Kiểm tra nếu đủ dữ liệu đã được nhập
+    if (hesoluongValue !== '' || phucaptrachnhiemValue !== '' || phucapkhacValue !== '') {
+        // Gọi hàm fetchSalary()
+        fetchSalary()
+            .catch(error => {
+                // Xử lý lỗi nếu cần
+                console.error(error);
+            });
+    }
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
     const buildButton = (label, type, icon) => {
@@ -288,19 +317,6 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const actionE2 = document.getElementById('tinhluong_form_Action');
-    const buildButton2 = (label, type, icon) => {
-        const btnE2 = document.createElement('base-button')
-        btnE2.setAttribute('label', label)
-        btnE2.setAttribute('type', type)
-        btnE2.setAttribute('icon', icon)
-        return btnE2
-    }
-
-    const tinhLuong = buildButton2('Tính lương', 'green', 'bx bxs-calculator')
-    tinhLuong.addEventListener('click', fetchSalary)
-
-
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
@@ -308,7 +324,6 @@ function renderActionByStatus() {
     saveBtn.addEventListener('click', handleSave)
 
     actionEl.append(createBtn, saveBtn)
-    actionE2.append(tinhLuong)
 }
 
 function buildApiHopDong() {
