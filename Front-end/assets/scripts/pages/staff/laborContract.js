@@ -204,6 +204,18 @@ function handleSave() {
         }
     });
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('laborContract_form_action')
@@ -217,12 +229,16 @@ function renderActionByStatus() {
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('laborContract_form');
+    });
 
-    actionEl.append(createBtn, removeBtn, saveBtn)
+    actionEl.append(createBtn, removeBtn, saveBtn,clear)
 }
 
 function buildApiUrl() {

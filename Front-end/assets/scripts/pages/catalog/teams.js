@@ -1,5 +1,8 @@
 const isEdit = !!id
 let Eid = null;
+let temp = false
+let isPopupEdit = false
+
 
 let idToHienTai = null
 
@@ -10,8 +13,7 @@ var TableColumns = [
     },
     {
         label: 'Mã',
-        key: 'ma'
-    },
+        key: 'ma'    },
     {
         label: 'Tên',
         key: 'ten'
@@ -26,20 +28,12 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    // temp = true
                     Eid = row.id
+                    isPopupEdit = true
                     fetchTo(row.id);
                     var modal = document.getElementById("editTeam");
-                    modal.style.display = "block";
-                    btn.onclick = function () {
-                        modal.style.display = "block";
-                        console.log("fdf")
-                    }
-                    window.onclick = function (event) {
-                        if (event.target == modal) {
-                            modal.style.display = "none";
-                            clearFormValues('editTeam')
-                        }
-                    }
+                    showPopup()
                 }
             },
             { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
@@ -213,8 +207,11 @@ function renderActionByStatus() {
 
 
     createBtn.addEventListener('click', function () {
+        isPopupEdit = false
+        temp = true
         saveBtn.style.display = "none";
         saveCreateBtn.style.display = "block";
+        showPopup()
     });
     saveBtn.addEventListener('click', handleSave)
     saveCreateBtn.addEventListener('click', handleCreate)
@@ -223,26 +220,23 @@ function renderActionByStatus() {
     actionE2.append(saveBtn)
     actionE3.append(saveCreateBtn)
 
-    if (Eid) {
-        // saveBtn.style.display = "none"
-        saveCreateBtn.style.display = "block"
-    }
-    else {
-        // saveBtn.style.display = "block"
-        saveCreateBtn.style.display = "none"
 
+    saveBtn.style.display = 'none';
+    saveCreateBtn.style.display = 'none';
+    if (!temp) {
+        saveBtn.style.display = 'block';
+        saveCreateBtn.style.display = 'none';
     }
+    // if (temp) {
+    //     // saveBtn.style.display = "none"
+    //     saveCreateBtn.style.display = "block"
+    // }
+    // else {
+    //     // saveBtn.style.display = "block"
+    //     saveCreateBtn.style.display = "none"
+
+    // }
     // -----------------------------------------------------------------------
-    var modal = document.getElementById("editTeam");
-    createBtn.onclick = function () {
-        modal.style.display = "block";
-    }
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            clearFormValue
-        }
-    }
     // ------------------------------------------------------------------------
 }
 
@@ -250,8 +244,26 @@ function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo'
 }
 
+function showPopup() {
+    var modal = document.getElementById("editTeam");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            temp = false
+            modal.style.display = "none";
+            clearFormValues('editTeam')
+        }
+    }
+    if (isPopupEdit) {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Sửa Tiêu Đề Tổ"
+    } else {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
 })
-
 

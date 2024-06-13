@@ -105,8 +105,19 @@ function handleCreate() {
             backToList()
         },
         error: (err) => {
-            console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Tạo mới thất bại!")
+            }
         },
         complete: () => {
             setLoading(false)
@@ -191,7 +202,18 @@ function handleSave() {
         }
     });
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
 
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (label, type, icon) => {
@@ -201,19 +223,19 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
-
-
+    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    createBtn.addEventListener('click', handleCreate)
+    clear.addEventListener('click', function() {
+        clearFormValues('relationship_form');
+    });
 
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(createBtn,removeBtn, saveBtn, clear)
 }
 
 function buildApiUrl() {

@@ -14,27 +14,7 @@ class CustomHeader extends HTMLElement {
       `;
   }
 }
-
-{/* <div class="flex-1 flex gap-3">
-        <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
-          <i class='bx bx-calendar-minus text-lg text-white' ></i>
-          <span class="text-sm text-white mx-1">Đơn nghỉ phép</span>
-        </div>
-        <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-user-rectangle text-lg text-white' ></i>
-          <span class="text-sm text-white mx-1">Hồ sơ nhân viên</span>
-        </div>
-      </div>
-      <div class="flex gap-3">
-        <div class="bg-gray-500 px-1 flex items-center rounded-full relative cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-bell text-2xl text-white' ></i>
-          <span class="absolute -top-2 -right-2 border-2 border-gray-700 text-xs text-white bg-red-500 rounded-full px-1">12</span>
-        </div>
-        <div class="bg-gray-500 px-1 flex items-center rounded-full cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-user-circle text-2xl text-white' ></i>
-          <i class='bx bxs-down-arrow text-xs ml-2 text-white' ></i>
-        </div> */}
-
+    
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
@@ -78,71 +58,15 @@ class CustomSidebar extends HTMLElement {
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kiểm tra hạn hợp đồng</a>
               </div>
             </div>
+            <a href="/pages/catalog/catalog.html">
             <div
             class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3"">
               <span class="w-10">
               <i class='bx bx-category-alt'></i>
               </span>
               <span> Danh mục </span>
-              <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
-                <a href="/pages/catalog/Nations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục dân tộc </span>
-                </a> 
-               <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục chức danh </span>
-                </a>
-                <a href="/pages/catalog/specializations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục chuyên môn </span>
-                </a>
-                <a href="/pages/catalog/qualifications.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục trình độ </span>
-                </a>
-                <a href="/pages/catalog/foreignLanguages.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục ngoại ngữ </span>
-                </a>
-                <a href="/pages/catalog/teams.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục tổ </span>
-                </a> 
-               <a href="/pages/catalog/religions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục tôn giáo </span>
-                </a>
-                <a href="/pages/catalog/awardsAndDisciplinaryActions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục khen thưởng-kỷ luật </span>
-                </a>
-                <a href="/pages/catalog/departments.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục phòng ban </span>
-                </a>
-                <a href="/pages/catalog/TypeOfContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục loại hợp đồng </span>
-                </a>
-                <a href="/pages/catalog/SalaryGroup.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục nhóm lương </span>
-                </a>
-                <a href="/pages/catalog/FormOfTraining.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục hình thức đào tạo </span>
-                </a>
-                <a href="/pages/catalog/CivilServantRank.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục ngạch công chức </span>
-                </a>
-                <a href="/pages/catalog/Relationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục quan hệ </span>
-                </a>
-              </div>
             </div>
+            </a>
             <div
             class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
               <span class="w-10">
@@ -247,16 +171,16 @@ class CustomSidebar extends HTMLElement {
       subMenu2.classList.add("hidden");
     });
 
-    const menuItem3 = this.querySelector("#menu3");
-    const subMenu3 = this.querySelector("#submenu3");
+    // const menuItem3 = this.querySelector("#menu3");
+    // const subMenu3 = this.querySelector("#submenu3");
 
-    menuItem3.addEventListener("mouseenter", function () {
-      subMenu3.classList.remove("hidden");
-    });
+    // menuItem3.addEventListener("mouseenter", function () {
+    //   subMenu3.classList.remove("hidden");
+    // });
 
-    menuItem3.addEventListener("mouseleave", function () {
-      subMenu3.classList.add("hidden");
-    });
+    // menuItem3.addEventListener("mouseleave", function () {
+    //   subMenu3.classList.add("hidden");
+    // });
     const menuItem4 = this.querySelector("#menu4");
     const subMenu4 = this.querySelector("#submenu4");
     const menu4Child = this.querySelector("#menu-child4");
@@ -312,7 +236,7 @@ class BaseTextArea extends HTMLElement {
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
     <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <textarea rows="8" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+      <textarea rows="3" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
   }
@@ -574,13 +498,14 @@ class BaseUpload extends HTMLElement {
 }
 
 class BaseButton extends HTMLElement {
-  static observedAttributes = ["label", "type", "icon", "mini"];
+  static observedAttributes = ["label", "type", "icon", "mini", "id"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const type = this.getAttribute("type") || "primary";
     const icon = this.getAttribute("icon");
     const mini = this.getAttribute("mini") === 'true';
+    const id = this.getAttribute("id");
 
     // Các class chung
     let commonClasses =
@@ -603,7 +528,7 @@ class BaseButton extends HTMLElement {
     const contentClass = BtnClass[type] || BtnClass.primary;
 
     this.innerHTML = `
-    <button type="button" class="${commonClasses} ${contentClass}">
+    <button id="${id}" type="button" class="${commonClasses} ${contentClass}">
       ${icon ? `<i class='${icon} mr-1'></i>` : ""} ${label}
     </button>
   `;
@@ -648,6 +573,9 @@ class BaseTable extends HTMLElement {
         headTrEl.appendChild(thEl)
       })
       headEl.appendChild(headTrEl)
+
+      headEl.style.backgroundColor = '#444444	'; // Màu nền đen cho phần thead
+      headEl.style.color = '#fff'; 
 
       $.ajax({
         url: getApiUrl(),

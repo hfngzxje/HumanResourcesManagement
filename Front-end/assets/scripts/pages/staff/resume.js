@@ -93,29 +93,6 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
-
-
 function handleSave() {
     const valid = validateForm('resume_form')
     if(!valid) return
@@ -201,6 +178,18 @@ function uploadImage(anh) {
         }
     });
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('resume_form_action')
@@ -213,18 +202,23 @@ function renderActionByStatus() {
     }
     if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
         createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
+        clear.addEventListener('click', function() {
+            clearFormValues('resume_form');
+        });
+        actionEl.append(createBtn,clear)
         return
     }
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('resume_form');
+    });
 
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(saveBtn, clear)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
