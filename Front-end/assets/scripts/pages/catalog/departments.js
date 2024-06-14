@@ -201,7 +201,7 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            setFormValue('editTeam', { ma: "", ten: "", tenPhong: "", })
+            setFormValue('editPhongBan', { ma: "", ten: "", })
         }
     }
 

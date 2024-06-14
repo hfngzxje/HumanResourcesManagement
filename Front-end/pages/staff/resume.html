@@ -115,7 +115,9 @@
                                     <base-input class="flex-1" hide-label="true" name="chinhsach"></base-input>
                                 </div>
                                 <base-input label="Số thẻ ATM" name="atm"></base-input>
-                                <base-input label="Ngân hàng(*)" name="nganhang"required="true"></base-input>
+                                <!-- <base-input label="Ngân hàng(*)" name="nganhang"required="true"></base-input> -->
+                                <base-select label="Ngân hàng(*)" name="nganhang"
+                                        options="BankList"required="true"></base-select>
                             </div>
                         </form>
                         <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>

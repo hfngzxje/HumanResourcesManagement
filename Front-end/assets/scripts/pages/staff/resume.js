@@ -4,7 +4,28 @@ var MaritalOptions = [
     { label: 'Đã kết hôn', value: 1 },
     { label: 'Chưa kết hôn', value: 0 },
 ]
-
+var BankList = [
+    { label: 'Vietcombank', value: 'VCB' },
+    { label: 'BIDV', value: 'BIDV' },
+    { label: 'Agribank', value: 'AGB' },
+    { label: 'VietinBank', value: 'VTB' },
+    { label: 'ACB', value: 'ACB' },
+    { label: 'Techcombank', value: 'TCB' },
+    { label: 'MB Bank', value: 'MB' },
+    { label: 'TPBank', value: 'TPB' },
+    { label: 'VPBank', value: 'VPB' },
+    { label: 'SHB', value: 'SHB' },
+    { label: 'SeABank', value: 'SEA' },
+    { label: 'HDBank', value: 'HDB' },
+    { label: 'OCB', value: 'OCB' },
+    { label: 'NCB', value: 'NCB' },
+    { label: 'PVcomBank', value: 'PVC' },
+    { label: 'Sacombank', value: 'SCB' },
+    { label: 'LienVietPostBank', value: 'LPB' },
+    { label: 'VIB', value: 'VIB' },
+    { label: 'MSB', value: 'MSB' },
+    { label: 'VP Bank', value: 'VPB' }
+  ];
 
 function backToListDelete() {
     window.location.replace("/pages/staff/list.html");

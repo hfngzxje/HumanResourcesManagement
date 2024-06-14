@@ -307,6 +307,18 @@ function handleInputChange() {
             });
     }
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
@@ -319,11 +331,15 @@ function renderActionByStatus() {
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('salaryRecord_form');
+    });
 
-    actionEl.append(createBtn, saveBtn)
+    actionEl.append(createBtn, saveBtn,clear)
 }
 
 function buildApiHopDong() {

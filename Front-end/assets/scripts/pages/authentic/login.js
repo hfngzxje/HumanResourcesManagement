@@ -8,12 +8,18 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-
-function handleCreate() {
+function handleLoginSuccess(vaitroID) {
+    if (vaitroID === 2) {
+        window.location.replace("/pages/staff/list.html");
+    } else {
+        
+    }
+}
+function handleLogin() {
     const valid = validateForm('login_form')
     if (!valid) return
     const formValue = getFormValues('login_form')
-
+    // localStorage.setItem("myCat", "Tom");
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -25,15 +31,18 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function (data) {
 
+            
+        const maNhanVien = data.nhanVien.ma
+        localStorage.setItem("maNhanVien", maNhanVien);
         const vaitroID = data.nhanVien.vaiTroId;
 
         alert(vaitroID)
-        if(vaitroID == 1){
-            LoginSuccess();
+        if(vaitroID !== undefined){
+            handleLoginSuccess(vaitroID)
             alert("Đăng Nhập Thành Công")
         }
         else{
-            alert("Bạn không phải admin")
+            alert("Không tìm thấy vai trò người dùng")
         }
             
         },
@@ -73,7 +82,7 @@ function renderActionByStatus() {
     }
     const loginBtn = buildButton('Đăng Nhập', 'green', 'bx bx-plus')
 
-    loginBtn.addEventListener('click', handleCreate)
+    loginBtn.addEventListener('click', handleLogin)
 
 
     actionEl.append(loginBtn)
