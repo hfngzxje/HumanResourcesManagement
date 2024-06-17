@@ -31,7 +31,7 @@ var TableColumns = [
 ]
 
 function backToList() {
-    window.location.replace("/pages/catalog/religions.html");
+    window.location.replace("../catalog/religions.html");
 }
 
 function buildPayload(formValue) {
@@ -100,7 +100,6 @@ function handleCreate() {
 }
 
 function handleRemoveRow(id) {
-    
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
     setLoading(true)
