@@ -217,12 +217,12 @@ function showPopup() {
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa danh mục quan hệ"
+        popupTitle.textContent = "Sửa danh mục Dân Tộc"
         popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
         popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới danh mục quan hệ"
+        popupTitle.textContent = "Thêm mới danh mục Dân Tộc"
         popupSaveBtn.classList.add('hidden') // Ẩn sửa
         popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
     }

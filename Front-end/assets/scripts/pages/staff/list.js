@@ -1,4 +1,5 @@
-// let maNhanVien = null;
+
+
 
 var TableColumns = [
     {
@@ -22,13 +23,7 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết',onClick: (row) => { 
-          
-          localStorage.setItem("maNhanVien", row.ma)
-         const maNhanVien = localStorage.getItem("maNhanVien")
-          alert(maNhanVien)
-          backToList(row.ma)
-        } },
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết',onClick: (row) => { backToList(row.ma)} },
         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
       ]
     }

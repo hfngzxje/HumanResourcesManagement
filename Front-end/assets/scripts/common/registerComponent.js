@@ -139,7 +139,7 @@ class CustomSidebar extends HTMLElement {
                 <div class="form-header">
                    <h2>Đổi Mật Khẩu</h2>
                 </div>
-              
+              <base-input label="Mã Nhân Viên" name="maNhanVien" required="true" ></base-input>
               <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
               <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
               <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>

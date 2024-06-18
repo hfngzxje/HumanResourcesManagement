@@ -80,7 +80,7 @@ var tableEventLanguage = { // global: ở đau cũng truy cập được
 }
 function backToList() {
     const url = new URL("/pages/staff/qualifications.html", window.location.origin);
-    // url.searchParams.set("id", id);
+    url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
 
@@ -124,9 +124,11 @@ function handleCreateTrinhDo() {
     if (!valid) return
     const formValue = getFormValues('qualification_form')
 
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const employeeId = urlParams.get('id');
-    formValue['ma'] = maNhanVien;
+    const urlParams = new URLSearchParams(window.location.search);
+    const employeeId = urlParams.get('id');
+    formValue['ma'] = employeeId;
+
+    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -245,10 +247,11 @@ function handleCreateNgoaiNgu() {
     if (!valid) return
     const formValue = getFormValues('Language_form')
 
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const employeeId = urlParams.get('id');
-    formValue['ma'] = maNhanVien;
+    const urlParams = new URLSearchParams(window.location.search);
+    const employeeId = urlParams.get('id');
+    formValue['ma'] = employeeId;
 
+    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload1(formValue)
     setLoading(true)
@@ -368,11 +371,11 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl1() {
-    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maNhanVien
+    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + id
 }
 
 function buildApiUrl2() {
-    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maNhanVien
+    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + id
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
