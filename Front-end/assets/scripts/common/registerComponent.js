@@ -4,7 +4,7 @@ class CustomHeader extends HTMLElement {
     <header class="bg-gray-700 p-3 flex">
       <div class="flex items-center text-white w-[300px]">
         <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
-        <span class="ml-3 text-xl font-bold">
+        <span id="hrmLink" class="ml-3 text-xl font-bold">
           <a href="/pages/staff/list.html">HRM<a/>
         </span>
       </div>
@@ -12,6 +12,13 @@ class CustomHeader extends HTMLElement {
       </div>
     </header>
       `;
+      const hrmLink = this.querySelector('#hrmLink');
+
+      // Thêm sự kiện click vào span HRM
+      hrmLink.addEventListener('click', () => {
+        // Xóa localStorage
+        localStorage.removeItem('maNhanVien');
+      });
   }
 }
     
