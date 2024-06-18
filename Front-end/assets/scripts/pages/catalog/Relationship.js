@@ -198,7 +198,7 @@ function renderActionByStatus() {
     actionEl.append(createBtn)
 
 }
-
+//dsjhdsujgd
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc'
 }
