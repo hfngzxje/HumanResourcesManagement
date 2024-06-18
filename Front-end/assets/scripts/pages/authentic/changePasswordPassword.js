@@ -1,7 +1,7 @@
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("btn");
 var span = document.getElementsByClassName("close")[0];
-
+const ma = localStorage.getItem('maNhanVien');
 btn.onclick = function () {
   modal.style.display = "block";
   console.log("fdf")
@@ -28,6 +28,7 @@ function handleChangePassword() {
   const valid = validateForm('change_form')
   if (!valid) return
   const formValue = getFormValues('change_form')
+  formValue['maNhanVien'] = ma
 
   const payload = buildPayload(formValue)
   setLoading(true)
