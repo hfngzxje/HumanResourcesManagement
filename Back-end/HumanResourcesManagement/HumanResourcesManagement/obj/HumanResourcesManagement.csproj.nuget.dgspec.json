@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {}
+    "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {}
   },
   "projects": {
-    "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {
+    "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+        "projectUniqueName": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
         "projectName": "HumanResourcesManagement",
-        "projectPath": "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+        "projectPath": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
+        "outputPath": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

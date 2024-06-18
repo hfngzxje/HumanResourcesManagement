@@ -23,7 +23,7 @@ var TableColumns = [
   ]
 
 function backToList() {
-    window.location.replace("../catalog/nations.html");
+    window.location.replace("/pages/catalog/nations.html");
 }
 
 function buildPayload(formValue) {

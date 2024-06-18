@@ -1,58 +1,49 @@
-let isPopupEdit = false
-const popupCreateBtn = document.getElementById("createBtn")
-const popupSaveBtn = document.getElementById("saveBtn")
+const isEdit = !!id
 
-let idTonGiao = null
+let idDanTocHienTai = null
+
 
 var TableColumns = [
     {
-        label: 'ID',
-        key: 'id'
+      label: 'ID',
+      key: 'id'
     },
     {
-        label: 'Tên Dân Tộc',
-        key: 'ten'
+      label: 'Tên',
+      key: 'ten'
     },
     {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchTonGiao(row.id);
-                    var modal = document.getElementById("editChuyenMon");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTonGiao(row.id)} },
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+      ]
     }
-]
+  ]
 
 function backToList() {
-    window.location.replace("../catalog/Nations.html");
+    window.location.replace("/pages/catalog/Nations.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = { ...formValue }
-    formClone['id'] = idTonGiao
+    const formClone = {...formValue}
+    formClone['id'] = idDanTocHienTai
     return formClone
 }
 
 function fetchTonGiao(id) {
-    console.log("Name:", id);
+    console.log("Name:" , id);
     setLoading(true)
-    idTonGiao = id
+    idDanTocHienTai = id
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
         method: 'GET',
-        success: function (data) {
-            setFormValue('editTonGiao', data, 'fetch');
-            setFormValue('editTonGiao', data)
+        success: function(data) {
+            setFormValue('religions_form', data)
         },
         error: (err) => {
-            console.log('fetchDepartments err :: ', err);
+            console.log('fetchReligion err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -61,9 +52,9 @@ function fetchTonGiao(id) {
 }
 
 function handleCreate() {
-    const valid = validateForm('editTonGiao')
-    if (!valid) return
-    const formValue = getFormValues('editTonGiao')
+    const valid = validateForm('religions_form')
+    if(!valid) return
+    const formValue = getFormValues('religions_form')
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -73,17 +64,17 @@ function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchTonGiao res :: ', data);
-            alert("Thêm thành công !")
+        success: function(data) {
+            console.log('fetchReligion res :: ', data);
+            alert('Tạo Thành Công!');
             backToList()
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if (!err.responseJSON) {
+                if(!err.responseJSON) {
                     alert(err.responseText)
-                    return
+                    return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -91,13 +82,14 @@ function handleCreate() {
                 alert(message)
             } catch (error) {
                 alert("Tạo mới không thành công!")
-            }
+            }  
         },
         complete: () => {
             setLoading(false)
         }
     });
 }
+
 
 function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
@@ -106,13 +98,13 @@ function handleRemoveRow(id) {
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucDanToc/removeDanToc?id=' + id,
         method: 'DELETE',
-        success: function (data) {
-            console.log('fetchTonGiao res :: ', data);
-            alert("Xóa thành công !")
+        success: function(data) {
+            console.log('fetchReligions res :: ', data);
+            alert('Xóa Dân Tộc Thành Công!');
             backToList()
         },
         error: (err) => {
-            console.log('fetchTonGiao err :: ', err);
+            console.log('fetchReligions err :: ', err);
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -120,29 +112,27 @@ function handleRemoveRow(id) {
         }
     });
 }
+
 function handleSave() {
-    const valid = validateForm('editTonGiao')
-    if(!valid) return
-    const formValue = getFormValues('editTonGiao')
-    formValue['id'] = idTonGiao
+    const formValue = getFormValues('religions_form')
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc',
+        url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc' ,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchTonGiao res :: ', data);
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
             alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if (!err.responseJSON) {
+                if(!err.responseJSON) {
                     alert(err.responseText)
-                    return
+                    return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -158,19 +148,6 @@ function handleSave() {
     });
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea, select');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
 function renderActionByStatus() {
     const actionEl = document.getElementById('religions_form_action')
     const buildButton = (label, type, icon) => {
@@ -178,52 +155,22 @@ function renderActionByStatus() {
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
-
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
+    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
-    actionEl.append(createBtn)
+    createBtn.addEventListener('click', handleCreate)
+    saveBtn.addEventListener('click', handleSave)
+
+    actionEl.append(createBtn,saveBtn)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc'
-}
-
-function showPopup() {
-    var modal = document.getElementById("editTonGiao");
-    modal.style.display = "block";
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            setFormValue('editTonGiao', {ten: "" })
-        }
-    }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
-    if (isPopupEdit) {
-        const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa Danh Mục Dân Tộc"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
-    } else {
-        const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Danh mục Dân Tộc"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
-    }
+    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc' 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-    popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
-        handleSave()
-    })
-    popupCreateBtn.addEventListener("click", handleCreate)
 })
+

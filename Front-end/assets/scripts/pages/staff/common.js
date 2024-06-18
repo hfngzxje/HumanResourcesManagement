@@ -1,6 +1,6 @@
 const params = new URL(document.location.toString()).searchParams;
 const id = params.get("id");
-
+const maNhanVien = localStorage.getItem("maNhanVien")
 const TAB = {
   RESUME: 1 ,
   PERSON_HISTORY: 2,
@@ -74,7 +74,7 @@ function renderTab() {
       _class += " text-white bg-blue-600";
     }
     aElement.id = getTabId(tab.key);
-    aElement.href = '../..' + tab.activeByPath + '?id=' + id; // chuyển trang kèm id
+    aElement.href = '../..' + tab.activeByPath ; // chuyển trang kèm id
     aElement.className = _class;
     aElement.textContent = tab.label;
 
