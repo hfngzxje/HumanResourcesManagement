@@ -170,31 +170,6 @@ function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc' 
 }
 
-function showPopup() {
-    var modal = document.getElementById("editTeam");
-    modal.style.display = "block";
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            setFormValue('editTeam', {ten: "",})
-        }
-    }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
-    if (isPopupEdit) {
-        const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa danh mục Dân Tộc"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
-    } else {
-        const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới danh mục Dân Tộc"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
 })
