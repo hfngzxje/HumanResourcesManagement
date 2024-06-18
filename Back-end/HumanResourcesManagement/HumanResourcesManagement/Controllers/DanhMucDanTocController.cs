@@ -47,7 +47,7 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("removeLoaiHopDong/{id}")]
+        [HttpDelete("removeLoaiHopDong")]
         public async Task<IActionResult> RemoveLoaiHopDong(int id)
         {
             try

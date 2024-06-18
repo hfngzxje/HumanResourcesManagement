@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+4mXDj8Zwctll0z5aMdq6gOsyS2Ga0g01bXx5w/ENxu0D4acfjvv1mvj1JOOBaHBM60T7uJh2P2qnj0hCVkqBw==",
+  "dgSpecHash": "06H4YNLSbpbQXX56IDrLAueYhuNzkdxkTuxAFzQh1k/HSLyNMoHIqZZt8z4uaee740aJM5JljFt6n9PfHtzW+Q==",
   "success": true,
-  "projectFilePath": "F:\\PJBranchDuyWeek6\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+  "projectFilePath": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",

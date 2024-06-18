@@ -9,7 +9,7 @@ let idToHienTai = null
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id' 
+        key: 'id'
     },
     {
         label: 'Mã',
@@ -41,7 +41,7 @@ var TableColumns = [
 ]
 
 function backToList() {
-    window.location.replace("../catalog/teams.html");
+    window.location.replace("/pages/catalog/teams.html");
 }
 
 function buildPayload(formValue) {
