@@ -209,12 +209,12 @@ function showPopup() {
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa Tiêu Đề Tổ"
+        popupTitle.textContent = "Sửa Tiêu Đề Phòng Ban"
         popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
         popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+        popupTitle.textContent = "Thêm mới Tiêu Đề Phòng Ban"
         popupSaveBtn.classList.add('hidden') // Ẩn sửa
         popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
     }

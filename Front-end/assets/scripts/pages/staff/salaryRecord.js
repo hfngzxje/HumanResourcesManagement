@@ -86,7 +86,7 @@ var tableEvent = { // global: ở đau cũng truy cập được
 
 function backToList() {
     const url = new URL("/pages/staff/salaryRecord.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
 
@@ -343,14 +343,14 @@ function renderActionByStatus() {
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien;
 }
 async function buildApiHopDongA(id) {
     return 'https://localhost:7141/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + id;
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maNhanVien;
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()

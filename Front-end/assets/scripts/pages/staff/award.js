@@ -1,4 +1,5 @@
 const isEdit = !!id
+// const maNhanVien = localStorage.getItem("maNhanVien")
 
 let maHopDongHienTai = null
 
@@ -47,9 +48,9 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('award_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-    formValue['ma'] = employeeId;
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
+    formValue['ma'] = maNhanVien;
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -127,12 +128,12 @@ function renderActionByStatus() {
 
 function buildApiUrlKhenThuong() {
     
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + id;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
     let string2 = '/1'
     return string1 + string2;
 }
 function buildApiUrlKyLuat() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + id;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
     let string2 = '/0'
     return string1 + string2;
 }

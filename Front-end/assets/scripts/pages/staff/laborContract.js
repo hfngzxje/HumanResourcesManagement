@@ -1,6 +1,7 @@
 const isEdit = !!id
 
 let maHopDongHienTai = null
+// const maNhanVien = localStorage.getItem("maNhanVien")
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -53,7 +54,7 @@ var tableEvent = { // global: ở đau cũng truy cập được
 
 function backToList() {
     const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
 }
 
@@ -91,11 +92,10 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-    formValue['ma'] = employeeId;
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
+    formValue['ma'] = maNhanVien;
 
-    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -177,10 +177,10 @@ function handleRemoveRow(mahopdong) {
 function handleSave() {
     const formValue = getFormValues('laborContract_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
 
-    formValue['ma'] = employeeId;
+    formValue['ma'] = maNhanVien;
 
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -252,7 +252,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien
 }
 
 document.addEventListener('DOMContentLoaded', () => {

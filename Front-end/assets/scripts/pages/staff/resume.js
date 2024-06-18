@@ -32,7 +32,7 @@ function backToListDelete() {
 }
 function backToListUpdate() {
     const url = new URL("/pages/staff/resume.html", window.location.origin);
-    url.searchParams.set("id", id);
+    url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
 }
 
@@ -44,7 +44,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + id,
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -63,7 +63,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -124,7 +124,7 @@ function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -163,7 +163,7 @@ function handleSave() {
 
 function uploadImage(anh) {
     const payloadUploadImage = new FormData()
-    payloadUploadImage.append('maNV', id)
+    payloadUploadImage.append('maNV', maNhanVien)
     payloadUploadImage.append('file', anh)
 
     $.ajax({
@@ -244,8 +244,7 @@ function renderActionByStatus() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-    console.log('id ', id);
-    if (id) {
+    if (maNhanVien) {
         fetchEmployee()
         getImage()
     }

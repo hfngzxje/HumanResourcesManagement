@@ -1,5 +1,5 @@
 const isEdit = !!id
-
+// const ma = localStorage.getItem("maNhanVien")
 let idNguoiThan = null
 
 var MaritalOptions = [
@@ -55,7 +55,7 @@ var TableColumns = [
 }
 function backToList() {
     const url = new URL("/pages/staff/FamilyRelationship.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
 }
 
@@ -83,13 +83,15 @@ function fetchRelationship(id) {
 }
 
 function handleCreate() {
+    alert(maNhanVien)
     const valid = validateForm('relationship_form')
     if(!valid) return
     const formValue = getFormValues('relationship_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
+    const employeeId = maNhanVien
+ 
     formValue['ma'] = employeeId;
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -241,7 +243,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + id
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
 
 function getNameQuanHe(){
