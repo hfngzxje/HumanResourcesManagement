@@ -2,6 +2,11 @@
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HumanResourcesManagement.Service
 {
@@ -27,14 +32,28 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public void AddNhanVien(NhanVienRequest request)
+        public async Task AddNhanVienAsync(NhanVienRequest request)
         {
             if (string.IsNullOrEmpty(request.Ten))
             {
                 throw new Exception("Tên không được để trống");
             }
 
+            if (_context.TblNhanViens.Any(nv => nv.Email == request.Email))
+            {
+                throw new Exception("Email đã tồn tại!");
+            }
+
+            if (_context.TblNhanViens.Any(nv => nv.Didong == request.Didong))
+            {
+                throw new Exception("Số điện thoại đã tồn tại!");
+            }
+
             string maNhanVien = GenerateEmployeeCode(request.Ten);
+            if (maNhanVien.Length > 10) 
+            {
+                maNhanVien = maNhanVien.Substring(0, 10);
+            }
             int suffix = 1;
             string originalMaNhanVien = maNhanVien;
 
@@ -43,16 +62,108 @@ namespace HumanResourcesManagement.Service
                 maNhanVien = originalMaNhanVien + suffix.ToString();
                 suffix++;
             }
+            string password = GenerateRandomPassword();
+
+            string hashedPassword = HashPassword(password);
 
             var nhanVien = _mapper.Map<TblNhanVien>(request);
             nhanVien.Ma = maNhanVien;
+            nhanVien.VaiTroId = 2;
+            nhanVien.MatKhau = hashedPassword;
+
             _context.TblNhanViens.Add(nhanVien);
             _context.SaveChanges();
+
+            RemoveVietnameseDiacritics(maNhanVien);
+
+            try
+            {
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    UseDefaultCredentials = false,
+                    Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "acoe joeu tlxf qbgq"),
+                    Port = 587,
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("buiduchung300802@gmail.com"),
+                    Subject = "Thông tin tài khoản nhân viên mới",
+                    Body = $"Xin chào {request.Ten},<br><br>" +
+                           $"Tài khoản của bạn đã được tạo thành công.<br>" +
+                           $"Mã nhân viên (username): {maNhanVien}<br>" +
+                           $"Mật khẩu: {password}<br><br>" +
+                           "Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu.<br><br>" +
+                           "Trân trọng,<br>Phòng Nhân Sự",
+                    IsBodyHtml = true
+                };
+
+                mailMessage.To.Add(request.Email);
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to send email: " + ex.Message);
+            }
         }
+
+
+        private string HashPassword(string password)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+
+
+
+
+
+        private static readonly char[] AvailableCharacters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+        public static string GenerateRandomPassword(int length = 8)
+        {
+            if (length <= 0) throw new ArgumentException("Password length must be greater than 0.", nameof(length));
+
+            var random = new Random();
+            return new string(Enumerable.Repeat(AvailableCharacters, length)
+                                        .Select(chars => chars[random.Next(chars.Length)]).ToArray());
+        }
+
+
+        public static string RemoveVietnameseDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (char c in normalizedString)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
 
         private string GenerateEmployeeCode(string fullName)
         {
-            var nameParts = fullName.Split(' ');
+            string cleanedName = RemoveVietnameseDiacritics(fullName).ToLower();
+            var nameParts = cleanedName.Split(' ');
             if (nameParts.Length == 0)
             {
                 throw new Exception("Tên không hợp lệ");
@@ -63,6 +174,7 @@ namespace HumanResourcesManagement.Service
 
             return lastName + initials;
         }
+
 
 
         private bool IsIdExist(string id)
@@ -234,5 +346,32 @@ namespace HumanResourcesManagement.Service
             }
             return to;
         }
+
+        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh)
+        {
+            try
+            {
+                var query = _context.TblNhanViens.Where(n => n.Phong == idPhong);
+
+                if (gioiTinh.HasValue)
+                {
+                    query = query.Where(n => n.Gioitinh == gioiTinh.Value);
+                }
+
+                var list = await query.ToListAsync();
+
+                if (list == null || !list.Any())  
+                {
+                    throw new Exception("Khong co nhan vien nao");
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message); 
+            }
+        }
+
     }
 }

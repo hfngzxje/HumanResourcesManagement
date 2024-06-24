@@ -33,6 +33,7 @@ namespace HumanResourcesManagement.Models
         public virtual DbSet<TblDieuChuyen> TblDieuChuyens { get; set; } = null!;
         public virtual DbSet<TblHinhThucDaoTao> TblHinhThucDaoTaos { get; set; } = null!;
         public virtual DbSet<TblHopDong> TblHopDongs { get; set; } = null!;
+        public virtual DbSet<TblKhenThuongKyLuat> TblKhenThuongKyLuats { get; set; } = null!;
         public virtual DbSet<TblLichSuBanThan> TblLichSuBanThans { get; set; } = null!;
         public virtual DbSet<TblLuong> TblLuongs { get; set; } = null!;
         public virtual DbSet<TblNgoaiNgu> TblNgoaiNgus { get; set; } = null!;
@@ -40,6 +41,7 @@ namespace HumanResourcesManagement.Models
         public virtual DbSet<TblNhanVien> TblNhanViens { get; set; } = null!;
         public virtual DbSet<TblTrinhDoVanHoa> TblTrinhDoVanHoas { get; set; } = null!;
         public virtual DbSet<TblUser> TblUsers { get; set; } = null!;
+        public virtual DbSet<TblVaiTro> TblVaiTros { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,8 +54,6 @@ namespace HumanResourcesManagement.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.UseCollation("SQL_Latin1_General_CP1_CI_AS");
-
             modelBuilder.Entity<TblDanhMucChucDanh>(entity =>
             {
                 entity.ToTable("tblDanhMucChucDanh");
@@ -134,26 +134,6 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucKhenThuongKyLuat");
 
                 entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Khenthuongkiluat).HasColumnName("khenthuongkiluat");
-
-                entity.Property(e => e.Lido)
-                    .HasMaxLength(100)
-                    .HasColumnName("lido");
-
-                entity.Property(e => e.Ma)
-                    .HasMaxLength(10)
-                    .IsUnicode(false)
-                    .HasColumnName("ma")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Ngay)
-                    .HasColumnType("datetime")
-                    .HasColumnName("ngay");
-
-                entity.Property(e => e.Noidung)
-                    .HasMaxLength(100)
-                    .HasColumnName("noidung");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -343,6 +323,37 @@ namespace HumanResourcesManagement.Models
                     .IsFixedLength();
             });
 
+            modelBuilder.Entity<TblKhenThuongKyLuat>(entity =>
+            {
+                entity.ToTable("tblKhenThuongKyLuat");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Khenthuongkiluat).HasColumnName("khenthuongkiluat");
+
+                entity.Property(e => e.Lido)
+                    .HasMaxLength(100)
+                    .HasColumnName("lido");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Ngay)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ngay");
+
+                entity.Property(e => e.Noidung)
+                    .HasMaxLength(100)
+                    .HasColumnName("noidung");
+
+                entity.Property(e => e.Ten)
+                    .HasMaxLength(50)
+                    .HasColumnName("ten");
+            });
+
             modelBuilder.Entity<TblLichSuBanThan>(entity =>
             {
                 entity.HasKey(e => e.Ma)
@@ -512,9 +523,7 @@ namespace HumanResourcesManagement.Models
                     .HasColumnName("ma")
                     .IsFixedLength();
 
-                entity.Property(e => e.Anh)
-                    .HasColumnType("image")
-                    .HasColumnName("anh");
+                entity.Property(e => e.Anh).HasColumnName("anh");
 
                 entity.Property(e => e.Atm)
                     .HasMaxLength(20)
@@ -572,10 +581,10 @@ namespace HumanResourcesManagement.Models
                     .IsUnicode(false)
                     .HasColumnName("didong");
 
-                entity.Property(e => e.Dienthoai)
-                    .HasMaxLength(16)
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("dienthoai");
+                    .HasColumnName("email");
 
                 entity.Property(e => e.Gioitinh).HasColumnName("gioitinh");
 
@@ -584,6 +593,11 @@ namespace HumanResourcesManagement.Models
                 entity.Property(e => e.Laconchinhsach).HasColumnName("laconchinhsach");
 
                 entity.Property(e => e.Lathuongbinh).HasColumnName("lathuongbinh");
+
+                entity.Property(e => e.MatKhau)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("matKhau");
 
                 entity.Property(e => e.Ngachcongchuc).HasColumnName("ngachcongchuc");
 
@@ -672,6 +686,8 @@ namespace HumanResourcesManagement.Models
                 entity.Property(e => e.To).HasColumnName("to");
 
                 entity.Property(e => e.Tongiao).HasColumnName("tongiao");
+
+                entity.Property(e => e.VaiTroId).HasColumnName("vaiTroId");
             });
 
             modelBuilder.Entity<TblTrinhDoVanHoa>(entity =>
@@ -737,6 +753,20 @@ namespace HumanResourcesManagement.Models
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("password");
+            });
+
+            modelBuilder.Entity<TblVaiTro>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("tblVaiTro");
+
+                entity.Property(e => e.TenVaiTro)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("tenVaiTro");
+
+                entity.Property(e => e.VaiTroId).HasColumnName("vaiTroId");
             });
 
             OnModelCreatingPartial(modelBuilder);

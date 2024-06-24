@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using HumanResourcesManagement.Service.IService;
 using HumanResourcesManagement.Service;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Config.Mapper;
 
@@ -21,6 +20,21 @@ public class Program
         builder.Services.AddScoped<IKhenThuongKiLuatService, KhenThuongKiLuatService>();
         builder.Services.AddScoped<IDanhMucDanTocService, DanhMucDanTocService>();
         builder.Services.AddScoped<IDanhMucTonGiaoService, DanhMucTonGiaoService>();
+        builder.Services.AddScoped<IChuyenMonService, ChuyenMonService>();
+        builder.Services.AddScoped<ITrinhDoService, TrinhDoService>();
+        builder.Services.AddScoped<IHoSoLuongService, HoSoLuongService>();
+        builder.Services.AddScoped<IChucDanhService, ChucDanhService>();
+        builder.Services.AddScoped<IPhongBanService, PhongBanService>();
+        builder.Services.AddScoped<IDanhMucQuanHeService, DanhMucQuanHeService>();
+        builder.Services.AddScoped<IImageService, ImageService>();
+        builder.Services.AddScoped<IDanhMucNgoaiNguService, DanhMucNgoaiNguService>();
+        builder.Services.AddScoped<IDanhMucToService, DanhMucToService>();
+        builder.Services.AddScoped<IDanhMucKhenThuongKyLuatService, DanhMucKhenThuongKyLuatService>();
+        builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
+        builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
+        builder.Services.AddScoped<IDangNhapService, DangNhapService>();
+
+
 
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
@@ -35,6 +49,7 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddSession();
         builder.Services.AddCors(opts =>
         {
             opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));
@@ -59,6 +74,7 @@ public class Program
         app.UseCors("CORSPolicy");
         app.MapControllers();
         app.UseRouting();
+        app.UseSession();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

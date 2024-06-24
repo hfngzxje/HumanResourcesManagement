@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="../../assets/styles/pages/login.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
+</head>
+
+<body class="login-bg">
+    <div class="login-container">
+
+        <form id="login_form">
+            <div class="form-header">
+                <h2>HRM Login</h2>
+            </div>
+            <base-input label="Mã Nhân Viên" name="maNhanVien" required="true" placeholder="" ></base-input>
+            <base-input type="password" label="Mật Khẩu" name="matkhau" required="true"placeholder=""></base-input>
+        </form>
+        <div id="login_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+        <!-- <button type="button" onclick="login()">Login</button> -->
+        <div class="form-footer">
+            <a href="#" class="forgot-password">Forgotten password?</a>
+        </div>
+        <!-- </form> -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../assets/scripts/common/loading.js"></script>
+    <script src="../../assets/scripts/pages/staff/common.js"></script>
+    <script src="../../assets/scripts/common/formHanlde.js"></script>
+    <script src="../../assets/scripts/pages/authentic/login.js"></script>
+</body>
+
+</html>

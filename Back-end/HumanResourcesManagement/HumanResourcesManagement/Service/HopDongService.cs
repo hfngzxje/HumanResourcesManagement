@@ -14,7 +14,7 @@ namespace HumanResourcesManagement.Service
             _context = context;
         }
 
-        public List<HopDongResponse> GetAllHopDong()
+        public List<TblHopDong> GetAllHopDong()
         {
             var hopDongs = _context.TblHopDongs.ToList();
             if (!hopDongs.Any())
@@ -22,32 +22,22 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Không có hợp đồng nào!!");
             }
 
-            var hopDongResponses = new List<HopDongResponse>();
-
-            foreach (var hopDong in hopDongs)
-            {
-                var loaiHopDong = _context.TblDanhMucLoaiHopDongs.Find(hopDong.Loaihopdong);
-                var chucDanh = _context.TblDanhMucChucDanhs.Find(hopDong.Chucdanh);
-
-                var hopDongResponse = new HopDongResponse
-                {
-                    Mahopdong = hopDong.Mahopdong,
-                    Luongcoban = hopDong.Luongcoban,
-                    Hopdongtungay = hopDong.Hopdongtungay,
-                    Hopdongdenngay = hopDong.Hopdongdenngay,
-                    Ghichu = hopDong.Ghichu,
-                    Ma = hopDong.Ma,
-                    Loaihopdong = loaiHopDong?.Ten,
-                    Chucdanh = chucDanh?.Ten
-                };
-
-                hopDongResponses.Add(hopDongResponse);
-            }
-
-            return hopDongResponses;
+            return hopDongs;
         }
 
-        public HopDongResponse GetHopDongByMaHopDong(string id)
+        public List<TblHopDong> GetAllHopDongByMaNV(string id)
+        {
+            var hopDongs = _context.TblHopDongs.Where(hd => hd.Ma == id).ToList();
+
+            if (!hopDongs.Any())
+            {
+                throw new Exception("Không có hợp đồng nào cho mã nhân viên này!!");
+            }
+
+            return hopDongs;
+        }
+
+        public TblHopDong GetHopDongByMaHopDong(string id)
         {
             var hopDong = _context.TblHopDongs.Find(id);
             if (hopDong == null)
@@ -55,25 +45,10 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("ID không tồn tại!");
             }
 
-            var loaiHopDong = _context.TblDanhMucLoaiHopDongs.Find(hopDong.Loaihopdong);
-            var chucDanh = _context.TblDanhMucChucDanhs.Find(hopDong.Chucdanh);
-
-            var hopDongResponse = new HopDongResponse
-            {
-                Mahopdong = hopDong.Mahopdong,
-                Luongcoban = hopDong.Luongcoban,
-                Hopdongtungay = hopDong.Hopdongtungay,
-                Hopdongdenngay = hopDong.Hopdongdenngay,
-                Ghichu = hopDong.Ghichu,
-                Ma = hopDong.Ma,
-                Loaihopdong = loaiHopDong?.Ten,
-                Chucdanh = chucDanh?.Ten
-            };
-
-            return hopDongResponse;
+            return hopDong;
         }
 
-        public void SuaHopDong(string id, HopDongRequest request)
+        public void SuaHopDong(string id, UpdateHopDongRequest request)
         {
             var hopDong = _context.TblHopDongs.Find(id);
             if (hopDong == null)
@@ -93,37 +68,56 @@ namespace HumanResourcesManagement.Service
             hopDong.Hopdongdenngay = request.Hopdongdenngay;
             hopDong.Ghichu = request.Ghichu;
             hopDong.Ma = request.Ma;
+            hopDong.TrangThai = request.trangThai;
 
             _context.TblHopDongs.Update(hopDong);
             _context.SaveChanges();
         }
 
-        public void TaoHopDong(HopDongRequest request)
+
+        public void TaoHopDong(InsertHopDongRequest request)
         {
-            if (IsIdExist(request.Ma))
+            var nhanVien = _context.TblNhanViens.FirstOrDefault(nv => nv.Ma == request.Ma);
+            if (nhanVien == null)
             {
-                throw new Exception("ID already exists.");
+                throw new Exception("Mã nhân viên không tồn tại.");
             }
 
-            if(request.Hopdongtungay > request.Hopdongdenngay)
+            if (request.Hopdongtungay > request.Hopdongdenngay)
             {
-                throw new Exception("Ngay tao hop dong phai nho hon ngay het han!!");
+                throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
             }
+
+            var newMaNv = request.Ma.ToUpper();
+
+            string baseMaHopDong = newMaNv + "HD";
+            int suffix = 1;
+
+            while (_context.TblHopDongs.Any(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
+            {
+                suffix++;
+            }
+
+            string newMaHopDong = baseMaHopDong + suffix.ToString("D2");
 
             var hopDong = new TblHopDong()
             {
-                Mahopdong = request.Mahopdong,
+                Mahopdong = newMaHopDong,
                 Loaihopdong = request.Loaihopdong,
                 Chucdanh = request.Chucdanh,
                 Luongcoban = request.Luongcoban,
                 Hopdongtungay = request.Hopdongtungay,
                 Hopdongdenngay = request.Hopdongdenngay,
                 Ghichu = request.Ghichu,
-                Ma = request.Ma
+                Ma = request.Ma,
+                TrangThai = 1,
             };
+
             _context.TblHopDongs.Add(hopDong);
             _context.SaveChanges();
         }
+
+
 
         public void XoaHopDong(string id)
         {
@@ -139,7 +133,29 @@ namespace HumanResourcesManagement.Service
 
         private bool IsIdExist(string id)
         {
-            return _context.TblHopDongs.Any(nv => nv.Ma == id);
+            return _context.TblHopDongs.Any(nv => nv.Mahopdong == id);
         }
+
+
+        public List<TblDanhMucLoaiHopDong> GetAllLoaiHopDong()
+        {
+            var loaiHopDong = _context.TblDanhMucLoaiHopDongs.ToList();
+            if (!loaiHopDong.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return loaiHopDong;
+        }
+
+        public List<TblDanhMucChucDanh> GetAllChucDanh()
+        {
+            var chucDanh = _context.TblDanhMucChucDanhs.ToList();
+            if (!chucDanh.Any())
+            {
+                throw new Exception("Empty list!!");
+            }
+            return chucDanh;
+        }
+
     }
 }

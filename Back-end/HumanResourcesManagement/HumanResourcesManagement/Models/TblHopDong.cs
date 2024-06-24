@@ -13,5 +13,6 @@ namespace HumanResourcesManagement.Models
         public DateTime? Hopdongdenngay { get; set; }
         public string? Ghichu { get; set; }
         public string? Ma { get; set; }
+        public int? TrangThai { get; set; }
     }
 }

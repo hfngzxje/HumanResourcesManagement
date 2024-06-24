@@ -7,6 +7,7 @@ namespace HumanResourcesManagement.Service.IService
     public interface INguoiThanService
     {
         Task<IEnumerable<NguoiThanDto>> GetNguoiThanByMaNV(string maNV);
+        Task<TblNguoiThan> GetNguoiThanById(int id);
         Task<TblNguoiThan> AddNguoiThan(InsertNguoiThanRequest req);
         Task<TblNguoiThan> UpdateNguoiThan(UpdateNguoiThanRequest req);
         Task DeleteNguoiThan(int id);

@@ -45,6 +45,15 @@ namespace HumanResourcesManagement.Service
             return listNguoiThan;
         }
 
+        public async Task<TblNguoiThan> GetNguoiThanById(int id)
+        {
+            var nt = await _context.TblNguoiThans.FindAsync(id);
+            if (nt == null)
+            {
+                throw new Exception("khong co id nay");
+            }
+            return nt;
+        }
         public async Task<TblNguoiThan> AddNguoiThan(InsertNguoiThanRequest req)
         {
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);

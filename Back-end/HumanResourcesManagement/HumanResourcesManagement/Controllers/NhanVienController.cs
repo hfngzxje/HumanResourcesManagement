@@ -18,19 +18,26 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet]
         public IActionResult GetAllNhanVien()
         {
-            var nhanVien = _nhanVienService.GetAllNhanVien();
-            return Ok(nhanVien);
+            try
+            {
+                var nhanVien = _nhanVienService.GetAllNhanVien();
+                return Ok(nhanVien);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("TaoMoiNhanVien")]
-        public IActionResult CreateNhanVien([FromBody] NhanVienRequest request)
+        public async Task<IActionResult> CreateNhanVien([FromBody] NhanVienRequest request)
         {
             try
             {
-                _nhanVienService.AddNhanVien(request);
-                return Ok("Them moi nhan vien thanh cong!!");
+                await _nhanVienService.AddNhanVienAsync(request);
+                return Ok("Thêm mới nhân viên thành công!!");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -208,6 +215,19 @@ namespace HumanResourcesManagement.Controllers
         {
             var to = _nhanVienService.GetAllTo();
             return Ok(to);
+        }
+
+        [HttpGet("getByPhongBan")]
+        public async Task<IActionResult> GetByPhongBan(int idPhong, bool? gioiTinh)
+        {
+            try
+            {
+                var list = await _nhanVienService.getNhanVienByPhongBan(idPhong, gioiTinh);
+                return Ok(list);
+            }catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

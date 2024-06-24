@@ -8,37 +8,37 @@ namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DanhMucDanTocController : ControllerBase
+    public class LoaiHopDongController : ControllerBase
     {
         private readonly NhanSuContext _context;
-        private readonly IDanhMucDanTocService _danhMucDanTocService;
+        private readonly ILoaiHopDongService _loaiHopDongService;
 
-        public DanhMucDanTocController(NhanSuContext context, IDanhMucDanTocService danhMucDanTocService)
+        public LoaiHopDongController(NhanSuContext context, ILoaiHopDongService loaiHopDongService)
         {
             _context = context;
-            _danhMucDanTocService = danhMucDanTocService;
+            _loaiHopDongService = loaiHopDongService;
         }
 
-        [HttpGet("getDanhMucDanToc")]
-        public async Task<IActionResult> GetDanhMucDanToc()
+        [HttpGet("getLoaiHopDong")]
+        public async Task<IActionResult> GetLoaiHopDong()
         {
-            var dm = await _danhMucDanTocService.GetAllDanToc();
+            var dm = await _loaiHopDongService.GetAllLoaiHopDong();
             return Ok(dm);
         }
 
-        [HttpGet("getDanhMucDanTocById/{id}")]
-        public async Task<IActionResult> GetDanhMucDanTocById(int id)
+        [HttpGet("getLoaiHopDongById/{id}")]
+        public async Task<IActionResult> GetLoaiHopDongById(int id)
         {
-            var dt = await _danhMucDanTocService.GetDanTocById(id);
+            var dt = await _loaiHopDongService.GetLoaiHopDongById(id);
             return Ok(dt);
         }
 
-        [HttpPost("addDanhMucDanToc")]
-        public async Task<IActionResult> AddDanToc(InsertDanTocRequest req)
+        [HttpPost("addLoaiHopDong")]
+        public async Task<IActionResult> AddLoaiHopDong(InsertLoaiHopDongRequest req)
         {
             try
             {
-                await _danhMucDanTocService.AddDanToc(req);
+                await _loaiHopDongService.AddLoaiHopDong(req);
                 return StatusCode(200, "add thanh cong");
             }
             catch (Exception ex)
@@ -47,12 +47,12 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("removeDanToc")]
-        public async Task<IActionResult> RemoveDanToc(int id)
+        [HttpDelete("removeLoaiHopDong")]
+        public async Task<IActionResult> RemoveLoaiHopDong(int id)
         {
             try
             {
-                await _danhMucDanTocService.DeleteDanToc(id);
+                await _loaiHopDongService.DeleteLoaiHopDong(id);
                 return StatusCode(200, "xoa dan toc thanh cong");
             }
             catch (Exception ex)
@@ -60,12 +60,12 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPut("updateDanToc")]
-        public async Task<IActionResult> UpdateDanToc(UpdateDanTocRequest req)
+        [HttpPut("updateLoaiHopDong")]
+        public async Task<IActionResult> UpdateLoaiHopDong(int id, InsertLoaiHopDongRequest req)
         {
             try
             {
-                await _danhMucDanTocService.UpdateDanToc(req);
+                await _loaiHopDongService.UpdateLoaiHopDong(id,req);
                 return StatusCode(200, "cap nhat dan toc thanh cong");
             }
             catch (Exception ex)
