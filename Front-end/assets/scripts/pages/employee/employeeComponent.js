@@ -6,11 +6,11 @@ class CustomHeader extends HTMLElement {
           <div class="flex items-center text-white w-[300px]">
             <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
             <span class="ml-3 text-xl font-bold">
-              <a href="/pages/staff/list.html">HRM</a>
+              <a href="/pages/employee/overView.html">HRM</a>
             </span>
           </div>
           <div class="flex items-center">
-            <img src="link_to_your_avatar_image" alt="Avatar" class="w-10 h-10 rounded-full ml-1">
+            <img src="" alt="Avatar" class="w-10 h-10 rounded-full ml-1">
           </div>
         </div>
       </header>
@@ -456,16 +456,33 @@ class CustomHeader extends HTMLElement {
   }
   
   class BaseTable extends HTMLElement {
-    static observedAttributes = ["api", "columns"];
+    // khai báo các thuộc tính sẽ nhận vào từ bên file html
+    static observedAttributes = ["api", "columns", "event"];
     connectedCallback() {
-      const api = this.getAttribute('api')
-      const columnsKey = this.getAttribute('columns')
+      // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
+      const api = this.getAttribute('api') // tên biến lưu trữ thông tin liên quan đến api
+      const columnsKey = this.getAttribute('columns') // ... columns
+      const eventKey = this.getAttribute('event') // ... event
   
+      // api = 'buildApiUrl'
+  
+      // Xử lý lấy thông tin api từ giá trị của thuộc tính api
       function getApiUrl() {
-        if (!window[api]) return api
-        return window[api]()
-      }
+        // window là biến toàn cục đại diện cho trang web
+        
+        // const user = { name: "Duy" }
+        // const userKey = "name"
+        // user[userKey] <=> user.name
   
+        window['buildApiUrl']
+  
+        // không tồn tại biến khai báo thông tin api bên file js
+        if (window[api] === undefined) return api // hoạt động với chế động url http:...
+  
+        return window[api]() // http://.../123
+      } // http://...
+  
+      // định dạng lại kiểu datetime
       function formatDateTime(dateTimeStr) {
         const dateTime = new Date(dateTimeStr);
         const year = dateTime.getFullYear();
@@ -477,39 +494,71 @@ class CustomHeader extends HTMLElement {
         return `${day}-${month}-${year} `;
       }
   
+      // định dạg lại kiểu tiền tệ
       function formatCurrency(val) {
         return val.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
       }
   
+      // addEventListener('DOMContentLoaded' : sự kiện sau khi nội dung trang wen đã hiện thị xong
       document.addEventListener('DOMContentLoaded', () => {
-        const columns = window[columnsKey] || []
+        const columns = window[columnsKey] || [] // lấy giá trị tương ứng của colums hoặc mặc định []
+        const event = window[eventKey] || {} // ... event hoặc ... {}
+  
+        // this chính là phần html của class BaseTable
         const headEl = this.querySelector('thead')
+        // tạo ra 1 thẻ tr mới <tr></tr>
         const headTrEl = document.createElement('tr')
-        columns.forEach(col => {
+        columns.forEach(col => { // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
+          // tạo 1 thẻ th đại hiện cho cột
           const thEl = document.createElement('th')
-          thEl.setAttribute('scope', 'col')
+          // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
           thEl.setAttribute('class', 'px-6 py-3')
+          // <th class="px-6 py-3">Mã hợp đồng</th>
           thEl.innerText = col.label
+          // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
           headTrEl.appendChild(thEl)
         })
+        // <thead><tr><th class="px-6 py-3">Mã hợp đồng</th></tr></thead>
         headEl.appendChild(headTrEl)
   
-        $.ajax({
-          url: getApiUrl(),
-          method: 'GET',
-          success: (tableData) => {
-            const bodyEl = this.querySelector('tbody')
-            const tableDataDisplay = tableData.slice(0, 30)
-            tableDataDisplay.forEach(row => {
-              const trEl = document.createElement('tr')
-              trEl.setAttribute('class', 'bg-white border-b')
-              columns.forEach(col => {
-                const thEl = document.createElement('th')
-                thEl.setAttribute('scope', 'col')
-                thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
-                let value = row[col.key]
+        headEl.style.backgroundColor = '#444444	'; // Màu nền đen cho phần thead
+        headEl.style.color = '#fff'; // màu chữ của thead
   
+        $.ajax({
+          url: getApiUrl(), // lấy ra url api của bảng = http://...
+          method: 'GET', // phương thức
+          success: (tableData) => { // tableData : dữ liệu Api bảng trả về
+            // Tìm ra thẻ Tbody của bảng
+            const bodyEl = this.querySelector('tbody')
+            // Cát giá trị chỉ hiển thị tối đa 30 dòng
+            const tableDataDisplay = tableData.slice(0, 30)
+            // lặp lần lượt dữ liệu bảng từ api
+            tableDataDisplay.forEach(row => {
+  
+              // row = { mahopdong: 123123, luongcoban: 12323 }
+  
+              // mỗi hàng sẽ tạo 1 thẻ tr tương ứng
+              const trEl = document.createElement('tr')
+              // set class cho thẻ tr đc tạo
+              trEl.setAttribute('class', 'bg-white border-bottom hover:bg-gray-100')
+              // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
+              if(event.rowClick != undefined) { 
+                // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
+                trEl.addEventListener("click", () => {
+                  event.rowClick(row) // gọi đến function rowClick đã được khai báo trước đó
+                })
+              }
+              // Lặp lần lượt các thông tin cột
+              columns.forEach(col => { //  Mã hợp đồng, Lương cơ bả, ...
+                // tạo thẻ th
+                const thEl = document.createElement('th')
+                thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
+                // Lấy ra giá trị của cột tương ứng với key được khai báo
+                let value = row[col.key] //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
+  
+                // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
                 if (col.key === 'action') {
+                  // 
                   col.actions.forEach(({ label, type, icon, onClick }) => {
                     const btnEl = document.createElement('base-button')
                     btnEl.setAttribute('label', label)
@@ -520,27 +569,31 @@ class CustomHeader extends HTMLElement {
                     thEl.appendChild(btnEl)
                   })
                 } else {
+                  // nếu type được khai báo thì định dạng lại giá trị tương ứng
                   if (col.type === 'datetime') {
                     value = formatDateTime(value)
                   } else if (col.type === 'currency') {
                     value = formatCurrency(value)
                   }
   
+                  // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
                   if (col.formatter) {
                     console.log(value)
-                    value = col.formatter(value)
+                    value = col.formatter(value) // value 
                   }
   
+                  // <th> nội dung đã được định dạng lại /th>
                   thEl.innerText = value
                 }
   
                 trEl.appendChild(thEl)
               })
+              // thêm các thẻ tr và body
               bodyEl.appendChild(trEl)
             })
           },
           error: (xhr, status, error) => {
-            console.error(`Error fetching table data: ${xhr.responseText}`);
+            // Trường hợp thất bại
             const wrapperTable = this.querySelector('#wrapper-table')
             const divEl = document.createElement('div')
             divEl.setAttribute('class', 'text-center text-gray-400 mt-5 mb-5 text-sm')
@@ -579,20 +632,30 @@ class CustomHeader extends HTMLElement {
 //     }
 // }
 class BaseImage extends HTMLElement {
-  static observedAttributes = ["icon","color"];
+  static observedAttributes = ["icon","color","description","title","titleLink","href"];
 
   connectedCallback() {
     const icon = this.getAttribute("icon");
     const color = this.getAttribute("color");
+    const description = this.getAttribute("description");
+    const title = this.getAttribute("title")||"";
+    const titleLink = this.getAttribute("titleLink");
+    const href = this.getAttribute("href");
     
     this.innerHTML = `
-    <div  class="${color} p-3 rounded-lg flex items-center justify-center relative" style="width: 90%; height: 200px;">
-      <div class="absolute top-0 right-0 m-4 text-9xl">${icon}</div>
-      <div class="ml-4">
-        <h2 class="text-lg font-semibold absolute top-5 left-5">Title</h2>
-        <p class="text-gray-600">Description</p>
-      </div>
+  <div class="p-3 rounded-lg flex items-center justify-center relative" style="width: 90%; height: 200px; background-color: ${color};">
+    <div class="absolute top-0 right-0 m-4 text-8xl">${icon}</div>
+    <div class="ml-4">
+        <h2 class="text-7xl font-semibold absolute top-5 left-8" style="color: white;">${title}</h2>
+        <p class="text-gray-600 text-lg font-semibold absolute top-25 left-8" style="color: white;">${description}</p>
     </div>
+    <div class="footer absolute bottom-0 left-0 right-0 p-3 bg-gray-200 text-center">
+        <a href="${href}" class="block w-full text-blue-500 font-semibold">${titleLink}</a>
+    </div>
+</div>
+
+
+
     `;
   }
 }

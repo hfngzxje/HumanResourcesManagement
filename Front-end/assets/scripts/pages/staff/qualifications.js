@@ -1,7 +1,7 @@
 
 let idTrinhDo = null
 let idNgoaiNgu = null
-
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var TableColumns1 = [
     {
@@ -375,6 +375,10 @@ function buildApiUrl2() {
     return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maNhanVien
 }
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
     renderActionByStatus()
 })
 

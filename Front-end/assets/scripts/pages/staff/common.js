@@ -1,6 +1,7 @@
 const params = new URL(document.location.toString()).searchParams;
 const id = params.get("id");
 const maNhanVien = localStorage.getItem("maNhanVien")
+const vaitro = localStorage.getItem("vaiTroID");
 const TAB = {
   RESUME: 1 ,
   PERSON_HISTORY: 2,

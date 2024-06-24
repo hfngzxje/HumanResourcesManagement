@@ -1,5 +1,5 @@
 const isEdit = !!id
-// const maNhanVien = localStorage.getItem("maNhanVien")
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 let maHopDongHienTai = null
 
@@ -139,6 +139,10 @@ function buildApiUrlKyLuat() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.replace("/pages/error.html");
+        return;
+    }
     renderActionByStatus()
 })
 

@@ -1,4 +1,5 @@
 let idLuongHienTai = null
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -353,6 +354,10 @@ function buildApiUrl() {
     return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maNhanVien;
 }
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
     renderActionByStatus()
 })
 

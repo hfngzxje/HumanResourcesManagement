@@ -9,10 +9,10 @@ function buildPayload(formValue) {
     return formClone
 }
 function handleLoginSuccess(vaitroID) {
-    if (vaitroID === 2) {
+    if (vaitroID === 1) {
         window.location.replace("/pages/staff/list.html");
     } else {
-        
+        window.location.replace("/pages/employee/overview.html");
     }
 }
 function handleLogin() {

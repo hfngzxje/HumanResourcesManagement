@@ -1,4 +1,5 @@
-const isEdit = !!id
+const isEdit = !!maNhanVien
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var MaritalOptions = [
     { label: 'Đã kết hôn', value: 1 },
@@ -188,8 +189,7 @@ function uploadImage(anh) {
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
-                setLoading(false)
-            } catch (error) {
+                setLoading(false)            } catch (error) {
                 alert("Cập nhật thất bại!")
                 setLoading(false)
             }
@@ -243,6 +243,10 @@ function renderActionByStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
     renderActionByStatus()
     if (maNhanVien) {
         fetchEmployee()
@@ -250,3 +254,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+                                        

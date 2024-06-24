@@ -1,5 +1,5 @@
 const isEdit = !!id
-// const ma = localStorage.getItem("maNhanVien")
+const vaiTroID = localStorage.getItem("vaiTroID")
 let idNguoiThan = null
 
 var MaritalOptions = [
@@ -46,6 +46,7 @@ var TableColumns = [
       ]
     }
   ]
+
 
   var tableEvent = { // global: ở đau cũng truy cập được
     rowClick: (row) => {
@@ -261,7 +262,14 @@ function getNameQuanHe(){
 }
 
 getNameQuanHe()
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
+    renderActionByStatus();
+
     
 })

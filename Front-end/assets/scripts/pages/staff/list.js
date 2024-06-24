@@ -1,4 +1,4 @@
-// let maNhanVien = null;
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var TableColumns = [
     {
@@ -44,4 +44,10 @@ var TableColumns = [
     window.location.replace(`/pages/staff/resume.html`);
 }
 
+// document.addEventListener('DOMContentLoaded', () => {
+//   if (vaiTroID !== "1") {
+//       window.location.href = "/pages/error.html";
+//       return;
+//   }
+// })
 

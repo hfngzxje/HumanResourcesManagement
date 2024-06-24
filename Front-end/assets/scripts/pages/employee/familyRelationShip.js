@@ -1,86 +1,81 @@
 const isEdit = !!id
-const vaiTroID = localStorage.getItem("vaiTroID")
-let maHopDongHienTai = null
-// const maNhanVien = localStorage.getItem("maNhanVien")
+// const ma = localStorage.getItem("maNhanVien")
+let idNguoiThan = null
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
-
-// Khai báo giá trị định nghĩa columns biến "var" là biến toàn cục
+var relationshipOptions = []
 var TableColumns = [
     {
-        label: 'Mã hợp đồng',
-        key: 'mahopdong',
+      label: 'Họ Tên',
+      key: 'ten'
     },
     {
-        label: 'Lương cơ bản',
-        key: 'luongcoban',
-        type: 'currency'
+      label: 'Quan Hệ',
+      key: 'quanheTen',
+      
     },
     {
-        label: 'Từ ngày',
-        key: 'hopdongtungay',
-        type: 'datetime'
+      label: 'Ngày Sinh',
+      key: 'ngaysinh',
+      type: 'datetime'
     },
     {
-        label: 'Đến ngày',
-        key: 'hopdongdenngay',
-        type: 'datetime'
+      label: 'Địa chỉ',
+      key: 'diachi',
     },
     {
-        label: 'Ghi chú',
-        key: 'ghichu'
+      label: 'Điện thoại',
+      key: 'dienthoai'
+    },
+    {
+        label: 'Nghề nghiệp',
+        key: 'nghenghiep'
+      },
+      {
+        label: 'Thông tin khác',
+        key: 'khac'
+      },
+    {
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id)  } }
+      ]
     }
-    // {
-    //     label: 'Hành động',
-    //     key: 'action',
-    //     actions: [
-            
-    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
-    //     ]
-    // }
-]
-// ctrl K 0
-// Biến định nghĩa các sự kiện của table
-var tableEvent = { // global: ở đau cũng truy cập được
+  ]
+
+
+  var tableEvent = { // global: ở đau cũng truy cập được
     rowClick: (row) => {
         console.log('row click ', row);
-        fetchContract(row.mahopdong)
+        fetchRelationship(row.id)
     }
 }
-
-
 function backToList() {
-    
-        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-        // url.searchParams.set("id", maNhanVien);
-  
+    const url = new URL("/pages/employee/familyRelationship.html", window.location.origin);
+    // url.searchParams.set("id", maNhanVien);
+    window.location.replace(url.toString());
 }
 
 function buildPayload(formValue) {
-    const formClone = { ...formValue }
-
-    formClone['trangThai'] = Number(formClone['trangThai'])
-
+    const formClone = {...formValue}
     return formClone
 }
 
-function fetchContract(mahopdong) {
-    console.log(mahopdong);
+function fetchRelationship(id) {
     setLoading(true)
-    maHopDongHienTai = mahopdong
+    idNguoiThan = id
     $.ajax({
-
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
-        success: function (data) {
-            setFormValue('laborContract_form', data, 'fetch');
-            setFormValue('laborContract_form', data)
+        success: function(data) {
+            setFormValue('relationship_form', data)
         },
         error: (err) => {
-            console.log('fetchContract err :: ', err);
+            console.log('fetchEmployee err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -89,43 +84,43 @@ function fetchContract(mahopdong) {
 }
 
 function handleCreate() {
-    const valid = validateForm('laborContract_form')
-    if (!valid) return
-    const formValue = getFormValues('laborContract_form')
+    alert(maNhanVien)
+    const valid = validateForm('relationship_form')
+    if(!valid) return
+    const formValue = getFormValues('relationship_form')
 
     // const urlParams = new URLSearchParams(window.location.search);
     // const employeeId = urlParams.get('id');
-    formValue['ma'] = maNhanVien;
-
+    const employeeId = maNhanVien
+ 
+    formValue['ma'] = employeeId;
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
+    
     setLoading(true)
     $.ajax({
-        
-        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
+        url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            alert('Tạo Thành Công!');
-            backToList();
+        success: function(data) {
+            alert("Thêm thành công!")
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if (!err.responseJSON) {
+                if(!err.responseJSON) {
                     alert(err.responseText)
-                    return
+                    return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
             } catch (error) {
-                alert("Tạo mới không thành công!")
+                alert("Tạo mới thất bại!")
             }
-
-
         },
         complete: () => {
             setLoading(false)
@@ -138,14 +133,14 @@ function handleRemove() {
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
         method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            backToList()
         },
         error: (err) => {
-            console.log('fetchContract err :: ', err);
+            console.log('fetchEmployee err :: ', err);
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -153,20 +148,19 @@ function handleRemove() {
         }
     });
 }
-
-function handleRemoveRow(mahopdong) {
+function handleRemoveRow(id) {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + mahopdong,
+        url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + id,
         method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
+        success: function(data) {
+            console.log('fetchEmployee res :: ', data);
+            backToList()
         },
         error: (err) => {
-            console.log('fetchContract err :: ', err);
+            console.log('fetchEmployee err :: ', err);
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -176,31 +170,29 @@ function handleRemoveRow(mahopdong) {
 }
 
 function handleSave() {
-    const formValue = getFormValues('laborContract_form')
-
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const employeeId = urlParams.get('id');
-
-    formValue['ma'] = maNhanVien;
-
+    const valid = validateForm('relationship_form')
+    if(!valid) return
+    
+    const formValue = getFormValues('relationship_form')
+    formValue['id'] = idNguoiThan
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchContract res :: ', data);
-            alert('Lưu Thành Công!');
-            backToList();
+        success: function(data) {
+            alert("Sửa thành công!")
+            console.log('fetchEmployee res :: ', data);
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if (!err.responseJSON) {
+                if(!err.responseJSON) {
                     alert(err.responseText)
-                    return
+                    return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -227,9 +219,8 @@ function clearFormValues(formId) {
         }
     });
 }
-
 function renderActionByStatus() {
-    const actionEl = document.getElementById('laborContract_form_action')
+    const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
@@ -240,27 +231,41 @@ function renderActionByStatus() {
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
-    createBtn.addEventListener('click', handleCreate)
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    createBtn.addEventListener('click', handleCreate)
     clear.addEventListener('click', function() {
-        clearFormValues('laborContract_form');
+        clearFormValues('relationship_form');
     });
 
-    actionEl.append(createBtn, removeBtn, saveBtn,clear)
+    actionEl.append(createBtn,removeBtn, saveBtn, clear)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + 'hungbd'
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return;
-    }
-    renderActionByStatus()
-})
+function getNameQuanHe(){
+  
+    $.ajax({
+        url: 'https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan',
+        method: 'GET',
+        success: function(data) {
+            relationshipOptions = data;
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        }
+    });
+}
 
+getNameQuanHe()
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderActionByStatus();
+
+    
+})
