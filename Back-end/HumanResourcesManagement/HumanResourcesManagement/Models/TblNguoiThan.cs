@@ -16,6 +16,7 @@ namespace HumanResourcesManagement.Models
         public string? Khac { get; set; }
         public string Ma { get; set; } = null!;
 
+        public virtual TblNhanVien MaNavigation { get; set; } = null!;
         public virtual TblDanhMucNguoiThan? QuanheNavigation { get; set; }
     }
 }

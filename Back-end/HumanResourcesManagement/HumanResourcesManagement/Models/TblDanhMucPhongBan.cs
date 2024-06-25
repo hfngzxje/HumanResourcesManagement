@@ -8,6 +8,8 @@ namespace HumanResourcesManagement.Models
         public TblDanhMucPhongBan()
         {
             TblDanhMucTos = new HashSet<TblDanhMucTo>();
+            TblDieuChuyens = new HashSet<TblDieuChuyen>();
+            TblNhanViens = new HashSet<TblNhanVien>();
         }
 
         public int Id { get; set; }
@@ -15,5 +17,7 @@ namespace HumanResourcesManagement.Models
         public string? Ten { get; set; }
 
         public virtual ICollection<TblDanhMucTo> TblDanhMucTos { get; set; }
+        public virtual ICollection<TblDieuChuyen> TblDieuChuyens { get; set; }
+        public virtual ICollection<TblNhanVien> TblNhanViens { get; set; }
     }
 }
