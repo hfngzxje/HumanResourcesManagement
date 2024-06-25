@@ -19,7 +19,6 @@ function handleLogin() {
     const valid = validateForm('login_form')
     if (!valid) return
     const formValue = getFormValues('login_form')
-    // localStorage.setItem("myCat", "Tom");
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -35,11 +34,13 @@ function handleLogin() {
         const maNhanVien = data.nhanVien.ma
         localStorage.setItem("maNhanVien", maNhanVien);
         const vaitroID = data.nhanVien.vaiTroId;
+       
 
         alert(vaitroID)
         if(vaitroID !== undefined){
             handleLoginSuccess(vaitroID)
             alert("Đăng Nhập Thành Công")
+            localStorage.setItem("vaiTroID", vaitroID);
         }
         else{
             alert("Không tìm thấy vai trò người dùng")

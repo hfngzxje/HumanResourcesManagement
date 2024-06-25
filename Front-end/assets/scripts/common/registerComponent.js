@@ -62,7 +62,7 @@ class CustomSidebar extends HTMLElement {
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hồ sơ</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Điều chuyển</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen thưởng-Kỷ luật</a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kiểm tra hạn hợp đồng</a>
+                <a href="/pages/staffSideBar/listLaborContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kiểm tra hợp đồng</a>
               </div>
             </div>
             <a href="/pages/catalog/catalog.html">
@@ -629,12 +629,18 @@ class BaseTable extends HTMLElement {
             // set class cho thẻ tr đc tạo
             trEl.setAttribute('class', 'bg-white border-bottom hover:bg-gray-100')
             // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
-            if(event.rowClick != undefined) { 
+            if (event.rowClick !== undefined) {
               // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
               trEl.addEventListener("click", () => {
-                event.rowClick(row) // gọi đến function rowClick đã được khai báo trước đó
-              })
+                  event.rowClick(row); // gọi đến function rowClick đã được khai báo trước đó
+              });
             }
+              if(event.rowDoubleClick != undefined){
+              // Thêm sự kiện double click
+              trEl.addEventListener("dblclick", () => {
+                      event.rowDoubleClick(row); // gọi đến function rowDoubleClick đã được khai báo trước đó
+              });
+          }
             // Lặp lần lượt các thông tin cột
             columns.forEach(col => { //  Mã hợp đồng, Lương cơ bả, ...
               // tạo thẻ th
@@ -646,13 +652,16 @@ class BaseTable extends HTMLElement {
               // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
               if (col.key === 'action') {
                 // 
-                col.actions.forEach(({ label, type, icon, onClick }) => {
+                col.actions.forEach(({ label, type, icon, onClick,doubleClick }) => {
                   const btnEl = document.createElement('base-button')
                   btnEl.setAttribute('label', label)
                   btnEl.setAttribute('type', type)
                   btnEl.setAttribute('icon', icon)
                   btnEl.setAttribute('mini', "true")
                   btnEl.addEventListener('click', () => onClick(row))
+                  btnEl.addEventListener('dblclick', () => doubleClick(row))
+
+             
                   thEl.appendChild(btnEl)
                 })
               } else {
