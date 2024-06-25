@@ -81,7 +81,7 @@ namespace HumanResourcesManagement.Service
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     UseDefaultCredentials = false,
-                    Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "acoe joeu tlxf qbgq"),
+                    Credentials = new System.Net.NetworkCredential("buiduchung300802@gmail.com", "ocpb abuz ztmj gmkc"),
                     Port = 587,
                     EnableSsl = true
                 };
