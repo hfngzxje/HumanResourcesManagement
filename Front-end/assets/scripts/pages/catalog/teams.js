@@ -2,7 +2,8 @@
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
-
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 let idToHienTai = null
 
@@ -22,24 +23,34 @@ var TableColumns = [
     {
         label: 'Tên phòng',
         key: 'idphong'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchTo(row.id);
-                    var modal = document.getElementById("editTeam");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
     }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchTo(row.id);
+    //                 var modal = document.getElementById("editTeam");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
 ]
-
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchTo(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/teams.html");
 }
@@ -50,7 +61,6 @@ function buildPayload(formValue) {
 }
 
 function fetchTo(id) {
-    console.log("Name:", id);
     setLoading(true)
     idToHienTai = id
     $.ajax({
@@ -70,7 +80,10 @@ function fetchTo(id) {
     });
 }
 
+
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục tổ?')
+    if (!isConfirm) return
     const valid = validateForm('editTeam')
     if (!valid) return
     const formValue = getFormValues('editTeam')
@@ -109,12 +122,12 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục tổ?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + id,
+        url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
         method: 'DELETE',
         success: function (data) {
             console.log('fetchPhongBan res :: ', data);
@@ -131,12 +144,12 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
-    try {
+        const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục tổ?')
+    if (!isConfirm) return
         const formValue = getFormValues('editTeam')
         const payload = buildPayload(formValue)
         console.log('payload ', payload);
         setLoading(true)
-        console.log('maTo: ', idToHienTai)
         $.ajax({
             url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
             method: 'PUT',
@@ -166,14 +179,11 @@ function handleSave() {
                 setLoading(false)
             }
         });
-    } catch (error) {
-        console.log('handleSave e ', e);
-    }
 
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
+function clearFormValues() {
+    const form = document.getElementById('editTeam');
     const inputs = form.querySelectorAll('input, textarea, select');
 
     inputs.forEach(input => {
@@ -181,6 +191,7 @@ function clearFormValues(formId) {
             input.checked = false;
         } else {
             input.value = '';
+            input.selectedIndex = 0;
         }
     });
 }
@@ -217,7 +228,7 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            setFormValue('editTeam', { ma: "", ten: "", tenPhong: "", })
+            clearFormValues();
         }
     }
 
@@ -226,13 +237,17 @@ function showPopup() {
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Tổ"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -243,5 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

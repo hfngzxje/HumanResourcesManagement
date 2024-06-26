@@ -118,6 +118,8 @@ function fetchSalaryToEdit(id) {
 }
 
 async function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
+    if (!isConfirm) return
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
@@ -179,7 +181,7 @@ async function fetchContractCodeStatus(mahopdong) {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -200,7 +202,7 @@ function handleRemove() {
 }
 
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -221,6 +223,8 @@ function handleRemoveRow(id) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
+    if (!isConfirm) return
     const formValue = getFormValues('salaryRecord_form')
     const payload = buildPayload(formValue)
     setLoading(true)

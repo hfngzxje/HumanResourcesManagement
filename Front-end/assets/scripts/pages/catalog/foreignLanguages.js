@@ -1,7 +1,8 @@
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
-
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 
 let idNgoaiNgu = null
@@ -14,24 +15,19 @@ var TableColumns = [
     {
         label: 'Tên Ngoại Ngữ',
         key: 'ten'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchNgoaiNgu(row.id);
-                    var modal = document.getElementById("editChuyenMon");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
     }
 ]
-
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchNgoaiNgu(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/foreignLanguages.html");
 }
@@ -42,18 +38,16 @@ function buildPayload(formValue) {
 }
 
 function fetchNgoaiNgu(id) {
-    console.log("Name:", id);
     setLoading(true)
     idNgoaiNgu = id
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('editNgoaiNgu', data, 'fetch');
             setFormValue('editNgoaiNgu', data)
         },
         error: (err) => {
-            console.log('fetchNgoaiNgu err :: ', err);
+            console.log('fetchKhenThuong err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -62,6 +56,8 @@ function fetchNgoaiNgu(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục Ngoại ngữ?')
+    if (!isConfirm) return
     const valid = validateForm('editNgoaiNgu')
     if (!valid) return
     const formValue = getFormValues('editNgoaiNgu')
@@ -75,7 +71,7 @@ function handleCreate() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
-            console.log('fetchNgoaiNgu res :: ', data);
+            console.log('fetchKhenThuong res :: ', data);
             alert("Thêm thành công !")
             backToList()
         },
@@ -100,20 +96,20 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục ngoại ngữ?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + id,
+        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + idNgoaiNgu,
         method: 'DELETE',
         success: function (data) {
-            console.log('fetchNgoaiNgu res :: ', data);
+            console.log('fetchKhenThuong res :: ', data);
             alert("Xóa thành công !")
             backToList()
         },
         error: (err) => {
-            console.log('fetchNgoaiNgu err :: ', err);
+            console.log('fetchKhenThuong err :: ', err);
             alert("Xóa thất bại!")
         },
         complete: () => {
@@ -122,17 +118,20 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục ngoại ngữ?')
+    if (!isConfirm) return
+    const valid = validateForm('editNgoaiNgu')
+    if(!valid) return
     const formValue = getFormValues('editNgoaiNgu')
     const payload = buildPayload(formValue)
     setLoading(true)
-    console.log('maTo: ', idNgoaiNgu)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
+        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu, 
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
-            console.log('fetchNgoaiNgu res :: ', data);
+            console.log('fetchKhenThuong res :: ', data);
             alert('Lưu Thành Công!');
             backToList();
         },
@@ -157,12 +156,12 @@ function handleSave() {
     });
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea, select');
+function clearFormValues() {
+    const form = document.getElementById('editNgoaiNgu');
+    const inputs = form.querySelectorAll('input, textarea');
 
     inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
+        if (input.type === 'checkbox') {
             input.checked = false;
         } else {
             input.value = '';
@@ -181,20 +180,16 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-
-
     createBtn.addEventListener('click', function () {
         isPopupEdit = false
         showPopup()
     });
     actionEl.append(createBtn)
-
 }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
 }
-
 
 function showPopup() {
     var modal = document.getElementById("editNgoaiNgu");
@@ -211,13 +206,17 @@ function showPopup() {
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Ngoại Ngữ"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Ngoại Ngữ"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
+        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -228,5 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

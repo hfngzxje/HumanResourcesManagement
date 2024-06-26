@@ -120,6 +120,8 @@ function fetchTrinhDo(id) {
 }
 
 function handleCreateTrinhDo() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm trình độ văn hóa?')
+    if (!isConfirm) return
     const valid = validateForm('qualification_form')
     if (!valid) return
     const formValue = getFormValues('qualification_form')
@@ -162,7 +164,7 @@ function handleCreateTrinhDo() {
 }
 
 function handleRemoveRowTrinhDo(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn Xóa trình độ văn hóa?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -183,6 +185,8 @@ function handleRemoveRowTrinhDo(id) {
 }
 
 function handleSaveTrinhDo() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa trình độ văn hóa?')
+    if (!isConfirm) return
     const formValue = getFormValues('qualification_form')
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -241,6 +245,8 @@ function fetchNgoaiNgu(id) {
 }
 
 function handleCreateNgoaiNgu() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm ngoại ngữ?')
+    if (!isConfirm) return
     const valid = validateForm('Language_form')
     if (!valid) return
     const formValue = getFormValues('Language_form')
@@ -284,7 +290,8 @@ function handleCreateNgoaiNgu() {
 }
 
 function handleRemoveRowNgoaiNgu(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    
+    const isConfirm = confirm('Bạn chắc chắn muốn Xóa ngoại ngữ?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -305,6 +312,8 @@ function handleRemoveRowNgoaiNgu(id) {
 }
 
 function handleSaveNgoaiNgu() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa ngoại ngữ?')
+    if (!isConfirm) return
     const formValue = getFormValues('Language_form')
     const payload = buildPayload1(formValue)
     setLoading(true)

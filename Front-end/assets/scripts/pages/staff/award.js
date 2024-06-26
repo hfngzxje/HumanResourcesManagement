@@ -44,12 +44,13 @@ function buildPayload(formValue) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm  khen thưởng - kỷ luật?')
+    if (!isConfirm) return
     const valid = validateForm('award_form')
     if (!valid) return
     const formValue = getFormValues('award_form')
 
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const employeeId = urlParams.get('id');
+    
     formValue['ma'] = maNhanVien;
 
     console.log('formValue ', formValue);
@@ -88,8 +89,7 @@ function handleCreate() {
 }
 
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
-    // console.log("abcbc", id)
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa  khen thưởng - kỷ luật?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({

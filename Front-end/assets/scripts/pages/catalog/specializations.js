@@ -1,6 +1,8 @@
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 let idChuyenMon = null
 
@@ -16,24 +18,34 @@ var TableColumns = [
     {
         label: 'Tên Chuyên Môn',
         key: 'ten'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchChuyenMon(row.id);
-                    var modal = document.getElementById("editChuyenMon");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
     }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchChuyenMon(row.id);
+    //                 var modal = document.getElementById("editChuyenMon");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
 ]
-
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchChuyenMon(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/specializations.html");
 }
@@ -64,6 +76,8 @@ function fetchChuyenMon(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục chuyên môn?')
+    if (!isConfirm) return
     const valid = validateForm('editChuyenMon')
     if (!valid) return
     const formValue = getFormValues('editChuyenMon')
@@ -102,12 +116,12 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục chuyên môn?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + id,
+        url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
         method: 'DELETE',
         success: function (data) {
             console.log('fetchChuyenMon res :: ', data);
@@ -124,6 +138,8 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn lưu danh mục chuyên môn?')
+    if (!isConfirm) return
     const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -168,6 +184,7 @@ function clearFormValues(formId) {
             input.checked = false;
         } else {
             input.value = '';
+            input.checked = false;
         }
     });
 }
@@ -206,13 +223,17 @@ function showPopup() {
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Chuyên Môn"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Chuyên Môn"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -223,5 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

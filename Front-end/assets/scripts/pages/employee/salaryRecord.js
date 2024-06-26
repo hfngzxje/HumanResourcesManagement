@@ -49,5 +49,5 @@ var TableColumns = [
     }
 ]
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + 'hungbd';
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + 'NV01';
 }

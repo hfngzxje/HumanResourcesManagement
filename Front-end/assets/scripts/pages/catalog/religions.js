@@ -1,6 +1,8 @@
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 let idTonGiao = null
 
@@ -12,24 +14,34 @@ var TableColumns = [
     {
         label: 'Tên Tôn Giáo',
         key: 'ten'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchTonGiao(row.id);
-                    var modal = document.getElementById("editChuyenMon");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
     }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchTonGiao(row.id);
+    //                 var modal = document.getElementById("editChuyenMon");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
 ]
-
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchTonGiao(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/religions.html");
 }
@@ -61,6 +73,8 @@ function fetchTonGiao(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn tạo danh mục tôn giáo?')
+    if (!isConfirm) return
     const valid = validateForm('editTonGiao')
     if (!valid) return
     const formValue = getFormValues('editTonGiao')
@@ -83,6 +97,7 @@ function handleCreate() {
             try {
                 if (!err.responseJSON) {
                     alert(err.responseText)
+                    // $('.error-message').text(err.responseText).show();
                     return
                 }
                 const errObj = err.responseJSON.errors
@@ -99,13 +114,12 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục tôn giáo?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + id,
+        url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
         method: 'DELETE',
         success: function (data) {
             console.log('fetchTonGiao res :: ', data);
@@ -122,6 +136,8 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục tôn giáo?')
+    if (!isConfirm) return
     const valid = validateForm('editTonGiao')
     if(!valid) return
     const formValue = getFormValues('editTonGiao')
@@ -159,15 +175,16 @@ function handleSave() {
     });
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea, select');
+function clearFormValues() {
+    const form = document.getElementById('editTonGiao');
+    const inputs = form.querySelectorAll('input, textarea');
 
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
             input.checked = false;
         } else {
             input.value = '';
+            input.checked = false;
         }
     });
 }
@@ -201,7 +218,8 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            setFormValue('editTonGiao', {ten: "" })
+            // setFormValue('editTonGiao', {ten: "" })
+            clearFormValues();
         }
     }
 
@@ -210,13 +228,17 @@ function showPopup() {
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Tôn Giáo"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Tôn Giáo"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -227,4 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })

@@ -1,6 +1,8 @@
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 
 let idKhenThuong = null
@@ -14,23 +16,33 @@ var TableColumns = [
         label: 'Tên ',
         key: 'ten'
     },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-                    isPopupEdit = true
-                    fetchKhenThuong(row.id);
-                    var modal = document.getElementById("editChuyenMon");
-                    showPopup()
-                }
-            },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-        ]
-    }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchKhenThuong(row.id);
+    //                 var modal = document.getElementById("editChuyenMon");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
 ]
-
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchKhenThuong(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/awardsAndDisciplinaryActions.html");
 }
@@ -60,6 +72,8 @@ function fetchKhenThuong(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục khen thưởng - kỷ luật?')
+    if (!isConfirm) return
     const valid = validateForm('editKhenThuong')
     if (!valid) return
     const formValue = getFormValues('editKhenThuong')
@@ -98,12 +112,12 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục khen thưởng - kỷ luật?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + id,
+        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
         method: 'DELETE',
         success: function (data) {
             console.log('fetchKhenThuong res :: ', data);
@@ -120,6 +134,8 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục khen thưởng - kỷ luật?')
+    if (!isConfirm) return
     const valid = validateForm('editKhenThuong')
     if(!valid) return
     const formValue = getFormValues('editKhenThuong')
@@ -157,12 +173,12 @@ function handleSave() {
     });
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea, select');
+function clearFormValues() {
+    const form = document.getElementById('editKhenThuong');
+    const inputs = form.querySelectorAll('input, textarea');
 
     inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
+        if (input.type === 'checkbox') {
             input.checked = false;
         } else {
             input.value = '';
@@ -206,14 +222,18 @@ function showPopup() {
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa Tiêu Đề Tổ"
-        popupSaveBtn.classList.remove('hidden') // Hủy trạng thái ẩn của btn sửa
-        popupCreateBtn.classList.add('hidden') // Thêm trạng thái ẩn cho btn thêm mới
+        popupTitle.textContent = "Sửa Tiêu Đề Khen Thưởng - Kỷ Luật"
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
-        popupSaveBtn.classList.add('hidden') // Ẩn sửa
-        popupCreateBtn.classList.remove('hidden') // Hiện thêm mới
+        popupTitle.textContent = "Thêm mới Tiêu Đề Khen Thưởng - Kỷ Luật"
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -224,5 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

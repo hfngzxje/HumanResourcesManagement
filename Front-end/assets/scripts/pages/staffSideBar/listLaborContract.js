@@ -235,7 +235,20 @@ function renderActionByStatus() {
 
     actionEl.append(createBtn)
 }
+function clearFormValues(formId) {
+    const form = document.getElementById('editHopDong');
+    const inputs = form.querySelectorAll('input, textarea, select');
 
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } 
+        else {
+            input.value = '';
+            input.selectedIndex = 0;
+        }
+    });
+}
 function buildApiUrl() {
     return 'https://localhost:7141/api/HopDong'
 }
@@ -245,7 +258,8 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            setFormValue('editHopDong', {ma: "",chucdanh: "",hopdongtungay: "",hopdongdenngay: "",loaihopdong: "",luongcoban: "",trangThai: "" })
+            // setFormValue('editHopDong', {ma: "",chucdanh: "",hopdongtungay: "",hopdongdenngay: "",loaihopdong: "",luongcoban: "",trangThai: "" })
+            clearFormValues();
         }
     }
 

@@ -79,6 +79,8 @@ function fetchEmployee() {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
+    if (!isConfirm) return
     const valid = validateForm('resume_form')
     if(!valid) return
     const {anh, ...rest} = getFormValues('resume_form')
@@ -116,6 +118,8 @@ function handleCreate() {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa Lý lịch tư pháp ?')
+    if (!isConfirm) return
     const valid = validateForm('resume_form')
     if(!valid) return
     

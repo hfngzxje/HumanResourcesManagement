@@ -244,7 +244,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + 'hungbd'
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + 'NV01'
 }
 
 function getNameQuanHe(){

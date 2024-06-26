@@ -48,16 +48,16 @@ var TableColumnsLaborContract = [
 ]
 
 function buildApiUrlSalary() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + 'hungbd'
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + 'NV01'
 }
 function buildApiUrlLaborContract() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + 'hungbd'
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + 'NV01'
 }
 
 function fetchFamilyRelationshipCount() {
    
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/'+'hungbd1',
+        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/'+'NV01',
         method: 'GET',
         success: function(data) {
 
@@ -84,7 +84,7 @@ function fetchFamilyRelationshipCount() {
 function fetchLaborContractCount() {
    
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id='+'string',
+        url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id='+'NV01',
         method: 'GET',
         success: function(data) {
 
@@ -117,7 +117,7 @@ function fetchLaborContractCount() {
 function fetchSalaryCount() {
   
     $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/'+'hungbd',
+        url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/'+'NV01',
         method: 'GET',
         success: function(data) {
             const salaryCount = data.length;
@@ -140,7 +140,7 @@ function fetchSalaryCount() {
     });
 }
 function fetchAwardCount() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/hungbd' 
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/NV01' 
     let string2 = '/1'
     $.ajax({
         url: string1 + string2,
@@ -167,7 +167,7 @@ function fetchAwardCount() {
     });
 }
 function fetchDisciplineCount() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/hungbd' 
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/NV01' 
     let string2 = '/2'
     $.ajax({
         url: string1 + string2,

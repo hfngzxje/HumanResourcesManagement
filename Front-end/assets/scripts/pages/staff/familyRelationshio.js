@@ -84,6 +84,8 @@ function fetchRelationship(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm quan hệ gia đình?')
+    if (!isConfirm) return
     alert(maNhanVien)
     const valid = validateForm('relationship_form')
     if(!valid) return
@@ -129,7 +131,7 @@ function handleCreate() {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -149,7 +151,7 @@ function handleRemove() {
     });
 }
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -170,6 +172,8 @@ function handleRemoveRow(id) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa quan hệ gia đình?')
+    if (!isConfirm) return
     const valid = validateForm('relationship_form')
     if(!valid) return
     

@@ -89,6 +89,8 @@ function fetchContract(mahopdong) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm hợp đồng lao động?')
+    if (!isConfirm) return
     const valid = validateForm('laborContract_form')
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
@@ -134,7 +136,7 @@ function handleCreate() {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -155,7 +157,7 @@ function handleRemove() {
 }
 
 function handleRemoveRow(mahopdong) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -176,6 +178,8 @@ function handleRemoveRow(mahopdong) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa hợp đồng lao động?')
+    if (!isConfirm) return
     const formValue = getFormValues('laborContract_form')
 
     // const urlParams = new URLSearchParams(window.location.search);
