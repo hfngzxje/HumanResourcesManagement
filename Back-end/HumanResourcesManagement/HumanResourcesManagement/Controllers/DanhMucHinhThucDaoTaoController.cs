@@ -70,7 +70,7 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("deleteDanhMucHinhThucDaoTao/{id}")]
+        [HttpDelete("deleteDanhMucHinhThucDaoTao")]
         public async Task<IActionResult> DeleteDanhMucHinhThucDaoTao(int id)
         {
             try

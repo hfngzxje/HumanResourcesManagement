@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
 </head>
@@ -17,44 +18,34 @@
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <div class="flex border-b border-solid pb-3">
-                        <div class="w-[300px]">
-
-                            <span class="text-gray-700 text-xl font-medium">Danh mục ngoại ngữ</span>
-                        </div>
-
-                    </div>
-
-                    <a href="../../"></a>
-
-
-                    <!-- Nội dung form theo từng màn hình -->
-                    <div class="mt-3">
-                        <form id="Language_form">
-                            <!-- <base-input label="Mã nhân viên(*)" required="true" name="ma"></base-input> -->
-                            <div class="flex gap-x-5">
-                                
-                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
-                                    <base-input label="Tên(*)" required="true" name="ten"></base-input>
-                                </div>
-                            </div>
-                        </form>
-                       
-                    </div>
-                </div>
                 <div id="Language_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
                 <div class="flex justify-between" style="color: blue; margin-top: 5%;">
                     <p class="text-xl">Danh sách ngoại ngữ</p>
                 </div>
                 <div class="mt-3">
-                    <base-table api="buildApiUrl" columns="TableColumns">
+                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
                     </base-table>
                 </div>
             </div>
         </div>
     </div>
-
+    <div id="editNgoaiNgu" class="modal">
+        <div class="change-container">
+         <span class="close">&times;</span>
+          <form id="change_form">
+              <div class="form-header">
+                 <h2>Sửa Tiêu Đề Ngoại Ngữ</h2> 
+              </div>
+              <base-input label="Tên Ngoại Ngữ(*)" required="true" name="ten"></base-input>
+         </form>
+         <div class="flex gap-x-5 mt-5 justify-center">
+            <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green" ></base-button>
+            <base-button id="saveBtn" label="Lưu" icon="bx bx-save" ></base-button>
+            <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type = "red"></base-button>
+            <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type = "black"></base-button>
+        </div>
+       </div>
+      </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
     <script src="../../assets/scripts/common/transform.js"></script>
@@ -62,6 +53,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/catalog/foreignLanguages.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 
 </html>

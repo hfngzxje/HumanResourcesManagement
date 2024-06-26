@@ -1,4 +1,5 @@
 const isEdit = !!id
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 let maHopDongHienTai = null
 
@@ -43,13 +44,14 @@ function buildPayload(formValue) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm  khen thưởng - kỷ luật?')
+    if (!isConfirm) return
     const valid = validateForm('award_form')
     if (!valid) return
     const formValue = getFormValues('award_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-    formValue['ma'] = employeeId;
+    
+    formValue['ma'] = maNhanVien;
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -87,8 +89,7 @@ function handleCreate() {
 }
 
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
-    // console.log("abcbc", id)
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa  khen thưởng - kỷ luật?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -127,17 +128,21 @@ function renderActionByStatus() {
 
 function buildApiUrlKhenThuong() {
     
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + id;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
     let string2 = '/1'
     return string1 + string2;
 }
 function buildApiUrlKyLuat() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + id;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
     let string2 = '/0'
     return string1 + string2;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.replace("/pages/error.html");
+        return;
+    }
     renderActionByStatus()
 })
 

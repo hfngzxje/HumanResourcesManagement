@@ -4,35 +4,24 @@ class CustomHeader extends HTMLElement {
     <header class="bg-gray-700 p-3 flex">
       <div class="flex items-center text-white w-[300px]">
         <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
-        <span class="ml-3 text-xl font-bold">
+        <span id="hrmLink" class="ml-3 text-xl font-bold">
           <a href="/pages/staff/list.html">HRM<a/>
         </span>
       </div>
-      <div class="flex-1 flex gap-3">
-        <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
-          <i class='bx bx-calendar-minus text-lg text-white' ></i>
-          <span class="text-sm text-white mx-1">Đơn nghỉ phép</span>
-        </div>
-        <div class="bg-gray-500 px-2 flex items-center rounded-full w-fit flex items-center cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-user-rectangle text-lg text-white' ></i>
-          <span class="text-sm text-white mx-1">Hồ sơ nhân viên</span>
-        </div>
-      </div>
-      <div class="flex gap-3">
-        <div class="bg-gray-500 px-1 flex items-center rounded-full relative cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-bell text-2xl text-white' ></i>
-          <span class="absolute -top-2 -right-2 border-2 border-gray-700 text-xs text-white bg-red-500 rounded-full px-1">12</span>
-        </div>
-        <div class="bg-gray-500 px-1 flex items-center rounded-full cursor-pointer transition hover:brightness-90">
-          <i class='bx bxs-user-circle text-2xl text-white' ></i>
-          <i class='bx bxs-down-arrow text-xs ml-2 text-white' ></i>
-        </div>
+      
       </div>
     </header>
       `;
+      const hrmLink = this.querySelector('#hrmLink');
+
+      // Thêm sự kiện click vào span HRM
+      hrmLink.addEventListener('click', () => {
+        // Xóa localStorage
+        localStorage.removeItem('maNhanVien');
+      });
   }
 }
-
+    
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
@@ -56,10 +45,11 @@ class CustomSidebar extends HTMLElement {
               <span> Hệ thống </span>
               <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đăng xuất</a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đổi mật khẩu</a>
+                <a id="btn"  class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close All</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Thoát</a>
+               
               </div>
             </div>
             <div
@@ -72,74 +62,18 @@ class CustomSidebar extends HTMLElement {
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hồ sơ</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Điều chuyển</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen thưởng-Kỷ luật</a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kiểm tra hạn hợp đồng</a>
+                <a href="/pages/staffSideBar/listLaborContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kiểm tra hợp đồng</a>
               </div>
             </div>
+            <a href="/pages/catalog/catalog.html">
             <div
             class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3"">
               <span class="w-10">
               <i class='bx bx-category-alt'></i>
               </span>
               <span> Danh mục </span>
-              <div class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu z-index:10;" id="submenu3">
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục dân tộc </span>
-                </a> 
-               <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục chức danh </span>
-                </a>
-                <a href="/pages/catalog/specializations.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục chuyên môn </span>
-                </a>
-                <a href="/pages/catalog/qualifications.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục trình độ </span>
-                </a>
-                <a href="/pages/catalog/foreignLanguages.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục ngoại ngữ </span>
-                </a>
-                <a href="/pages/catalog/teams.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục tổ </span>
-                </a> 
-               <a href="/pages/catalog/religions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục tôn giáo </span>
-                </a>
-                <a href="/pages/catalog/awardsAndDisciplinaryActions.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 280px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục khen thưởng-kỷ luật </span>
-                </a>
-                <a href="/pages/catalog/departments.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục phòng ban </span>
-                </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục loại hợp đồng </span>
-                </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục nhóm lương </span>
-                </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục hình thức đào tạo </span>
-                </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 250px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục ngạch công chức </span>
-                </a>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">
-                     <i class='bx bxs-detail'></i> 
-                     <span> Danh mục quan hệ </span>
-                </a>
-              </div>
             </div>
+            </a>
             <div
             class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
               <span class="w-10">
@@ -203,7 +137,24 @@ class CustomSidebar extends HTMLElement {
               <span> Quản lý tài khoản </span>
             </div>
           </div>
-        </div>`;
+        </div>
+       
+       <div id="myModal" class="modal">
+          <div class="change-container">
+           <span class="close">&times;</span>
+            <form id="change_form">
+                <div class="form-header">
+                   <h2>Đổi Mật Khẩu</h2>
+                </div>
+              
+              <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+              <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+              <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+           </form>
+          <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+         </div>
+        </div>
+        `;
 
     const menuItem = this.querySelector("#menu1");
     const subMenu = this.querySelector("#submenu1");
@@ -227,16 +178,16 @@ class CustomSidebar extends HTMLElement {
       subMenu2.classList.add("hidden");
     });
 
-    const menuItem3 = this.querySelector("#menu3");
-    const subMenu3 = this.querySelector("#submenu3");
+    // const menuItem3 = this.querySelector("#menu3");
+    // const subMenu3 = this.querySelector("#submenu3");
 
-    menuItem3.addEventListener("mouseenter", function () {
-      subMenu3.classList.remove("hidden");
-    });
+    // menuItem3.addEventListener("mouseenter", function () {
+    //   subMenu3.classList.remove("hidden");
+    // });
 
-    menuItem3.addEventListener("mouseleave", function () {
-      subMenu3.classList.add("hidden");
-    });
+    // menuItem3.addEventListener("mouseleave", function () {
+    //   subMenu3.classList.add("hidden");
+    // });
     const menuItem4 = this.querySelector("#menu4");
     const subMenu4 = this.querySelector("#submenu4");
     const menu4Child = this.querySelector("#menu-child4");
@@ -257,21 +208,25 @@ class CustomSidebar extends HTMLElement {
     menu4Child.addEventListener("mouseleave", function () {
       submenu4Child.classList.add("hidden");
     });
+
   }
+
 }
 class BaseInput extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name", "required"];
+  static observedAttributes = ["label", "hide-label", "name", "required", "type"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const type = this.getAttribute("type") || "text";
+
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
@@ -288,7 +243,7 @@ class BaseTextArea extends HTMLElement {
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
     <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"}">${label}</label>
-      <textarea rows="8" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+      <textarea rows="3" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
   }
@@ -550,13 +505,14 @@ class BaseUpload extends HTMLElement {
 }
 
 class BaseButton extends HTMLElement {
-  static observedAttributes = ["label", "type", "icon", "mini"];
+  static observedAttributes = ["label", "type", "icon", "mini", "id"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const type = this.getAttribute("type") || "primary";
     const icon = this.getAttribute("icon");
     const mini = this.getAttribute("mini") === 'true';
+    const id = this.getAttribute("id");
 
     // Các class chung
     let commonClasses =
@@ -579,7 +535,7 @@ class BaseButton extends HTMLElement {
     const contentClass = BtnClass[type] || BtnClass.primary;
 
     this.innerHTML = `
-    <button type="button" class="${commonClasses} ${contentClass}">
+    <button id="${id}" type="button" class="${commonClasses} ${contentClass}">
       ${icon ? `<i class='${icon} mr-1'></i>` : ""} ${label}
     </button>
   `;
@@ -587,16 +543,33 @@ class BaseButton extends HTMLElement {
 }
 
 class BaseTable extends HTMLElement {
-  static observedAttributes = ["api", "columns"];
+  // khai báo các thuộc tính sẽ nhận vào từ bên file html
+  static observedAttributes = ["api", "columns", "event"];
   connectedCallback() {
-    const api = this.getAttribute('api')
-    const columnsKey = this.getAttribute('columns')
+    // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
+    const api = this.getAttribute('api') // tên biến lưu trữ thông tin liên quan đến api
+    const columnsKey = this.getAttribute('columns') // ... columns
+    const eventKey = this.getAttribute('event') // ... event
 
+    // api = 'buildApiUrl'
+
+    // Xử lý lấy thông tin api từ giá trị của thuộc tính api
     function getApiUrl() {
-      if (!window[api]) return api
-      return window[api]()
-    }
+      // window là biến toàn cục đại diện cho trang web
+      
+      // const user = { name: "Duy" }
+      // const userKey = "name"
+      // user[userKey] <=> user.name
 
+      window['buildApiUrl']
+
+      // không tồn tại biến khai báo thông tin api bên file js
+      if (window[api] === undefined) return api // hoạt động với chế động url http:...
+
+      return window[api]() // http://.../123
+    } // http://...
+
+    // định dạng lại kiểu datetime
     function formatDateTime(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
       const year = dateTime.getFullYear();
@@ -608,70 +581,115 @@ class BaseTable extends HTMLElement {
       return `${day}-${month}-${year} `;
     }
 
+    // định dạg lại kiểu tiền tệ
     function formatCurrency(val) {
       return val.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
     }
 
+    // addEventListener('DOMContentLoaded' : sự kiện sau khi nội dung trang wen đã hiện thị xong
     document.addEventListener('DOMContentLoaded', () => {
-      const columns = window[columnsKey] || []
+      const columns = window[columnsKey] || [] // lấy giá trị tương ứng của colums hoặc mặc định []
+      const event = window[eventKey] || {} // ... event hoặc ... {}
+
+      // this chính là phần html của class BaseTable
       const headEl = this.querySelector('thead')
+      // tạo ra 1 thẻ tr mới <tr></tr>
       const headTrEl = document.createElement('tr')
-      columns.forEach(col => {
+      columns.forEach(col => { // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
+        // tạo 1 thẻ th đại hiện cho cột
         const thEl = document.createElement('th')
-        thEl.setAttribute('scope', 'col')
+        // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
         thEl.setAttribute('class', 'px-6 py-3')
+        // <th class="px-6 py-3">Mã hợp đồng</th>
         thEl.innerText = col.label
+        // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
         headTrEl.appendChild(thEl)
       })
+      // <thead><tr><th class="px-6 py-3">Mã hợp đồng</th></tr></thead>
       headEl.appendChild(headTrEl)
 
-      $.ajax({
-        url: getApiUrl(),
-        method: 'GET',
-        success: (tableData) => {
-          const bodyEl = this.querySelector('tbody')
-          const tableDataDisplay = tableData.slice(0, 10)
-          tableDataDisplay.forEach(row => {
-            const trEl = document.createElement('tr')
-            trEl.setAttribute('class', 'bg-white border-b')
-            columns.forEach(col => {
-              const thEl = document.createElement('th')
-              thEl.setAttribute('scope', 'col')
-              thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
-              let value = row[col.key]
+      headEl.style.backgroundColor = '#444444	'; // Màu nền đen cho phần thead
+      headEl.style.color = '#fff'; // màu chữ của thead
 
+      $.ajax({
+        url: getApiUrl(), // lấy ra url api của bảng = http://...
+        method: 'GET', // phương thức
+        success: (tableData) => { // tableData : dữ liệu Api bảng trả về
+          // Tìm ra thẻ Tbody của bảng
+          const bodyEl = this.querySelector('tbody')
+          // Cát giá trị chỉ hiển thị tối đa 30 dòng
+          const tableDataDisplay = tableData.slice(0, 30)
+          // lặp lần lượt dữ liệu bảng từ api
+          tableDataDisplay.forEach(row => {
+
+            // row = { mahopdong: 123123, luongcoban: 12323 }
+
+            // mỗi hàng sẽ tạo 1 thẻ tr tương ứng
+            const trEl = document.createElement('tr')
+            // set class cho thẻ tr đc tạo
+            trEl.setAttribute('class', 'bg-white border-bottom hover:bg-gray-100')
+            // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
+            if (event.rowClick !== undefined) {
+              // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
+              trEl.addEventListener("click", () => {
+                  event.rowClick(row); // gọi đến function rowClick đã được khai báo trước đó
+              });
+            }
+              if(event.rowDoubleClick != undefined){
+              // Thêm sự kiện double click
+              trEl.addEventListener("dblclick", () => {
+                      event.rowDoubleClick(row); // gọi đến function rowDoubleClick đã được khai báo trước đó
+              });
+          }
+            // Lặp lần lượt các thông tin cột
+            columns.forEach(col => { //  Mã hợp đồng, Lương cơ bả, ...
+              // tạo thẻ th
+              const thEl = document.createElement('th')
+              thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
+              // Lấy ra giá trị của cột tương ứng với key được khai báo
+              let value = row[col.key] //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
+
+              // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
               if (col.key === 'action') {
-                col.actions.forEach(({ label, type, icon, onClick }) => {
+                // 
+                col.actions.forEach(({ label, type, icon, onClick,doubleClick }) => {
                   const btnEl = document.createElement('base-button')
                   btnEl.setAttribute('label', label)
                   btnEl.setAttribute('type', type)
                   btnEl.setAttribute('icon', icon)
                   btnEl.setAttribute('mini', "true")
                   btnEl.addEventListener('click', () => onClick(row))
+                  btnEl.addEventListener('dblclick', () => doubleClick(row))
+
+             
                   thEl.appendChild(btnEl)
                 })
               } else {
+                // nếu type được khai báo thì định dạng lại giá trị tương ứng
                 if (col.type === 'datetime') {
                   value = formatDateTime(value)
                 } else if (col.type === 'currency') {
                   value = formatCurrency(value)
                 }
 
+                // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
                 if (col.formatter) {
                   console.log(value)
-                  value = col.formatter(value)
+                  value = col.formatter(value) // value 
                 }
 
+                // <th> nội dung đã được định dạng lại /th>
                 thEl.innerText = value
               }
 
               trEl.appendChild(thEl)
             })
+            // thêm các thẻ tr và body
             bodyEl.appendChild(trEl)
           })
         },
         error: (xhr, status, error) => {
-          console.error(`Error fetching table data: ${xhr.responseText}`);
+          // Trường hợp thất bại
           const wrapperTable = this.querySelector('#wrapper-table')
           const divEl = document.createElement('div')
           divEl.setAttribute('class', 'text-center text-gray-400 mt-5 mb-5 text-sm')
