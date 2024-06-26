@@ -33,7 +33,7 @@ class CustomHeader extends HTMLElement {
     <div class="border-b border-gray-200 ">
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu1"">
         <span class=" w-10">
-            <i class='bx bxs-badge-dollar'></i>
+            <i class='bx bx-bar-chart-alt'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Tổng Quan</a>
@@ -49,7 +49,7 @@ class CustomHeader extends HTMLElement {
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3"">
         <span class=" w-10">
-            <i class='bx bx-category-alt'></i>
+            <i class='bx bx-file-find'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hợp Đồng</a>
@@ -58,16 +58,43 @@ class CustomHeader extends HTMLElement {
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
         <span class=" w-10">
-            <i class='bx bxs-report'></i>
+            <i class='bx bx-money'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Bảng Lương</a>
             </span>
 
         </div>
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
+        <span class=" w-10">
+            <i class='bx bx-group'></i>
+            </span>
+            <span>
+                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Quan Hệ Gia Đình</a>
+            </span>
+
+        </div>
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
+        <span class=" w-10">
+            <i class='bx bx-trophy'></i>
+            </span>
+            <span>
+                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen Thưởng</a>
+            </span>
+
+        </div>
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
+        <span class=" w-10">
+            <i class='bx bx-shield'></i>
+            </span>
+            <span>
+                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kỷ Luật</a>
+            </span>
+
+        </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
             <span class="w-10">
-                <i class='bx bxs-help-circle'></i>
+                <i class='bx bx-transfer'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Thuyên Chuyển</a>
@@ -75,7 +102,7 @@ class CustomHeader extends HTMLElement {
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
             <span class="w-10">
-                <i class='bx bxs-help-circle'></i>
+                <i class='bx bx-exit'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Nghỉ Việc</a>
@@ -83,15 +110,7 @@ class CustomHeader extends HTMLElement {
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
             <span class="w-10">
-                <i class='bx bxs-help-circle'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen Thưởng</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
-            <span class="w-10">
-                <i class='bx bxs-help-circle'></i>
+                <i class='bx bx-file-find'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Báo Cáo</a>
@@ -99,7 +118,7 @@ class CustomHeader extends HTMLElement {
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
             <span class="w-10">
-                <i class='bx bxs-help-circle'></i>
+                <i class='bx bx-user-circle'></i>
             </span>
             <span>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hoạt Động Tài Khoản</a>
