@@ -20,12 +20,11 @@ namespace HumanResourcesManagement.Service
         {
             if (req == null)
             {
-                throw new ArgumentNullException(nameof(req), "DanhMucNgoaiNgu cannot be null.");
+                throw new ArgumentNullException(nameof(req), "DanhMucNgoaiNgu không được để trống.");
             }
             var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
             _context.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
-                await _context.SaveChangesAsync();
-           
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteDanhMucNgoaiNgu(int id)
@@ -33,7 +32,7 @@ namespace HumanResourcesManagement.Service
             var danhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
             if (danhMucNgoaiNgu == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
             }
             _context.TblDanhMucNgoaiNgus.Remove(danhMucNgoaiNgu);
             await _context.SaveChangesAsync();
@@ -41,16 +40,15 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<DanhMucNgoaiNguResponse>> GetDanhMucNgoaiNgu()
         {
-
             var listDanhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus
                 .Select(dmnn => new DanhMucNgoaiNguResponse
                 {
                     Id = dmnn.Id,
                     Ten = dmnn.Ten,
                 }).ToListAsync();
-            if (listDanhMucNgoaiNgu == null)
+            if (listDanhMucNgoaiNgu == null || !listDanhMucNgoaiNgu.Any())
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Danh sách trống");
             }
 
             return listDanhMucNgoaiNgu;
@@ -80,7 +78,6 @@ namespace HumanResourcesManagement.Service
             return ngoaiNguResponse;
         }
 
-
         public async Task UpdateDanhMucNgoaiNgu(DanhMucNgoaiNguRequest req, int id)
         {
             try
@@ -88,7 +85,7 @@ namespace HumanResourcesManagement.Service
                 var danhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
                 if (danhMucNgoaiNgu == null)
                 {
-                    throw new KeyNotFoundException($"not found {id}");
+                    throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
                 }
 
                 _mapper.Map(req, danhMucNgoaiNgu);
@@ -103,6 +100,5 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

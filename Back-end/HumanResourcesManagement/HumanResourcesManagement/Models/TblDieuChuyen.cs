@@ -12,5 +12,9 @@ namespace HumanResourcesManagement.Models
         public int? To { get; set; }
         public int? Chucvu { get; set; }
         public string? Chitiet { get; set; }
+
+        public virtual TblNhanVien ManvNavigation { get; set; } = null!;
+        public virtual TblDanhMucPhongBan? PhongNavigation { get; set; }
+        public virtual TblDanhMucTo? ToNavigation { get; set; }
     }
 }

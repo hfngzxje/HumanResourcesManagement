@@ -12,6 +12,7 @@ namespace HumanResourcesManagement.Models
         public string? Noicap { get; set; }
         public string Ma { get; set; } = null!;
 
+        public virtual TblNhanVien MaNavigation { get; set; } = null!;
         public virtual TblDanhMucNgoaiNgu? NgoainguNavigation { get; set; }
     }
 }

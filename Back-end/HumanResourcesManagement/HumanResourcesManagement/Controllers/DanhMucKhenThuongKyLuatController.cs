@@ -3,6 +3,7 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+
 namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
@@ -11,6 +12,7 @@ namespace HumanResourcesManagement.Controllers
     {
         private readonly IDanhMucKhenThuongKyLuatService _danhMucKhenThuongKyLuatService;
         private readonly NhanSuContext _context;
+
         public DanhMucKhenThuongKyLuatController(IDanhMucKhenThuongKyLuatService danhMucKhenThuongKyLuatService, NhanSuContext context)
         {
             _danhMucKhenThuongKyLuatService = danhMucKhenThuongKyLuatService;
@@ -20,11 +22,10 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getDanhMucKhenThuongKyLuat")]
         public async Task<IActionResult> GetDanhMucKhenThuongKyLuat()
         {
-
             var listDanhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.GetDanhMucKhenThuongKyLuat();
             return Ok(listDanhMucKhenThuongKyLuat);
-
         }
+
         [HttpGet("getDanhMucKhenThuongKyLuatById/{id}")]
         public async Task<IActionResult> GetDanhMucKhenThuongKyLuatById(int id)
         {
@@ -49,17 +50,15 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
 
-
         [HttpPost("addDanhMucKhenThuongKyLuat")]
-        public async Task<IActionResult> AddDanhMucKhenThuongKyLuat([FromBody] TblDanhMucKhenThuongKyLuat req)
+        public async Task<IActionResult> AddDanhMucKhenThuongKyLuat([FromBody] DanhMucKhenThuongKyLuatRequest req)
         {
             try
             {
-                var newDanhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.AddDanhMucKhenThuongKyLuat(req);
-                return StatusCode(200, "add thanh cong");
+                await _danhMucKhenThuongKyLuatService.AddDanhMucKhenThuongKyLuat(req);
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -77,11 +76,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucKhenThuongKyLuatService.DeleteDanhMucKhenThuongKyLuat(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -90,12 +89,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpPut("updateDanhMucKhenThuongKyLuat")]
-        public async Task<IActionResult> UpdateDanhMucKhenThuongKyLuat([FromBody] TblDanhMucKhenThuongKyLuat req)
+        public async Task<IActionResult> UpdateDanhMucKhenThuongKyLuat([FromBody] DanhMucKhenThuongKyLuatRequest req ,int id)
         {
             try
             {
-                await _danhMucKhenThuongKyLuatService.UpDateDanhMucKhenThuongKyLuat(req);
-                return StatusCode(200, "sua thanh cong");
+                await _danhMucKhenThuongKyLuatService.UpDateDanhMucKhenThuongKyLuat(req, id);
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

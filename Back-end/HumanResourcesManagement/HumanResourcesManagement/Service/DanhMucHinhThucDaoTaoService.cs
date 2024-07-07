@@ -1,4 +1,6 @@
-﻿using HumanResourcesManagement.DTOS.Response;
+﻿using AutoMapper;
+using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
@@ -8,19 +10,17 @@ namespace HumanResourcesManagement.Service
     public class DanhMucHinhThucDaoTaoService : IDanhMucHinhThucDaoTaoService
     {
         private readonly NhanSuContext _context;
-        public DanhMucHinhThucDaoTaoService(NhanSuContext context)
+        private readonly IMapper _mapper;
+        public DanhMucHinhThucDaoTaoService(IMapper mapper,NhanSuContext context)
         {
-            _context = context;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<TblHinhThucDaoTao> AddDanhMucHinhThucDaoTao(TblHinhThucDaoTao req)
+        public async Task AddDanhMucHinhThucDaoTao(HinhThucDaoTaoRequest req)
         {
-            var dmhtdt = new TblHinhThucDaoTao
-            {
-                Ten = req.Ten,
-            };
+            var dmhtdt = _mapper.Map<TblHinhThucDaoTao>(req);
             _context.TblHinhThucDaoTaos.Add(dmhtdt);
             await _context.SaveChangesAsync();
-            return dmhtdt;
         }
 
         public async Task DeleteDanhMucHinhThucDaoTao(int id)
@@ -28,16 +28,16 @@ namespace HumanResourcesManagement.Service
             var dmhtdt = await _context.TblHinhThucDaoTaos.FindAsync(id);
             if (dmhtdt == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy {id}");
             }
             _context.TblHinhThucDaoTaos.Remove(dmhtdt);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TblHinhThucDaoTao>> GetDanhMucHinhThucDaoTao()
+        public async Task<IEnumerable<HinhThucDaoTaoResponse>> GetDanhMucHinhThucDaoTao()
         {
             var listHinhthucdaotao = await _context.TblHinhThucDaoTaos
-               .Select(dmhtdt => new TblHinhThucDaoTao
+               .Select(dmhtdt => new HinhThucDaoTaoResponse
                {
                    Id = dmhtdt.Id,
                    Ten = dmhtdt.Ten,
@@ -45,45 +45,44 @@ namespace HumanResourcesManagement.Service
                .ToListAsync();
             if (!listHinhthucdaotao.Any())
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Danh sách trống");
             }
             return listHinhthucdaotao;
         }
-        public async Task<TblHinhThucDaoTao> GetDanhMucHinhThucDaoTaoById(int id)
+        public async Task<HinhThucDaoTaoResponse> GetDanhMucHinhThucDaoTaoById(int id)
         {
             var listHinhthucdaotao = await _context.TblHinhThucDaoTaos.FindAsync(id);
             if (listHinhthucdaotao == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy {id}");
             }
             var listhinhthucdaotao = await _context.TblHinhThucDaoTaos.Where(nv => nv.Id == id)
-                .Select(cm => new TblHinhThucDaoTao
+                .Select(cm => new HinhThucDaoTaoResponse
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
                 }).FirstOrDefaultAsync();
             if (listhinhthucdaotao == null)
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Danh sách trống");
             }
 
             return listhinhthucdaotao;
         }
 
-        public async Task<TblHinhThucDaoTao> UpDateDanhMucHinhThucDaoTao(TblHinhThucDaoTao req)
+        public async Task UpDateDanhMucHinhThucDaoTao(HinhThucDaoTaoRequest req,int id)
         {
             try
             {
-                var danhMucHinhThucDaoTao = await _context.TblHinhThucDaoTaos.FindAsync(req.Id);
+                var danhMucHinhThucDaoTao = await _context.TblHinhThucDaoTaos.FindAsync(id);
                 if (danhMucHinhThucDaoTao == null)
                 {
-                    throw new KeyNotFoundException($"not found {req.Id}");
+                    throw new KeyNotFoundException($"Không tìm thấy {id}");
                 }
-                danhMucHinhThucDaoTao.Ten = req.Ten;
+                _mapper.Map(req, danhMucHinhThucDaoTao);
+                danhMucHinhThucDaoTao.Id = id;
                 _context.TblHinhThucDaoTaos.Update(danhMucHinhThucDaoTao);
-                _context.Entry(danhMucHinhThucDaoTao).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return danhMucHinhThucDaoTao;
             }
             catch (Exception ex)
             {

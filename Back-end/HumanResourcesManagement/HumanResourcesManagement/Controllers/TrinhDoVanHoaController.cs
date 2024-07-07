@@ -12,30 +12,46 @@ namespace HumanResourcesManagement.Controllers
     {
         private readonly ITrinhDoVanHoaService _trinhDoVanHoaService;
         private readonly NhanSuContext _context;
+
         public TrinhDoVanHoaController(ITrinhDoVanHoaService trinhDoVanHoaService, NhanSuContext context)
         {
             _trinhDoVanHoaService = trinhDoVanHoaService;
             _context = context;
         }
 
-       
         [HttpGet("getTrinhDoVanHoaByMaNV/{maNV}")]
         public async Task<IActionResult> GetTrinhDoVanHoaByMaNV(string maNV)
         {
-
-            var listTrinhDoVanHoa = await _trinhDoVanHoaService.GetTrinhDoVanHoaByMaNV(maNV);
-            return Ok(listTrinhDoVanHoa);
-
+            try
+            {
+                var listTrinhDoVanHoa = await _trinhDoVanHoaService.GetTrinhDoVanHoaByMaNV(maNV);
+                return Ok(listTrinhDoVanHoa);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
+            }
         }
 
-       
         [HttpPost("addTrinhDoVanHoa")]
         public async Task<IActionResult> AddTrinhDoVanHoa([FromBody] InsertTrinhDoVanHoaRequest req)
         {
             try
             {
                 var newTrinhDoVanHoa = await _trinhDoVanHoaService.AddTrinhDoVanHoa(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -53,11 +69,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _trinhDoVanHoaService.DeleteTrinhDoVanHoa(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -71,7 +87,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _trinhDoVanHoaService.UpdateTrinhDoVanHoa(req);
-                return StatusCode(200, "sua thanh cong");
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

@@ -3,6 +3,7 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+
 namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
@@ -11,13 +12,12 @@ namespace HumanResourcesManagement.Controllers
     {
         private readonly ITrinhDoService _trinhDoService;
         private readonly NhanSuContext _context;
+
         public TrinhDoController(ITrinhDoService trinhDoService, NhanSuContext context)
         {
             _trinhDoService = trinhDoService;
             _context = context;
         }
-
-
 
         [HttpGet("getTrinhDo")]
         public async Task<IActionResult> GetTrinhDo()
@@ -43,15 +43,15 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
+
         [HttpGet("getTrinhDoById/{id}")]
         public async Task<IActionResult> GetTrinhDoById(int id)
         {
             try
             {
-                var listTrinhDo = await _trinhDoService.GetTrinhDoById(id);
-                return Ok(listTrinhDo);
+                var trinhDo = await _trinhDoService.GetTrinhDoById(id);
+                return Ok(trinhDo);
             }
             catch (ArgumentException ex)
             {
@@ -69,9 +69,7 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
-
 
         [HttpPost("addTrinhDo")]
         public async Task<IActionResult> AddTrinhDo([FromBody] TrinhDoRequest req)
@@ -79,7 +77,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _trinhDoService.AddTrinhDo(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -92,16 +90,16 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpDelete("deleteTrinhDo/{id}")]
-        public async Task<IActionResult> DeleteChuyenMon(int id)
+        public async Task<IActionResult> DeleteTrinhDo(int id)
         {
             try
             {
                 await _trinhDoService.DeleteTrinhDo(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -115,7 +113,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _trinhDoService.UpdateTrinhDo(req, id);
-                return StatusCode(200, "sua thanh cong");
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

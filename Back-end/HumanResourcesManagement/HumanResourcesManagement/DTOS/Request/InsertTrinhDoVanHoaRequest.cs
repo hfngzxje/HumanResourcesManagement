@@ -4,18 +4,19 @@ namespace HumanResourcesManagement.DTOS.Request
 {
     public class InsertTrinhDoVanHoaRequest
     {
-        [Required(ErrorMessage = "Ten truong khong duoc de trong")]
+        [Required(ErrorMessage = "Tên trường không được để trống")]
         public string? Tentruong { get; set; }
-        [Required(ErrorMessage = "Chuyen nganh khong duoc de trong")]
+        [Required(ErrorMessage = "Chuyên ngành không được để trống")]
         public int? Chuyennganh { get; set; }
-        [Required(ErrorMessage = "Thoi gian khong duoc de trong")]
+        [Required(ErrorMessage = "Thời gian phải trước hiện tại")]
         public DateTime? Tuthoigian { get; set; }
-        [Required(ErrorMessage = "Thoi gian khong duoc de trong")]
+        [Required(ErrorMessage = "Thời gian phải trước hiện tại")]
         public DateTime? Denthoigian { get; set; }
-        [Required(ErrorMessage = "Hinh thuc dao tao khong duoc de trong")]
+        [Required(ErrorMessage = "Hình thức đào tạo không được để trống")]
         public int? Hinhthucdaotao { get; set; }
-        [Required(ErrorMessage = "Trinh Do khong duoc de trong")]
+        [Required(ErrorMessage = "Trình độ không được để trống")]
         public int? Trinhdo { get; set; }
+        [Required(ErrorMessage = "Mã không được để trống")]
         public string Ma { get; set; } = null!;
     }
 }
