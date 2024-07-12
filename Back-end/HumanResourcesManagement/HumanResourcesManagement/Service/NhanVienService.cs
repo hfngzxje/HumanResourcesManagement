@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Net.Mail;
@@ -15,7 +17,7 @@ namespace HumanResourcesManagement.Service
         private readonly NhanSuContext _context;
         private readonly IMapper _mapper;
 
-        public NhanVienService(NhanSuContext context,IMapper mapper)
+        public NhanVienService(NhanSuContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -26,7 +28,7 @@ namespace HumanResourcesManagement.Service
             var nhanViens = _context.TblNhanViens.ToList();
             if (!nhanViens.Any())
             {
-                throw new Exception("List không có nhân viên nào!!");
+                throw new Exception("Danh sách không có nhân viên nào!!");
             }
             return nhanViens;
         }
@@ -50,7 +52,7 @@ namespace HumanResourcesManagement.Service
             }
 
             string maNhanVien = GenerateEmployeeCode(request.Ten);
-            if (maNhanVien.Length > 10) 
+            if (maNhanVien.Length > 10)
             {
                 maNhanVien = maNhanVien.Substring(0, 10);
             }
@@ -187,8 +189,8 @@ namespace HumanResourcesManagement.Service
             var existingNhanVien = _context.TblNhanViens.Find(id);
             if (existingNhanVien == null)
             {
-                throw new KeyNotFoundException("NhanVien with this ID does not exist.");
-            }   
+                throw new KeyNotFoundException("Không tồn tại nhân viên có ID này.");
+            }
 
             _mapper.Map(request, existingNhanVien);
             _context.TblNhanViens.Update(existingNhanVien);
@@ -282,7 +284,7 @@ namespace HumanResourcesManagement.Service
             var nv = _context.TblNhanViens.Find(ma);
             if (nv == null)
             {
-                throw new KeyNotFoundException("not found");
+                throw new KeyNotFoundException($"Không tìm thấy nhân viên mã: {ma}");
             }
             return nv;
         }
@@ -292,7 +294,7 @@ namespace HumanResourcesManagement.Service
             var danToc = _context.TblDanhMucDanTocs.ToList();
             if (!danToc.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách dân tộc trống.");
             }
             return danToc;
         }
@@ -302,7 +304,7 @@ namespace HumanResourcesManagement.Service
             var tonGiao = _context.TblDanhMucTonGiaos.ToList();
             if (!tonGiao.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh mục tôn giáo trống");
             }
             return tonGiao;
         }
@@ -312,7 +314,7 @@ namespace HumanResourcesManagement.Service
             var chucDanh = _context.TblDanhMucChucDanhs.ToList();
             if (!chucDanh.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách chức danh trống.");
             }
             return chucDanh;
         }
@@ -322,7 +324,7 @@ namespace HumanResourcesManagement.Service
             var nghachCongChuc = _context.TblDanhMucNgachCongChucs.ToList();
             if (!nghachCongChuc.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách ngạch công chức trống.");
             }
             return nghachCongChuc;
         }
@@ -332,7 +334,7 @@ namespace HumanResourcesManagement.Service
             var phong = _context.TblDanhMucPhongBans.ToList();
             if (!phong.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách phòng ban trống.");
             }
             return phong;
         }
@@ -342,7 +344,7 @@ namespace HumanResourcesManagement.Service
             var to = _context.TblDanhMucTos.ToList();
             if (!to.Any())
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách tổ trống.");
             }
             return to;
         }
@@ -360,18 +362,90 @@ namespace HumanResourcesManagement.Service
 
                 var list = await query.ToListAsync();
 
-                if (list == null || !list.Any())  
+                if (list == null || !list.Any())
                 {
-                    throw new Exception("Khong co nhan vien nao");
+                    throw new Exception("Không có nhân viên nào.");
                 }
 
                 return list;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message); 
+                throw new Exception(ex.Message);
             }
         }
 
+        public async Task<IEnumerable<TblNhanVien>> getDanhSachNhanVien(DanhSachNhanVienRequest req)
+        {
+            var all = await _context.TblNhanViens.ToListAsync();
+            var searchRule = req.searchRules.ToLower();
+            List<TblHopDong> listMaNv = new List<TblHopDong>();
+            IEnumerable<TblNhanVien> filtered = all;
+
+            if (searchRule == "phòng ban")
+            {
+                filtered = filtered.Where(n => n.Phong == req.PhongBan.Value);
+            }
+
+            if (req.FromDate.HasValue && req.ToDate.HasValue)
+            {
+                if (searchRule == "năm sinh")
+                {
+                    filtered = filtered.Where(n => n.Ngaysinh.HasValue &&
+                                                   n.Ngaysinh.Value.Year >= req.FromDate.Value.Year &&
+                                                   n.Ngaysinh.Value.Year <= req.ToDate.Value.Year);
+                }
+                else if (searchRule == "tháng sinh")
+                {
+                    filtered = filtered.Where(n => n.Ngaysinh.HasValue &&
+                                                   n.Ngaysinh.Value.Month >= req.FromDate.Value.Month &&
+                                                   n.Ngaysinh.Value.Month <= req.ToDate.Value.Month);
+                }
+                else if (searchRule == "năm hợp đồng")
+                {
+                    listMaNv = await _context.TblHopDongs
+                        .Where(n => n.Hopdongtungay.HasValue && n.Hopdongdenngay.HasValue &&
+                                    n.Hopdongtungay.Value.Year >= req.FromDate.Value.Year &&
+                                    n.Hopdongdenngay.Value.Year <= req.ToDate.Value.Year)
+                        .ToListAsync();
+
+                    var maNvSet = listMaNv.Select(hd => hd.Ma).ToHashSet();
+                    filtered = filtered.Where(n => maNvSet.Contains(n.Ma));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(req.QueQuan))
+            {
+                if (searchRule == "quê quán")
+                {
+                    filtered = filtered.Where(n => n.Quequan.ToLower().Contains(req.QueQuan.ToLower()));
+                }
+                else if (searchRule == "nơi sinh")
+                {
+                    filtered = filtered.Where(n => n.Noisinh.ToLower().Contains(req.QueQuan.ToLower()));
+                }
+                else if (searchRule == "thường trú")
+                {
+                    filtered = filtered.Where(n => n.Thuongtru.ToLower().Contains(req.QueQuan.ToLower()));
+                }
+                else if (searchRule == "tạm trú")
+                {
+                    filtered = filtered.Where(n => n.Tamtru.ToLower().Contains(req.QueQuan.ToLower()));
+                }
+            }
+
+            if (!req.GioiTinh.ToLower().Equals("tất cả"))
+            {
+                filtered = filtered.Where(n => n.Gioitinh.ToString().ToLower() == req.GioiTinh.ToLower());
+            }
+
+            var list = filtered.ToList();
+            if (list == null || !list.Any())
+            {
+                throw new Exception("Không có nhân viên nào.");
+            }
+
+            return list;
+        }
     }
 }

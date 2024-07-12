@@ -4,19 +4,21 @@ namespace HumanResourcesManagement.DTOS.Request
 {
     public class InsertNguoiThanRequest
     {
-        [Required(ErrorMessage ="Ten khong duoc de trong")]
+        [Required(ErrorMessage = "Tên không được để trống")]
+        [RegularExpression(@"^[a-zA-AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZaàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+(\s[a-zA-ZAÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZaàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+)*$", ErrorMessage = "Tên chỉ được chứa chữ cái.")]
         public string Ten { get; set; }
-        [Required(ErrorMessage = "Gioi tinh khong duoc de trong")]
+        [Required(ErrorMessage = "Giới tính không được để trống")]
         public bool? Gioitinh { get; set; }
-        [Required(ErrorMessage = "Ngay sinh khong duoc de trong")]
+        [Required(ErrorMessage = "Ngày sinh không được để trống")]
         public string? Ngaysinh { get; set; }
-        [Required(ErrorMessage = "Quan he khong duoc de trong")]
+        [Required(ErrorMessage = "Quan hệ không được để trống")]
         public int? Quanhe { get; set; }
-        [Required(ErrorMessage = "Nghe nghiep khong duoc de trong")]
+        [Required(ErrorMessage = "Nghề nghiệp không được để trống")]
         public string? Nghenghiep { get; set; }
-        [Required(ErrorMessage = "Dia chi khong duoc de trong")]
+        [Required(ErrorMessage = "Địa chỉ không được để trống")]
         public string? Diachi { get; set; }
-        [Required(ErrorMessage = "Dien thoai khong duoc de trong")]
+        [Required(ErrorMessage = "Điện thoại không được để trống")]
+        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Điện thoại phải là dãy số bắt đầu từ 0 và có 10 ký tự")]
         public string? Dienthoai { get; set; }
         public string? Khac { get; set; }
         public string Ma { get; set; }
