@@ -8,25 +8,28 @@ var TableColumns = [
         key: 'ten',
     },
     {
+        label: 'Phòng ban',
+        key: 'phong'
+    },
+    {
         label: 'Ngày sinh',
         key: 'ngaysinh',
         type:'datetime'
     },
     {
-        label: 'Tháng',
-        key: 'gioitinh',
+        label: 'Tháng sinh',
+        key: 'ngaysinh',
+        type: 'month'
     },
     {
-        label: 'Điện thoại',
-        key: 'didong'
+        label: 'Sinh nhật',
+        key: 'ngaysinh',
+        type: 'birthDate'
     },
     {
-        label: 'Phòng ban',
-        key: 'phong',
-    },
-    {
-        label: 'Trạng thái',
-        key: 'trangthai'
+        label: 'Thông báo',
+        key: 'ngaysinh',  
+        type: 'noticeBirthdate'
     }
 ]
 var locTheo = [

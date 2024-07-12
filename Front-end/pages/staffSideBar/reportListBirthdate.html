@@ -1,77 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
-    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <link rel="stylesheet" href="../../assets/styles/pages/staffSideBar/common.css" />
+    <link
+      rel="stylesheet"
+      href="../../assets/styles/common/changePassword.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../assets/styles/pages/staffSideBar/common.css"
+    />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
-</head>
+  </head>
 
-<body class="text-gray-600">
+  <body class="text-gray-600">
     <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"></layout-sidebar>
-            <div class="container">
-                <div class="left"style="margin-top: 100px;">
-                    <h1 class="text-xl font-bold mb-4"style="display: flex; justify-content: center;" >Mẫu báo cáo</h1>
-                    <!-- <base-select label=" " options="MaritalOptions" required="true" ></base-select> -->
-
-                    <base-select id="tabList"  label=" ">
-                        <!-- Các tùy chọn sẽ được thêm vào bằng JavaScript -->
-                    </base-select>
-                </div>
-                <div class="right">
-                    <form id="report_form">
-                    <div class="top">
-                       
-                            <div class="input-container">
-                                <h1 class="text-xl font-bold mb-4">Danh sách sinh nhật</h1>
-                                <div class="input-group">
-                                    
-                                    <div class="input-column" style="margin-left: 100px;">
-                                        <base-select  label="Lọc theo" options="locTheo" required="true"></base-select><br>
-                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Từ ngày" name="" required="true"></base-datepicker>
-                                    </div>
-                                    <div class="input-column">
-                                        <div id="report_form_action" class="flex gap-x-5 mt-5 justify-end" style="margin-top: 200px;"></div>
-                                    </div>
-                                    
-                                    <div class="input-column" style="margin-right: 100px;">
-                                        <base-select  label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select><br>
-                                        <base-datepicker  class="ml-auto" style="margin: 0;" label="Đến ngày" name="" required="true"></base-datepicker>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                       
-                    </div>
-                    
-                </form>
-                    
-                    <div class="bottom">
-                        <h1 class="text-xl font-bold mb-4" style="display: flex; justify-content: center; font-size: 36px;">HRM</h1>
-                        <h1 style="display: flex; justify-content: center;">-------------------</h1>
-                        <h1 class="text-align  mb-2" style="display: flex; justify-content: center; font-size: 30px;">Danh Sách Nhân Viên</h1> <br>
-
-                        <p class="text-xl font-medium mb-4" style="font-size: 18px;">Phòng ban</p>
-                        <p id="datetime" class="text-xl font-medium mb-4" style="font-size: 16px;">Hà Nội / Ngày / Tháng</p>
-
-                        <div class="mt-3">
-                            <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
-                            <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                            </base-table>
-                        </div>
-                    </div>
-                </div>
+      <layout-header></layout-header>
+      <div class="flex flex-1 overflow-auto">
+        <layout-sidebar class="zIndexSideBar"></layout-sidebar>
+        <div class="container">
+          <div class="right">
+            <div class="px-5 mb-4 mt-4">
+                <h1
+                class="text-xl font-bold mb-4"
+                style="display: flex; justify-content: center; font-size: 30px"
+              >
+                HRM
+              </h1>
+              <h1 class="text-xl font-bold mb-2">Mẫu báo cáo</h1>
+              <base-select id="tabList" label=" "> </base-select>
             </div>
+            <form id="report_form">
+              <div class="top">
+                <div class="input-container">
+                  <h1 class="text-xl font-bold mb-4">Danh sách sinh nhật</h1>
+                  <div class="grid grid-cols-4 gap-x-5">
+                    <base-select
+                      label="Lọc theo"
+                      options="locTheo"
+                      required="true"
+                    >
+                    </base-select>
+                    <base-select
+                    label="Phòng ban"
+                    name="phongban"
+                    keyValue="id"
+                    keyLabel="ten"
+                    api="https://localhost:7141/api/PhongBan/getAllPhongBan"
+                  ></base-select>
+                    <base-datepicker
+                      class="ml-auto"
+                      style="margin: 0;  margin-top: -10px;"
+                      label="Từ ngày"
+                      name=""
+                      required="true"
+                    ></base-datepicker>
+                    <base-datepicker
+                      class="ml-auto"
+                      style="margin: 0;  margin-top: -10px;"
+                      label="Đến ngày"
+                      name=""
+                      required="true"
+                    ></base-datepicker>
+                  </div>
+                  <div
+                    id="report_form_action"
+                    class="flex gap-x-5 mt-5 justify-center"
+                  ></div>
+                </div>
+              </div>
+            </form>
+
+            <div class="bottom">
+              <p
+                id="datetime"
+                class="text-xl font-medium mb-4"
+                style="font-size: 16px"
+              >
+                Hà Nội / Ngày / Tháng
+              </p>
+
+              <div class="mt-3">
+                <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
+                <base-table
+                  api="buildApiUrl"
+                  columns="TableColumns"
+                  event="tableEvent"
+                >
+                </base-table>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -82,6 +111,5 @@
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staffSideBar/reportListBirthdate.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
-</body>
-
+  </body>
 </html>

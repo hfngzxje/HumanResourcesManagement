@@ -37,7 +37,7 @@ const TAB_LIST = [
   {
     key: TAB.EMPLOYMENT_CONTRACT,
     label: "Danh sách sinh nhật",
-    activeByPath: "/pages/staff/laborContract.html",
+    activeByPath: "/pages/staffSideBar/reportListBirthdate.html",
   },
   {
     key: TAB.SALARY_PROFILE,

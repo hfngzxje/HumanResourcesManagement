@@ -582,6 +582,53 @@ class BaseTable extends HTMLElement {
       return `${day}-${month}-${year} `;
     }
 
+    function getMonth(dateTimeStr){
+      const dateTime = new Date(dateTimeStr);
+      const year = dateTime.getFullYear();
+      const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+      const day = String(dateTime.getDate()).padStart(2, '0');
+      const hours = String(dateTime.getHours()).padStart(2, '0');
+      const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+
+      return `${month} `;
+    }
+    function getBirthDate(dateTimeStr){
+      const dateTime = new Date(dateTimeStr);
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+      const day = String(dateTime.getDate()).padStart(2, '0');
+
+      return `${day}-${month}-${year} `;
+    }
+    function getNoticeBirthDate(value){
+      const currentDate = new Date();
+                
+                  const birthDate = new Date(value);
+                  const birthMonth = birthDate.getMonth(); 
+                  const birthDay = birthDate.getDate(); 
+
+                  let thisYearBirthDate = new Date(currentDate.getFullYear(), birthMonth, birthDay);
+                
+                  if (thisYearBirthDate < currentDate) {
+                    thisYearBirthDate.setFullYear(thisYearBirthDate.getFullYear());
+                  }
+                
+                  const differenceInTime = currentDate - thisYearBirthDate;
+
+                  const daysUntilBirthday = differenceInTime / (1000 * 60 * 60 * 24);
+
+                  if (daysUntilBirthday >= -10 && daysUntilBirthday <= 1) {
+                    return 'Sắp sinh nhật'; 
+                  }
+                  else if(daysUntilBirthday > 0){
+                    return 'Đã xong'
+                  }
+                   else  {
+                    return ' '; 
+                  }
+    }
+
     // định dạg lại kiểu tiền tệ
     function formatCurrency(val) {
       return val.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
@@ -627,9 +674,24 @@ class BaseTable extends HTMLElement {
 
             // mỗi hàng sẽ tạo 1 thẻ tr tương ứng
             const trEl = document.createElement('tr')
+            
             // set class cho thẻ tr đc tạo
             trEl.setAttribute('class', 'bg-white border-bottom hover:bg-gray-100')
+       
             // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
+
+            const noticeBirthdate = columns.find(col => col.type === 'noticeBirthdate');
+            if (noticeBirthdate) {
+              const noticeValue = getNoticeBirthDate(row[noticeBirthdate.key]);
+              if (noticeValue === 'Đã xong') {
+                trEl.style.backgroundColor = 'silver'
+                // Đặt màu chữ của hàng thành đỏ
+              }
+              else if(noticeValue === 'Sắp sinh nhật'){
+                trEl.style.backgroundColor = '#EE7C6B'
+              }
+            }
+            
             if (event.rowClick !== undefined) {
               // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
               trEl.addEventListener("click", () => {
@@ -669,7 +731,20 @@ class BaseTable extends HTMLElement {
                 // nếu type được khai báo thì định dạng lại giá trị tương ứng
                 if (col.type === 'datetime') {
                   value = formatDateTime(value)
-                } else if (col.type === 'currency') {
+                } 
+                else if(col.type == 'month'){
+                  value = getMonth(value)
+                }
+                else if(col.type == 'birthDate'){
+                  value = getBirthDate(value)
+                }
+                else if (col.type == 'noticeBirthdate') {
+                 value = getNoticeBirthDate(value)
+                }
+                
+                
+                
+                else if (col.type === 'currency') {
                   value = formatCurrency(value)
                 } else if (col.type === 'gender') {
                   value = value ? 'Nam' : 'Nữ'
@@ -705,7 +780,7 @@ class BaseTable extends HTMLElement {
 
     this.innerHTML = `
     <div id="wrapper-table" class="relative overflow-x-auto bg-gray-100">
-      <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50"></thead>
         <tbody></tbody>
       </table>
