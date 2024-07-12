@@ -1,3 +1,5 @@
+
+const ma = localStorage.getItem("maNhanVien")
 var TableColumns = [
     {
         label: 'Mã Hợp Đồng',
@@ -49,5 +51,5 @@ var TableColumns = [
     }
 ]
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + 'NV01';
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma;
 }

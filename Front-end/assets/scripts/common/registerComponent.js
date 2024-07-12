@@ -670,7 +670,10 @@ class BaseTable extends HTMLElement {
                   value = formatDateTime(value)
                 } else if (col.type === 'currency') {
                   value = formatCurrency(value)
+                } else if (col.type === 'gender') {
+                  value = value ? 'Nam' : 'Nữ'
                 }
+                
 
                 // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
                 if (col.formatter) {

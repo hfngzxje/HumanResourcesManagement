@@ -36,7 +36,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-bar-chart-alt'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Tổng Quan</a>
+                <a href="overview.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Tổng Quan</a>
             </span>
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu2"">
@@ -52,7 +52,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-file-find'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hợp Đồng</a>
+                <a href="laborContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hợp Đồng</a>
             </span>
 
         </div>
@@ -61,7 +61,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-money'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Bảng Lương</a>
+                <a href="salaryRecord.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Bảng Lương</a>
             </span>
 
         </div>
@@ -70,7 +70,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-group'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Quan Hệ Gia Đình</a>
+                <a href="familyRelationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Quan Hệ Gia Đình</a>
             </span>
 
         </div>
@@ -79,7 +79,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-trophy'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen Thưởng</a>
+                <a href="award.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen Thưởng</a>
             </span>
 
         </div>
@@ -88,7 +88,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-shield'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kỷ Luật</a>
+                <a href="discipline.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kỷ Luật</a>
             </span>
 
         </div>

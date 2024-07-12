@@ -1,5 +1,5 @@
 const isEdit = !!id
-// const ma = localStorage.getItem("maNhanVien")
+const ma = localStorage.getItem("maNhanVien")
 let idNguoiThan = null
 
 var MaritalOptions = [
@@ -84,14 +84,13 @@ function fetchRelationship(id) {
 }
 
 function handleCreate() {
-    alert(maNhanVien)
     const valid = validateForm('relationship_form')
     if(!valid) return
     const formValue = getFormValues('relationship_form')
 
     // const urlParams = new URLSearchParams(window.location.search);
     // const employeeId = urlParams.get('id');
-    const employeeId = maNhanVien
+    const employeeId = ma
  
     formValue['ma'] = employeeId;
     console.log('formValue ', formValue);
@@ -244,7 +243,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + 'NV01'
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + ma
 }
 
 function getNameQuanHe(){
