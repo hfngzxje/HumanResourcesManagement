@@ -50,6 +50,11 @@ body, html {
     flex-direction: column;
     width: 32%;
 }
+.top .input-row {
+    display: flex;
+    justify-content: row;
+    margin-bottom: 20px; /* Adjust spacing between rows as needed */
+}
 .bottom {
     flex: 7;
     padding: 20px;

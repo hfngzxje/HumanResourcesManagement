@@ -79,7 +79,8 @@ class CustomSidebar extends HTMLElement {
               <span class="w-10">
               <i class='bx bxs-report'></i>
               </span>
-              <span> Báo cáo </span>
+              <a href="/pages/staffSideBar/report.html">
+              <span> Báo cáo </span> </a>
               <div class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu4">
               <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhân viên</a>
               <div class="flex items-center cursor-pointer transition relative" id="menu-child4">
