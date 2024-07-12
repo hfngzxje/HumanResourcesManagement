@@ -87,7 +87,7 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const DisplayBtn = buildButton('Tìm báo cáo', 'green')
+    const DisplayBtn = buildButton('Tìm báo cáo', 'green', 'bx bx-search')
     const pdfBtn = buildButton('PDF', 'red', 'bx bx-file-blank')
     const excelBtn = buildButton('Excel', '', 'bx bx-spreadsheet')
 
