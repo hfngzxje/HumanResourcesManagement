@@ -3,27 +3,29 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+
 namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class DanhMucHinhThucDaoTaoController : ControllerBase
     {
-        private readonly IDanhMucHinhThucDaoTaoService  _danhMucHinhThucDaoTaoService;
+        private readonly IDanhMucHinhThucDaoTaoService _danhMucHinhThucDaoTaoService;
         private readonly NhanSuContext _context;
+
         public DanhMucHinhThucDaoTaoController(IDanhMucHinhThucDaoTaoService danhMucHinhThucDaoTaoService, NhanSuContext context)
         {
             _danhMucHinhThucDaoTaoService = danhMucHinhThucDaoTaoService;
             _context = context;
         }
+
         [HttpGet("getDanhMucHinhThucDaoTao")]
         public async Task<IActionResult> GetDanhMucHinhThucDaoTao()
         {
-
             var listDanhMucHinhThucDaoTao = await _danhMucHinhThucDaoTaoService.GetDanhMucHinhThucDaoTao();
             return Ok(listDanhMucHinhThucDaoTao);
-
         }
+
         [HttpGet("getDanhMucHinhThucDaoTaoById/{id}")]
         public async Task<IActionResult> GetDanhMucHinhThucDaoTaoById(int id)
         {
@@ -48,17 +50,15 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
 
-
         [HttpPost("addDanhMucHinhThucDaoTao")]
-        public async Task<IActionResult> AddDanhMucHinhThucDaoTao([FromBody] TblHinhThucDaoTao req)
+        public async Task<IActionResult> AddDanhMucHinhThucDaoTao([FromBody] HinhThucDaoTaoRequest req)
         {
             try
             {
-                var newDanhMucHinhThucDaoTao = await _danhMucHinhThucDaoTaoService.AddDanhMucHinhThucDaoTao(req);
-                return StatusCode(200, "add thanh cong");
+                await _danhMucHinhThucDaoTaoService.AddDanhMucHinhThucDaoTao(req);
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -76,11 +76,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucHinhThucDaoTaoService.DeleteDanhMucHinhThucDaoTao(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -89,12 +89,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpPut("updateDanhMucHinhThucDaoTao")]
-        public async Task<IActionResult> UpdateDanhMucHinhThucDaoTao([FromBody] TblHinhThucDaoTao req)
+        public async Task<IActionResult> UpdateDanhMucHinhThucDaoTao([FromBody] HinhThucDaoTaoRequest req,int id)
         {
             try
             {
-                await _danhMucHinhThucDaoTaoService.UpDateDanhMucHinhThucDaoTao(req);
-                return StatusCode(200, "sua thanh cong");
+                await _danhMucHinhThucDaoTaoService.UpDateDanhMucHinhThucDaoTao(req, id);
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

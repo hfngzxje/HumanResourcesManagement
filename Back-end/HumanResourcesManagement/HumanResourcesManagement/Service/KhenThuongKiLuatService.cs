@@ -1,4 +1,5 @@
-﻿using HumanResourcesManagement.DTOS.Request;
+﻿using AutoMapper;
+using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
@@ -9,47 +10,48 @@ namespace HumanResourcesManagement.Service
     public class KhenThuongKiLuatService : IKhenThuongKiLuatService
     {
         private readonly NhanSuContext _context;
-        public KhenThuongKiLuatService(NhanSuContext context)
+        private readonly IMapper _mapper;
+        public KhenThuongKiLuatService(IMapper mapper, NhanSuContext context)
         {
-            _context = context;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<TblKhenThuongKyLuat> AddKhenThuongKyLuat(TblKhenThuongKyLuat req)
+
+        // Thêm mới khen thưởng kỷ luật
+        public async Task AddKhenThuongKyLuat(KhenThuongKyLuatRequest req)
         {
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);
             if (nv == null)
             {
-                throw new KeyNotFoundException($"not found {req.Ma}");
+                throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {req.Ma}");
             }
-           
-            var ktkl = new TblKhenThuongKyLuat
-            {
-                Ngay = req.Ngay,
-                Noidung = req.Noidung,
-                Lido = req.Lido,
-                Khenthuongkiluat = req.Khenthuongkiluat,
-                Ma = req.Ma
-            };
-            _context.TblKhenThuongKyLuats.Add(ktkl);
-            await _context.SaveChangesAsync();
-            return ktkl;
+            if ( req.Ngay <= DateTime.Now) {
+                var ktkl = _mapper.Map<TblKhenThuongKyLuat>(req);
+                _context.TblKhenThuongKyLuats.Add(ktkl);
+                await _context.SaveChangesAsync();
+            }
+            else throw new KeyNotFoundException($"thời gian phải nhỏ hơn hoặc bằng thời điểm hiện tại ");
+            
         }
 
+        // Xóa khen thưởng kỷ luật theo id
         public async Task DeleteKhenThuongKyLuat(int id)
         {
             var ktkl = await _context.TblKhenThuongKyLuats.FindAsync(id);
             if (ktkl == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy khen thưởng kỷ luật với id {id}");
             }
             _context.TblKhenThuongKyLuats.Remove(ktkl);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TblKhenThuongKyLuat>> GetKhenThuongKyLuatByMaNV(string maNV, int khenThuongOrKiLuat)
+        // Lấy danh sách khen thưởng kỷ luật theo mã nhân viên và loại khen thưởng/kỷ luật
+        public async Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV, int khenThuongOrKiLuat)
         {
             if (string.IsNullOrWhiteSpace(maNV))
             {
-                throw new ArgumentException("maNV không được để trống", nameof(maNV));
+                throw new ArgumentException("Mã nhân viên không được để trống", nameof(maNV));
             }
 
             var exists = await _context.TblKhenThuongKyLuats.AnyAsync(nv => nv.Ma == maNV);
@@ -60,20 +62,20 @@ namespace HumanResourcesManagement.Service
 
             if (_context.TblKhenThuongKyLuats == null)
             {
-                throw new InvalidOperationException("no data");
+                throw new InvalidOperationException("Không có dữ liệu");
             }
 
-            var listKhenThuongKiLuat = new List<TblKhenThuongKyLuat>();
+            var listKhenThuongKiLuat = new List<KhenThuongKyLuatResponse>();
 
             if (khenThuongOrKiLuat == 1)
             {
                 var listKhenThuong = await _context.TblKhenThuongKyLuats
                     .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 1)
-                    .Select(kt => new TblKhenThuongKyLuat
+                    .Select(kt => new KhenThuongKyLuatResponse
                     {
                         Id = kt.Id,
-                        Ten = kt.Ten,
-                        Ngay = kt.Ngay ?? DateTime.MinValue, // Handle nullable DateTime
+                        Ten = kt.TenNavigation.Ten,
+                        Ngay = kt.Ngay ?? DateTime.MinValue, 
                         Noidung = kt.Noidung,
                         Lido = kt.Lido,
                         Ma = kt.Ma.Trim()
@@ -83,18 +85,18 @@ namespace HumanResourcesManagement.Service
                 listKhenThuongKiLuat = listKhenThuong;
                 if (!listKhenThuong.Any())
                 {
-                    throw new KeyNotFoundException($"list is empty {maNV}");
+                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
                 }
             }
             else
             {
                 var listKiLuat = await _context.TblKhenThuongKyLuats
                     .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 2)
-                    .Select(kt => new TblKhenThuongKyLuat
+                    .Select(kt => new KhenThuongKyLuatResponse
                     {
                         Id = kt.Id,
-                        Ten = kt.Ten,
-                        Ngay = kt.Ngay ?? DateTime.MinValue, // Handle nullable DateTime
+                        Ten = kt.TenNavigation.Ten,
+                        Ngay = kt.Ngay ?? DateTime.MinValue, 
                         Noidung = kt.Noidung,
                         Lido = kt.Lido,
                         Ma = kt.Ma.Trim()
@@ -104,7 +106,7 @@ namespace HumanResourcesManagement.Service
                 listKhenThuongKiLuat = listKiLuat;
                 if (!listKiLuat.Any())
                 {
-                    throw new KeyNotFoundException($"list is empty {maNV}");
+                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
                 }
             }
 

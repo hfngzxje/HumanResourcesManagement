@@ -6,20 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HumanResourcesManagement.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class NgoaiNguController : ControllerBase
     {
         private readonly INgoaiNguService _ngoaiNguService;
         private readonly NhanSuContext _context;
+
         public NgoaiNguController(INgoaiNguService ngoaiNguService, NhanSuContext context)
         {
             _ngoaiNguService = ngoaiNguService;
             _context = context;
         }
-    
-
 
         [HttpGet("getNgoaiNguByMaNV/{maNV}")]
         public async Task<IActionResult> GetNgoaiNguByMaNV(string maNV)
@@ -45,9 +43,7 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
-
 
         [HttpPost("addNgoaiNgu")]
         public async Task<IActionResult> AddNgoaiNgu([FromBody] InsertNgoaiNguRequest req)
@@ -55,7 +51,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var newNgoaiNgu = await _ngoaiNguService.AddNgoaiNgu(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -73,11 +69,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _ngoaiNguService.DeleteNgoaiNgu(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -91,7 +87,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _ngoaiNguService.UpdateNgoaiNgu(req);
-                return StatusCode(200, "sua thanh cong");
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

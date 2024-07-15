@@ -3,22 +3,24 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+
 namespace HumanResourcesManagement.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class KhenThuongKiLuatController : ControllerBase
     {
         private readonly IKhenThuongKiLuatService _khenThuongKiLuatService;
         private readonly NhanSuContext _context;
+
         public KhenThuongKiLuatController(IKhenThuongKiLuatService khenThuongKiLuatService, NhanSuContext context)
         {
             _khenThuongKiLuatService = khenThuongKiLuatService;
             _context = context;
         }
+
         [HttpGet("getKhenThuongKiLuatByMaNV/{maNV}/{khenThuongOrKiLuat}")]
-        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV,int khenThuongOrKiLuat)
+        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV, int khenThuongOrKiLuat)
         {
             try
             {
@@ -41,15 +43,15 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
+
         [HttpPost("addKhenThuongKiLuat")]
-        public async Task<IActionResult> AddddKhenThuongKiLuat([FromBody] TblKhenThuongKyLuat req)
+        public async Task<IActionResult> AddKhenThuongKiLuat([FromBody] KhenThuongKyLuatRequest req)
         {
             try
             {
-                var newKhenThuongKiLuat = await _khenThuongKiLuatService.AddKhenThuongKyLuat(req);
-                return StatusCode(200, "add thanh cong");
+                await _khenThuongKiLuatService.AddKhenThuongKyLuat(req);
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -60,17 +62,18 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(502, ex.Message);
             }
         }
+
         [HttpDelete("deleteKhenThuongKiLuat/{id}")]
         public async Task<IActionResult> DeleteKhenThuongKiLuat(int id)
         {
             try
             {
                 await _khenThuongKiLuatService.DeleteKhenThuongKyLuat(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {

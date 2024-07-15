@@ -2,9 +2,10 @@
 
 namespace HumanResourcesManagement.DTOS.Request
 {
-    public class DanhMucNgoaiNguRequest
+    public class HinhThucDaoTaoRequest
     {
         [Required(ErrorMessage = "Tên không được để trống")]
         public string? Ten { get; set; }
+
     }
 }
