@@ -17,7 +17,6 @@ var TableColumns = [
         type:'datetime'
     },
     {
-<<<<<<< Updated upstream
         label: 'Tháng sinh',
         key: 'ngaysinh',
         type: 'month'
@@ -31,15 +30,6 @@ var TableColumns = [
         label: 'Thông báo',
         key: 'ngaysinh',  
         type: 'noticeBirthdate'
-=======
-        label: 'Tháng sinh'
-    },
-    {
-        label: 'Sinh nhật'
-    },
-    {
-        label: 'Thông báo',
->>>>>>> Stashed changes
     }
 ]
 var locTheo = [

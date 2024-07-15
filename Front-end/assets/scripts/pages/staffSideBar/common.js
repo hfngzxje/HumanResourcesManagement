@@ -39,11 +39,7 @@ const TAB_LIST = [
   {
     key: TAB.BIRTH_DATE,
     label: "Danh sách sinh nhật",
-<<<<<<< Updated upstream
     activeByPath: "/pages/staffSideBar/reportListBirthdate.html",
-=======
-    activeByPath: "/pages/staff/reportListBirthdate.html",
->>>>>>> Stashed changes
   },
   {
     key: TAB.Communist_Party,
