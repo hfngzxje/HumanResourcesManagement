@@ -4,13 +4,15 @@ const maNhanVien = localStorage.getItem("maNhanVien");
 const vaitro = localStorage.getItem("vaiTroID");
 const TAB = {
   RESUME: 1,
-  PERSON_HISTORY: 2,
-  CULTURAL_PROFICIENCY: 3,
-  FAMILY_RELATIONSHIP: 4,
-  EMPLOYMENT_CONTRACT: 5,
-  SALARY_PROFILE: 6,
-  EMPLOYMENT_HISTORY: 7,
-  REWARDS_DISCIPLINE: 8,
+  SALARY_UP: 2,
+  RAISE_SALARY: 3,
+  SALARY: 4,
+  BIRTH_DATE: 5,
+  Communist_Party: 6,
+  SALARY_GROUP: 7,
+  FAMILY_RELATIONSHIP: 8,
+  Difficult_Households: 9,
+  BHYT_BHXH : 10
 };
 
 const TAB_LIST = [
@@ -20,47 +22,47 @@ const TAB_LIST = [
     activeByPath: "/pages/staffSideBar/report.html",
   },
   {
-    key: TAB.PERSON_HISTORY,
+    key: TAB.SALARY_UP,
     label: "Danh sách nâng lương",
     activeByPath: "/pages/staffSideBar/reportListSalaryUp.html",
   },
   {
-    key: TAB.CULTURAL_PROFICIENCY,
+    key: TAB.RAISE_SALARY,
     label: "Quyết định lên lương",
     activeByPath: "/pages/staff/qualifications.html",
   },
   {
-    key: TAB.FAMILY_RELATIONSHIP,
+    key: TAB.SALARY,
     label: "Hồ sơ lương",
-    activeByPath: "/pages/staff/FamilyRelationship.html",
+    activeByPath: "/pages/staffSideBar/reportSalary.html",
   },
   {
-    key: TAB.EMPLOYMENT_CONTRACT,
+    key: TAB.BIRTH_DATE,
     label: "Danh sách sinh nhật",
     activeByPath: "/pages/staffSideBar/reportListBirthdate.html",
   },
   {
-    key: TAB.SALARY_PROFILE,
+    key: TAB.Communist_Party,
     label: "Danh sách đảng viên",
-    activeByPath: "/pages/staff/salaryRecord.html",
+    activeByPath: "/pages/staffSideBar/reportCommunistParty.html",
   },
   {
-    key: TAB.EMPLOYMENT_HISTORY,
+    key: TAB.SALARY_GROUP,
     label: "Danh sách nhóm lương",
-    activeByPath: "",
+    activeByPath: "/pages/staffSideBar/reportSalaryGroup.html",
   },
   {
-    key: TAB.REWARDS_DISCIPLINE,
+    key: TAB.FAMILY_RELATIONSHIP,
     label: "Danh sách người thân",
-    activeByPath: "/pages/staff/award.html",
+    activeByPath: "/pages/staffSideBar/reportFamilyRelationship.html",
   },
   {
-    key: TAB.REWARDS_DISCIPLINE,
+    key: TAB.Difficult_Households,
     label: "Danh sách diện chính sách",
-    activeByPath: "/pages/staff/award.html",
+    activeByPath: "/pages/staffSideBar/reportDifficultHouseholds.html",
   },
   {
-    key: TAB.REWARDS_DISCIPLINE,
+    key: TAB.BHYT_BHXH,
     label: "Danh sách sổ bảo hiểm",
     activeByPath: "/pages/staff/award.html",
   }
