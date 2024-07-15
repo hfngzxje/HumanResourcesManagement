@@ -1,5 +1,5 @@
 const isEdit = !!id
-
+const vaiTroID = localStorage.getItem("vaiTroID")
 let idNguoiThan = null
 
 var MaritalOptions = [
@@ -42,28 +42,30 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id) } }
+        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id)  } }
       ]
     }
   ]
 
+
+  var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchRelationship(row.id)
+    }
+}
 function backToList() {
     const url = new URL("/pages/staff/FamilyRelationship.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-
-    formClone['trangThai'] = Number(formClone['trangThai'])
-    formClone['id'] = idNguoiThan
-    // formClone['ma'] = employeeId
     return formClone
 }
 
-function fetchEmployee(id) {
+function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
@@ -82,15 +84,18 @@ function fetchEmployee(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm quan hệ gia đình?')
+    if (!isConfirm) return
+    alert(maNhanVien)
     const valid = validateForm('relationship_form')
     if(!valid) return
     const formValue = getFormValues('relationship_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
+    const employeeId = maNhanVien
+ 
     formValue['ma'] = employeeId;
-
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     
@@ -101,12 +106,23 @@ function handleCreate() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
+            alert("Thêm thành công!")
             backToList()
         },
         error: (err) => {
-            console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Tạo mới thất bại!")
+            }
         },
         complete: () => {
             setLoading(false)
@@ -115,7 +131,7 @@ function handleCreate() {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -135,7 +151,7 @@ function handleRemove() {
     });
 }
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -156,10 +172,13 @@ function handleRemoveRow(id) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa quan hệ gia đình?')
+    if (!isConfirm) return
     const valid = validateForm('relationship_form')
     if(!valid) return
     
     const formValue = getFormValues('relationship_form')
+    formValue['id'] = idNguoiThan
     const payload = buildPayload(formValue)
     setLoading(true)
     $.ajax({
@@ -168,8 +187,9 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
+            alert("Sửa thành công!")
             console.log('fetchEmployee res :: ', data);
-            // backToList()
+            backToList()
         },
         error: (err) => {
             console.log('err ', err);
@@ -191,7 +211,18 @@ function handleSave() {
         }
     });
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
 
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (label, type, icon) => {
@@ -201,23 +232,23 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
-
-
+    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    createBtn.addEventListener('click', handleCreate)
+    clear.addEventListener('click', function() {
+        clearFormValues('relationship_form');
+    });
 
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(createBtn,removeBtn, saveBtn, clear)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + id
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
 
 function getNameQuanHe(){
@@ -235,7 +266,15 @@ function getNameQuanHe(){
 }
 
 getNameQuanHe()
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    alert(vaiTroID)
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
+    renderActionByStatus();
+
     
 })

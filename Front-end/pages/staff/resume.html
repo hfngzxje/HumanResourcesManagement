@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
 </head>
@@ -18,18 +19,7 @@
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
                 <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <div class="flex border-b border-solid pb-3">
-                        <div class="w-[300px]">
-                            <span class="text-gray-400">Mã số <span style="color: red;">(*)</span>: </span>
-                            <span class="text-gray-700 text-xl font-medium">1123826</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-400">Họ tên: </span>
-                            <span class="text-gray-700 text-xl font-medium">
-                                Nguyễn Sinh Duy
-                            </span>
-                        </div>
-                    </div>
+                  
 
                     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
                         <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
@@ -49,7 +39,8 @@
                                         <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
                                     </div>
                                 </div>
-                                <base-input-phone label="Di động(*)" name="didong" required="true"></base-input-phone><br>
+                                <base-input-phone label="Di động(*)" name="didong" required="true"></base-input-phone>
+                                <base-input label="Email (*)" name="email" required="true"></base-input>
                                 <base-input-number label="CMND(*)" name="cmnd"required="true"></base-input-number>
                                 <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"required="true"></base-datepicker>
                                 <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"required="true"></base-input>
@@ -93,7 +84,7 @@
                                         options="MaritalOptions"required="true"></base-select>
 
                                     <base-select label="Dân tộc(*)" name="dantoc"
-                                        api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
+                                        api="https://localhost:7141/api/NhanVien/danToc" keyValue="ten"
                                         keyLabel="ten"></base-select>
 
                                     <base-select label="Tôn giáo" name="tongiao"
@@ -124,7 +115,9 @@
                                     <base-input class="flex-1" hide-label="true" name="chinhsach"></base-input>
                                 </div>
                                 <base-input label="Số thẻ ATM" name="atm"></base-input>
-                                <base-input label="Ngân hàng(*)" name="nganhang"required="true"></base-input>
+                                <!-- <base-input label="Ngân hàng(*)" name="nganhang"required="true"></base-input> -->
+                                <base-select label="Ngân hàng(*)" name="nganhang"
+                                        options="BankList"required="true"></base-select>
                             </div>
                         </form>
                         <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
@@ -141,6 +134,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/resume.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 
 </html>

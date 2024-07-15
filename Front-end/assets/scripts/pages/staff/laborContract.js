@@ -1,16 +1,18 @@
 const isEdit = !!id
-
+const vaiTroID = localStorage.getItem("vaiTroID")
 let maHopDongHienTai = null
+// const maNhanVien = localStorage.getItem("maNhanVien")
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
 ];
 
+// Khai báo giá trị định nghĩa columns biến "var" là biến toàn cục
 var TableColumns = [
     {
         label: 'Mã hợp đồng',
-        key: 'mahopdong'
+        key: 'mahopdong',
     },
     {
         label: 'Lương cơ bản',
@@ -30,21 +32,31 @@ var TableColumns = [
     {
         label: 'Ghi chú',
         key: 'ghichu'
-    },
-    {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchContract(row.mahopdong) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
-        ]
     }
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+            
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
+    //     ]
+    // }
 ]
+// ctrl K 0
+// Biến định nghĩa các sự kiện của table
+var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchContract(row.mahopdong)
+    }
+}
+
 
 function backToList() {
-    const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-    url.searchParams.set("id", id);
-    window.location.replace(url.toString());
+    
+        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
+        // url.searchParams.set("id", maNhanVien);
+  
 }
 
 function buildPayload(formValue) {
@@ -77,15 +89,16 @@ function fetchContract(mahopdong) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm hợp đồng lao động?')
+    if (!isConfirm) return
     const valid = validateForm('laborContract_form')
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-    formValue['ma'] = employeeId;
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
+    formValue['ma'] = maNhanVien;
 
-    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -123,7 +136,7 @@ function handleCreate() {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -144,7 +157,7 @@ function handleRemove() {
 }
 
 function handleRemoveRow(mahopdong) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -165,12 +178,14 @@ function handleRemoveRow(mahopdong) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa hợp đồng lao động?')
+    if (!isConfirm) return
     const formValue = getFormValues('laborContract_form')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const employeeId = urlParams.get('id');
 
-    formValue['ma'] = employeeId;
+    formValue['ma'] = maNhanVien;
 
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -204,6 +219,18 @@ function handleSave() {
         }
     });
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('laborContract_form_action')
@@ -217,19 +244,27 @@ function renderActionByStatus() {
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('laborContract_form');
+    });
 
-    actionEl.append(createBtn, removeBtn, saveBtn)
+    actionEl.append(createBtn, removeBtn, saveBtn,clear)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
     renderActionByStatus()
 })
 

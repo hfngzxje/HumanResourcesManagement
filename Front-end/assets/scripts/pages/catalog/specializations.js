@@ -1,55 +1,73 @@
-const isEdit = !!id
+let isPopupEdit = false
+const popupCreateBtn = document.getElementById("createBtn")
+const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
-let idChuyenMonHienTai = null
+let idChuyenMon = null
 
 var TableColumns = [
     {
-      label: 'ID',
-      key: 'id'
+        label: 'ID',
+        key: 'id'
     },
     {
-      label: 'Mã Chuyên Môn',
-      key: 'ma'
+        label: 'Mã Chuyên Môn',
+        key: 'ma'
     },
     {
-      label: 'Tên Chuyên Môn',
-      key: 'ten'
-    },
-    {
-      label: 'Hành động',
-      key: 'action',
-      actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchChuyenMon(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-      ]
+        label: 'Tên Chuyên Môn',
+        key: 'ten'
     }
-  ]
-
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchChuyenMon(row.id);
+    //                 var modal = document.getElementById("editChuyenMon");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
+]
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchChuyenMon(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/specializations.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = {...formValue}
-
-    
-
+    const formClone = { ...formValue }
     return formClone
 }
 
 function fetchChuyenMon(id) {
-    console.log("Name:" , id);
+    console.log("Name:", id);
     setLoading(true)
-    idChuyenMonHienTai = id
+    idChuyenMon = id
     $.ajax({
         url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
-        success: function(data) {
-            setFormValue('specializations_form', data, 'fetch');
-            setFormValue('specializations_form', data)
+        success: function (data) {
+            // setFormValue('editChuyenMon', data, 'fetch');
+            setFormValue('editChuyenMon', data)
         },
         error: (err) => {
-            console.log('fetchReligion err :: ', err);
+            console.log('fetchDepartments err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -58,9 +76,12 @@ function fetchChuyenMon(id) {
 }
 
 function handleCreate() {
-    const valid = validateForm('specializations_form')
-    if(!valid) return
-    const formValue = getFormValues('specializations_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục chuyên môn?')
+    if (!isConfirm) return
+    const valid = validateForm('editChuyenMon')
+    if (!valid) return
+    const formValue = getFormValues('editChuyenMon')
+
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -69,17 +90,17 @@ function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            alert('Tạo Thành Công!');
+        success: function (data) {
+            console.log('fetchChuyenMon res :: ', data);
+            alert("Thêm thành công !")
             backToList()
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -88,8 +109,6 @@ function handleCreate() {
             } catch (error) {
                 alert("Tạo mới không thành công!")
             }
-           
-            
         },
         complete: () => {
             setLoading(false)
@@ -97,16 +116,16 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục chuyên môn?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + id,
+        url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
         method: 'DELETE',
-        success: function(data) {
+        success: function (data) {
             console.log('fetchChuyenMon res :: ', data);
-            alert('Xóa Thành Công!');
+            alert("Xóa thành công !")
             backToList()
         },
         error: (err) => {
@@ -118,17 +137,19 @@ function handleRemoveRow(id) {
         }
     });
 }
-
 function handleSave() {
-    const formValue = getFormValues('specializations_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn lưu danh mục chuyên môn?')
+    if (!isConfirm) return
+    const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
     setLoading(true)
+    console.log('maTo: ', idChuyenMon)
     $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/updateChuyenMon/' + idChuyenMonHienTai,
+        url: 'https://localhost:7141/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             console.log('fetchChuyenMon res :: ', data);
             alert('Lưu Thành Công!');
             backToList();
@@ -136,9 +157,9 @@ function handleSave() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -154,6 +175,20 @@ function handleSave() {
     });
 }
 
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } else {
+            input.value = '';
+            input.checked = false;
+        }
+    });
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('specializations_form_action')
     const buildButton = (label, type, icon) => {
@@ -163,21 +198,53 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-        
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-
-    createBtn.addEventListener('click', handleCreate)
-    saveBtn.addEventListener('click', handleSave)
-
-    actionEl.append(createBtn, saveBtn)
+    createBtn.addEventListener('click', function () {
+        isPopupEdit = false
+        showPopup()
+    });
+    actionEl.append(createBtn)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChuyenMon/getChuyenMon' 
+    return 'https://localhost:7141/api/ChuyenMon/getChuyenMon'
+}
+
+function showPopup() {
+    var modal = document.getElementById("editChuyenMon");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            setFormValue('editChuyenMon', { ma: "", ten: "" })
+        }
+    }
+
+    if (isPopupEdit) {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Sửa Tiêu Đề Chuyên Môn"
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
+    } else {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Thêm mới Tiêu Chuyên Môn"
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
+    popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

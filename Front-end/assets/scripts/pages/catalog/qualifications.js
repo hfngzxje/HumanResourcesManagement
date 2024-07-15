@@ -1,48 +1,70 @@
-const isEdit = !!id
+let isPopupEdit = false
+const popupCreateBtn = document.getElementById("createBtn")
+const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
-let idTrinhDoHienTai = null
 
+let idTrinhDo = null
 
 var TableColumns = [
     {
-      label: 'ID',
-      key: 'id'
+        label: 'ID',
+        key: 'id'
     },
     {
-      label: 'Tên',
-      key: 'ten'
-    },
-    {
-      label: 'Hành động',
-      key: 'action',
-      actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTrinhDo(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-      ]
+        label: 'Tên Trình Độ',
+        key: 'ten'
     }
-  ]
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchTrinhDo(row.id);
+    //                 var modal = document.getElementById("editChuyenMon");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
+]
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchTrinhDo(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 
 function backToList() {
     window.location.replace("/pages/catalog/qualifications.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = {...formValue}
-    formClone['id'] = idTrinhDoHienTai
+    const formClone = { ...formValue }
     return formClone
 }
 
 function fetchTrinhDo(id) {
+    console.log("Name:", id);
     setLoading(true)
-    idTrinhDoHienTai = id
+    idTrinhDo = id
     $.ajax({
         url: 'https://localhost:7141/api/TrinhDo/getTrinhDoById/' + id,
         method: 'GET',
-        success: function(data) {
-            setFormValue('qualifications_form', data)
+        success: function (data) {
+            setFormValue('editTrinhDo', data)
         },
         error: (err) => {
-            console.log('fetchTrinhDo err :: ', err);
+            console.log('fetchDepartments err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -51,9 +73,11 @@ function fetchTrinhDo(id) {
 }
 
 function handleCreate() {
-    const valid = validateForm('qualifications_form')
-    if(!valid) return
-    const formValue = getFormValues('qualifications_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục trình độ?')
+    if (!isConfirm) return
+    const valid = validateForm('editTrinhDo')
+    if (!valid) return
+    const formValue = getFormValues('editTrinhDo')
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -63,17 +87,17 @@ function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             console.log('fetchTrinhDo res :: ', data);
-            alert('Tạo Thành Công!');
+            alert("Thêm thành công !")
             backToList()
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -81,7 +105,7 @@ function handleCreate() {
                 alert(message)
             } catch (error) {
                 alert("Tạo mới không thành công!")
-            }  
+            }
         },
         complete: () => {
             setLoading(false)
@@ -89,17 +113,16 @@ function handleCreate() {
     });
 }
 
-
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục trình độ?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/TrinhDo/deleteTrinhDo/' + id,
+        url: 'https://localhost:7141/api/TrinhDo/deleteTrinhDo/' + idTrinhDo,
         method: 'DELETE',
-        success: function(data) {
+        success: function (data) {
             console.log('fetchTrinhDo res :: ', data);
-            alert('Xóa Thành Công!');
+            alert("Xóa thành công !")
             backToList()
         },
         error: (err) => {
@@ -111,26 +134,29 @@ function handleRemoveRow(id) {
         }
     });
 }
-
 function handleSave() {
-    const formValue = getFormValues('qualifications_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục trình độ?')
+    if (!isConfirm) return
+    const formValue = getFormValues('editTrinhDo')
     const payload = buildPayload(formValue)
     setLoading(true)
+    console.log('maTo: ', idTrinhDo)
     $.ajax({
-        url: 'https://localhost:7141/api/TrinhDo/updateTrinhDo/' +idTrinhDoHienTai ,
+        url: 'https://localhost:7141/api/TrinhDo/updateTrinhDo/' + idTrinhDo,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
+            console.log('fetchTrinhDo res :: ', data);
             alert('Lưu Thành Công!');
             backToList();
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -146,29 +172,83 @@ function handleSave() {
     });
 }
 
+function clearFormValues() {
+    const form = document.getElementById('editTrinhDo');
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('qualifications_form_action')
+
     const buildButton = (label, type, icon) => {
         const btnEl = document.createElement('base-button')
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
+
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
-    createBtn.addEventListener('click', handleCreate)
-    saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn,saveBtn)
+    createBtn.addEventListener('click', function () {
+        isPopupEdit = false
+        showPopup()
+    });
+
+    actionEl.append(createBtn)
+
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/TrinhDo/getTrinhDo' 
+    return 'https://localhost:7141/api/TrinhDo/getTrinhDo'
+}
+
+function showPopup() {
+    var modal = document.getElementById("editTrinhDo");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            setFormValue('editTrinhDo', { ten: "" })
+        }
+    }
+
+    console.log('isPopupEdit ', isPopupEdit);
+
+    if (isPopupEdit) {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Sửa Tiêu Đề Trình Độ"
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
+    } else {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Thêm mới Tiêu Đề Trình Độ"
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
+    popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

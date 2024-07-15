@@ -1,54 +1,75 @@
-const isEdit = !!id
+
+let isPopupEdit = false
+const popupCreateBtn = document.getElementById("createBtn")
+const popupSaveBtn = document.getElementById("saveBtn")
+const popupRemoveBtn = document.getElementById("removeBtn")
+const popupClearBtn = document.getElementById("clearBtn")
 
 let idToHienTai = null
 
 var TableColumns = [
     {
-      label: 'ID',
-      key: 'id'
+        label: 'ID',
+        key: 'id'
     },
     {
         label: 'Mã',
         key: 'ma'
-      },
+    },
     {
-      label: 'Tên',
-      key: 'ten'
+        label: 'Tên',
+        key: 'ten'
     },
     {
         label: 'Tên phòng',
         key: 'idphong'
-      },
-    {
-      label: 'Hành động',
-      key: 'action',
-      actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchTo(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-      ]
     }
-  ]
-
+    // {
+    //     label: 'Hành động',
+    //     key: 'action',
+    //     actions: [
+    //         {
+    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+    //                 isPopupEdit = true
+    //                 fetchTo(row.id);
+    //                 var modal = document.getElementById("editTeam");
+    //                 showPopup()
+    //             }
+    //         },
+    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+    //     ]
+    // }
+]
+var tableEvent = {
+    
+    rowDoubleClick: (row) => {
+   
+        isPopupEdit = true
+       
+        fetchTo(row.id)
+        showPopup()
+        console.log('row double click ',row);
+    }
+};
 function backToList() {
     window.location.replace("/pages/catalog/teams.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = {...formValue}
-    // formClone['id'] = idPhongBanHienTai
+    const formClone = { ...formValue }
     return formClone
 }
 
 function fetchTo(id) {
-    console.log("Name:" , id);
     setLoading(true)
     idToHienTai = id
     $.ajax({
         url: 'https://localhost:7141/api/DanhMucTo/getDanhMucToById/' + id,
         method: 'GET',
-        success: function(data) {
-            setFormValue('teams_form', data, 'fetch');
-            setFormValue('teams_form', data)
+        success: function (data) {
+
+            // setFormValue('editTeam', data, 'fetch');
+            setFormValue('editTeam', data)
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -59,10 +80,13 @@ function fetchTo(id) {
     });
 }
 
+
 function handleCreate() {
-    const valid = validateForm('teams_form')
-    if(!valid) return
-    const formValue = getFormValues('teams_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục tổ?')
+    if (!isConfirm) return
+    const valid = validateForm('editTeam')
+    if (!valid) return
+    const formValue = getFormValues('editTeam')
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -72,7 +96,7 @@ function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             console.log('fetchEmployee res :: ', data);
             alert("Thêm thành công !")
             backToList()
@@ -80,9 +104,9 @@ function handleCreate() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     alert(err.responseText)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -90,7 +114,7 @@ function handleCreate() {
                 alert(message)
             } catch (error) {
                 alert("Tạo mới không thành công!")
-            }  
+            }
         },
         complete: () => {
             setLoading(false)
@@ -98,14 +122,14 @@ function handleCreate() {
     });
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục tổ?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + id,
+        url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
         method: 'DELETE',
-        success: function(data) {
+        success: function (data) {
             console.log('fetchPhongBan res :: ', data);
             alert("Xóa thành công !")
             backToList()
@@ -120,37 +144,54 @@ function handleRemoveRow(id) {
     });
 }
 function handleSave() {
-    const formValue = getFormValues('teams_form')
-    const payload = buildPayload(formValue)
-    setLoading(true)
-    console.log('maTo: ', idToHienTai)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(data) {
-            console.log('fetchLanguage res :: ', data);
-            alert('Lưu Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if(!err.responseJSON) {
-                    alert(err.responseText)
-                    return 
+        const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục tổ?')
+    if (!isConfirm) return
+        const formValue = getFormValues('editTeam')
+        const payload = buildPayload(formValue)
+        console.log('payload ', payload);
+        setLoading(true)
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchLanguage res :: ', data);
+                alert('Lưu Thành Công!');
+                backToList();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
+        });
+
+}
+
+function clearFormValues() {
+    const form = document.getElementById('editTeam');
+    const inputs = form.querySelectorAll('input, textarea, select');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } else {
+            input.value = '';
+            input.selectedIndex = 0;
         }
     });
 }
@@ -162,22 +203,62 @@ function renderActionByStatus() {
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
+
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
 
-    createBtn.addEventListener('click', handleCreate)
-    saveBtn.addEventListener('click', handleSave)
 
-    actionEl.append(createBtn, saveBtn)
+    createBtn.addEventListener('click', function () {
+        isPopupEdit = false
+        showPopup()
+    });
+
+    actionEl.append(createBtn)
+
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo' 
+    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo'
+}
+
+function showPopup() {
+    var modal = document.getElementById("editTeam");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues();
+        }
+    }
+
+    console.log('isPopupEdit ', isPopupEdit);
+
+    if (isPopupEdit) {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Sửa Tiêu Đề Tổ"
+        popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.add('hidden') 
+        popupClearBtn.classList.add('hidden')
+    } else {
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+        popupSaveBtn.classList.add('hidden') 
+        popupRemoveBtn.classList.add('hidden')
+        popupCreateBtn.classList.remove('hidden') 
+        popupClearBtn.classList.remove('hidden')
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
+    popupCreateBtn.addEventListener("click", handleCreate)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })
 

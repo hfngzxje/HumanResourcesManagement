@@ -1,16 +1,39 @@
-const isEdit = !!id
+const isEdit = !!maNhanVien
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var MaritalOptions = [
     { label: 'Đã kết hôn', value: 1 },
     { label: 'Chưa kết hôn', value: 0 },
 ]
+var BankList = [
+    { label: 'Vietcombank', value: 'VCB' },
+    { label: 'BIDV', value: 'BIDV' },
+    { label: 'Agribank', value: 'AGB' },
+    { label: 'VietinBank', value: 'VTB' },
+    { label: 'ACB', value: 'ACB' },
+    { label: 'Techcombank', value: 'TCB' },
+    { label: 'MB Bank', value: 'MB' },
+    { label: 'TPBank', value: 'TPB' },
+    { label: 'VPBank', value: 'VPB' },
+    { label: 'SHB', value: 'SHB' },
+    { label: 'SeABank', value: 'SEA' },
+    { label: 'HDBank', value: 'HDB' },
+    { label: 'OCB', value: 'OCB' },
+    { label: 'NCB', value: 'NCB' },
+    { label: 'PVcomBank', value: 'PVC' },
+    { label: 'Sacombank', value: 'SCB' },
+    { label: 'LienVietPostBank', value: 'LPB' },
+    { label: 'VIB', value: 'VIB' },
+    { label: 'MSB', value: 'MSB' },
+    { label: 'VP Bank', value: 'VPB' }
+  ];
 
 function backToListDelete() {
     window.location.replace("/pages/staff/list.html");
 }
 function backToListUpdate() {
     const url = new URL("/pages/staff/resume.html", window.location.origin);
-    url.searchParams.set("id", id);
+    url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
 }
 
@@ -22,7 +45,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + id,
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -41,7 +64,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + id,
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -56,6 +79,8 @@ function fetchEmployee() {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
+    if (!isConfirm) return
     const valid = validateForm('resume_form')
     if(!valid) return
     const {anh, ...rest} = getFormValues('resume_form')
@@ -92,90 +117,9 @@ function handleCreate() {
     });
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/XoaNhanVien/' + id,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
-// function handleSave() {
-//     const valid = validateForm('resume_form')
-//     if(!valid) return
-    
-//     const {anh, ...rest} = getFormValues('resume_form')
-
-//     const formValue = getFormValues('resume_form')
-//     const payload = buildPayload(rest)
-//     setLoading(true)
-//     $.ajax({
-//         url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
-//         method: 'PUT',
-//         contentType: 'application/json',
-//         data: JSON.stringify(payload),
-//         success: function(data) {
-//             alert('Lưu thành công!');
-//             backToListUpdate();
-//         },
-//         error: (err) => {
-//             console.log('err ', err);
-//             try {
-//                 if(!err.responseJSON) {
-//                     alert(err.responseText)
-//                     return 
-//                 }
-//                 const errObj = err.responseJSON.errors
-//                 const firtErrKey = Object.keys(errObj)[0]
-//                 const message = errObj[firtErrKey][0]
-//                 alert(message)
-//             } catch (error) {
-//                 alert("Cập nhật thất bại!")
-//             }
-//         },
-//         complete: () => {
-            
-//         }
-//     });
-
-//     if(anh) {
-//         const payloadUploadImage = new FormData()
-//         payloadUploadImage.append('maNV', id)
-//         payloadUploadImage.append('file', anh)
-
-//         $.ajax({
-//             url: 'https://localhost:7141/api/Image/uploadImage',
-//             method: 'POST',
-//             contentType: false,
-//             processData: false,
-//             data: payloadUploadImage,
-//             success: function(data) {
-//             },
-//             error: (err) => {
-//             },
-//             complete: () => {
-//                 setLoading(false)
-//             }
-//         });
-//     } else {
-//         setLoading(false)
-//     }
-// }
-
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa Lý lịch tư pháp ?')
+    if (!isConfirm) return
     const valid = validateForm('resume_form')
     if(!valid) return
     
@@ -185,7 +129,7 @@ function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + id,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -224,7 +168,7 @@ function handleSave() {
 
 function uploadImage(anh) {
     const payloadUploadImage = new FormData()
-    payloadUploadImage.append('maNV', id)
+    payloadUploadImage.append('maNV', maNhanVien)
     payloadUploadImage.append('file', anh)
 
     $.ajax({
@@ -249,14 +193,25 @@ function uploadImage(anh) {
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 alert(message)
-                setLoading(false)
-            } catch (error) {
+                setLoading(false)            } catch (error) {
                 alert("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
         complete: () => {
             
+        }
+    });
+}
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
         }
     });
 }
@@ -272,27 +227,35 @@ function renderActionByStatus() {
     }
     if (!isEdit) {
         const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
         createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
+        clear.addEventListener('click', function() {
+            clearFormValues('resume_form');
+        });
+        actionEl.append(createBtn,clear)
         return
     }
-
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
-    removeBtn.addEventListener('click', handleRemove)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('resume_form');
+    });
 
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(saveBtn, clear)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // if (vaiTroID !== "1") {
+    //     window.location.href = "/pages/error.html";
+    //     return;
+    // }
     renderActionByStatus()
-    console.log('id ', id);
-    if (id) {
+    if (maNhanVien) {
         fetchEmployee()
         getImage()
     }
 })
 
+                                        

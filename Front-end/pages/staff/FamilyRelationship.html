@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
 </head>
@@ -18,53 +19,42 @@
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
                 <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <div class="flex border-b border-solid pb-3">
-                        <div class="w-[300px]">
-                            <span class="text-gray-400">Mã số <span style="color: red;">(*)</span>: </span>
-                            <span class="text-gray-700 text-xl font-medium">1123826</span>
-                        </div>
-                        <div>
-                            <span class="text-gray-400">Họ tên: </span>
-                            <span class="text-gray-700 text-xl font-medium">
-                                Nguyễn Sinh Duy
-                            </span>
-                        </div>
-                    </div>
-
                     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
                         <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
                     </div>
                     <!-- Nội dung form theo từng màn hình -->
                     <div class="mt-3">
-                        <form id="relationship_form" class="flex gap-x-5">
-                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
-                                <base-input label="Họ và tên (*)" name="ten"></base-input> <br>
-                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
-                                <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"></base-input>
-                             
+                                    <form id="relationship_form" class="flex gap-x-5">
+                                        <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                                            <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
+                                            <base-input label="Họ và tên (*)" name="ten"required="true"></base-input> <br>
+                                            <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
+                                            <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"required="true"></base-input>
+                                        
 
-                            </div>
-                            <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
-                                <div class="col-span-2 flex flex-col gap-y-2">
-                                    <div class="flex items-center gap-5">
-                                        <div>
-                                            <label-form-item name="Giới tính(*)"></label-form-item>
-                                            <div class="flex gap-5">
-                                                <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
-                                                <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                                        </div>
+                                        <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
+                                            <div class="col-span-2 flex flex-col gap-y-2">
+                                                <div class="flex items-center gap-5">
+                                                    <div>
+                                                        <label-form-item name="Giới tính(*)"></label-form-item>
+                                                        <div class="flex gap-5">
+                                                            <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
+                                                            <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                                                        </div>
+                                                    </div>
+                                                    <base-datepicker class="ml-auto" label="Năm sinh(*)"
+                                                        name="ngaysinh"required="true"></base-datepicker> <!-- Thêm lớp ml-auto -->
+                                                </div>
+                                                <base-input class="col-span-2" label="Nghề Nghiệp (*)"
+                                                    name="nghenghiep"required="true"></base-input>
+                                                <base-input-phone label="Số điện thoại" name="dienthoai"required="true"></base-input-phone>
                                             </div>
                                         </div>
-                                        <base-datepicker class="ml-auto" label="Năm sinh(*)"
-                                            name="ngaysinh"></base-datepicker> <!-- Thêm lớp ml-auto -->
-                                    </div>
-                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)"
-                                        name="nghenghiep"></base-input>
-                                    <base-input-phone label="Số điện thoại" name="dienthoai"></base-input-phone>
-                                </div>
-                            </div>
-                            <base-textarea label="Ghi chú" name="khac"></base-textarea>
-                        </form>
+                                        <base-textarea label="Ghi chú" name="khac"></base-textarea>
+
+                                        
+                                    </form>
                         <div id="relationship_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
                     
@@ -76,6 +66,7 @@
                     <base-table 
                         api="buildApiUrl"
                         columns="TableColumns"
+                        event="tableEvent"
                     >
                     </base-table>
                 </div>
@@ -90,6 +81,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/familyRelationshio.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 
 </html>

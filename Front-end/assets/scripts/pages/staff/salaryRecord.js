@@ -1,6 +1,5 @@
-const isEdit = !!id
-
 let idLuongHienTai = null
+const vaiTroID = localStorage.getItem("vaiTroID")
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -52,7 +51,8 @@ var TableColumns = [
     },
     {
         label: 'Thời Hạn Lên Lương',
-        key: 'thoihanlenluong'
+        key: 'thoihanlenluong',
+        formatter: (giatri) => giatri + ' năm'
     },
     {
         label: 'Ngày Hiệu Lực',
@@ -72,15 +72,22 @@ var TableColumns = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchSalary(row.id) } },
             { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
         ]
     }
 ]
+var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchSalaryToEdit(row.id)
+    }
+}
+
+
 
 function backToList() {
     const url = new URL("/pages/staff/salaryRecord.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
 
@@ -91,19 +98,18 @@ function buildPayload(formValue) {
     return formClone
 }
 
-function fetchSalary(id) {
-    console.log(mahopdong);
+function fetchSalaryToEdit(id) {
     setLoading(true)
     idLuongHienTai = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + id,
+        url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('laborContract_form', data)
+            setFormValue('salaryRecord_form', data)
         },
         error: (err) => {
-            console.log('fetchContract err :: ', err);
+            console.log('fetchSalary err :: ', err);
         },
         complete: () => {
             setLoading(false)
@@ -112,6 +118,8 @@ function fetchSalary(id) {
 }
 
 async function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
+    if (!isConfirm) return
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
@@ -173,7 +181,7 @@ async function fetchContractCodeStatus(mahopdong) {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -194,7 +202,7 @@ function handleRemove() {
 }
 
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
     $.ajax({
@@ -215,6 +223,8 @@ function handleRemoveRow(id) {
 }
 
 function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
+    if (!isConfirm) return
     const formValue = getFormValues('salaryRecord_form')
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -265,7 +275,6 @@ async function fetchSalary() {
         // Gán giá trị lương vào trường input số
         const inputElement = document.querySelector('base-input-number[name="tongluong"]');
         if (inputElement instanceof BaseInputNumber) {
-
             inputElement.value = salary;
         }
 
@@ -279,6 +288,43 @@ async function fetchSalary() {
     }
 }
 
+const hesoluongInput = document.querySelector('base-input-number[name="hesoluong"]');
+const phucaptrachnhiemInput = document.querySelector('base-input-number[name="phucaptrachnhiem"]');
+const phucapkhacInput = document.querySelector('base-input-number[name="phucapkhac"]');
+
+hesoluongInput.addEventListener('input', handleInputChange);
+phucaptrachnhiemInput.addEventListener('input', handleInputChange);
+phucapkhacInput.addEventListener('input', handleInputChange);
+
+function handleInputChange() {
+    // Lấy giá trị từ các trường input
+    const hesoluongValue = hesoluongInput.value;
+    const phucaptrachnhiemValue = phucaptrachnhiemInput.value;
+    const phucapkhacValue = phucapkhacInput.value;
+
+    // Kiểm tra nếu đủ dữ liệu đã được nhập
+    if (hesoluongValue !== '' || phucaptrachnhiemValue !== '' || phucapkhacValue !== '') {
+        // Gọi hàm fetchSalary()
+        fetchSalary()
+            .catch(error => {
+                // Xử lý lỗi nếu cần
+                console.error(error);
+            });
+    }
+}
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
     const buildButton = (label, type, icon) => {
@@ -288,40 +334,34 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const actionE2 = document.getElementById('tinhluong_form_Action');
-    const buildButton2 = (label, type, icon) => {
-        const btnE2 = document.createElement('base-button')
-        btnE2.setAttribute('label', label)
-        btnE2.setAttribute('type', type)
-        btnE2.setAttribute('icon', icon)
-        return btnE2
-    }
-
-    const tinhLuong = buildButton2('Tính lương', 'green', 'bx bxs-calculator')
-    tinhLuong.addEventListener('click', fetchSalary)
-
-
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('salaryRecord_form');
+    });
 
-    actionEl.append(createBtn, saveBtn)
-    actionE2.append(tinhLuong)
+    actionEl.append(createBtn, saveBtn,clear)
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien;
 }
 async function buildApiHopDongA(id) {
     return 'https://localhost:7141/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + id;
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maNhanVien;
 }
 document.addEventListener('DOMContentLoaded', () => {
+    if (vaiTroID !== "1") {
+        window.location.href = "/pages/error.html";
+        return;
+    }
     renderActionByStatus()
 })
 
