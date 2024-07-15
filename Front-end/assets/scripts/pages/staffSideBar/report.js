@@ -1,3 +1,4 @@
+const apiTable = 'https://localhost:7141/api/NhanVien';
 var TableColumns = [
     {
         label: 'Mã nhân viên',
@@ -47,6 +48,7 @@ var gioiTinh = [
     { label: 'Nam', value: 1 },
     { label: 'Nữ', value: 2 }
 ]
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const filterSelect = document.querySelector('base-select[description="Lọc theo"]');
@@ -111,7 +113,8 @@ function formatVietnameseDate(date) {
     return `${day} ${month} năm ${year}`;
 }
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NhanVien'
+    
+    return apiTable
 }
 
 document.addEventListener('DOMContentLoaded', () => {

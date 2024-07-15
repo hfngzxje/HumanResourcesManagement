@@ -680,17 +680,7 @@ class BaseTable extends HTMLElement {
        
             // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
 
-            const noticeBirthdate = columns.find(col => col.type === 'noticeBirthdate');
-            if (noticeBirthdate) {
-              const noticeValue = getNoticeBirthDate(row[noticeBirthdate.key]);
-              if (noticeValue === 'Đã xong') {
-                trEl.style.backgroundColor = 'silver'
-                // Đặt màu chữ của hàng thành đỏ
-              }
-              else if(noticeValue === 'Sắp sinh nhật'){
-                trEl.style.backgroundColor = '#EE7C6B'
-              }
-            }
+            
             
             if (event.rowClick !== undefined) {
               // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
@@ -711,7 +701,19 @@ class BaseTable extends HTMLElement {
               thEl.setAttribute('class', 'px-6 py-3 font-normal text-gray-500')
               // Lấy ra giá trị của cột tương ứng với key được khai báo
               let value = row[col.key] //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
-
+             
+              if (col.type === 'noticeBirthdate') {
+              
+                const noticeValue = getNoticeBirthDate(value);
+                if (noticeValue === 'Đã xong') {
+                  thEl.style.color = 'blue'
+                  // Đặt màu chữ của hàng thành đỏ
+                }
+                else if(noticeValue === 'Sắp sinh nhật'){
+                  thEl.style.color = 'red'
+                }
+                console.log(noticeValue)
+              }
               // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
               if (col.key === 'action') {
                 // 
