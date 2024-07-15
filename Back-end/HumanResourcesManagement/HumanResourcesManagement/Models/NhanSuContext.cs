@@ -203,7 +203,7 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblDanhMucTos)
                     .HasForeignKey(d => d.Idphong)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblDanhMu__idpho__628FA481");
+                    .HasConstraintName("FK__tblDanhMu__idpho__4F7CD00D");
             });
 
             modelBuilder.Entity<TblDanhMucTonGiao>(entity =>
@@ -258,17 +258,17 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.Manv)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblDieuChu__manv__6383C8BA");
+                    .HasConstraintName("FK__tblDieuChu__manv__5165187F");
 
                 entity.HasOne(d => d.PhongNavigation)
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.Phong)
-                    .HasConstraintName("FK__tblDieuCh__phong__6477ECF3");
+                    .HasConstraintName("FK__tblDieuCh__phong__5070F446");
 
                 entity.HasOne(d => d.ToNavigation)
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.To)
-                    .HasConstraintName("FK__tblDieuChuye__to__656C112C");
+                    .HasConstraintName("FK__tblDieuChuye__to__52593CB8");
             });
 
             modelBuilder.Entity<TblHinhThucDaoTao>(entity =>
@@ -285,7 +285,7 @@ namespace HumanResourcesManagement.Models
             modelBuilder.Entity<TblHopDong>(entity =>
             {
                 entity.HasKey(e => e.Mahopdong)
-                    .HasName("PK__tblHopDo__44476340AE57D1E2");
+                    .HasName("PK__tblHopDo__444763402460F472");
 
                 entity.ToTable("tblHopDong");
 
@@ -322,12 +322,12 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.LoaihopdongNavigation)
                     .WithMany(p => p.TblHopDongs)
                     .HasForeignKey(d => d.Loaihopdong)
-                    .HasConstraintName("FK__tblHopDon__loaih__74AE54BC");
+                    .HasConstraintName("FK__tblHopDon__loaih__534D60F1");
 
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblHopDongs)
                     .HasForeignKey(d => d.Ma)
-                    .HasConstraintName("FK__tblHopDong__ma__73BA3083");
+                    .HasConstraintName("FK__tblHopDong__ma__5441852A");
             });
 
             modelBuilder.Entity<TblKhenThuongKyLuat>(entity =>
@@ -361,12 +361,12 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblKhenThuongKyLuats)
                     .HasForeignKey(d => d.Ma)
-                    .HasConstraintName("FK__tblKhenThuon__ma__66603565");
+                    .HasConstraintName("FK__tblKhenThuon__ma__5629CD9C");
 
                 entity.HasOne(d => d.TenNavigation)
                     .WithMany(p => p.TblKhenThuongKyLuats)
                     .HasForeignKey(d => d.Ten)
-                    .HasConstraintName("FK__tblKhenThuo__ten__75A278F5");
+                    .HasConstraintName("FK__tblKhenThuo__ten__5535A963");
             });
 
             modelBuilder.Entity<TblLuong>(entity =>
@@ -414,7 +414,7 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.MahopdongNavigation)
                     .WithMany(p => p.TblLuongs)
                     .HasForeignKey(d => d.Mahopdong)
-                    .HasConstraintName("FK__tblLuong__mahopd__6754599E");
+                    .HasConstraintName("FK__tblLuong__mahopd__571DF1D5");
             });
 
             modelBuilder.Entity<TblNgoaiNgu>(entity =>
@@ -447,12 +447,12 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblNgoaiNgus)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblNgoaiNgu__ma__693CA210");
+                    .HasConstraintName("FK__tblNgoaiNgu__ma__59063A47");
 
                 entity.HasOne(d => d.NgoainguNavigation)
                     .WithMany(p => p.TblNgoaiNgus)
                     .HasForeignKey(d => d.Ngoaingu)
-                    .HasConstraintName("FK__tblNgoaiN__ngoai__68487DD7");
+                    .HasConstraintName("FK__tblNgoaiN__ngoai__5812160E");
             });
 
             modelBuilder.Entity<TblNguoiThan>(entity =>
@@ -502,18 +502,18 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblNguoiThans)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblNguoiThan__ma__6B24EA82");
+                    .HasConstraintName("FK__tblNguoiThan__ma__5AEE82B9");
 
                 entity.HasOne(d => d.QuanheNavigation)
                     .WithMany(p => p.TblNguoiThans)
                     .HasForeignKey(d => d.Quanhe)
-                    .HasConstraintName("FK__tblNguoiT__quanh__6A30C649");
+                    .HasConstraintName("FK__tblNguoiT__quanh__59FA5E80");
             });
 
             modelBuilder.Entity<TblNhanVien>(entity =>
             {
                 entity.HasKey(e => e.Ma)
-                    .HasName("PK__tblNhanV__3213C8B712F80AE7");
+                    .HasName("PK__tblNhanV__3213C8B7FE3F5A5A");
 
                 entity.ToTable("tblNhanVien");
 
@@ -692,37 +692,37 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.ChucvuhientaiNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Chucvuhientai)
-                    .HasConstraintName("FK__tblNhanVi__chucv__76969D2E");
+                    .HasConstraintName("FK__tblNhanVi__chucv__5BE2A6F2");
 
                 entity.HasOne(d => d.DantocNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Dantoc)
-                    .HasConstraintName("FK__tblNhanVi__danto__6C190EBB");
+                    .HasConstraintName("FK__tblNhanVi__danto__5CD6CB2B");
 
                 entity.HasOne(d => d.NgachcongchucNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Ngachcongchuc)
-                    .HasConstraintName("FK__tblNhanVi__ngach__778AC167");
+                    .HasConstraintName("FK__tblNhanVi__ngach__5DCAEF64");
 
                 entity.HasOne(d => d.PhongNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Phong)
-                    .HasConstraintName("FK__tblNhanVi__phong__6E01572D");
+                    .HasConstraintName("FK__tblNhanVi__phong__5EBF139D");
 
                 entity.HasOne(d => d.ToNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.To)
-                    .HasConstraintName("FK__tblNhanVien__to__6EF57B66");
+                    .HasConstraintName("FK__tblNhanVien__to__619B8048");
 
                 entity.HasOne(d => d.TongiaoNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Tongiao)
-                    .HasConstraintName("FK__tblNhanVi__tongi__6D0D32F4");
+                    .HasConstraintName("FK__tblNhanVi__tongi__5FB337D6");
 
                 entity.HasOne(d => d.VaiTro)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.VaiTroId)
-                    .HasConstraintName("FK__tblNhanVi__vaiTr__787EE5A0");
+                    .HasConstraintName("FK__tblNhanVi__vaiTr__60A75C0F");
             });
 
             modelBuilder.Entity<TblTrinhDoVanHoa>(entity =>
@@ -758,29 +758,29 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.ChuyennganhNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Chuyennganh)
-                    .HasConstraintName("FK__tblTrinhD__chuye__6FE99F9F");
+                    .HasConstraintName("FK__tblTrinhD__chuye__628FA481");
 
                 entity.HasOne(d => d.HinhthucdaotaoNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Hinhthucdaotao)
-                    .HasConstraintName("FK__tblTrinhD__hinht__70DDC3D8");
+                    .HasConstraintName("FK__tblTrinhD__hinht__6383C8BA");
 
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblTrinhDoVa__ma__72C60C4A");
+                    .HasConstraintName("FK__tblTrinhDoVa__ma__656C112C");
 
                 entity.HasOne(d => d.TrinhdoNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Trinhdo)
-                    .HasConstraintName("FK__tblTrinhD__trinh__71D1E811");
+                    .HasConstraintName("FK__tblTrinhD__trinh__6477ECF3");
             });
 
             modelBuilder.Entity<TblVaiTro>(entity =>
             {
                 entity.HasKey(e => e.VaiTroId)
-                    .HasName("PK__tblVaiTr__846C746F93938FBE");
+                    .HasName("PK__tblVaiTr__846C746F13454CF2");
 
                 entity.ToTable("tblVaiTro");
 

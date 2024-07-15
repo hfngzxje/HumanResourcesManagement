@@ -10,7 +10,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        
         builder.Services.AddScoped<INhanVienService, NhanVienService>();
         builder.Services.AddScoped<INguoiThanService, NguoiThanService>();
         builder.Services.AddScoped<IHopDongService, HopDongService>();
