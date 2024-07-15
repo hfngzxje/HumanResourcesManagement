@@ -39,7 +39,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucQuanHeService.AddQuanHe(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm danh mục quan hệ thành công.");
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucQuanHeService.DeleteQuanHe(id);
-                return StatusCode(200, "xoa quan he thanh cong");
+                return StatusCode(200, "Xóa danh mục quan hệ thành công.");
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucQuanHeService.UpdateQuanHe(id, req);
-                return StatusCode(200, "cap nhat dan toc thanh cong");
+                return StatusCode(200, "Cập nhật danh mục quan hệ thành công.");
             }
             catch (Exception ex)
             {

@@ -18,7 +18,7 @@ namespace HumanResourcesManagement.Service
             var cd = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ma == req.Ma);
             if (cd != null)
             {
-                throw new Exception("ma da ton tai");
+                throw new Exception("Mã đã tồn tại");
             }
             var d = new TblDanhMucChucDanh
             {
@@ -56,21 +56,21 @@ namespace HumanResourcesManagement.Service
             return dt;
         }
 
-        public async Task<TblDanhMucChucDanh> UpdateChucDanh(int id ,InsertChucDanh req)
+        public async Task<TblDanhMucChucDanh> UpdateChucDanh(int id, InsertChucDanh req)
         {
             try
             {
                 var dt = await GetChucDanhById(id);
                 if (dt == null)
                 {
-                    throw new Exception("khong ton tai id nay");
+                    throw new Exception("Không tồn tại id này.");
                 }
 
-                var temp = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ma == req.Ma);
-                if (temp != null && temp.Ma.Equals(req.Ma))
-                {
-                    throw new Exception($"{req.Ma} da ton tai");
-                }
+                // var temp = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ma == req.Ma);
+                // if (temp != null && temp.Ma.Equals(req.Ma))
+                // {
+                //     throw new Exception($"{req.Ma} đã tồn tại.");
+                // }
                 dt.Ma = req.Ma;
                 dt.Ten = req.Ten;
                 dt.Phucap = req.Phucap;
