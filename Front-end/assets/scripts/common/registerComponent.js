@@ -229,8 +229,7 @@ class BaseInput extends HTMLElement {
 
     this.innerHTML = `
     <div>
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${
-        hideLabel ? "" : "hidden"
+      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
       }">${label}</label>
       <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
@@ -248,9 +247,8 @@ class BaseTextArea extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
-    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
-      hideLabel ? "" : "hidden"
-    }">${label}</label>
+    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
+      }">${label}</label>
       <textarea rows="3" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
@@ -340,9 +338,8 @@ class BaseInputNumber extends HTMLElement {
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
-      this._readonly ? "readonly" : ""
-    }>
+      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
+      }>
     </div>
     `;
 
@@ -389,9 +386,8 @@ class BaseRadio extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex items-center mb-4">
-      <input type="radio" value="${value}" name="${name}" ${
-      checked !== null ? "checked" : ""
-    } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
+      <input type="radio" value="${value}" name="${name}" ${checked !== null ? "checked" : ""
+      } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
     </div>
     `;
@@ -575,6 +571,7 @@ class BaseButton extends HTMLElement {
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html
   static observedAttributes = ["api", "columns", "event", "pageSize"];
+  
   connectedCallback() {
     // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
     const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
@@ -651,11 +648,12 @@ class BaseTable extends HTMLElement {
 
       const daysUntilBirthday = differenceInTime / (1000 * 60 * 60 * 24);
 
-      if (daysUntilBirthday >= -10 && daysUntilBirthday <= 1) {
+      if (daysUntilBirthday >= -10 && daysUntilBirthday < 0) {
         return "Sắp sinh nhật";
       } else if (daysUntilBirthday > 0) {
         return "Đã xong";
-      } else {
+      }
+      else {
         return " ";
       }
     }
@@ -732,21 +730,6 @@ class BaseTable extends HTMLElement {
             "bg-white border-bottom hover:bg-gray-100"
           );
 
-          // kiểm tra xem sự kiện rowClick đã đc khai báo hay chưa
-
-          const noticeBirthdate = columns.find(
-            (col) => col.type === "noticeBirthdate"
-          );
-          if (noticeBirthdate) {
-            const noticeValue = getNoticeBirthDate(row[noticeBirthdate.key]);
-            if (noticeValue === "Đã xong") {
-              trEl.style.backgroundColor = "silver";
-              // Đặt màu chữ của hàng thành đỏ
-            } else if (noticeValue === "Sắp sinh nhật") {
-              trEl.style.backgroundColor = "#EE7C6B";
-            }
-          }
-
           if (event.rowClick !== undefined) {
             // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
             trEl.addEventListener("click", () => {
@@ -768,6 +751,18 @@ class BaseTable extends HTMLElement {
             // Lấy ra giá trị của cột tương ứng với key được khai báo
             let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
 
+            if (col.type === "noticeBirthdate") {
+              const noticeValue = getNoticeBirthDate(value);
+              if (noticeValue === "Đã xong") {
+                thEl.style.color = "blue";
+              }
+              else if (noticeValue === "Hôm nay sinh nhật") {
+                thEl.style.color = "green"
+              }
+              else if (noticeValue === "Sắp sinh nhật") {
+                thEl.style.color = "red";
+              }
+            }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
             if (col.key === "action") {
               //
@@ -819,26 +814,101 @@ class BaseTable extends HTMLElement {
       // xử lý phần hiển thị phân trang
       function renderPagination() {
         paginationEl.innerHTML = "";
-        for (let i = 1; i <= totalPage; i++) {
+        // Nút "Previous"
+        // Nút "Previous"
+        const prevButton = document.createElement("button");
+        prevButton.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l hover:bg-gray-100 hover:text-gray-700"
+        );
+        prevButton.textContent = "Previous";
+        prevButton.disabled = currentPage === 1; // Vô hiệu hóa nếu đang ở trang đầu tiên
+        prevButton.classList.add(currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer");
+        prevButton.addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+            renderPagination();
+          }
+        });
+        paginationEl.appendChild(prevButton);
+
+        // Nút phân trang số
+        const addPageButton = (page) => {
           const button = document.createElement("button");
           button.setAttribute(
             "class",
             "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
           );
-          button.textContent = i;
-          if (i === currentPage) {
+          button.textContent = page;
+          if (page === currentPage) {
             button.setAttribute(
               "class",
-              "z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 "
+              "z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
             );
           }
           button.addEventListener("click", () => {
-            currentPage = i;
+            currentPage = page;
             renderTable();
             renderPagination();
           });
           paginationEl.appendChild(button);
+        };
+
+        if (totalPage <= 6) {
+          for (let i = 1; i <= totalPage; i++) {
+            addPageButton(i);
+          }
+        } else {
+          if (currentPage <= 3) {
+            for (let i = 1; i <= 4; i++) {
+              addPageButton(i);
+            }
+            paginationEl.appendChild(createEllipsis());
+            addPageButton(totalPage);
+          } else if (currentPage >= totalPage - 2) {
+            addPageButton(1);
+            paginationEl.appendChild(createEllipsis());
+            for (let i = totalPage - 3; i <= totalPage; i++) {
+              addPageButton(i);
+            }
+          } else {
+            addPageButton(1);
+            paginationEl.appendChild(createEllipsis());
+            for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+              addPageButton(i);
+            }
+            paginationEl.appendChild(createEllipsis());
+            addPageButton(totalPage);
+          }
         }
+
+        // Nút "Next"
+        const nextButton = document.createElement("button");
+        nextButton.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r hover:bg-gray-100 hover:text-gray-700"
+        );
+        nextButton.textContent = "Next";
+        nextButton.disabled = currentPage === totalPage; // Vô hiệu hóa nếu đang ở trang cuối
+        nextButton.classList.add(currentPage === totalPage ? "cursor-not-allowed" : "cursor-pointer");
+        nextButton.addEventListener("click", () => {
+          if (currentPage < totalPage) {
+            currentPage++;
+            renderTable();
+            renderPagination();
+          }
+        });
+        paginationEl.appendChild(nextButton);
+      }
+      function createEllipsis() {
+        const ellipsis = document.createElement("span");
+        ellipsis.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500"
+        );
+        ellipsis.textContent = "...";
+        return ellipsis;
       }
 
       $.ajax({
@@ -846,8 +916,8 @@ class BaseTable extends HTMLElement {
         method: "GET", // phương thức
         success: (tableData) => {
           // tableData : dữ liệu Api bảng trả về
-          sourceTableData = TABLE_MOCK;
-          setTableData(TABLE_MOCK);
+
+          setTableData(tableData);
           renderTable();
           renderPagination();
         },
@@ -884,7 +954,7 @@ customElements.define("base-input", BaseInput);
 customElements.define("base-textarea", BaseTextArea);
 customElements.define("base-datepicker", BaseDatePicker);
 customElements.define("base-input-phone", BaseInputPhone);
-customElements.define("base-rad&io", BaseRadio);
+customElements.define("base-radio", BaseRadio);
 customElements.define("label-form-item", LabelFormItem);
 customElements.define("base-input-number", BaseInputNumber);
 customElements.define("base-select", BaseSelect);
