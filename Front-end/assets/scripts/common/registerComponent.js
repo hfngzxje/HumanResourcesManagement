@@ -238,20 +238,27 @@ class BaseInput extends HTMLElement {
   }
 }
 class BaseTextArea extends HTMLElement {
-  static observedAttributes = ["label", "hide-label", "name", "required"];
+  static observedAttributes = [
+    "label",
+    "hide-label",
+    "name",
+    "required",
+    "row",
+  ];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const row = this.getAttribute("row") || "3";
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
     <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
       hideLabel ? "" : "hidden"
     }">${label}</label>
-      <textarea rows="3" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+      <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
   }
