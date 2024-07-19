@@ -19,108 +19,227 @@
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
                 <div class="h-fit w-full bg-white rounded-lg p-3">
-                  
+
 
                     <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
                         <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
                     </div>
 
                     <!-- Nội dung form theo từng màn hình -->
-                    <div class="mt-3">
-                        <form id="resume_form" class="flex gap-x-5">
-                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <base-input class="col-span-2" label="Họ và tên (*)" name="ten" required="true"></base-input>
-                                <base-datepicker label="Ngày sinh(*)" name="ngaysinh"required="true"></base-datepicker>
-                                <!-- <base-input-phone label="Số điện thoại" name="dienthoai"></base-input-phone> -->
-                                <div>
+                    <div class="flex mt-3">
+
+                        <div id="div1" class="w-1/6 bg-gray-100 rounded-lg p-3 mr-3 h-screen" style="max-width: 300px;">
+                            <form id="a">
+                                <div class="col-span-1 h-[300px]">
+                                    <base-upload name="anh" idImage="employeeImage"></base-upload>
+                                </div>
+
+                                <h1 id="ma-text" style="font-weight: bold; text-align: center; margin-top: 6px; font-size: 25px;color: cornflowerblue;">Mã Nhân Viên</h1>
+                                <h3 id="trangThai-text" style="font-weight: bold; text-align: center;margin-top: 1px; font-size: 18px;color: green;">Trạng thái</h1>
+                                    <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                                <div class="text-sm text-gray-700">
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-group text-lg'></i></span>
+                                        <span id="name" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bxs-home-alt-2'></i></span>
+                                        <span id="phong" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-id-card'></i></span>
+                                        <span id="chucdanh" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                            
+                                    <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                            
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-phone'></i></span>
+                                        <span id="sdt" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-envelope'></i></span>
+                                        <span id="email" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-calendar'></i></span>
+                                        <span id="ngaysinh" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-male'></i></span>
+                                        <span id="gioitinh" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+                            
+                                    <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                            
+                                    <h3 style="font-size: 18px; margin-top: 20px; color: cornflowerblue;">Ngày vào làm</h3>
+                                    <p style="margin: 10px 0;">
+                                        <span class="icon" style="margin-right: 8px;"><i class='bx bx-calendar-alt'></i></span>
+                                        <span id="ngayvaolam" style="font-size: 16px; font-weight: lighter;"></span>
+                                    </p>
+
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div id="div2" class="w-5/6 bg-white rounded-lg p-3">
+                            <form id="resume_form" class="flex gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 ">
+
+                                    <!-- p-4 bg-gray-100 border border-gray-300 rounded-lg -->
+
+                                    <!-- <base-input class="col-span-2" label="Họ và tên (*)" name="ten" required="true"></base-input> -->
+                                    <!-- <base-datepicker label="Ngày sinh(*)" name="ngaysinh"required="true"></base-datepicker> -->
+                                    <!-- <div>
                                     <label-form-item name="Giới tính(*)"required="true"></label-form-item>
                                     <div class="flex gap-5">
                                         <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
                                         <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
                                     </div>
-                                </div>
-                                <base-input-phone label="Di động(*)" name="didong" required="true"></base-input-phone>
-                                <base-input label="Email (*)" name="email" required="true"></base-input>
-                                <base-input-number label="CMND(*)" name="cmnd"required="true"></base-input-number>
-                                <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"required="true"></base-datepicker>
-                                <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"required="true"></base-input>
-                                <base-input class="col-span-2" label="Quê quán(*)" name="quequan"required="true"></base-input>
-                                <base-input label="Nghề nghiệp" name="nghenghiep"></base-input>
-                                <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung"></base-datepicker>
+                                </div> -->
+                                    <!-- <base-input-phone label="Di động(*)" name="didong" required="true"></base-input-phone>
+                                <base-input label="Email (*)" name="email" required="true"></base-input> -->
+                                    <base-input-number label="CMND(*)" name="cmnd" required="true"></base-input-number>
+                                    <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
+                                        required="true"></base-datepicker>
+                                    <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"
+                                        required="true"></base-input>
+                                    <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
+                                        required="true"></base-input>
+                                    <div class="col-span-2 flex flex-col gap-y-2">
+                                        <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
+                                            options="MaritalOptions" required="true"></base-select>
+                                        <div class="flex gap-x-2">
+                                            <base-input label="Nghề nghiệp" name="nghenghiep"
+                                                class="flex-1"></base-input>
+                                            <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung"
+                                                class="flex-1"></base-datepicker>
+                                        </div>
+                                    </div>
 
-                                <base-select label="Chúc Vụ Hiện Tại" name="chucvuhientai"
+
+                                    <!-- <base-select label="Chúc Vụ Hiện Tại" name="chucvuhientai"
                                     api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
                                     keyLabel="ten"></base-select>
 
                                <base-select label="Phòng" name="phong"
                                     api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
-                                    keyLabel="ten"></base-select>
+                                    keyLabel="ten"></base-select> -->
 
-                                <base-select label="Tổ" name="to"
+                                    <!-- <base-select label="Tổ" name="to"
                                     api="https://localhost:7141/api/NhanVien/to" keyValue="id"
-                                    keyLabel="ten"></base-select>
+                                    keyLabel="ten"></base-select> -->
 
-                                <base-input label="Cơ quan tuyển dụng" name="coquantuyendung"></base-input>
 
-                                <base-select label="Ngạch công chức" name="ngachcongchuc"
-                                api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
-                                keyLabel="ten"></base-select>
 
-                                <base-datepicker label="Ngày vào đảng" name="ngayvaodang"></base-datepicker>
-                                <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội"
-                                    name="social_political_organization_join_date"></base-datepicker>
-                                <base-input class="col-span-2" label="Nơi tham gia" name="noithamgia"></base-input>
-                                <div class="col-span-2 flex items-center gap-x-5">
-                                    <base-checkbox label="Là thương binh hạng" class="!mb-0"
-                                        name="lathuongbinh"></base-checkbox>
-                                    <base-input class="flex-1" hide-label="true" name="thuongbinh"></base-input>
+
+
+                                    <div class="col-span-2 flex flex-col gap-y-2">
+                                        <base-datepicker label="Ngày vào đảng" name="ngayvaodang"></base-datepicker>
+                                    </div>
+                                    <base-datepicker label="Ngày nhập ngũ" name="ngaynhapngu"></base-datepicker>
+                                    <base-datepicker label="Ngày xuất ngũ" name="ngayxuatngu"></base-datepicker>
+                                    <div class="col-span-2 flex flex-col gap-y-2">
+                                        <div class="col-span-2 flex items-center gap-x-5">
+                                            <base-checkbox label="Là thương binh hạng" class="!mb-0"
+                                                name="lathuongbinh"></base-checkbox>
+                                            <base-input class="flex-1" hide-label="true" name="thuongbinh"></base-input>
+                                        </div>
+                                    </div>
+
+                                    <base-input label="Mã số BHXH" name="bhxh"></base-input>
+                                    <base-input label="Mã số BHYT" name="bhyt"></base-input>
                                 </div>
-                                <base-input label="Mã số BHXH" name="bhxh"></base-input>
-                                <base-input label="Mã số BHYT" name="bhyt"></base-input>
-                            </div>
-                            <div class="flex-1  grid grid-cols-2 gap-y-2 gap-x-5">
-                                <div class="col-span-1 flex flex-col gap-y-2">
-                                    <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
-                                        options="MaritalOptions"required="true"></base-select>
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 ">
+                                    <!-- p-4 bg-blue-100 border border-gray-300 rounded-lg -->
 
-                                    <base-select label="Dân tộc(*)" name="dantoc"
-                                        api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
-                                        keyLabel="ten"></base-select>
+                                    <div class="col-span-3 flex flex-col gap-y-2">
+                                        <base-input label="Nơi cấp(*)" name="cmndnoicap" required="true"></base-input>
+                                        <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
+                                            name="thuongtru" required="true"></base-input>
+                                        <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
+                                            required="true"></base-input>
 
-                                    <base-select label="Tôn giáo" name="tongiao"
-                                        api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
-                                        keyLabel="ten"></base-select>
 
-                                    <base-input label="Nơi cấp(*)" name="cmndnoicap"required="true"></base-input>
+
+
+
+                                    </div>
+                                    <div class="col-span-3 flex flex-row gap-x-2">
+                                        <div class="w-1/2">
+                                            <base-select label="Dân tộc(*)" name="dantoc"
+                                                api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="w-1/2">
+                                            <base-select label="Tôn giáo" name="tongiao"
+                                                api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                    </div>
+
+
+                                    <base-input class="flex-2" label="Công việc chính"
+                                        name="congviecchinh"></base-input>
+                                    <base-input class="flex-1" label="Cơ quan tuyển dụng"
+                                        name="coquantuyendung"></base-input>
+                                    <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
+                                        api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
+                                        keyLabel="ten"  style="margin-top: 7px;"></base-select>
+
+
+                                    <!-- <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker> -->
+                                    <!-- <base-datepicker label="Ngày công tác" name="ngaychinhthuc"></base-datepicker> -->
+
+
+
+                                    <div class="col-span-3 flex flex-row gap-x-2">
+                                        <div class="w-1/2">
+                                            <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội"
+                                                name="social_political_organization_join_date"></base-datepicker>
+                                        </div>
+                                        <div class="w-1/2">
+                                            <base-input class="ml-auto" label="Nơi tham gia"
+                                                name="noithamgia"></base-input>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-3 flex flex-row gap-x-2">
+                                        <div class="w-1/2">
+                                            <base-input label="Quân hàm cao nhất" name="quanhamcaonhat"></base-input>
+                                        </div>
+                                        <div class="w-1/2">
+                                            <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất"
+                                                name="danhhieucaonhat"></base-input>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-span-2 flex flex-col gap-y-2">
+                                        <div class="col-span-2 flex items-center gap-x-5">
+                                            <base-checkbox label="Là con gia đình chính sách" class="!mb-0" name="laconchinhsach"></base-checkbox>
+                                            <base-input class="w-full" hide-label="true" name="chinhsach"></base-input>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-3 flex flex-row gap-x-2">
+                                        <div class="w-1/2">
+                                            <base-input label="Số thẻ ATM" name="atm"></base-input>
+                                        </div>
+                                        <div class="w-1/2">
+                                            <base-select label="Ngân hàng(*)" name="nganhang" options="BankList"
+                                                required="true" style="margin-top: 20px;"></base-select>
+                                        </div>
+                                    </div>
+
+
+
                                 </div>
-                                <div class="col-span-1 h-[300px]">
-                                    <base-upload name="anh" idImage="employeeImage" ></base-upload>
-                                </div>
-                                <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
-                                    name="thuongtru"required="true"></base-input>
-                                <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"required="true"></base-input>
-                                <base-input class="col-span-2" label="Công việc chính"
-                                    name="congviecchinh"></base-input>
-                                <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker>
-                                <base-datepicker label="Ngày công tác" name="ngaychinhthuc"></base-datepicker>
-                                <base-datepicker label="Ngày nhập ngũ" name="ngaynhapngu"></base-datepicker>
-                                <base-datepicker label="Ngày xuất ngũ" name="ngayxuatngu"></base-datepicker>
-                                <base-input class="col-span-2" label="Quân hàm cao nhất"
-                                    name="quanhamcaonhat"></base-input>
-                                <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất"
-                                    name="danhhieucaonhat"></base-input>
-                                <div class="col-span-2 flex items-center gap-x-5">
-                                    <base-checkbox label="Là con gia đình chính sách" class="!mb-0"
-                                        name="laconchinhsach"></base-checkbox>
-                                    <base-input class="flex-1" hide-label="true" name="chinhsach"></base-input>
-                                </div>
-                                <base-input label="Số thẻ ATM" name="atm"></base-input>
-                                <!-- <base-input label="Ngân hàng(*)" name="nganhang"required="true"></base-input> -->
-                                <base-select label="Ngân hàng(*)" name="nganhang"
-                                        options="BankList"required="true"></base-select>
-                            </div>
-                        </form>
-                        <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                            </form>
+
+                            <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                        </div>
                     </div>
                 </div>
             </div>

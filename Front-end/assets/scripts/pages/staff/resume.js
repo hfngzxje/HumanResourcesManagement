@@ -78,6 +78,7 @@ function fetchEmployee() {
     });
 }
 
+
 function handleCreate() {
     const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
     if (!isConfirm) return
@@ -134,7 +135,6 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            // Lưu thông tin nhân viên thành công
             if (anh) {
                 uploadImage(anh);
             } else {
@@ -251,11 +251,55 @@ document.addEventListener('DOMContentLoaded', () => {
     //     window.location.href = "/pages/error.html";
     //     return;
     // }
+    var div1 = document.getElementById("div1");
+    var div2 = document.getElementById("div2");
+
+    // Lấy chiều cao của div2
+    var div2Height = div2.offsetHeight;
+    // Đặt chiều cao của div1 bằng chiều cao của div2
+    div1.style.height =( div2Height - 35) + "px";
     renderActionByStatus()
     if (maNhanVien) {
         fetchEmployee()
         getImage()
+        const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien;
+
+        // Thực hiện yêu cầu API
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                // Cập nhật nội dung của thẻ <p>
+                const maText = document.getElementById('ma-text');
+                maText.textContent = data.ma; // Giả sử API trả về một thuộc tính `description`
+                const name = document.getElementById('name');
+                name.textContent = data.ten; 
+                const phong = document.getElementById('phong');
+                phong.textContent = data.phong; 
+                const chucDanh = document.getElementById('chucdanh');
+                chucDanh.textContent = data.chucvuhientai; 
+                const sdt = document.getElementById('sdt');
+                sdt.textContent = data.didong; 
+                const email = document.getElementById('email');
+                email.textContent = data.email; 
+                const ngaysinh = document.getElementById('ngaysinh');
+                ngaysinh.textContent = data.ngaysinh; 
+                const gioitinh = document.getElementById('gioitinh');
+                if(data.gioitinh === true){
+                    gioitinh.textContent = "Nam";
+                }
+                else{
+                    gioitinh.textContent = "Nữ"
+                }
+                const ngayvaolam = document.getElementById('ngayvaolam');
+                ngayvaolam.textContent = data.ngaychinhthuc;
+                
+            })
+            .catch(error => {
+                console.error('Error fetching the data:', error);
+            });
     }
+
+    
 })
 
                                         
