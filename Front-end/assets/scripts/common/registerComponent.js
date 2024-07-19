@@ -229,7 +229,8 @@ class BaseInput extends HTMLElement {
 
     this.innerHTML = `
     <div>
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
+      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ${
+        hideLabel ? "" : "hidden"
       }">${label}</label>
       <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
@@ -247,8 +248,9 @@ class BaseTextArea extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
-    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${hideLabel ? "" : "hidden"
-      }">${label}</label>
+    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
+      hideLabel ? "" : "hidden"
+    }">${label}</label>
       <textarea rows="3" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
@@ -338,8 +340,9 @@ class BaseInputNumber extends HTMLElement {
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
-      }>
+      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+      this._readonly ? "readonly" : ""
+    }>
     </div>
     `;
 
@@ -386,8 +389,9 @@ class BaseRadio extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex items-center mb-4">
-      <input type="radio" value="${value}" name="${name}" ${checked !== null ? "checked" : ""
-      } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
+      <input type="radio" value="${value}" name="${name}" ${
+      checked !== null ? "checked" : ""
+    } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
     </div>
     `;
@@ -571,7 +575,7 @@ class BaseButton extends HTMLElement {
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html
   static observedAttributes = ["api", "columns", "event", "pageSize"];
-  
+
   connectedCallback() {
     // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
     const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
@@ -652,8 +656,7 @@ class BaseTable extends HTMLElement {
         return "Sắp sinh nhật";
       } else if (daysUntilBirthday > 0) {
         return "Đã xong";
-      }
-      else {
+      } else {
         return " ";
       }
     }
@@ -755,11 +758,9 @@ class BaseTable extends HTMLElement {
               const noticeValue = getNoticeBirthDate(value);
               if (noticeValue === "Đã xong") {
                 thEl.style.color = "blue";
-              }
-              else if (noticeValue === "Hôm nay sinh nhật") {
-                thEl.style.color = "green"
-              }
-              else if (noticeValue === "Sắp sinh nhật") {
+              } else if (noticeValue === "Hôm nay sinh nhật") {
+                thEl.style.color = "green";
+              } else if (noticeValue === "Sắp sinh nhật") {
                 thEl.style.color = "red";
               }
             }
@@ -823,7 +824,9 @@ class BaseTable extends HTMLElement {
         );
         prevButton.textContent = "Previous";
         prevButton.disabled = currentPage === 1; // Vô hiệu hóa nếu đang ở trang đầu tiên
-        prevButton.classList.add(currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer");
+        prevButton.classList.add(
+          currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+        );
         prevButton.addEventListener("click", () => {
           if (currentPage > 1) {
             currentPage--;
@@ -891,7 +894,9 @@ class BaseTable extends HTMLElement {
         );
         nextButton.textContent = "Next";
         nextButton.disabled = currentPage === totalPage; // Vô hiệu hóa nếu đang ở trang cuối
-        nextButton.classList.add(currentPage === totalPage ? "cursor-not-allowed" : "cursor-pointer");
+        nextButton.classList.add(
+          currentPage === totalPage ? "cursor-not-allowed" : "cursor-pointer"
+        );
         nextButton.addEventListener("click", () => {
           if (currentPage < totalPage) {
             currentPage++;
@@ -910,29 +915,39 @@ class BaseTable extends HTMLElement {
         ellipsis.textContent = "...";
         return ellipsis;
       }
+      const handleCallFetchData = (payload) => {
+        $.ajax({
+          url: getApiUrl(), // lấy ra url api của bảng = http://...
+          method: "GET", // phương thức
+          data: payload,
+          success: (tableData) => {
+            // tableData : dữ liệu Api bảng trả về
 
-      $.ajax({
-        url: getApiUrl(), // lấy ra url api của bảng = http://...
-        method: "GET", // phương thức
-        success: (tableData) => {
-          // tableData : dữ liệu Api bảng trả về
+            setTableData(tableData);
+            renderTable();
+            renderPagination();
+          },
+          error: (xhr, status, error) => {
+            const hasEmptyEl = this.querySelector("#empty-data");
+            console.log("hasEmptyEl ", hasEmptyEl);
+            if (hasEmptyEl) return;
+            // Trường hợp thất bại
+            const wrapperTable = this.querySelector("#wrapper-table");
 
-          setTableData(tableData);
-          renderTable();
-          renderPagination();
-        },
-        error: (xhr, status, error) => {
-          // Trường hợp thất bại
-          const wrapperTable = this.querySelector("#wrapper-table");
-          const divEl = document.createElement("div");
-          divEl.setAttribute(
-            "class",
-            "text-center text-gray-400 mt-5 mb-5 text-sm"
-          );
-          divEl.innerText = "Không có dữ liệu!";
-          wrapperTable.append(divEl);
-        },
-      });
+            const divEl = document.createElement("div");
+            divEl.setAttribute("id", "empty-data");
+            divEl.setAttribute(
+              "class",
+              "text-center text-gray-400 mt-5 mb-5 text-sm"
+            );
+            divEl.innerText = "Không có dữ liệu!";
+            wrapperTable.append(divEl);
+          },
+        });
+      };
+      handleCallFetchData();
+
+      this.handleCallFetchData = handleCallFetchData;
     });
 
     this.innerHTML = `
@@ -948,7 +963,7 @@ class BaseTable extends HTMLElement {
 }
 
 //  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
-customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
+customElements.define(/** 1*/ "layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);
 customElements.define("base-textarea", BaseTextArea);
