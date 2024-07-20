@@ -127,6 +127,7 @@ function handleSave() {
     const {anh, ...rest} = getFormValues('resume_form')
 
     const formValue = getFormValues('resume_form')
+    // formValue['ten'] = 
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({

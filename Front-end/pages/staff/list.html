@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">>
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
@@ -29,7 +30,7 @@
                             </button>
                             <button type="button"
                                 class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-                                <a href="../staff/resume.html" onclick="addNewEmp()">
+                                <a onclick="showPopup()">
                                     <i class="bx bx-plus mr-1"></i>
                                     Thêm mới
                                 </a>
@@ -37,8 +38,7 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <base-table api="https://localhost:7141/api/NhanVien" columns="TableColumns"
-                        pagesize="5">
+                        <base-table api="https://localhost:7141/api/NhanVien" columns="TableColumns" pagesize="1">
                         </base-table>
                         </ul>
                         </nav>
@@ -47,6 +47,165 @@
             </div>
         </div>
     </div>
+    <div id="createNhanVien" class="modal" style="z-index: 100;">
+        <div class="change-container "
+            style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
+            <span class="close">&times;</span>
+            <form id="change_form">
+                <div class="form-header" style="padding: 10px;">
+                    <h2 style="color: #333; text-align: center; font-size: 24px; font-weight: lighter;">Thêm mới nhân
+                        viên</h2>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="container">
+                                <form id="profile_form">
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <h6 class="mb-2 text-primary">Thông tin cá nhân</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
+                                                required="true"></base-input>
+                                        </div>
+                                        <div class="col">
+                                            <base-input label="Email (*)" name="email" required="true"></base-input>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <base-input-phone label="Di động(*)" name="didong"
+                                                required="true"></base-input-phone>
+                                        </div>
+                                        <div class="col">
+                                            <base-datepicker label="Ngày sinh(*)" name="ngaysinh"
+                                                required="true"></base-datepicker>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label-form-item name="Giới tính(*)" required="true"></label-form-item>
+                                                <div class="flex gap-5">
+                                                    <base-radio label="Nam" name="gioitinh" value="1"
+                                                        checked></base-radio>
+                                                    <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <base-input-number label="CMND(*)" name="cmnd"
+                                                required="true"></base-input-number>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
+                                                required="true"></base-datepicker>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-input label="Nơi cấp(*)" name="cmndnoicap"
+                                                required="true"></base-input>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"
+                                                required="true"></base-input>
+                                        </div>
+                                        <div class="col">
+                                            <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
+                                                name="thuongtru" required="true"></base-input>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
+                                                required="true"></base-input>
+                                        </div>
+                                        <div class="col">
+                                            <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
+                                                required="true"></base-input>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
+                                                options="MaritalOptions" required="true"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select label="Dân tộc(*)" name="dantoc"
+                                                api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select label="Tôn giáo" name="tongiao"
+                                                api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select label="Ngân hàng(*)" name="nganhang" options="BankList"
+                                                required="true" style="margin-top: 20px;"></base-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <h6 class="mt-3 mb-2 text-primary">Công việc</h6>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
+                                                api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select label="Phòng" name="phong"
+                                                api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select label="Tổ" name="to"
+                                                api="https://localhost:7141/api/NhanVien/to" keyValue="id"
+                                                keyLabel="ten"></base-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
+                                        api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
+                                        keyLabel="ten" ></base-select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker>
+                                        </div>
+                                        <div class="col">
+                                            <base-datepicker label="Ngày công tác"
+                                                name="ngaychinhthuc"></base-datepicker>
+                                        </div>
+                                        
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div id="profile_form_action" class="flex gap-x-5 mt-5 justify-end">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="flex gap-x-5 mt-5 justify-center">
+                <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
+                <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

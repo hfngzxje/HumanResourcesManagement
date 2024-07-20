@@ -2,10 +2,50 @@
 const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
 
+var BankList = [
+    { label: 'Vietcombank', value: 'VCB' },
+    { label: 'BIDV', value: 'BIDV' },
+    { label: 'Agribank', value: 'AGB' },
+    { label: 'VietinBank', value: 'VTB' },
+    { label: 'ACB', value: 'ACB' },
+    { label: 'Techcombank', value: 'TCB' },
+    { label: 'MB Bank', value: 'MB' },
+    { label: 'TPBank', value: 'TPB' },
+    { label: 'VPBank', value: 'VPB' },
+    { label: 'SHB', value: 'SHB' },
+    { label: 'SeABank', value: 'SEA' },
+    { label: 'HDBank', value: 'HDB' },
+    { label: 'OCB', value: 'OCB' },
+    { label: 'NCB', value: 'NCB' },
+    { label: 'PVcomBank', value: 'PVC' },
+    { label: 'Sacombank', value: 'SCB' },
+    { label: 'LienVietPostBank', value: 'LPB' },
+    { label: 'VIB', value: 'VIB' },
+    { label: 'MSB', value: 'MSB' },
+    { label: 'VP Bank', value: 'VPB' }
+  ];
+
 function backToListUpdate() {
     const url = new URL("/pages/staff/profile.html", window.location.origin);
     url.searchParams.set("id", maNhanVien);
     window.location.replace(url.toString());
+}
+function getImage() {
+    $.ajax({
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
+        method: 'GET',
+        success: function(data) {
+            const imgEl = document.querySelector('#employeeImage')
+            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
+            imgEl.classList.remove('opacity-0')
+        },
+        error: (err) => {
+            console.log('fetchEmployee err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
 function fetchEmployee() {
@@ -25,23 +65,7 @@ function fetchEmployee() {
     });
 }
 
-function getImage() {
-    $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
-        method: 'GET',
-        success: function(data) {
-            const imgEl = document.querySelector('#employeeImage')
-            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
-            imgEl.classList.remove('opacity-0')
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+
 
 function uploadImage(anh) {
     const payloadUploadImage = new FormData()
@@ -71,6 +95,54 @@ function uploadImage(anh) {
                 const message = errObj[firtErrKey][0]
                 alert(message)
                 setLoading(false)            } catch (error) {
+                alert("Cập nhật thất bại!")
+                setLoading(false)
+            }
+        },
+        complete: () => {
+            
+        }
+    });
+}
+
+function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa hồ sơ ?')
+    if (!isConfirm) return
+    const valid = validateForm('profile_form')
+    if(!valid) return
+    
+    const {anh, ...rest} = getFormValues('profile_form')
+
+    const formValue = getFormValues('profile_form')
+    const payload = buildPayload(rest)
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(data) {
+            if (anh) {
+                uploadImage(anh);
+            } else {
+                setLoading(false);
+                backToListUpdate();
+            }
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    setLoading(false)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+                setLoading(false)
+            } catch (error) {
                 alert("Cập nhật thất bại!")
                 setLoading(false)
             }
@@ -115,7 +187,7 @@ function renderActionByStatus() {
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
-    // saveBtn.addEventListener('click', handleSave)
+    saveBtn.addEventListener('click', handleSave)
     clear.addEventListener('click', function() {
         clearFormValues('profile_form');
     });
@@ -131,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     if (maNhanVien) {
         fetchEmployee()
-       
+        getImage()
         
     }
 
@@ -147,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const emailText = document.getElementById('email-text');
             emailText.textContent = data.email; 
             const anh = document.getElementById('anh_text');
-            anh.alt = data.anh; 
+            // anh.alt = data.anh; 
         })
         .catch(error => {
             console.error('Error fetching the data:', error);

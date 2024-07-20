@@ -140,7 +140,7 @@ class CustomSidebar extends HTMLElement {
           </div>
         </div>
        
-       <div id="myModal" class="modal">
+       <div id="myModal" class="modal" style="z-index: 100;">
           <div class="change-container">
            <span class="close">&times;</span>
             <form id="change_form">
@@ -507,23 +507,23 @@ class BaseUpload extends HTMLElement {
     const idImage = this.getAttribute("idImage");
 
     this.innerHTML = `
-      <div class="flex items-center justify-center w-full h-full">
-          <label for="dropzone-file" class="flex flex-col items-center justify-center w-full min-h-64 h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 relative">
-              <img 
-                id="${idImage}"
-                src="" 
-                class="absolute h-full w-full object-contain rounded-lg opacity-0 bg-gray-50"
-              />
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                  <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                  </svg>
-                  <p class="mb-2 text-sm text-gray-50 "><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                  <p class="text-xs text-gray-500"> PNG, JPG or JPEG (MAX. 800x400px)</p>
-              </div>
-              <input id="dropzone-file" type="file" name="${name}" accept="image/*" class="hidden" />
-          </label>
-      </div> 
+     <div class="flex items-center justify-center w-full h-full">
+    <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-gray-50 relative overflow-hidden">
+        <img 
+            id="${idImage}"
+            src="" 
+            class="absolute h-full w-full object-cover rounded-full opacity-0 bg-gray-50"
+        />
+        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+            </svg>
+            <p class="mb-2 text-sm text-gray-50"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+            <p class="text-xs text-gray-500"> PNG, JPG or JPEG (MAX. 800x400px)</p>
+        </div>
+        <input id="dropzone-file" type="file" name="${name}" accept="image/*" class="hidden" />
+    </label>
+</div>
     `;
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -581,13 +581,14 @@ class BaseButton extends HTMLElement {
 
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html
-  static observedAttributes = ["api", "columns", "event", "pageSize"];
+  static observedAttributes = ["api", "columns", "event", "pageSize", "method"];
 
   connectedCallback() {
     // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
     const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
     const columnsKey = this.getAttribute("columns"); // ... columns
     const eventKey = this.getAttribute("event"); // ... event
+    const method = this.getAttribute("method") || "GET";
 
     // api = 'buildApiUrl'
 
@@ -925,7 +926,7 @@ class BaseTable extends HTMLElement {
       const handleCallFetchData = (payload) => {
         $.ajax({
           url: getApiUrl(), // lấy ra url api của bảng = http://...
-          method: "GET", // phương thức
+          method: method, // phương thức
           data: payload,
           success: (tableData) => {
             // tableData : dữ liệu Api bảng trả về

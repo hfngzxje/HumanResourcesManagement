@@ -32,11 +32,11 @@ var TableColumns = [
   },
 ];
 var locTheo = [
-  { label: "Tất cả", value: 0 },
-  { label: "Trạng thái", value: 1 },
-  { label: "Phòng ban", value: 2 },
-  { label: "Ngày tháng", value: 3 },
-  { label: "Giới tính", value: 4 },
+  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Trạng thái", value: 'Trạng thái' },
+  { label: "Phòng ban", value: 'Phòng ban' },
+  { label: "Ngày tháng", value: 'Ngày tháng' },
+  { label: "Giới tính", value: 'Giới tính' },
 ];
 var trangThai = [
   { label: "Tất cả", value: 0 },
@@ -79,13 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Cập nhật trạng thái của các thẻ khi chọn giá trị từ "Lọc theo"
-  filterSelect.addEventListener("change", (event) => {
-    if (event.target.value === "Tất cả") {
-      toggleInputs(true); // Bật tất cả các thẻ
-    } else {
-      toggleInputs(false); // Tắt tất cả các thẻ
-    }
-  });
+  // filterSelect.addEventListener("change", (event) => {
+  //   if (event.target.value === "Tất cả") {
+  //     toggleInputs(true); // Bật tất cả các thẻ
+  //   } else {
+  //     toggleInputs(false); // Tắt tất cả các thẻ
+  //   }
+  // });
 
   // Khởi tạo trạng thái ban đầu
   toggleInputs(filterSelect.value === "Tất cả");
@@ -113,31 +113,33 @@ function renderActionByStatus() {
   // createBtn.addEventListener('click', handleCreate)
 
   actionEl.append(DisplayBtn, pdfBtn, excelBtn);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    DisplayBtn.click();
+  });
 }
 
 function handleSearch() {
+  alert("Duy sinh")
   const formValue = getFormValues("report_form");
   const tableReport = document.getElementById("tableReport");
-  if (formValue.loctheo === "0") {
+  if (formValue.loctheo === "Tất cả") {
     tableReport.handleCallFetchData(formValue);
     return;
   }
   const params = {};
-  if (formValue.loctheo === "1") {
+  if (formValue.loctheo === "Trạng thái") {
     params.trangthai = formValue.trangthai;
   }
-  if (formValue.loctheo === "2") {
+  if (formValue.loctheo === "Phòng ban") {
     params.phongban = formValue.phongban;
-    alert(params.phongban)
   }
-  if (formValue.loctheo === "3") {
+  if (formValue.loctheo === "Ngày tháng") {
     params.tungay = formValue.tungay;
     params.denngay = formValue.denngay;
-    alert (params.tungay + "  " + params.denngay)
   }
-  if (formValue.loctheo === "4") {
+  if (formValue.loctheo === "Giới tính") {
     params.GioiTinh = formValue.GioiTinh;
-    alert("abc: "+ params.GioiTinh)
   }
 
   
@@ -174,7 +176,7 @@ function handleSelectFilterBy() {
     const locTheoValue = locTheoEl.value;
     console.log("locTheoValue ", locTheoValue);
 
-    if (locTheoValue === "0") {
+    if (locTheoValue === "Tất cả") {
       trangThaiEl.disabled = false;
       phongBanEl.disabled = false;
       tuNgayEl.disabled = false;
@@ -188,19 +190,19 @@ function handleSelectFilterBy() {
     tuNgayEl.disabled = true;
     denNgayEl.disabled = true;
     gioiTinhEl.disabled = true;
-    if (locTheoValue === "1") {
+    if (locTheoValue === "Trạng thái") {
       trangThaiEl.disabled = false;
       phongBanEl.value ="";
     }
-    if (locTheoValue === "2") {
+    if (locTheoValue === "Phòng ban") {
       phongBanEl.disabled = false;
     }
-    if (locTheoValue === "3") {
+    if (locTheoValue === "Ngày tháng") {
       tuNgayEl.disabled = false;
       denNgayEl.disabled = false;
       phongBanEl.value ="";
     }
-    if (locTheoValue === "4") {
+    if (locTheoValue === "Giới tính") {
       gioiTinhEl.disabled = false;
       phongBanEl.value ="";
     }
