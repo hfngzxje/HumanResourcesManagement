@@ -44,9 +44,9 @@ var trangThai = [
   { label: "Nghỉ việc", value: 2 },
 ];
 var gioiTinh = [
-  { label: "Tất cả", value: 0 },
-  { label: "Nam", value: 1 },
-  { label: "Nữ", value: 2 },
+  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Nam", value: 'Nam' },
+  { label: "Nữ", value: 'Nữ' },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -128,15 +128,22 @@ function handleSearch() {
   }
   if (formValue.loctheo === "2") {
     params.phongban = formValue.phongban;
+    alert(params.phongban)
   }
   if (formValue.loctheo === "3") {
     params.tungay = formValue.tungay;
     params.denngay = formValue.denngay;
+    alert (params.tungay + "  " + params.denngay)
   }
   if (formValue.loctheo === "4") {
     params.GioiTinh = formValue.GioiTinh;
+    alert("abc: "+ params.GioiTinh)
   }
+
+  
   tableReport.handleCallFetchData(params);
+
+
 }
 
 function showDateTimeNow() {
@@ -183,6 +190,7 @@ function handleSelectFilterBy() {
     gioiTinhEl.disabled = true;
     if (locTheoValue === "1") {
       trangThaiEl.disabled = false;
+      phongBanEl.value ="";
     }
     if (locTheoValue === "2") {
       phongBanEl.disabled = false;
@@ -190,9 +198,11 @@ function handleSelectFilterBy() {
     if (locTheoValue === "3") {
       tuNgayEl.disabled = false;
       denNgayEl.disabled = false;
+      phongBanEl.value ="";
     }
     if (locTheoValue === "4") {
       gioiTinhEl.disabled = false;
+      phongBanEl.value ="";
     }
   });
 }

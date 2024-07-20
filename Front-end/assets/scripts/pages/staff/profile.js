@@ -146,8 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
             nameText.textContent = data.ten; // Giả sử API trả về một thuộc tính `description`
             const emailText = document.getElementById('email-text');
             emailText.textContent = data.email; 
-            const anh = document.getElementById('anh');
-            anh.src = data.anh; 
+            const anh = document.getElementById('anh_text');
+            anh.alt = data.anh; 
         })
         .catch(error => {
             console.error('Error fetching the data:', error);
