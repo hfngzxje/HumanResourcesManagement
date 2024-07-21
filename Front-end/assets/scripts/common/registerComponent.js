@@ -926,7 +926,7 @@ class BaseTable extends HTMLElement {
       const handleCallFetchData = (payload) => {
         $.ajax({
           url: getApiUrl(), // lấy ra url api của bảng = http://...
-          method: method, // phương thức
+          type: method, // phương thức
           data: payload,
           success: (tableData) => {
             // tableData : dữ liệu Api bảng trả về
