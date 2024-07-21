@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/NhanVien";
+const apiTable = "https://localhost:7141/api/NhanVien/getDanhSachNhanVien";
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -45,8 +45,8 @@ var trangThai = [
 ];
 var gioiTinh = [
   { label: "Tất cả", value: 'Tất cả' },
-  { label: "Nam", value: 'Nam' },
-  { label: "Nữ", value: 'Nữ' },
+  { label: "Nam", value: 'true' },
+  { label: "Nữ", value: 'false' },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -120,25 +120,32 @@ function renderActionByStatus() {
 }
 
 function handleSearch() {
-  alert("Duy sinh")
+  
   const formValue = getFormValues("report_form");
+  console.log("Form: " , formValue)
   const tableReport = document.getElementById("tableReport");
-  if (formValue.loctheo === "Tất cả") {
+  if (formValue.searchRules === "Tất cả") {
     tableReport.handleCallFetchData(formValue);
     return;
   }
-  const params = {};
-  if (formValue.loctheo === "Trạng thái") {
+  const params = {
+    searchRules: formValue.searchRules,
+    GioiTinh: "Tất cả",
+    ToDate: "",
+    FromDate:"",
+    PhongBan: ""
+  };
+  if (formValue.searchRules === "Trạng thái") {
     params.trangthai = formValue.trangthai;
   }
-  if (formValue.loctheo === "Phòng ban") {
-    params.phongban = formValue.phongban;
+  if (formValue.searchRules === "Phòng ban") {
+    params.PhongBan = formValue.PhongBan;
   }
-  if (formValue.loctheo === "Ngày tháng") {
-    params.tungay = formValue.tungay;
-    params.denngay = formValue.denngay;
+  if (formValue.searchRules === "Ngày tháng") {
+    params.FromDate = formValue.FromDate;
+    params.ToDate = formValue.ToDate;
   }
-  if (formValue.loctheo === "Giới tính") {
+  if (formValue.searchRules === "Giới tính") {
     params.GioiTinh = formValue.GioiTinh;
   }
 
@@ -196,11 +203,13 @@ function handleSelectFilterBy() {
     }
     if (locTheoValue === "Phòng ban") {
       phongBanEl.disabled = false;
+      gioiTinhEl.value= "Tất cả"
     }
     if (locTheoValue === "Ngày tháng") {
       tuNgayEl.disabled = false;
       denNgayEl.disabled = false;
       phongBanEl.value ="";
+      gioiTinhEl.value= "Tất cả"
     }
     if (locTheoValue === "Giới tính") {
       gioiTinhEl.disabled = false;
@@ -214,4 +223,5 @@ document.addEventListener("DOMContentLoaded", () => {
   renderActionByStatus();
   showDateTimeNow();
   handleSelectFilterBy();
+  handleSearch();
 });

@@ -855,7 +855,7 @@ class BaseTable extends HTMLElement {
           if (page === currentPage) {
             button.setAttribute(
               "class",
-              "z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
+              " flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
             );
           }
           button.addEventListener("click", () => {

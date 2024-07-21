@@ -37,15 +37,15 @@
               <div class="input-container">
                 <h1 class="text-xl font-bold mb-4">Danh sách nhân viên</h1>
                 <div class="grid grid-cols-3 gap-x-5">
-                  <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true" name="loctheo">
+                  <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true" name="searchRules">
                   </base-select>
                   <base-select id="trangthai" label="Trạng thái" name="trangthai" options="trangThai" required="true">
                   </base-select>
-                  <base-select id="phongban" label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten"
+                  <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
                     api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
-                  <base-datepicker id="tungay" class="ml-auto" style="margin: 0" label="Từ ngày" name="tungay"
+                  <base-datepicker id="tungay" class="ml-auto" style="margin: 0" label="Từ ngày" name="FromDate"
                     required="true"></base-datepicker>
-                  <base-datepicker id="denngay" class="ml-auto" style="margin: 0" label="Đến ngày" name="denngay"
+                  <base-datepicker id="denngay" class="ml-auto" style="margin: 0" label="Đến ngày" name="ToDate"
                     required="true"></base-datepicker>
                   <base-select id="gioitinh" label="Giới tính" name="GioiTinh" options="gioiTinh" required="true"
                     style="margin-top: 9px"></base-select>
@@ -57,7 +57,7 @@
 
           <div class="bottom">
             <div class="mt-3">
-              <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4">
+              <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4" method="POST">
               </base-table>
             </div>
           </div>
