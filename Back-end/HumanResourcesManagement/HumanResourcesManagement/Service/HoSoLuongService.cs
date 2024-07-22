@@ -61,7 +61,8 @@ namespace HumanResourcesManagement.Service
             double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
             double phuCapKhac = request.Phucapkhac ?? 0;
 
-            double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            double tongLuong = 0;
 
             return 10;
         }
@@ -89,7 +90,8 @@ namespace HumanResourcesManagement.Service
             double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
             double phuCapKhac = request.Phucapkhac ?? 0;
 
-            double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            double tongLuong = 0;
 
             hoSoLuong.Mahopdong = request.Mahopdong;
             hoSoLuong.Nhomluong = request.Nhomluong;
