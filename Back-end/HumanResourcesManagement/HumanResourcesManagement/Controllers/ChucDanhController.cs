@@ -46,7 +46,7 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
-
+        //removechucdanh
         [HttpDelete("removeChucDanh")]
         public async Task<IActionResult> RemoveChucDanh(int id)
         {

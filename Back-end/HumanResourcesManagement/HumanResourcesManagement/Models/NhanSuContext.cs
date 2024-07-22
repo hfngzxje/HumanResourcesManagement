@@ -25,6 +25,7 @@ namespace HumanResourcesManagement.Models
         public virtual DbSet<TblDanhMucNgachCongChuc> TblDanhMucNgachCongChucs { get; set; } = null!;
         public virtual DbSet<TblDanhMucNgoaiNgu> TblDanhMucNgoaiNgus { get; set; } = null!;
         public virtual DbSet<TblDanhMucNguoiThan> TblDanhMucNguoiThans { get; set; } = null!;
+        public virtual DbSet<TblDanhMucNhomLuong> TblDanhMucNhomLuongs { get; set; } = null!;
         public virtual DbSet<TblDanhMucPhongBan> TblDanhMucPhongBans { get; set; } = null!;
         public virtual DbSet<TblDanhMucTo> TblDanhMucTos { get; set; } = null!;
         public virtual DbSet<TblDanhMucTonGiao> TblDanhMucTonGiaos { get; set; } = null!;
@@ -89,6 +90,11 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
+
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
                     .HasColumnName("ten");
@@ -115,6 +121,11 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
+
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
                     .HasColumnName("ten");
@@ -127,7 +138,8 @@ namespace HumanResourcesManagement.Models
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Ma)
-                    .HasMaxLength(5)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
                     .HasColumnName("ma");
 
                 entity.Property(e => e.Ten)
@@ -141,6 +153,11 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
+
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
                     .HasColumnName("ten");
@@ -151,6 +168,11 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucNgoaiNgu");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -163,9 +185,32 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
+
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
                     .HasColumnName("ten");
+            });
+
+            modelBuilder.Entity<TblDanhMucNhomLuong>(entity =>
+            {
+                entity.HasKey(e => e.Nhomluong)
+                    .HasName("PK__tblDanhM__2E93B6DADA4FD7EF");
+
+                entity.ToTable("tblDanhMucNhomLuong");
+
+                entity.Property(e => e.Nhomluong).HasColumnName("nhomluong");
+
+                entity.Property(e => e.Bacluong).HasColumnName("bacluong");
+
+                entity.Property(e => e.Ghichu)
+                    .HasMaxLength(100)
+                    .HasColumnName("ghichu");
+
+                entity.Property(e => e.Hesoluong).HasColumnName("hesoluong");
             });
 
             modelBuilder.Entity<TblDanhMucPhongBan>(entity =>
@@ -203,7 +248,7 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblDanhMucTos)
                     .HasForeignKey(d => d.Idphong)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblDanhMu__idpho__4F7CD00D");
+                    .HasConstraintName("FK__tblDanhMu__idpho__628FA481");
             });
 
             modelBuilder.Entity<TblDanhMucTonGiao>(entity =>
@@ -211,6 +256,11 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucTonGiao");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -222,6 +272,11 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblDanhMucTrinhDo");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -258,17 +313,17 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.Manv)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblDieuChu__manv__5165187F");
+                    .HasConstraintName("FK__tblDieuChu__manv__6383C8BA");
 
                 entity.HasOne(d => d.PhongNavigation)
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.Phong)
-                    .HasConstraintName("FK__tblDieuCh__phong__5070F446");
+                    .HasConstraintName("FK__tblDieuCh__phong__6477ECF3");
 
                 entity.HasOne(d => d.ToNavigation)
                     .WithMany(p => p.TblDieuChuyens)
                     .HasForeignKey(d => d.To)
-                    .HasConstraintName("FK__tblDieuChuye__to__52593CB8");
+                    .HasConstraintName("FK__tblDieuChuye__to__656C112C");
             });
 
             modelBuilder.Entity<TblHinhThucDaoTao>(entity =>
@@ -276,6 +331,10 @@ namespace HumanResourcesManagement.Models
                 entity.ToTable("tblHinhThucDaoTao");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(5)
+                    .HasColumnName("ma");
 
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
@@ -285,7 +344,7 @@ namespace HumanResourcesManagement.Models
             modelBuilder.Entity<TblHopDong>(entity =>
             {
                 entity.HasKey(e => e.Mahopdong)
-                    .HasName("PK__tblHopDo__444763402460F472");
+                    .HasName("PK__tblHopDo__44476340AE57D1E2");
 
                 entity.ToTable("tblHopDong");
 
@@ -311,8 +370,6 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Loaihopdong).HasColumnName("loaihopdong");
 
-                entity.Property(e => e.Luongcoban).HasColumnName("luongcoban");
-
                 entity.Property(e => e.Ma)
                     .HasMaxLength(10)
                     .IsUnicode(false)
@@ -322,12 +379,12 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.LoaihopdongNavigation)
                     .WithMany(p => p.TblHopDongs)
                     .HasForeignKey(d => d.Loaihopdong)
-                    .HasConstraintName("FK__tblHopDon__loaih__534D60F1");
+                    .HasConstraintName("FK__tblHopDon__loaih__74AE54BC");
 
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblHopDongs)
                     .HasForeignKey(d => d.Ma)
-                    .HasConstraintName("FK__tblHopDong__ma__5441852A");
+                    .HasConstraintName("FK__tblHopDong__ma__73BA3083");
             });
 
             modelBuilder.Entity<TblKhenThuongKyLuat>(entity =>
@@ -361,12 +418,12 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblKhenThuongKyLuats)
                     .HasForeignKey(d => d.Ma)
-                    .HasConstraintName("FK__tblKhenThuon__ma__5629CD9C");
+                    .HasConstraintName("FK__tblKhenThuon__ma__66603565");
 
                 entity.HasOne(d => d.TenNavigation)
                     .WithMany(p => p.TblKhenThuongKyLuats)
                     .HasForeignKey(d => d.Ten)
-                    .HasConstraintName("FK__tblKhenThuo__ten__5535A963");
+                    .HasConstraintName("FK__tblKhenThuo__ten__75A278F5");
             });
 
             modelBuilder.Entity<TblLuong>(entity =>
@@ -375,15 +432,11 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Bacluong)
-                    .HasMaxLength(10)
-                    .HasColumnName("bacluong");
-
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(100)
                     .HasColumnName("ghichu");
 
-                entity.Property(e => e.Hesoluong).HasColumnName("hesoluong");
+                entity.Property(e => e.Luongcoban).HasColumnName("luongcoban");
 
                 entity.Property(e => e.Mahopdong)
                     .HasMaxLength(30)
@@ -414,7 +467,12 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.MahopdongNavigation)
                     .WithMany(p => p.TblLuongs)
                     .HasForeignKey(d => d.Mahopdong)
-                    .HasConstraintName("FK__tblLuong__mahopd__571DF1D5");
+                    .HasConstraintName("FK__tblLuong__mahopd__6754599E");
+
+                entity.HasOne(d => d.NhomluongNavigation)
+                    .WithMany(p => p.TblLuongs)
+                    .HasForeignKey(d => d.Nhomluong)
+                    .HasConstraintName("FK_nhomluong");
             });
 
             modelBuilder.Entity<TblNgoaiNgu>(entity =>
@@ -447,12 +505,12 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblNgoaiNgus)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblNgoaiNgu__ma__59063A47");
+                    .HasConstraintName("FK__tblNgoaiNgu__ma__693CA210");
 
                 entity.HasOne(d => d.NgoainguNavigation)
                     .WithMany(p => p.TblNgoaiNgus)
                     .HasForeignKey(d => d.Ngoaingu)
-                    .HasConstraintName("FK__tblNgoaiN__ngoai__5812160E");
+                    .HasConstraintName("FK__tblNgoaiN__ngoai__68487DD7");
             });
 
             modelBuilder.Entity<TblNguoiThan>(entity =>
@@ -502,18 +560,18 @@ namespace HumanResourcesManagement.Models
                     .WithMany(p => p.TblNguoiThans)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblNguoiThan__ma__5AEE82B9");
+                    .HasConstraintName("FK__tblNguoiThan__ma__6B24EA82");
 
                 entity.HasOne(d => d.QuanheNavigation)
                     .WithMany(p => p.TblNguoiThans)
                     .HasForeignKey(d => d.Quanhe)
-                    .HasConstraintName("FK__tblNguoiT__quanh__59FA5E80");
+                    .HasConstraintName("FK__tblNguoiT__quanh__6A30C649");
             });
 
             modelBuilder.Entity<TblNhanVien>(entity =>
             {
                 entity.HasKey(e => e.Ma)
-                    .HasName("PK__tblNhanV__3213C8B7FE3F5A5A");
+                    .HasName("PK__tblNhanV__3213C8B712F80AE7");
 
                 entity.ToTable("tblNhanVien");
 
@@ -692,37 +750,37 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.ChucvuhientaiNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Chucvuhientai)
-                    .HasConstraintName("FK__tblNhanVi__chucv__5BE2A6F2");
+                    .HasConstraintName("FK__tblNhanVi__chucv__76969D2E");
 
                 entity.HasOne(d => d.DantocNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Dantoc)
-                    .HasConstraintName("FK__tblNhanVi__danto__5CD6CB2B");
+                    .HasConstraintName("FK__tblNhanVi__danto__6C190EBB");
 
                 entity.HasOne(d => d.NgachcongchucNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Ngachcongchuc)
-                    .HasConstraintName("FK__tblNhanVi__ngach__5DCAEF64");
+                    .HasConstraintName("FK__tblNhanVi__ngach__778AC167");
 
                 entity.HasOne(d => d.PhongNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Phong)
-                    .HasConstraintName("FK__tblNhanVi__phong__5EBF139D");
+                    .HasConstraintName("FK__tblNhanVi__phong__6E01572D");
 
                 entity.HasOne(d => d.ToNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.To)
-                    .HasConstraintName("FK__tblNhanVien__to__619B8048");
+                    .HasConstraintName("FK__tblNhanVien__to__6EF57B66");
 
                 entity.HasOne(d => d.TongiaoNavigation)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.Tongiao)
-                    .HasConstraintName("FK__tblNhanVi__tongi__5FB337D6");
+                    .HasConstraintName("FK__tblNhanVi__tongi__6D0D32F4");
 
                 entity.HasOne(d => d.VaiTro)
                     .WithMany(p => p.TblNhanViens)
                     .HasForeignKey(d => d.VaiTroId)
-                    .HasConstraintName("FK__tblNhanVi__vaiTr__60A75C0F");
+                    .HasConstraintName("FK__tblNhanVi__vaiTr__787EE5A0");
             });
 
             modelBuilder.Entity<TblTrinhDoVanHoa>(entity =>
@@ -758,29 +816,29 @@ namespace HumanResourcesManagement.Models
                 entity.HasOne(d => d.ChuyennganhNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Chuyennganh)
-                    .HasConstraintName("FK__tblTrinhD__chuye__628FA481");
+                    .HasConstraintName("FK__tblTrinhD__chuye__6FE99F9F");
 
                 entity.HasOne(d => d.HinhthucdaotaoNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Hinhthucdaotao)
-                    .HasConstraintName("FK__tblTrinhD__hinht__6383C8BA");
+                    .HasConstraintName("FK__tblTrinhD__hinht__70DDC3D8");
 
                 entity.HasOne(d => d.MaNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Ma)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__tblTrinhDoVa__ma__656C112C");
+                    .HasConstraintName("FK__tblTrinhDoVa__ma__72C60C4A");
 
                 entity.HasOne(d => d.TrinhdoNavigation)
                     .WithMany(p => p.TblTrinhDoVanHoas)
                     .HasForeignKey(d => d.Trinhdo)
-                    .HasConstraintName("FK__tblTrinhD__trinh__6477ECF3");
+                    .HasConstraintName("FK__tblTrinhD__trinh__71D1E811");
             });
 
             modelBuilder.Entity<TblVaiTro>(entity =>
             {
                 entity.HasKey(e => e.VaiTroId)
-                    .HasName("PK__tblVaiTr__846C746F13454CF2");
+                    .HasName("PK__tblVaiTr__846C746F93938FBE");
 
                 entity.ToTable("tblVaiTro");
 
