@@ -4,6 +4,7 @@ using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace HumanResourcesManagement.Service
 {
@@ -16,9 +17,33 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        public string GenerateCodeFromName(string ten)
+        {
+            if (string.IsNullOrEmpty(ten))
+            {
+                throw new ArgumentException("Tên không được để trống", nameof(ten));
+            }
+            var initials = string.Concat(ten.Split(' ').Select(word => word[0])).ToUpper();
+            var existingEntries = _context.TblHinhThucDaoTaos
+                               .Where(cd => cd.Ma.StartsWith(initials))
+                               .ToList();
+            var existingNumbers = existingEntries
+                .Select(cd => int.TryParse(cd.Ma.Substring(initials.Length), out int number) ? number : 0)
+                .ToList();
+
+            var uniqueNumber = existingNumbers.Any() ? existingNumbers.Max() + 1 : 1;
+
+            return $"{initials}{uniqueNumber}";
+        }
         public async Task AddDanhMucHinhThucDaoTao(HinhThucDaoTaoRequest req)
         {
+            var cdTen = await _context.TblHinhThucDaoTaos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+            if (cdTen != null)
+            {
+                throw new Exception("Tên đã tồn tại");
+            }
             var dmhtdt = _mapper.Map<TblHinhThucDaoTao>(req);
+            dmhtdt.Ma = GenerateCodeFromName(req.Ten);
             _context.TblHinhThucDaoTaos.Add(dmhtdt);
             await _context.SaveChangesAsync();
         }
@@ -41,6 +66,7 @@ namespace HumanResourcesManagement.Service
                {
                    Id = dmhtdt.Id,
                    Ten = dmhtdt.Ten,
+                   Ma = dmhtdt.Ma
                })
                .ToListAsync();
             if (!listHinhthucdaotao.Any())
@@ -61,6 +87,7 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
+                    Ma = cm.Ma
                 }).FirstOrDefaultAsync();
             if (listhinhthucdaotao == null)
             {
@@ -78,6 +105,11 @@ namespace HumanResourcesManagement.Service
                 if (danhMucHinhThucDaoTao == null)
                 {
                     throw new KeyNotFoundException($"Không tìm thấy {id}");
+                }
+                var cdTen = await _context.TblHinhThucDaoTaos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+                if (cdTen != null)
+                {
+                    throw new Exception("Tên đã tồn tại");
                 }
                 _mapper.Map(req, danhMucHinhThucDaoTao);
                 danhMucHinhThucDaoTao.Id = id;

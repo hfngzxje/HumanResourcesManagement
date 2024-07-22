@@ -16,13 +16,37 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+        public string GenerateCodeFromName(string ten)
+        {
+            if (string.IsNullOrEmpty(ten))
+            {
+                throw new ArgumentException("Tên không được để trống", nameof(ten));
+            }
+            var initials = string.Concat(ten.Split(' ').Select(word => word[0])).ToUpper();
+            var existingEntries = _context.TblDanhMucNgoaiNgus
+                                           .Where(cd => cd.Ma.StartsWith(initials))
+                                           .ToList();
+            var existingNumbers = existingEntries
+                .Select(cd => int.TryParse(cd.Ma.Substring(initials.Length), out int number) ? number : 0)
+                .ToList();
+
+            var uniqueNumber = existingNumbers.Any() ? existingNumbers.Max() + 1 : 1;
+
+            return $"{initials}{uniqueNumber}";
+        }
         public async Task AddDanhMucNgoaiNgu(DanhMucNgoaiNguRequest req)
         {
             if (req == null)
             {
                 throw new ArgumentNullException(nameof(req), "DanhMucNgoaiNgu không được để trống.");
             }
+            var cdTen = await _context.TblDanhMucNgoaiNgus.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+            if (cdTen != null)
+            {
+                throw new Exception("Tên đã tồn tại");
+            }
             var danhMucNgoaiNgu = _mapper.Map<TblDanhMucNgoaiNgu>(req);
+            danhMucNgoaiNgu.Ma = GenerateCodeFromName(req.Ten);
             _context.TblDanhMucNgoaiNgus.Add(danhMucNgoaiNgu);
             await _context.SaveChangesAsync();
         }
@@ -45,6 +69,7 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = dmnn.Id,
                     Ten = dmnn.Ten,
+                    Ma = dmnn.Ma,
                 }).ToListAsync();
             if (listDanhMucNgoaiNgu == null || !listDanhMucNgoaiNgu.Any())
             {
@@ -67,6 +92,7 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
+                    Ma = cm.Ma,
                 })
                 .FirstOrDefaultAsync();
 
@@ -87,7 +113,11 @@ namespace HumanResourcesManagement.Service
                 {
                     throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
                 }
-
+                var cdTen = await _context.TblDanhMucNgoaiNgus.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+                if (cdTen != null)
+                {
+                    throw new Exception("Tên đã tồn tại");
+                }
                 _mapper.Map(req, danhMucNgoaiNgu);
 
                 danhMucNgoaiNgu.Id = id;
