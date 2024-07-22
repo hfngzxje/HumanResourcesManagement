@@ -45,8 +45,28 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Mật khẩu mới và nhập lại mật khẩu mới không khớp.");
             }
 
+            if (!IsValidPassword(request.MatKhauMoi))
+            {
+                throw new Exception("Mật khẩu mới phải dài hơn 6 ký tự và chứa ít nhất một ký tự đặc biệt.");
+            }
+
             nhanVien.MatKhau = HashPassword(request.MatKhauMoi);
             await _context.SaveChangesAsync();
+            return true;
+        }
+
+        private bool IsValidPassword(string password)
+        {
+            if (password.Length < 6)
+            {
+                return false;
+            }
+
+            if (!password.Any(char.IsPunctuation) && !password.Any(char.IsSymbol))
+            {
+                return false;
+            }
+
             return true;
         }
 
