@@ -30,9 +30,10 @@
 
                                     <base-select label="Mã hợp đồng(*)" name="mahopdong" keyValue="mahopdong" required="true"
                                         keyLabel="mahopdong" api="buildApiHopDong"></base-select> <br>
-                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true"></base-input-number>
-                                    <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
-                                            required="true"></base-select> 
+                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true" readonly></base-input-number>
+                                    <!-- <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                            required="true"></base-select>  -->
+                                            <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" readonly></base-input-number>
                                     <base-input-number label="Phụ cấp khác"required="true" name="phucapkhac"></base-input-number>
                                     <base-input-number label="Thời hạn lên lương"required="true" name="thoihanlenluong"></base-input-number>
                                    
@@ -41,9 +42,11 @@
                                
 
                                         <!-- gioi han 0-7 -->
-                                        <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
-                                            required="true"></base-select> <br> 
-                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem"></base-input-number>
+                                        <!-- <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
+                                            required="true"></base-select> <br>  -->
+                                            <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                            required="true"></base-select> <br>
+                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem" readonly></base-input-number>
                                         <base-input-number label="Tiền lương"required="true" name="tongluong" readonly  ></base-input-number>
                                         <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
                                         name="ngayhieuluc"></base-datepicker>

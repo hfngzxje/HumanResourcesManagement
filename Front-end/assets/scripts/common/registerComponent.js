@@ -218,6 +218,7 @@ class BaseInput extends HTMLElement {
     "name",
     "required",
     "type",
+    "value",
   ];
 
   connectedCallback() {
@@ -254,7 +255,7 @@ class BaseTextArea extends HTMLElement {
     const row = this.getAttribute("row") || "3";
 
     this.innerHTML = `
-    <div class="flex flex-col h-full w-full"> <!-- Thiết lập chiều cao và chiều rộng của textarea -->
+    <div class="flex flex-col h-full w-full">
     <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
       hideLabel ? "" : "hidden"
     }">${label}</label>
@@ -304,24 +305,6 @@ class BaseInputPhone extends HTMLElement {
     `;
   }
 }
-
-// class BaseInputNumber extends HTMLElement {
-//   static observedAttributes = ["label", "name", "required"];
-
-//   connectedCallback() {
-//     const label = this.getAttribute("label") || "Base input";
-//     const name = this.getAttribute("name");
-//     const required = this.getAttribute("required");
-
-//     this.innerHTML = `
-//     <div class="">
-//       <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-//       <input type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-//     </div>
-//     `;
-//   }
-// }
-
 class BaseInputNumber extends HTMLElement {
   static observedAttributes = [
     "label",

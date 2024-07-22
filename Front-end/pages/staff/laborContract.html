@@ -45,16 +45,17 @@
                                     <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong"
                                         keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select> <br>
-                                    <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" ></base-input-number> <br>
+                                    <!-- <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" ></base-input-number> <br> -->
                                     
 
-                                    <div>
+                                    
                                         <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
-                                            required="true"></base-select>
-                                    </div>
+                                            required="true"></base-select> <br>
+                                    
+                                    <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
                                 </div>
                             </div>
-                            <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+                           
                         </form>
                         <div id="laborContract_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
