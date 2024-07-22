@@ -28,6 +28,5 @@ namespace HumanResourcesManagement.Service.IService
         List<TblDanhMucTo> GetAllTo();
 
         Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh);
-        Task<IEnumerable<TblNhanVien>> getDanhSachNhanVien(DanhSachNhanVienRequest req);
     }
 }

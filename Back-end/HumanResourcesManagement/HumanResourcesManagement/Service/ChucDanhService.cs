@@ -32,10 +32,10 @@ namespace HumanResourcesManagement.Service
         }
         public async Task<TblDanhMucChucDanh> AddChucDanh(InsertChucDanh req)
         {
-            var cd = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ma == req.Ma);
+            var cd = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ten == req.Ten);
             if (cd != null)
             {
-                throw new Exception("Mã đã tồn tại");
+                throw new Exception("Tên chức danh đã tồn tại");
             }
             var cdTen = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ten == req.Ten);
             if (cdTen != null)
