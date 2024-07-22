@@ -4,13 +4,14 @@ const maNhanVien = localStorage.getItem("maNhanVien")
 const vaitro = localStorage.getItem("vaiTroID");
 const TAB = {
   RESUME: 1 ,
-  PERSON_HISTORY: 2,
-  CULTURAL_PROFICIENCY: 3,
-  FAMILY_RELATIONSHIP: 4,
-  EMPLOYMENT_CONTRACT: 5,
-  SALARY_PROFILE: 6,
-  EMPLOYMENT_HISTORY: 7,
-  REWARDS_DISCIPLINE: 8,
+  PROFILE: 2,
+  PERSON_HISTORY: 3,
+  CULTURAL_PROFICIENCY: 4,
+  FAMILY_RELATIONSHIP: 5,
+  EMPLOYMENT_CONTRACT: 6,
+  SALARY_PROFILE: 7,
+  EMPLOYMENT_HISTORY: 8,
+  REWARDS_DISCIPLINE: 9,
 };
 const tabList = document.querySelector("#tabList");
 let currentPath = window.location.pathname; // text-white bg-blue-600 active
@@ -21,6 +22,11 @@ const TAB_LIST = [
     key: TAB.RESUME,
     label: "Sơ yếu lý lịch",
     activeByPath: "/pages/staff/resume.html",
+  },
+  {
+    key: TAB.RESUME,
+    label: "Hồ sơ",
+    activeByPath: "/pages/staff/profile.html",
   },
   {
     key: TAB.PERSON_HISTORY,

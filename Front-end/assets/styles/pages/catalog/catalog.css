@@ -31,3 +31,7 @@
 .category-item:hover {
     background-color: #cbd5e0;
 }
+.modal {
+    z-index: 2000;
+   
+  }

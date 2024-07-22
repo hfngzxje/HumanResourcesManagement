@@ -8,5 +8,7 @@ namespace HumanResourcesManagement.Service.IService
     {
         Task<bool> ChangePasswordAsync(DoiMatKhauRequest request);
         Task<TblNhanVien> AuthenticateAsync(string maNhanVien, string matKhau);
+        Task<bool> SendPasswordResetEmailAsync(string email);
+        Task<bool> ResetPasswordAsync(DatLaiMatKhauRequest request);
     }
 }
