@@ -231,20 +231,6 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }
-
-        [HttpPost("getDanhSachNhanVien")]
-        public async Task<IActionResult> GetReportDanhSachNhanVien([FromForm] DanhSachNhanVienRequest req)
-        {
-            try
-            {
-                var list = await _nhanVienService.getDanhSachNhanVien(req);
-                return StatusCode(200, list);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        }        
     }
 }

@@ -33,6 +33,8 @@ public class Program
         builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
         builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
         builder.Services.AddScoped<IDangNhapService, DangNhapService>();
+        builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
+
 
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

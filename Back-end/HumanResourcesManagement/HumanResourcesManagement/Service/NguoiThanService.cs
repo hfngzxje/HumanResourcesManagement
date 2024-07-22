@@ -30,6 +30,7 @@ namespace HumanResourcesManagement.Service
                     Ten = nt.Ten,
                     Gioitinh = nt.Gioitinh,
                     Ngaysinh = nt.Ngaysinh,
+                    Quanhe= nt.Quanhe,
                     QuanheTen = nt.QuanheNavigation.Ten,
                     Nghenghiep = nt.Nghenghiep,
                     Diachi = nt.Diachi,
