@@ -4,6 +4,7 @@ var span = document.getElementsByClassName("close")[0];
 const ma = localStorage.getItem('maNhanVien');
 btn.onclick = function () {
   modal.style.display = "block";
+  modal.style.zIndex ="2000";
   console.log("fdf")
 }
 
