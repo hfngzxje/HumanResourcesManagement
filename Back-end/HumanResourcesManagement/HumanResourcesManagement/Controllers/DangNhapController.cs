@@ -110,5 +110,16 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+
+        [HttpPost("Logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("MaNhanVien");
+            HttpContext.Session.Remove("VaiTroId");
+
+            return Ok(new { Message = "Đăng xuất thành công." });
+        }
+
+
     }
 }
