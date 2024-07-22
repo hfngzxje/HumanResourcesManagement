@@ -71,5 +71,44 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult> ForgotPassword(String email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email không được để trống.");
+            }
+
+            try
+            {
+                await _dangNhapService.SendPasswordResetEmailAsync(email);
+                return Ok("Email xác nhận đã được gửi.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] DatLaiMatKhauRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Token) || string.IsNullOrEmpty(request.MatKhauMoi) || string.IsNullOrEmpty(request.XacNhanMatKhauMoi))
+            {
+                return BadRequest("Thông tin không được để trống.");
+            }
+
+            try
+            {
+                await _dangNhapService.ResetPasswordAsync(request);
+                return Ok("Mật khẩu đã được đặt lại thành công.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
