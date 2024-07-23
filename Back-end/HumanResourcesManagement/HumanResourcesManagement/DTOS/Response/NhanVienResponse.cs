@@ -46,5 +46,8 @@
         public string? tenPhong { get; set; }
         public string? tenTo { get; set; }
         public byte[]? Anh { get; set; }
+
+        public string? tenChucVu { get; set; }
+        public string? tenPhongBan { get; set; }
     }
 }

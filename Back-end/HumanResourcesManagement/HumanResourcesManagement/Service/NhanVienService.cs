@@ -389,5 +389,25 @@ namespace HumanResourcesManagement.Service
                 .Where(nv => nv.Ma.Contains(search) || nv.Ten.Contains(search))
                 .ToListAsync();
         }
+
+
+        public async Task<NhanVienResponse> GetNhanVienByIdAsync(string id)
+        {
+            var nhanVien = await _context.TblNhanViens
+                    .Include(nv => nv.ChucvuhientaiNavigation)
+                    .Include(nv => nv.PhongNavigation)
+                    .FirstOrDefaultAsync(nv => nv.Ma == id);
+
+            if (nhanVien == null)
+            {
+                throw new Exception("Mã nhân viên không tồn tại.");
+            }
+
+
+            var response = _mapper.Map<NhanVienResponse>(nhanVien);
+            response.tenChucVu = nhanVien.ChucvuhientaiNavigation.Ten; 
+            response.tenPhongBan = nhanVien.PhongNavigation?.Ten;
+            return response;
+        }
     }
 }
