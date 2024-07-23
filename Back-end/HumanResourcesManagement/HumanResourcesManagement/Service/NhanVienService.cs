@@ -375,5 +375,19 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message);
             }
         }
+
+
+
+        public async Task<List<TblNhanVien>> SearchNhanVienAsync(string? search)
+        {
+            if (string.IsNullOrEmpty(search))
+            {
+                return await _context.TblNhanViens.ToListAsync();
+            }
+
+            return await _context.TblNhanViens
+                .Where(nv => nv.Ma.Contains(search) || nv.Ten.Contains(search))
+                .ToListAsync();
+        }
     }
 }
