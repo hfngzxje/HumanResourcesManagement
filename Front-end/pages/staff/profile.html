@@ -11,6 +11,20 @@
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -71,7 +85,7 @@
                                                 <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
                                                     style="display: none;"></base-input>
 
-                                                <base-select label="Ngân hàng(*)" name="nganhang" options="BankList"
+                                                <base-select label="Ngân hàng(*)" name="Nganhang" options="BankList"
                                                     style="display: none;"></base-select>
                                                 <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
                                                     name="thuongtru" style="display: none;"></base-input>
@@ -188,6 +202,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/profile.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

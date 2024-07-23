@@ -268,10 +268,10 @@ function buildApiUrl() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return;
-    }
+    // if (vaiTroID !== "1") {
+    //     window.location.href = "/pages/error.html";
+    //     return;
+    // }
     renderActionByStatus()
 })
 

@@ -1,5 +1,6 @@
 const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
 
 var MaritalOptions = [
     { label: 'Đã kết hôn', value: 1 },
@@ -45,7 +46,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -64,7 +65,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien,
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -131,7 +132,7 @@ function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -260,10 +261,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Đặt chiều cao của div1 bằng chiều cao của div2
     div1.style.height =( div2Height - 35) + "px";
     renderActionByStatus()
-    if (maNhanVien) {
+    if (maDetail) {
         fetchEmployee()
         getImage()
-        const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien;
+        const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maDetail;
 
         // Thực hiện yêu cầu API
         fetch(apiUrl)

@@ -34,14 +34,15 @@ function handleLogin() {
             
         const maNhanVien = data.nhanVien.ma
         localStorage.setItem("maNhanVien", maNhanVien);
-        const vaitroID = data.nhanVien.vaiTroId;
-       
+        const vaitroID = data.nhanVien.vaiTroId
+    //    localStorage.setItem("vaiTroId", vaitroID)
 
-        alert(vaitroID)
+       
         if(vaitroID !== undefined){
+            localStorage.setItem("vaiTroId", vaitroID);
             handleLoginSuccess(vaitroID)
             alert("Đăng Nhập Thành Công")
-            localStorage.setItem("vaiTroID", vaitroID);
+           
         }
         else{
             alert("Không tìm thấy vai trò người dùng")
@@ -71,7 +72,18 @@ function handleLogin() {
     });
 }
 
+  // Hàm xóa lịch sử trình duyệt
+  function preventBack() {
+    window.history.forward();
+}
 
+// Xử lý sự kiện khi trang được tải
+window.onload = function() {
+    preventBack();
+    window.onpageshow = function(evt) {
+        if (evt.persisted) preventBack();
+    };
+};
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('login_form_action')

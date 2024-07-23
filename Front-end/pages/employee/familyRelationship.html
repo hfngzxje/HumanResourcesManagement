@@ -11,6 +11,15 @@
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">

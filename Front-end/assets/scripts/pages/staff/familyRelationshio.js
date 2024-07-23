@@ -269,7 +269,6 @@ getNameQuanHe()
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    alert(vaiTroID)
     if (vaiTroID !== "1") {
         window.location.href = "/pages/error.html";
         return;

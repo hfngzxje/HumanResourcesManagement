@@ -6,11 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            const maNhanVien = localStorage.getItem('maNhanVien')
+            if (maNhanVien === null) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -146,7 +161,7 @@
                                                 keyLabel="ten"></base-select>
                                         </div>
                                         <div class="col-md-4">
-                                            <base-select label="Ngân hàng(*)" name="nganhang" options="BankList"
+                                            <base-select label="Ngân hàng(*)" name="Nganhang" options="BankList"
                                                 required="true" style="margin-top: 20px;"></base-select>
                                         </div>
                                     </div>
@@ -215,6 +230,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/list.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

@@ -1,5 +1,7 @@
 let idLuongHienTai = null
 const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
+
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -348,14 +350,14 @@ function renderActionByStatus() {
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail;
 }
 async function buildApiHopDongA(id) {
     return 'https://localhost:7141/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maNhanVien;
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 document.addEventListener('DOMContentLoaded', () => {
     if (vaiTroID !== "1") {

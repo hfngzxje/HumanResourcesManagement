@@ -17,7 +17,7 @@ class CustomHeader extends HTMLElement {
     // Thêm sự kiện click vào span HRM
     hrmLink.addEventListener("click", () => {
       // Xóa localStorage
-      localStorage.removeItem("maNhanVien");
+      localStorage.removeItem("maDetail");
     });
   }
 }
@@ -44,7 +44,7 @@ class CustomSidebar extends HTMLElement {
               </span>
               <span> Hệ thống </span>
               <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Đăng xuất</a>
+                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
                 <a id="btn"  class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close</a>
                 <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Close All</a>

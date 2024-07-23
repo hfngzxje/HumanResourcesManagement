@@ -1,6 +1,7 @@
 
 const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
 
 var BankList = [
     { label: 'Vietcombank', value: 'VCB' },
@@ -32,7 +33,7 @@ function backToListUpdate() {
 }
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -51,7 +52,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien,
+        url: 'https://localhost:7141/api/NhanVien/id?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('profile_form', data)
@@ -69,7 +70,7 @@ function fetchEmployee() {
 
 function uploadImage(anh) {
     const payloadUploadImage = new FormData()
-    payloadUploadImage.append('maNV', maNhanVien)
+    payloadUploadImage.append('maNV', maDetail)
     payloadUploadImage.append('file', anh)
 
     $.ajax({
@@ -117,7 +118,7 @@ function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -207,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
     }
 
-    const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maNhanVien;
+    const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maDetail;
 
     // Thực hiện yêu cầu API
     fetch(apiUrl)

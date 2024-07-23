@@ -14,6 +14,15 @@
         integrity="sha512-7CTjZu+YFq01BMLWzR8NO6QqivOkr2j/Ep8NMe1Le2xmk3OzofTkDWNRU8TfeIv/AEzAhpqICV6FtHUyYUmV8g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">

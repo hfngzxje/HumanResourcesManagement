@@ -1,5 +1,7 @@
 const isEdit = !!id
 const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
+
 
 let maHopDongHienTai = null
 
@@ -51,7 +53,7 @@ function handleCreate() {
     const formValue = getFormValues('award_form')
 
     
-    formValue['ma'] = maNhanVien;
+    formValue['ma'] = maDetail;
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -128,12 +130,12 @@ function renderActionByStatus() {
 
 function buildApiUrlKhenThuong() {
     
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/1'
     return string1 + string2;
 }
 function buildApiUrlKyLuat() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maNhanVien;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/0'
     return string1 + string2;
 }
