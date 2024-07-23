@@ -231,6 +231,21 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-        }        
+        }
+
+        [HttpGet("Search")]
+        public async Task<ActionResult<List<TblNhanVien>>> SearchNhanVien([FromQuery] string? search)
+        {
+            var nhanViens = await _nhanVienService.SearchNhanVienAsync(search);
+
+            if (nhanViens == null || nhanViens.Count == 0)
+            {
+                return NotFound("Không có nhân viên nào!!");
+            }
+
+            return Ok(nhanViens);
+        }
     }
+
 }
+
