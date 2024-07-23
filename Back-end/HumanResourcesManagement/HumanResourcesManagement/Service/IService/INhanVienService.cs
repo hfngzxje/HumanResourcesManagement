@@ -12,7 +12,6 @@ namespace HumanResourcesManagement.Service.IService
         void UpdateNhanVien(string id, NhanVienRequest request);
         void DeleteNhanVien(string id);
         TblNhanVien GetNhanVienByMa(string ma);
-        TblNhanVien GetNhanVienById(string id);
         TblDanhMucDanToc GetDanTocById(int id);
         TblDanhMucTonGiao GetTonGiaoById(int id);
         TblDanhMucNgachCongChuc GetNgachCongChucById(int id);
@@ -30,5 +29,7 @@ namespace HumanResourcesManagement.Service.IService
         Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh);
 
         Task<List<TblNhanVien>> SearchNhanVienAsync(string? search);
+
+        Task<NhanVienResponse> GetNhanVienByIdAsync(string id);
     }
 }

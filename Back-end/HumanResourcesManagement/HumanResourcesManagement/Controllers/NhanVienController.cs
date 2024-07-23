@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
@@ -58,17 +59,22 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpGet("id")]
-        public IActionResult GetNhanVienById(string id)
+        [HttpGet("GetById")]
+        public async Task<ActionResult<NhanVienResponse>> GetById([FromQuery] string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Mã nhân viên không được để trống.");
+            }
+
             try
             {
-                var nhanVien = _nhanVienService.GetNhanVienById(id);
+                var nhanVien = await _nhanVienService.GetNhanVienByIdAsync(id);
                 return Ok(nhanVien);
             }
             catch (Exception ex)
             {
-                return NotFound(new { Message = ex.Message });
+                return NotFound(ex.Message);
             }
         }
 
