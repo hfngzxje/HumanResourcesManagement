@@ -10,6 +10,20 @@
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -30,9 +44,10 @@
 
                                     <base-select label="Mã hợp đồng(*)" name="mahopdong" keyValue="mahopdong" required="true"
                                         keyLabel="mahopdong" api="buildApiHopDong"></base-select> <br>
-                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true"></base-input-number>
-                                    <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
-                                            required="true"></base-select> 
+                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true" readonly></base-input-number>
+                                    <!-- <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                            required="true"></base-select>  -->
+                                            <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" readonly></base-input-number>
                                     <base-input-number label="Phụ cấp khác"required="true" name="phucapkhac"></base-input-number>
                                     <base-input-number label="Thời hạn lên lương"required="true" name="thoihanlenluong"></base-input-number>
                                    
@@ -41,9 +56,11 @@
                                
 
                                         <!-- gioi han 0-7 -->
-                                        <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
-                                            required="true"></base-select> <br> 
-                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem"></base-input-number>
+                                        <!-- <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
+                                            required="true"></base-select> <br>  -->
+                                            <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                            required="true"></base-select> <br>
+                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem" readonly></base-input-number>
                                         <base-input-number label="Tiền lương"required="true" name="tongluong" readonly  ></base-input-number>
                                         <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
                                         name="ngayhieuluc"></base-datepicker>
@@ -77,6 +94,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/salaryRecord.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

@@ -1,0 +1,20 @@
+/* styles.css */
+.custom-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1D4ED8; /* Màu xanh chủ đạo */
+    color: white; /* Màu chữ */
+    font-size: 16px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px; /* Bo tròn góc */
+    text-decoration: none; /* Xóa gạch dưới */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng chuyển tiếp */
+    cursor: pointer; /* Con trỏ chuột thay đổi khi hover */
+}
+
+.custom-button:hover {
+    background-color: #2563EB; /* Màu xanh đậm khi hover */
+    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}

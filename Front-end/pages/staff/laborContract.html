@@ -10,6 +10,24 @@
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            const maNhanVien = localStorage.getItem('maNhanVien');
+            alert(maNhanVien)
+            alert(vaiTroID)
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+        
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -45,16 +63,17 @@
                                     <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong"
                                         keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select> <br>
-                                    <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" ></base-input-number> <br>
+                                    <!-- <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" ></base-input-number> <br> -->
                                     
 
-                                    <div>
+                                    
                                         <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
-                                            required="true"></base-select>
-                                    </div>
+                                            required="true"></base-select> <br>
+                                    
+                                    <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
                                 </div>
                             </div>
-                            <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+                           
                         </form>
                         <div id="laborContract_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
@@ -78,6 +97,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/laborContract.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

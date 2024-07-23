@@ -2,6 +2,8 @@
 let idTrinhDo = null
 let idNgoaiNgu = null
 const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
+
 
 var TableColumns1 = [
     {
@@ -128,7 +130,7 @@ function handleCreateTrinhDo() {
 
     // const urlParams = new URLSearchParams(window.location.search);
     // const employeeId = urlParams.get('id');
-    formValue['ma'] = maNhanVien;
+    formValue['ma'] = maDetail;
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -253,7 +255,7 @@ function handleCreateNgoaiNgu() {
 
     // const urlParams = new URLSearchParams(window.location.search);
     // const employeeId = urlParams.get('id');
-    formValue['ma'] = maNhanVien;
+    formValue['ma'] = maDetail;
 
     console.log('formValue ', formValue);
     const payload = buildPayload1(formValue)
@@ -377,11 +379,11 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl1() {
-    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maNhanVien
+    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
 }
 
 function buildApiUrl2() {
-    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maNhanVien
+    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     if (vaiTroID !== "1") {

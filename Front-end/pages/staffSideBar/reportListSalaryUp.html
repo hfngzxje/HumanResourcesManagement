@@ -11,6 +11,20 @@
     <link rel="stylesheet" href="../../assets/styles/pages/staffSideBar/common.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
     <title>Danh sách nhân viên</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function () {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -19,11 +33,11 @@
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"></layout-sidebar>
             <div class="container">
-                <div class="left"style="margin-top: 100px;">
-                    <h1 class="text-xl font-bold mb-4"style="display: flex; justify-content: center;" >Mẫu báo cáo</h1>
+                <div class="left" style="margin-top: 100px;">
+                    <h1 class="text-xl font-bold mb-4" style="display: flex; justify-content: center;">Mẫu báo cáo</h1>
                     <!-- <base-select label=" " options="MaritalOptions" required="true" ></base-select> -->
 
-                    <base-select id="tabList"  label=" ">
+                    <base-select id="tabList" label=" ">
                         <!-- Các tùy chọn sẽ được thêm vào bằng JavaScript -->
                     </base-select>
                 </div>
@@ -32,24 +46,30 @@
                         <div class="input-container">
                             <h1 class="text-xl font-bold mb-4">Danh sách nâng lương</h1>
                             <div class="input-group">
-                                
+
                                 <div class="input-column">
-                                    <base-select label="Trạng thái" options="trangThai" required="true"></base-select><br>
-                                    <base-datepicker  class="ml-auto" style="margin: 0;" label="Đến ngày" name="" required="true"></base-datepicker>
+                                    <base-select label="Trạng thái" options="trangThai"
+                                        required="true"></base-select><br>
+                                    <base-datepicker class="ml-auto" style="margin: 0;" label="Đến ngày" name=""
+                                        required="true"></base-datepicker>
                                 </div>
                                 <div class="input-column">
-                                    <base-select  label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select><br>
-                                    <base-select  label="Giới tính" options="gioiTinh" required="true" style="margin-top: 9px;"></base-select>
+                                    <base-select label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select><br>
+                                    <base-select label="Giới tính" options="gioiTinh" required="true"
+                                        style="margin-top: 9px;"></base-select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
-                    
+
+
                     <div class="bottom">
-                        <h1 class="text-xl font-bold mb-4" style="display: flex; justify-content: center; font-size: 36px;">HRM</h1>
+                        <h1 class="text-xl font-bold mb-4"
+                            style="display: flex; justify-content: center; font-size: 36px;">HRM</h1>
                         <h1 style="display: flex; justify-content: center;">-------------------</h1>
-                        <h1 class="text-align  mb-2" style="display: flex; justify-content: center; font-size: 30px;">Danh Sách Nhân Viên</h1> <br>
+                        <h1 class="text-align  mb-2" style="display: flex; justify-content: center; font-size: 30px;">
+                            Danh Sách Nhân Viên</h1> <br>
 
                         <p class="text-xl font-medium mb-4" style="font-size: 18px;">Phòng ban</p>
                         <p class="text-xl font-medium mb-4" style="font-size: 16px;">Hà Nội / Ngày / Tháng</p>
@@ -72,6 +92,7 @@
     <script src="../../assets/scripts/pages/staffSideBar/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staffSideBar/report.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

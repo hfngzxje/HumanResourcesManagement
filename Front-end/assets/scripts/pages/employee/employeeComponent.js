@@ -44,7 +44,7 @@ class CustomHeader extends HTMLElement {
             <i class='bx bx-group text-lg'></i>
             </span>
             <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hồ sơ</a>
+                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Hồ sơ</a>
             </span>
         </div>
         <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3"">

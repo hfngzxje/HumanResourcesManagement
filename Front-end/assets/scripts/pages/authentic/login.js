@@ -1,4 +1,5 @@
 let Eid = null;
+const popupCreateBtn = document.getElementById("createBtn")
 
 function LoginSuccess() {
     window.location.replace("/pages/staff/list.html");
@@ -33,14 +34,15 @@ function handleLogin() {
             
         const maNhanVien = data.nhanVien.ma
         localStorage.setItem("maNhanVien", maNhanVien);
-        const vaitroID = data.nhanVien.vaiTroId;
-       
+        const vaitroID = data.nhanVien.vaiTroId
+    //    localStorage.setItem("vaiTroId", vaitroID)
 
-        alert(vaitroID)
+       
         if(vaitroID !== undefined){
+            localStorage.setItem("vaiTroId", vaitroID);
             handleLoginSuccess(vaitroID)
             alert("Đăng Nhập Thành Công")
-            localStorage.setItem("vaiTroID", vaitroID);
+           
         }
         else{
             alert("Không tìm thấy vai trò người dùng")
@@ -70,7 +72,18 @@ function handleLogin() {
     });
 }
 
+  // Hàm xóa lịch sử trình duyệt
+  function preventBack() {
+    window.history.forward();
+}
 
+// Xử lý sự kiện khi trang được tải
+window.onload = function() {
+    preventBack();
+    window.onpageshow = function(evt) {
+        if (evt.persisted) preventBack();
+    };
+};
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('login_form_action')
@@ -90,7 +103,72 @@ function renderActionByStatus() {
 }
 
 
+function showPopup() {
+    var modal = document.getElementById("forgetPassword");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues();
+        }
+    }
+        const popupTitle = modal.querySelector('h2')
+        popupTitle.textContent = "Quên mật khẩu" 
+  }
+  function clearFormValues(formId) {
+    const form = document.getElementById('forgetPassword');
+    const inputs = form.querySelectorAll('input, textarea, select');
+  
+    inputs.forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+            input.checked = false;
+        } 
+        else {
+            input.value = '';
+            input.selectedIndex = 0;
+        }
+    });
+  }
+
+  function handleCreate() {
+    const formValue = getFormValues('forgetPassword')
+    const email = formValue['email']
+    const payload = buildPayload(formValue)
+    console.log('Payload:', payload); 
+    console.log("Email value: " + email)
+    setLoading(true)
+    $.ajax({
+        url: 'https://localhost:7141/api/DangNhap/forgot-password?email=' + email ,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function(data) {
+            alert("Vui lòng kiểm tra email để lấy lại mật khẩu")
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if(!err.responseJSON) {
+                    alert(err.responseText)
+                    return 
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Gửi email thất bại")
+            }
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupCreateBtn.addEventListener("click", handleCreate)
 })
 

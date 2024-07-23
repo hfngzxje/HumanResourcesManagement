@@ -91,9 +91,9 @@ namespace HumanResourcesManagement.Service
             }
 
             var token = Guid.NewGuid().ToString();
-            _memoryCache.Set(token, email, TimeSpan.FromMinutes(5));
+            _memoryCache.Set(token, email, TimeSpan.FromMinutes(10));
 
-            var resetUrl = $"{_baseUrl}/api/PasswordReset/reset-password?token={token}";
+            var resetUrl = $"{_baseUrl}/pages/authentic/resetPassword.html?token={token}";
 
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {
@@ -110,7 +110,7 @@ namespace HumanResourcesManagement.Service
                 Body = $"Xin chào {nhanVien.Ten},<br><br>" +
                        $"Bạn đã yêu cầu đặt lại mật khẩu. Vui lòng nhấp vào link sau để đặt lại mật khẩu:<br>" +
                        $"<a href='{resetUrl}'>Đặt lại mật khẩu</a><br><br>" +
-                       "Link sẽ hết hạn sau 5 phút.<br><br>" +
+                       "Link sẽ hết hạn sau 10 phút.<br><br>" +
                        "Trân trọng,<br>Phòng Nhân Sự",
                 IsBodyHtml = true
             };

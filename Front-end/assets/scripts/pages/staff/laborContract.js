@@ -15,9 +15,12 @@ var TableColumns = [
         key: 'mahopdong',
     },
     {
-        label: 'Lương cơ bản',
-        key: 'luongcoban',
-        type: 'currency'
+        label: 'Loại hợp đồng',
+        key: 'loaihopdong'
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh'
     },
     {
         label: 'Từ ngày',
@@ -28,6 +31,10 @@ var TableColumns = [
         label: 'Đến ngày',
         key: 'hopdongdenngay',
         type: 'datetime'
+    },
+    {
+        label: 'Trạng thái',
+        key: 'trangthai'
     },
     {
         label: 'Ghi chú',
@@ -261,10 +268,10 @@ function buildApiUrl() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return;
-    }
+    // if (vaiTroID !== "1") {
+    //     window.location.href = "/pages/error.html";
+    //     return;
+    // }
     renderActionByStatus()
 })
 

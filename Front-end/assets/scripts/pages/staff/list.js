@@ -51,9 +51,9 @@ var TableColumns = [
       actions: [
         { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết',onClick: (row) => { 
           
-          localStorage.setItem("maNhanVien", row.ma)
-         const maNhanVien = localStorage.getItem("maNhanVien")
-          alert(maNhanVien)
+          localStorage.setItem("maDetail", row.ma)
+         const maDetail = localStorage.getItem("maDetail")
+          alert(maDetail)
           backToList(row.ma)
         } },
         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: () => { console.log('click') } }
@@ -148,10 +148,15 @@ function addNewEmp(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // if (vaiTroID !== "1") {
-  //     window.location.href = "/pages/error.html";
-  //     return;
-  // }
+//   if (localStorage.getItem('maNhanVien') === null) {
+//     window.location.href = '/pages/authentic/login.html';
+//     return; // Chuyển hướng đến trang chính nếu đã đăng nhập
+// }
+//   if (vaiTroID !== "1") {
+//       window.location.href = "/pages/error.html";
+//       return;
+//   }
   popupCreateBtn.addEventListener("click", handleCreate)
   popupClearBtn.addEventListener("click", clearFormValues)
+
 })
