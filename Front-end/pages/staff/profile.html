@@ -39,37 +39,16 @@
                     </div> <br><br>
                     <!-- Nội dung form theo từng màn hình -->
                     <div class="container">
-                        <div class="row gutters">
-                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div>
-                                            <div class="user-profile">
-
-                                                <h1 id="name-text"
-                                                    style="font-weight: bold; text-align: center; margin-top: 20px; font-size: 25px;">
-                                                </h1>
-                                                <h6 id="email-text" style=" text-align: center; margin-top: 10px; ">
-                                                </h6>
-                                            </div>
-                                            <div class="about">
-                                                <h1
-                                                    style="font-weight: bold; text-align: center; margin-top: 20px; font-size: 25px; color: blue;">
-                                                    Tổng quan</h1>
-                                                <!-- <p >I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="row justify-content-center">
+                            
                             <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
 
-                                <div class="card h-100">
+                                <div class="card h-100" style="border: none;">
 
                                     <div class="card-body">
                                         <div class="container">
                                             <form id="profile_form">
-                                                <div class="col-span-1 h-[300px]  ">
+                                                <div class="col-span-1 ">
                                                     <base-upload name="anh" idImage="employeeImage"></base-upload>
                                                 </div>
                                                 <!-- ---------hidden Item--------------- -->
@@ -104,7 +83,7 @@
                                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                     <h6 class="mb-2 text-primary">Thông tin cá nhân</h6>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row mt-5">
                                                     <div class="col">
                                                         <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
                                                             required="true"></base-input>
@@ -115,7 +94,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col mt-2">
                                                         <base-input-phone label="Di động(*)" name="didong"
                                                             required="true"></base-input-phone>
                                                     </div>
@@ -125,7 +104,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col mt-2">
                                                         <div class="form-group">
                                                             <label-form-item name="Giới tính(*)"
                                                                 required="true"></label-form-item>
@@ -142,7 +121,7 @@
                                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                     <h6 class="mt-3 mb-2 text-primary">Công việc</h6>
                                                 </div>
-                                                <div class="row">
+                                                <div class="row mt-5">
                                                     <div class="col-md-4">
                                                         <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
                                                             api="https://localhost:7141/api/NhanVien/chucDanh"
@@ -161,14 +140,15 @@
                                                 </div>
                                                 <br>
                                                 <div class="row">
-                                                    <div class="col">
+                                                    <div class="col-md-4">
                                                         <base-datepicker label="Ngày vào ban"
                                                             name="ngayvaoban"></base-datepicker>
                                                     </div>
-                                                    <div class="col">
+                                                    <div class="col-md-4">
                                                         <base-datepicker label="Ngày công tác"
                                                             name="ngaychinhthuc"></base-datepicker>
                                                     </div>
+                                                    <div class="col-md-4"></div>
                                                 </div>
 
                                             </form>

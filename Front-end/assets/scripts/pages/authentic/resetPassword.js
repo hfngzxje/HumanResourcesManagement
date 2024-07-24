@@ -79,17 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lấy giá trị của tham số 'token'
     const tokenURL = params.get('token');
      console.log("Token: " , tokenURL)
-    token = tokenURL
-    // if (tokenURL) {
-    //     // Lưu token vào cookie (có thể sử dụng HttpOnly và Secure nếu cần)
-    //     document.cookie = `AuthToken=${token}; path=/; secure; samesite=strict`;
+    
+    if (tokenURL) {
+        // Lưu token vào cookie (có thể sử dụng HttpOnly và Secure nếu cần)
+        document.cookie = `AuthToken=${tokenURL}; path=/; secure; samesite=strict`;
         
-    //     // Xóa token khỏi URL
-    //     window.history.replaceState({}, document.title, window.location.pathname);
+        // Xóa token khỏi URL
+        window.history.replaceState({}, document.title, window.location.pathname);
         
-    //     // Sử dụng token (nếu cần)
-    //     console.log("Token stored in cookie.");
-    // }
-    // token = getCookie('AuthToken');
-    // console.log("Token from cookie: ", token);
+        // Sử dụng token (nếu cần)
+        console.log("Token stored in cookie.");
+    }
+    token = getCookie('AuthToken');
+    console.log("Token from cookie: ", token);
 })

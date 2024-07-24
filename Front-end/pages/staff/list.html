@@ -13,7 +13,7 @@
     <title>Danh sách nhân viên</title>
     <script>
         // Đặt đoạn mã kiểm tra vào đây
-        (function() {
+        (function () {
             const maNhanVien = localStorage.getItem('maNhanVien')
             if (maNhanVien === null) {
                 window.location.href = '/pages/authentic/login.html';
@@ -55,8 +55,6 @@
                     <div class="mt-3">
                         <base-table api="https://localhost:7141/api/NhanVien" columns="TableColumns" pagesize="5">
                         </base-table>
-                        </ul>
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -186,8 +184,8 @@
                                         </div>
                                         <div class="col-md-4">
                                             <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
-                                        api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
-                                        keyLabel="ten" ></base-select>
+                                                api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
+                                                keyLabel="ten"></base-select>
                                         </div>
                                     </div>
                                     <br>
@@ -199,7 +197,7 @@
                                             <base-datepicker label="Ngày công tác"
                                                 name="ngaychinhthuc"></base-datepicker>
                                         </div>
-                                        
+
                                     </div>
 
                                 </form>
