@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
+    <title>Quá trình công tác</title>
+</head>
+
+<body class="text-gray-600">
+    <div class="h-screen w-screen flex flex-col overflow-auto ">
+        <layout-header class="box"></layout-header>
+        <div class="flex flex-1 overflow-auto">
+            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
+            <div class="flex-1 bg-gray-200 p-3 overflow-auto">
+                <div class="h-fit w-full bg-white rounded-lg p-3">
+                    <div class="flex border-b border-solid pb-3">
+                        <div class="w-[300px]">
+                            <span class="text-gray-400">Mã số: </span>
+                            <span class="text-gray-700 text-xl font-medium">
+                                <!-- Mã số -->
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400">Họ tên: </span>
+                            <span class="text-gray-700 text-xl font-me">
+                                <!-- Tên -->
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="flex justify-between" style="color: blue; margin-top: 2%; margin-bottom: 2%;">
+                            <p class="text-xl">Vị trí công tác hiện tại</p>
+                        </div>
+                        <form id="Working_Process_formm" class="flex gap-x-5">
+                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                                    <base-select label="Phòng ban" name="phong" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/NhanVien/phong"></base-select>
+                                    <base-select label="Tổ" name="to" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/NhanVien/to"></base-select>
+                                    <base-select disabled label="Chức vụ công tác" name="chucvuhientai" keyValue="id"
+                                        keyLabel="ten" api="https://localhost:7141/api/NhanVien/chucDanh"></base-select>
+                                    <base-datepicker class="ml-auto" label="Ngày hiệu lực" style="margin: 0"
+                                        name="ngaychinhthuc"></base-datepicker>
+                                </div>
+                                <base-textarea label="Chi tiết" name="chitiet"></base-textarea>
+                        </form>
+                        <!-- <div id="Working_Process_form_action" class="flex gap-x-5 mt-5 justify-end"></div> -->
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="flex justify-between" style="color: blue; margin-top: 2%; margin-bottom: 2%;">
+                            <p class="text-xl">Vị trí công tác chuyển đến</p>
+                        </div>
+                        <form id="Working_Process_form" class="flex gap-x-5">
+                            <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
+                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                                    <base-select label="Phòng ban" name="phong" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
+                                    <base-select label="Tổ" name="to" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/NhanVien/to"></base-select>
+
+                                    <base-select label="Chức vụ công tác" name="chucvu" keyValue="id" keyLabel="ten"
+                                        api="https://localhost:7141/api/ChucDanh/getAllChucDanh"></base-select>
+                                    <!-- <base-datepicker class="ml-auto" label="Ngày hiệu lực" style="margin: 0"
+                                        name="ngayhieuluc"></base-datepicker> -->
+                                    <div>
+                                        <div class="relative max-w-sm">
+                                            <div class="">
+                                                <label for="base-input"
+                                                    class="block mb-2 text-sm font-medium text-gray-900">Ngày hiệu
+                                                    lực</label>
+                                                <input type="datetime-local" id="ngayHieuLuc" name="ngayHieuLuc"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <base-textarea label="Chi tiết" name="chiTiet"></base-textarea>
+                        </form>
+                        <div id="Working_Process_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                    </div>
+
+
+                    <div class="mt-3">
+                        <base-table api="buildApiUrl" columns="TableColumns">
+                        </base-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+        <script src="../../assets/scripts/common/transform.js"></script>
+        <script src="../../assets/scripts/common/loading.js"></script>
+        <script src="../../assets/scripts/pages/staff/common.js"></script>
+        <script src="../../assets/scripts/common/formHanlde.js"></script>
+        <script src="../../assets/scripts/pages/staff/WorkingProcess.js"></script>
+</body>
+
+</html>
