@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Danh sách nhân viên</title>
+    <title>Danh mục tổ</title>
     <script>
         // Đặt đoạn mã kiểm tra vào đây
         (function() {
@@ -52,10 +52,10 @@
               <div class="form-header">
                  <h2>Sửa Tiêu Đề Tổ</h2> 
               </div>
-              <base-input label="Mã" required="true" name="ma"></base-input>
+              <!-- <base-input label="Mã" required="true" name="ma"></base-input> -->
               <base-input label="Tên tổ(*)" required="true" name="ten"></base-input>
               <base-select label="Tên phòng(*)" required="true" name="idphong"
-              keyValue="ten" keyLabel="ten"
+              keyValue="id" keyLabel="ten"
               api="https://localhost:7141/api/NhanVien/phong"></base-select>
            
          </form>

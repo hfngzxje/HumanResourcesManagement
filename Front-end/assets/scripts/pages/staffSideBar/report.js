@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/NhanVien/getDanhSachNhanVien";
+const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNhanVien";
 var TableColumns = [
   {
     label: "Mã nhân viên",

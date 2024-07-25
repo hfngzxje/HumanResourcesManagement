@@ -13,7 +13,7 @@
     <title>Danh sách nhân viên</title>
     <script>
         // Đặt đoạn mã kiểm tra vào đây
-        (function() {
+        (function () {
             if (!localStorage.getItem('maNhanVien')) {
                 window.location.href = '/pages/authentic/login.html';
                 return; // Chuyển hướng nếu không có mã nhân viên
@@ -33,7 +33,7 @@
         <div class="flex flex-1 overflow-auto">
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                
+
                 <div class="flex justify-left" style="color: rgb(15, 15, 20); margin-top: 5%;">
                     <p class="text-xl">Danh sách hợp đồng</p>
                 </div>
@@ -48,57 +48,60 @@
     </div>
 
     <div id="editHopDong" class="modal">
-        <div class="change-container" style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
+        <div class="change-container"
+            style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
             <span class="close">&times;</span>
             <form id="change_form">
                 <div class="form-header" style="padding: 10px;">
-                    <h2 style="color: #333; text-align: center; font-size: 24px; font-weight: lighter;">Thông tin hợp đồng</h2>
+                    <h2 style="color: #333; text-align: center; font-size: 24px; font-weight: lighter;">Thông tin hợp
+                        đồng</h2>
                 </div>
                 <div style="border: 1px solid #aaa8a8">
                     <div id="maNhanVien" class="flex gap-x-20" style="margin-left: 10px;">
-                        <base-select label="Mã Nhân Viên(*)" required="true" name="ma"
-                                     keyValue="ma" keyLabel="ma" api="https://localhost:7141/api/NhanVien"
-                                     style="width: 22%; max-width: 500px;"> </base-select>
+                        <base-select label="Mã Nhân Viên(*)" required="true" name="ma" keyValue="ma" keyLabel="ma"
+                            api="https://localhost:7141/api/NhanVien" style="width: 22%; max-width: 500px;">
+                        </base-select>
                     </div>
-                    
-                    
-                <div class="flex gap-x-5" style="margin-top: 20px;">
-                    <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full" style=" padding: 10px;">
-                        <base-select label="Chức danh công việc(*)" required="true" name="chucdanh"
-                            keyValue="id" keyLabel="ten" api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
-                        <br>
-                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực(*)"
-                            name="hopdongtungay" required="true"></base-datepicker>
-                        <br>
-                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
-                            name="hopdongdenngay" required="true"></base-datepicker>
-                    </div>
-                    <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full " style="padding: 10px;" >
-                            <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong"
-                                keyValue="id" keyLabel="ten" api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
+
+
+                    <div class="flex gap-x-5" style="margin-top: 20px;">
+                        <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full" style=" padding: 10px;">
+                            <base-select label="Chức danh công việc(*)" required="true" name="chucdanh" keyValue="id"
+                                keyLabel="ten" api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
                             <br>
-                            <base-input-number label="Lương cơ bản" name="luongcoban" required="true"></base-input-number>
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực(*)"
+                                name="hopdongtungay" required="true"></base-datepicker>
+                            <br>
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
+                                name="hopdongdenngay" required="true"></base-datepicker>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full " style="padding: 10px;">
+                            <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong" keyValue="id"
+                                keyLabel="ten" api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
+                            <br>
+                            <base-input-number label="Lương cơ bản" name="luongcoban"
+                                required="true"></base-input-number>
                             <br>
                             <div>
                                 <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
                                     required="true"></base-select>
                             </div>
+                        </div>
+
                     </div>
-                    
+
                 </div>
-              
-                        </div>         
             </form>
             <div class="flex gap-x-5 mt-5 justify-center">
                 <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
                 <base-button id="saveBtn" label="Lưu" icon="bx bx-save"></base-button>
-                <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type = "red"></base-button>
-                <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type = "black"></base-button>
+                <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
             </div>
         </div>
     </div>
-    
-    
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
