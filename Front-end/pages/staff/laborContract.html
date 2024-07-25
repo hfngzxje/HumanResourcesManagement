@@ -7,9 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Danh sách nhân viên</title>
+    <title>Danh sách hợp đồng</title>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function () {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+            const vaiTroID = localStorage.getItem('vaiTroId');
+            const maNhanVien = localStorage.getItem('maNhanVien');
+            if (vaiTroID !== "1") {
+                window.location.href = "/pages/error.html";
+                return; // Chuyển hướng nếu vai trò không phải là 1
+            }
+        })();
+
+    </script>
 </head>
 
 <body class="text-gray-600">
@@ -36,36 +53,87 @@
                                         keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/HopDong/chucDanh"></base-select> <br>
                                     <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực(*)"
-                                        name="hopdongtungay"></base-datepicker> <br>
-                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
-                                        name="hopdongdenngay"></base-datepicker>
+                                        name="hopdongtungay" required="true"></base-datepicker> <br>
+                                    <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
+                                        name="hopdongdenngay" required="true"></base-datepicker>
                                 </div>
                                 <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
 
                                     <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong"
                                         keyValue="id" keyLabel="ten"
                                         api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select> <br>
-                                    <base-input-number label="Lương cơ bản" name="luongcoban"></base-input-number> <br>
-                                    
+                                    <!-- <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" ></base-input-number> <br> -->
 
-                                    <div>
-                                        <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
-                                            required="true"></base-select>
-                                    </div>
+
+
+                                    <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
+                                        required="true"></base-select> <br>
+
+                                    <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
                                 </div>
                             </div>
-                            <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+
                         </form>
                         <div id="laborContract_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
                 </div>
-                <div class="flex justify-between" style="color: blue; margin-top: 5%;">
-                    <p class="text-xl">Danh sách người thân</p>
+                <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+                    <p class="text-xl">Danh sách hợp đồng lao động</p>
                 </div>
                 <div class="mt-3">
-                    <base-table api="buildApiUrl" columns="TableColumns">
+                    <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
+                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
                     </base-table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="editLaborContract">
+        <div class="change-container"
+            style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
+            <span class="close">&times;</span>
+            <form>
+                <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Sửa hợp đồng
+                    </h2>
+                </div>
+                <div class="p-4">
+                    <div class="grid gap-4 mb-4 grid-cols-2">
+                        <div class="col-span-2 sm:col-span-1 ">
+                            <base-select label="Chức danh công việc(*)" required="true" name="chucdanh"
+                                    keyValue="id" keyLabel="ten"
+                                    api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực(*)"
+                                    name="hopdongtungay" required="true"></base-datepicker>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
+                                    name="hopdongdenngay" required="true"></base-datepicker>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-select label="Loại hợp đồng(*)" required="true" name="loaihopdong"
+                                    keyValue="id" keyLabel="ten"
+                                    api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
+                        </div>
+                        <div class="col-span-2">
+                            <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
+                                    required="true"></base-select>
+                        </div>
+                        <div class="col-span-2">
+                            <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+            <div class="flex gap-x-5 mt-5 justify-center">
+                <base-button id="updateBtn" label="Cập nhật" icon="bx bx-save" type="green"></base-button>
+                <base-button id="deleteBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
             </div>
         </div>
     </div>
@@ -77,6 +145,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/laborContract.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
 </body>
 

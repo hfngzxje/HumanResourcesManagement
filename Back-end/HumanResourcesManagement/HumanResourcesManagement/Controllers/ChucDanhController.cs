@@ -39,21 +39,21 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _chucDanhService.AddChucDanh(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm chức danh thành công.");
             }
             catch (Exception ex)
             {
                 return StatusCode(501, ex.Message);
             }
         }
-
+        //removechucdanh
         [HttpDelete("removeChucDanh")]
         public async Task<IActionResult> RemoveChucDanh(int id)
         {
             try
             {
                 await _chucDanhService.DeleteChucDanh(id);
-                return StatusCode(200, "xoa chuc danh thanh cong");
+                return StatusCode(200, "Xóa chức danh thành công");
             }
             catch (Exception ex)
             {
@@ -61,12 +61,12 @@ namespace HumanResourcesManagement.Controllers
             }
         }
         [HttpPut("updateChucDanh")]
-        public async Task<IActionResult> UpdateChucDanh(int id,InsertChucDanh req)
+        public async Task<IActionResult> UpdateChucDanh(int id, InsertChucDanh req)
         {
             try
             {
-                await _chucDanhService.UpdateChucDanh(id,req);
-                return StatusCode(200, "cap nhat chuc danh thanh cong");
+                await _chucDanhService.UpdateChucDanh(id, req);
+                return StatusCode(200, "Cập nhật chức danh thành công");
             }
             catch (Exception ex)
             {

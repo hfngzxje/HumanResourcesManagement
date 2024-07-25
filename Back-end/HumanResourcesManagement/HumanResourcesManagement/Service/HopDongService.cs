@@ -63,7 +63,7 @@ namespace HumanResourcesManagement.Service
 
             hopDong.Loaihopdong = request.Loaihopdong;
             hopDong.Chucdanh = request.Chucdanh;
-            hopDong.Luongcoban = request.Luongcoban;
+            //hopDong.Luongcoban = request.Luongcoban;
             hopDong.Hopdongtungay = request.Hopdongtungay;
             hopDong.Hopdongdenngay = request.Hopdongdenngay;
             hopDong.Ghichu = request.Ghichu;
@@ -105,7 +105,7 @@ namespace HumanResourcesManagement.Service
                 Mahopdong = newMaHopDong,
                 Loaihopdong = request.Loaihopdong,
                 Chucdanh = request.Chucdanh,
-                Luongcoban = request.Luongcoban,
+                //Luongcoban = request.Luongcoban,
                 Hopdongtungay = request.Hopdongtungay,
                 Hopdongdenngay = request.Hopdongdenngay,
                 Ghichu = request.Ghichu,

@@ -12,12 +12,10 @@ namespace HumanResourcesManagement.Controllers
     public class NguoiThanController : ControllerBase
     {
         private readonly INguoiThanService _nguoiThanService;
-        private readonly NhanSuContext _context;
 
-        public NguoiThanController(INguoiThanService nguoiThanService, NhanSuContext context)
+        public NguoiThanController(INguoiThanService nguoiThanService)
         {
             _nguoiThanService = nguoiThanService;
-            _context = context;
         }
 
         //get danh muc nguoi than
@@ -52,7 +50,7 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-            
+
         }
 
         //them nguoi than
@@ -62,7 +60,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var newNguoiThan = await _nguoiThanService.AddNguoiThan(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm người thân thành công.");
             }
             catch (KeyNotFoundException ex)
             {
@@ -80,13 +78,13 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _nguoiThanService.DeleteNguoiThan(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa người thân thành công.");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy người thân này.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -98,8 +96,9 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _nguoiThanService.UpdateNguoiThan(req);
-                return StatusCode(200, "sua thanh cong");
-            }catch(Exception ex)
+                return StatusCode(200, "Cập nhật thông tin người thân thành công.");
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }

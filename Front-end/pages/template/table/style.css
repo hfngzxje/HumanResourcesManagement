@@ -1,0 +1,18 @@
+/* Add any custom styles here */
+.status-tag {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: white;
+    font-size: 0.75rem;
+    text-align: center;
+  }
+  .status-active {
+    background-color: green;
+  }
+  .status-inactive {
+    background-color: red;
+  }
+  .status-pending {
+    background-color: orange;
+  }
+  

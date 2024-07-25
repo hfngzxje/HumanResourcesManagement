@@ -1,6 +1,8 @@
-const isEdit = !!id
-
+const vaiTroID = localStorage.getItem("vaiTroID")
 let idNguoiThan = null
+const table = document.querySelector('base-table')
+const popupRemoveBtn = document.getElementById("deleteBtn")
+const popupUpdatebtn = document.getElementById("updateBtn")
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -42,35 +44,56 @@ var TableColumns = [
       label: 'Hành động',
       key: 'action',
       actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchEmployee(row.id)} },
-        { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { console.log(id)  ,handleRemoveRow(row.id) } }
+        {
+                        type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                            isPopupEdit = true
+                            fetchRelationship(row.id);
+                            showPopup()
+                        }
+                    }
       ]
     }
   ]
 
+
+  var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchRelationship(row.id)
+    }
+}
+function showPopup() {
+    var modal = document.getElementById("editFamily");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues("editFamily");
+        }
+    }
+}
+function closePopup(){
+    var modal = document.getElementById("editFamily");
+    modal.style.display="none"
+}
 function backToList() {
     const url = new URL("/pages/staff/FamilyRelationship.html", window.location.origin);
-    url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
 
 function buildPayload(formValue) {
     const formClone = {...formValue}
-
-    formClone['trangThai'] = Number(formClone['trangThai'])
-    formClone['id'] = idNguoiThan
-    // formClone['ma'] = employeeId
     return formClone
 }
 
-function fetchEmployee(id) {
+function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
         success: function(data) {
-            setFormValue('relationship_form', data)
+            setFormValue('editFamily', data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -82,48 +105,67 @@ function fetchEmployee(id) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm quan hệ gia đình?')
+    if (!isConfirm) return
     const valid = validateForm('relationship_form')
     if(!valid) return
     const formValue = getFormValues('relationship_form')
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-
+    const employeeId = maNhanVien
     formValue['ma'] = employeeId;
-
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('handleCreate err :: ', err);
-            alert("Tạo mới không thành công!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function(data) {
+                if(table){
+                    alert("Thêm thành công!");
+                    table.handleCallFetchData();
+                    clearFormValues("relationship_form")
+                }
+                else{
+                    console.err("Không tìm thấy")
+                }
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText);
+                        return;
+                    }
+                    const errObj = err.responseJSON.errors;
+                    const firtErrKey = Object.keys(errObj)[0];
+                    const message = errObj[firtErrKey][0];
+                    alert(message);
+                } catch (error) {
+                    alert("Tạo mới thất bại!");
+                }
+            },
+            complete: () => {
+                setLoading(false);
+            }
+        });
+    }, 1000); 
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
     if (!isConfirm) return
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
         method: 'DELETE',
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
+            alert("Xóa thành công!")
+            closePopup()
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -133,34 +175,18 @@ function handleRemove() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + id,
-        method: 'DELETE',
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
 function handleSave() {
-    const valid = validateForm('relationship_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa quan hệ gia đình?')
+    if (!isConfirm) return
+    const valid = validateForm('editFamily')
     if(!valid) return
     
-    const formValue = getFormValues('relationship_form')
+    const formValue = getFormValues('editFamily')
+    formValue['id'] = idNguoiThan
     const payload = buildPayload(formValue)
+    setTimeout(() => {
     setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
@@ -168,8 +194,9 @@ function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            // backToList()
+            alert("Sửa thành công!")
+            closePopup()
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('err ', err);
@@ -190,8 +217,20 @@ function handleSave() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
 
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (label, type, icon) => {
@@ -201,23 +240,19 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        createBtn.addEventListener('click', handleCreate)
-        actionEl.append(createBtn)
+    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
+    createBtn.addEventListener('click', handleCreate)
+    clear.addEventListener('click', function() {
+        clearFormValues('relationship_form');
+    });
 
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const exportBtn = buildButton('In', 'plain', 'bx bx-printer')
-
-    removeBtn.addEventListener('click', handleRemove)
-    saveBtn.addEventListener('click', handleSave)
-
-    actionEl.append(removeBtn, saveBtn, exportBtn)
+    actionEl.append(createBtn, clear)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + id
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
 
 function getNameQuanHe(){
@@ -235,7 +270,15 @@ function getNameQuanHe(){
 }
 
 getNameQuanHe()
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    // if (vaiTroID !== "1") {
+    //     window.location.href = "/pages/error.html";
+    //     return;
+    // }
+    renderActionByStatus();
+    popupRemoveBtn.addEventListener("click", handleRemove)
+    popupUpdatebtn.addEventListener("click", handleSave)
     
 })

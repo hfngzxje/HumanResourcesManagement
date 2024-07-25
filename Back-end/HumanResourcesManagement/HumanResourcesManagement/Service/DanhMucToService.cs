@@ -16,24 +16,45 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        //them moi danhmucto
+        public string GenerateCodeFromName(string ten)
+        {
+            if (string.IsNullOrEmpty(ten))
+            {
+                throw new ArgumentException("Tên không được để trống", nameof(ten));
+            }
+            var initials = string.Concat(ten.Split(' ').Select(word => word[0])).ToUpper();
+            var existingEntries = _context.TblDanhMucTos
+                                           .Where(cd => cd.Ma.StartsWith(initials))
+                                           .ToList();
+            var existingNumbers = existingEntries
+                .Select(cd => int.TryParse(cd.Ma.Substring(initials.Length), out int number) ? number : 0)
+                .ToList();
+
+            var uniqueNumber = existingNumbers.Any() ? existingNumbers.Max() + 1 : 1;
+
+            return $"{initials}{uniqueNumber}";
+        }
+        // thêm mới danh mục tổ
         public async Task AddDanhMucTo(DanhMucToRequest req)
         {
             if (req == null)
             {
-                throw new ArgumentNullException(nameof(req), "DanhMucTo khong duoc de trong.");
+                throw new ArgumentNullException(nameof(req), "DanhMucTo không được để trống.");
             }
-            var exists = await _context.TblDanhMucTos.AnyAsync(cm => cm.Ma == req.Ma);
-            if (exists)
+            //var exists = await _context.TblDanhMucTos.AnyAsync(cm => cm.Ma == req.Ma);
+            //if (exists)
+            //{
+            //    throw new InvalidOperationException($"Mã '{req.Ma}' đã tồn tại.");
+            //}
+            var cdTen = await _context.TblDanhMucTos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+            if (cdTen != null)
             {
-                throw new InvalidOperationException($"Ma '{req.Ma}' da ton tai.");
+                throw new Exception($"Tên '{req.Ten}' đã tồn tại");
             }
-            
-
             var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
+            danhMucTo.Ma = GenerateCodeFromName(req.Ten);
             _context.TblDanhMucTos.Add(danhMucTo);
-                await _context.SaveChangesAsync();
-           
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteDanhMucTo(int id)
@@ -41,7 +62,7 @@ namespace HumanResourcesManagement.Service
             var danhMucTo = await _context.TblDanhMucTos.FindAsync(id);
             if (danhMucTo == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy tổ với id {id}");
             }
             _context.TblDanhMucTos.Remove(danhMucTo);
             await _context.SaveChangesAsync();
@@ -57,9 +78,9 @@ namespace HumanResourcesManagement.Service
                     Idphong = dmt.IdphongNavigation.Ten,
                     Ma = dmt.Ma,
                 }).ToListAsync();
-            if (listDanhMucTo == null)
+            if (listDanhMucTo == null || !listDanhMucTo.Any())
             {
-                throw new KeyNotFoundException($"list is empty");
+                throw new KeyNotFoundException($"Danh sách trống");
             }
 
             return listDanhMucTo;
@@ -91,7 +112,6 @@ namespace HumanResourcesManagement.Service
             return danhMucToResponse;
         }
 
-
         public async Task UpdateDanhMucTo(DanhMucToRequest req, int id)
         {
             try
@@ -99,7 +119,12 @@ namespace HumanResourcesManagement.Service
                 var danhMucTo = await _context.TblDanhMucTos.FindAsync(id);
                 if (danhMucTo == null)
                 {
-                    throw new KeyNotFoundException($"not found {id}");
+                    throw new KeyNotFoundException($"Không tìm thấy tổ với id {id}");
+                }
+                var cdTen = await _context.TblDanhMucTos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
+                if (cdTen != null)
+                {
+                    throw new Exception($"Tên '{req.Ten}' đã tồn tại");
                 }
 
                 _mapper.Map(req, danhMucTo);
@@ -116,3 +141,4 @@ namespace HumanResourcesManagement.Service
         }
     }
 }
+    

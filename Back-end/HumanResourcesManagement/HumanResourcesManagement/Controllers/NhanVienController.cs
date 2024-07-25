@@ -1,4 +1,5 @@
-﻿using HumanResourcesManagement.Models;
+﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -93,7 +94,8 @@ namespace HumanResourcesManagement.Controllers
             {
                 var danToc = _nhanVienService.GetDanTocById(id);
                 return Ok(danToc);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
 
@@ -224,10 +226,11 @@ namespace HumanResourcesManagement.Controllers
             {
                 var list = await _nhanVienService.getNhanVienByPhongBan(idPhong, gioiTinh);
                 return Ok(list);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
-        }
+        }        
     }
 }

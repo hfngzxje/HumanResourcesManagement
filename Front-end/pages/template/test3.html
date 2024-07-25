@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+  <script src="../../assets/scripts/common/registerComponent.js"></script>
+  <title>Danh sách quan hệ gia đình</title>
+</head>
+
+<body>
+  <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
+    <div class="p-3 flex items-center">
+      <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
+      <div class="ml-3">
+        <p class="text-lg text-gray-700">Nguyễn Sinh Duy</p>
+        <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700">Admin</span>
+      </div>
+    </div>
+    <div class="border-b border-gray-200 ">
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu1">
+        <span class=" w-10">
+        <i class='bx bxs-badge-dollar'></i>
+        </span>
+        <span> Hệ thống </span>
+        <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
+          id="submenu1">
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
+          <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
+        </div>
+      </div>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+        <span class=" w-10">
+          <i class='bx bx-group text-lg'></i>
+          </span>
+          <span> Hồ sơ </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-file'></i> <!-- Hợp đồng -->
+          </span>
+          <span> Hợp đồng </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
+          </span>
+          <span> Điều chuyển </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
+          </span>
+          <span> Khen thưởng </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-shield'></i> <!-- Kỷ luật -->
+          </span>
+          <span> Kỷ luật </span>
+        </div>
+      </a>
+      
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+        <span class=" w-10">
+          <i class='bx bx-category-alt'></i>
+          </span>
+          <span> Danh mục </span>
+        </div>
+      </a>
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4">
+        <span class=" w-10">
+        <i class='bx bxs-report'></i>
+        </span>
+        <a href="/pages/staffSideBar/report.html">
+          <span> Báo cáo </span> </a>
+        <div
+          class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
+          id="submenu4">
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhân viên</a>
+          <div class="flex items-center cursor-pointer transition relative" id="menu-child4">
+            <a href="#" class="block p-2 hover:bg-gray-100 submenu-item"
+              style="width: 200px; display: flex; justify-content: space-between; align-items: center;">
+              <span>Hồ sơ lương</span>
+              <i class='bx bxs-chevron-right'></i>
+            </a>
+            <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"" id="
+              submenu4-child"> <!-- Mục con mới -->
+              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Tạm ứng lương</a>
+              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng lương tháng</a>
+              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng chấm công</a>
+            </div>
+          </div>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sinh nhật</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách đảng viên</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách trình độ
+            CBCNV</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhóm lương</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách người thân</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách diện chính
+            sách</a>
+          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sổ bảo hiểm</a>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+
+  <div id="myModal" class="modal" style="z-index: 100;">
+    <div class="change-container">
+      <span class="close">&times;</span>
+      <form id="change_form">
+        <div class="form-header">
+          <h2>Đổi Mật Khẩu</h2>
+        </div>
+
+        <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+        <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+        <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+      </form>
+      <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+    </div>
+  </div>
+</body>
+
+</html>

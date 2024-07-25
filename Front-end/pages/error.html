@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
+    <link rel="stylesheet" href="../assets/styles/common/error.css" />
+    <script src="../../assets/scripts/common/registerComponent.js"></script>
+    
+    <title>Document</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const vaiTroId = localStorage.getItem('vaiTroId');
+            const backToHomePageLink = document.querySelector('.custom-button');
+            console.log("Duy: " , backToHomePageLink)
+            if (vaiTroId === '1') {
+                backToHomePageLink.href = '/pages/staff/list.html';
+            } else if (vaiTroId === '2') {
+                backToHomePageLink.href = '/pages/employee/overview.html';
+            } else {
+                backToHomePageLink.href = '/pages/authentic/login.html'; // Chuyển hướng đến trang login nếu không hợp lệ
+            }
+        });
+    </script>
+</head>
+<body>
+    <section class="bg-white dark:bg-gray-900" style=" margin-top: 20vh;">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl  lg:py-16 lg:px-6">
+            <div class="mx-auto max-w-screen-sm text-center">
+                <h1 class="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">401</h1>
+                <p class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">Something's missing.</p>
+                <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">Sorry, we can't find that page. You'll find lots to explore on the home page.</p>
+                <a href="/pages/employee/overview.html" class="custom-button" >Back to Homepage</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

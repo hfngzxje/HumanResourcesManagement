@@ -13,12 +13,15 @@ namespace HumanResourcesManagement.Service
         {
             _context = context;
         }
+
+        // Lấy danh sách ngoại ngữ của nhân viên theo mã nhân viên
         public async Task<IEnumerable<NgoaiNguDto>> GetNgoaiNguByMaNV(string maNV)
         {
             if (string.IsNullOrWhiteSpace(maNV))
             {
-                throw new ArgumentException("maNV không được để trống ", nameof(maNV));
+                throw new ArgumentException("Mã nhân viên không được để trống", nameof(maNV));
             }
+
             var exists = await _context.TblNgoaiNgus.AnyAsync(nv => nv.Ma == maNV);
             if (!exists)
             {
@@ -27,8 +30,9 @@ namespace HumanResourcesManagement.Service
 
             if (_context.TblNgoaiNgus == null)
             {
-                throw new InvalidOperationException("no data");
+                throw new InvalidOperationException("Không có dữ liệu");
             }
+
             var listNgoaiNgu = await _context.TblNgoaiNgus.Where(nv => nv.Ma == maNV)
                 .Select(nn => new NgoaiNguDto
                 {
@@ -39,25 +43,30 @@ namespace HumanResourcesManagement.Service
                     Noicap = nn.Noicap,
                     Ma = nn.Ma.Trim()
                 }).ToListAsync();
-            if (listNgoaiNgu == null)
+
+            if (listNgoaiNgu == null || !listNgoaiNgu.Any())
             {
-                throw new KeyNotFoundException($"list is empty {maNV}");
+                throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
             }
 
             return listNgoaiNgu;
         }
+
+        // Thêm mới ngoại ngữ cho nhân viên
         public async Task<TblNgoaiNgu> AddNgoaiNgu(InsertNgoaiNguRequest req)
         {
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);
             if (nv == null)
             {
-                throw new KeyNotFoundException($"not found {req.Ma}");
+                throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {req.Ma}");
             }
+
             var dateDate = req.Ngaycap;
-            if (dateDate > DateTime.Today )
+            if (dateDate > DateTime.Today)
             {
-                throw new Exception("ngay cap phai truoc hoac trong ngay hien tai ");
+                throw new Exception("Ngày cấp phải trước hoặc trong ngày hiện tại");
             }
+
             var nn = new TblNgoaiNgu
             {
                 Ngoaingu = req.Ngoaingu,
@@ -66,23 +75,26 @@ namespace HumanResourcesManagement.Service
                 Noicap = req.Noicap,
                 Ma = req.Ma
             };
+
             _context.TblNgoaiNgus.Add(nn);
             await _context.SaveChangesAsync();
             return nn;
         }
 
+        // Xóa ngoại ngữ theo id
         public async Task DeleteNgoaiNgu(int id)
         {
             var ngoaiNgu = await _context.TblNgoaiNgus.FindAsync(id);
             if (ngoaiNgu == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
             }
+
             _context.TblNgoaiNgus.Remove(ngoaiNgu);
             await _context.SaveChangesAsync();
         }
 
-
+        // Cập nhật thông tin ngoại ngữ
         public async Task<TblNgoaiNgu> UpdateNgoaiNgu(UpdateNgoaiNguRequest req)
         {
             try
@@ -90,20 +102,24 @@ namespace HumanResourcesManagement.Service
                 var ngoaiNgu = await _context.TblNgoaiNgus.FindAsync(req.Id);
                 if (ngoaiNgu == null)
                 {
-                    throw new KeyNotFoundException($"not found {req.Id}");
+                    throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {req.Id}");
                 }
+
                 var dateDate = req.Ngaycap;
                 if (dateDate > DateTime.Today)
                 {
-                    throw new Exception("ngay cap phai truoc ngay hien tai");
+                    throw new Exception("Ngày cấp phải trước ngày hiện tại");
                 }
+
                 ngoaiNgu.Ngoaingu = req.Ngoaingu;
                 ngoaiNgu.Ngaycap = req.Ngaycap;
                 ngoaiNgu.Trinhdo = req.Trinhdo;
                 ngoaiNgu.Noicap = req.Noicap;
+
                 _context.TblNgoaiNgus.Update(ngoaiNgu);
                 _context.Entry(ngoaiNgu).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+
                 return ngoaiNgu;
             }
             catch (Exception ex)

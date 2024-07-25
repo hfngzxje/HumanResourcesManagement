@@ -1,6 +1,9 @@
-const isEdit = !!id
-
 let idLuongHienTai = null
+const vaiTroID = localStorage.getItem("vaiTroID")
+const maDetail = localStorage.getItem("maDetail")
+const table = document.querySelector('base-table')
+const popupRemoveBtn = document.getElementById("deleteBtn")
+const popupSaveBtn = document.getElementById("updateBtn")
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -52,7 +55,8 @@ var TableColumns = [
     },
     {
         label: 'Thời Hạn Lên Lương',
-        key: 'thoihanlenluong'
+        key: 'thoihanlenluong',
+        formatter: (giatri) => giatri + ' năm'
     },
     {
         label: 'Ngày Hiệu Lực',
@@ -72,15 +76,28 @@ var TableColumns = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchSalaryToEdit(row.id) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchSalaryToEdit(row.id)
+                    showPopup()
+                }
+            }
         ]
     }
 ]
+var tableEvent = { // global: ở đau cũng truy cập được
+    rowClick: (row) => {
+        console.log('row click ', row);
+        fetchSalaryToEdit(row.id)
+    }
+}
+
+
 
 function backToList() {
     const url = new URL("/pages/staff/salaryRecord.html", window.location.origin);
-    url.searchParams.set("id", id);
+    // url.searchParams.set("id", id);
     window.location.replace(url.toString());
 }
 
@@ -90,9 +107,21 @@ function buildPayload(formValue) {
 
     return formClone
 }
-
+function showPopup() {
+    var modal = document.getElementById("editSalaryRecord");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues("editSalaryRecord");
+        }
+    }
+}
+function closePopup() {
+    var modal = document.getElementById("editSalaryRecord");
+    modal.style.display = "none"
+}
 function fetchSalaryToEdit(id) {
-    alert("dsd")
     setLoading(true)
     idLuongHienTai = id
     $.ajax({
@@ -100,7 +129,7 @@ function fetchSalaryToEdit(id) {
         url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('salaryRecord_form', data)
+            setFormValue('editSalaryRecord', data)
         },
         error: (err) => {
             console.log('fetchSalary err :: ', err);
@@ -112,6 +141,8 @@ function fetchSalaryToEdit(id) {
 }
 
 async function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
+    if (!isConfirm) return
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
@@ -134,34 +165,37 @@ async function handleCreate() {
 
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            alert('Tạo Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                alert('Tạo Thành Công!');
+                table.handleCallFetchData();
+                clearFormValues("salaryRecord_form")
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 async function fetchContractCodeStatus(mahopdong) {
@@ -173,51 +207,57 @@ async function fetchContractCodeStatus(mahopdong) {
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
+            method: 'DELETE',
+            success: function (data) {
+                alert('Xóa Thành Công!');
+                closePopup();
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchContract err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+// function handleRemoveRow(id) {
+//     const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
+//     if (!isConfirm) return
+//     setLoading(true)
+//     $.ajax({
+//         url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
+//         method: 'DELETE',
+//         success: function (data) {
+//             alert('Xóa Thành Công!');
+//             backToList();
+//         },
+//         error: (err) => {
+//             console.log('fetchContract err :: ', err);
+//             alert("Xóa thất bại!")
+//         },
+//         complete: () => {
+//             setLoading(false)
+//         }
+//     });
+// }
 
 function handleSave() {
-    const formValue = getFormValues('salaryRecord_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
+    if (!isConfirm) return
+    const formValue = getFormValues('editSalaryRecord')
     const payload = buildPayload(formValue)
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
         method: 'PUT',
@@ -226,7 +266,8 @@ function handleSave() {
         success: function (data) {
             console.log('fetchContract res :: ', data);
             alert('Lưu Thành Công!');
-            backToList();
+            closePopup();
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('err ', err);
@@ -247,6 +288,7 @@ function handleSave() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
 
 async function fetchSalary() {
@@ -265,7 +307,6 @@ async function fetchSalary() {
         // Gán giá trị lương vào trường input số
         const inputElement = document.querySelector('base-input-number[name="tongluong"]');
         if (inputElement instanceof BaseInputNumber) {
-
             inputElement.value = salary;
         }
 
@@ -279,6 +320,43 @@ async function fetchSalary() {
     }
 }
 
+const hesoluongInput = document.querySelector('base-input-number[name="hesoluong"]');
+const phucaptrachnhiemInput = document.querySelector('base-input-number[name="phucaptrachnhiem"]');
+const phucapkhacInput = document.querySelector('base-input-number[name="phucapkhac"]');
+
+hesoluongInput.addEventListener('input', handleInputChange);
+phucaptrachnhiemInput.addEventListener('input', handleInputChange);
+phucapkhacInput.addEventListener('input', handleInputChange);
+
+function handleInputChange() {
+    // Lấy giá trị từ các trường input
+    const hesoluongValue = hesoluongInput.value;
+    const phucaptrachnhiemValue = phucaptrachnhiemInput.value;
+    const phucapkhacValue = phucapkhacInput.value;
+
+    // Kiểm tra nếu đủ dữ liệu đã được nhập
+    if (hesoluongValue !== '' || phucaptrachnhiemValue !== '' || phucapkhacValue !== '') {
+        // Gọi hàm fetchSalary()
+        fetchSalary()
+            .catch(error => {
+                // Xử lý lỗi nếu cần
+                console.error(error);
+            });
+    }
+}
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
     const buildButton = (label, type, icon) => {
@@ -288,40 +366,30 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const actionE2 = document.getElementById('tinhluong_form_Action');
-    const buildButton2 = (label, type, icon) => {
-        const btnE2 = document.createElement('base-button')
-        btnE2.setAttribute('label', label)
-        btnE2.setAttribute('type', type)
-        btnE2.setAttribute('icon', icon)
-        return btnE2
-    }
-
-    const tinhLuong = buildButton2('Tính lương', 'green', 'bx bxs-calculator')
-    tinhLuong.addEventListener('click', fetchSalary)
-
-
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
-    saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function () {
+        clearFormValues('salaryRecord_form');
+    });
 
-    actionEl.append(createBtn, saveBtn)
-    actionE2.append(tinhLuong)
+    actionEl.append(createBtn, clear)
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail;
 }
 async function buildApiHopDongA(id) {
     return 'https://localhost:7141/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + id;
+    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupRemoveBtn.addEventListener("click", handleRemove)
+    popupSaveBtn.addEventListener("click", handleSave)
 })
 

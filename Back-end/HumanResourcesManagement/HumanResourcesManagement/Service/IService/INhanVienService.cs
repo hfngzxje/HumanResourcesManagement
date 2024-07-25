@@ -1,4 +1,5 @@
-﻿using HumanResourcesManagement.DTOS.Response;
+﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,5 @@ namespace HumanResourcesManagement.Service.IService
         List<TblDanhMucTo> GetAllTo();
 
         Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh);
-
     }
 }

@@ -7,6 +7,11 @@ namespace HumanResourcesManagement.Models
     {
         public TblNhanVien()
         {
+            TblDieuChuyens = new HashSet<TblDieuChuyen>();
+            TblHopDongs = new HashSet<TblHopDong>();
+            TblKhenThuongKyLuats = new HashSet<TblKhenThuongKyLuat>();
+            TblNgoaiNgus = new HashSet<TblNgoaiNgu>();
+            TblNguoiThans = new HashSet<TblNguoiThan>();
             TblTrinhDoVanHoas = new HashSet<TblTrinhDoVanHoa>();
         }
 
@@ -57,7 +62,18 @@ namespace HumanResourcesManagement.Models
         public string? MatKhau { get; set; }
         public int? VaiTroId { get; set; }
 
-        public virtual TblLichSuBanThan? TblLichSuBanThan { get; set; }
+        public virtual TblDanhMucChucDanh? ChucvuhientaiNavigation { get; set; }
+        public virtual TblDanhMucDanToc? DantocNavigation { get; set; }
+        public virtual TblDanhMucNgachCongChuc? NgachcongchucNavigation { get; set; }
+        public virtual TblDanhMucPhongBan? PhongNavigation { get; set; }
+        public virtual TblDanhMucTo? ToNavigation { get; set; }
+        public virtual TblDanhMucTonGiao? TongiaoNavigation { get; set; }
+        public virtual TblVaiTro? VaiTro { get; set; }
+        public virtual ICollection<TblDieuChuyen> TblDieuChuyens { get; set; }
+        public virtual ICollection<TblHopDong> TblHopDongs { get; set; }
+        public virtual ICollection<TblKhenThuongKyLuat> TblKhenThuongKyLuats { get; set; }
+        public virtual ICollection<TblNgoaiNgu> TblNgoaiNgus { get; set; }
+        public virtual ICollection<TblNguoiThan> TblNguoiThans { get; set; }
         public virtual ICollection<TblTrinhDoVanHoa> TblTrinhDoVanHoas { get; set; }
     }
 }

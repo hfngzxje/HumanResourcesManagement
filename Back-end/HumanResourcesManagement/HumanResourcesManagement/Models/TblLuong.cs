@@ -7,9 +7,6 @@ namespace HumanResourcesManagement.Models
     {
         public int Id { get; set; }
         public string? Mahopdong { get; set; }
-        public int? Nhomluong { get; set; }
-        public double? Hesoluong { get; set; }
-        public string? Bacluong { get; set; }
         public double? Phucaptrachnhiem { get; set; }
         public double? Phucapkhac { get; set; }
         public double? Tongluong { get; set; }
@@ -17,5 +14,10 @@ namespace HumanResourcesManagement.Models
         public DateTime? Ngayhieuluc { get; set; }
         public DateTime? Ngayketthuc { get; set; }
         public string? Ghichu { get; set; }
+        public int? Nhomluong { get; set; }
+        public double? Luongcoban { get; set; }
+
+        public virtual TblHopDong? MahopdongNavigation { get; set; }
+        public virtual TblDanhMucNhomLuong? NhomluongNavigation { get; set; }
     }
 }

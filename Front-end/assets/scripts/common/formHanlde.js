@@ -1,4 +1,7 @@
 function formatDate(isoDate) {
+  if (!isoDate) {
+    return null;
+  }
   // Create a new Date object from the ISO 8601 date string
   const date = new Date(isoDate);
 

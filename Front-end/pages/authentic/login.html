@@ -4,7 +4,17 @@
 <head>
     <title>Login Page</title>
     <link rel="stylesheet" href="../../assets/styles/pages/login.css" />
+    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <script src="../../assets/scripts/common/registerComponent.js"></script>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function() {
+            if (localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/error.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+        })();
+    </script>
 </head>
 
 <body class="login-bg">
@@ -20,11 +30,28 @@
         <div id="login_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
         <!-- <button type="button" onclick="login()">Login</button> -->
         <div class="form-footer">
-            <a href="#" class="forgot-password">Forgotten password?</a>
+            <a onclick="showPopup()" href="#" class="forgot-password">Forgotten password?</a>
         </div>
         <!-- </form> -->
     </div>
 
+
+
+    <div id="forgetPassword" class="modal "  >
+        <div class="login-container">
+            <div class="form-header" style="padding: 10px;">
+                <h2 style="color: #333; text-align: center; font-size: 24px; font-weight: lighter;">Thêm mới nhân
+                    viên</h2>
+            </div>
+            <form id="login_form">
+                <base-input label="Email (*)" name="email"
+                required="true"></base-input>
+            </form>
+            <div class="flex gap-x-5 mt-5 ">
+                <base-button id="createBtn" label="Gửi email" icon="bx bx-save" type="green"></base-button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../assets/scripts/common/loading.js"></script>

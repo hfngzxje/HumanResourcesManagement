@@ -3,6 +3,7 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+
 namespace HumanResourcesManagement.Controllers
 {
     [Route("api/[controller]")]
@@ -11,11 +12,13 @@ namespace HumanResourcesManagement.Controllers
     {
         private readonly IDanhMucToService _danhMucToService;
         private readonly NhanSuContext _context;
+
         public DanhMucToController(IDanhMucToService danhMucToService, NhanSuContext context)
         {
             _danhMucToService = danhMucToService;
             _context = context;
         }
+
         [HttpGet("getDanhMucTo")]
         public async Task<IActionResult> GetDanhMucTo()
         {
@@ -40,8 +43,8 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
+
         [HttpGet("getDanhMucToById/{id}")]
         public async Task<IActionResult> GetDanhMucToById(int id)
         {
@@ -66,15 +69,15 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
-
         }
+
         [HttpPost("addDanhMucTo")]
         public async Task<IActionResult> AddDanhMucTo([FromBody] DanhMucToRequest req)
         {
             try
             {
                 await _danhMucToService.AddDanhMucTo(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
@@ -92,11 +95,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucToService.DeleteDanhMucTo(id);
-                return StatusCode(200, "xoa thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "khong tim thay");
+                return StatusCode(501, "Không tìm thấy");
             }
             catch (Exception ex)
             {
@@ -110,7 +113,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucToService.UpdateDanhMucTo(req, id);
-                return StatusCode(200, "sua thanh cong");
+                return StatusCode(200, "Sửa thành công");
             }
             catch (Exception ex)
             {

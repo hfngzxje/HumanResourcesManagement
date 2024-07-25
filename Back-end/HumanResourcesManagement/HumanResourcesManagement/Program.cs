@@ -3,6 +3,7 @@ using HumanResourcesManagement.Service.IService;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Config.Mapper;
+using HumanResourcesManagement.DTOS.Request;
 
 public class Program
 {
@@ -10,7 +11,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<INhanVienService, NhanVienService>();
         builder.Services.AddScoped<INguoiThanService, NguoiThanService>();
         builder.Services.AddScoped<IHopDongService, HopDongService>();
@@ -33,8 +33,10 @@ public class Program
         builder.Services.AddScoped<IDanhMucHinhThucDaoTaoService, DanhMucHinhThucDaoTaoService>();
         builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
         builder.Services.AddScoped<IDangNhapService, DangNhapService>();
+        builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
 
 
+        builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 
         builder.Services.AddAutoMapper(typeof(NhanVienMapper));
 
@@ -50,6 +52,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddSession();
+        builder.Services.AddMemoryCache();
         builder.Services.AddCors(opts =>
         {
             opts.AddPolicy("CORSPolicy", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowCredentials().SetIsOriginAllowed((host) => true));

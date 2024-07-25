@@ -21,7 +21,7 @@ namespace HumanResourcesManagement.Service
         {
             if (_context.TblNguoiThans == null)
             {
-                throw new InvalidOperationException("no data");
+                throw new InvalidOperationException("Không có dữ liệu");
             }
             var listNguoiThan = await _context.TblNguoiThans.Where(nv => nv.Ma == maNV)
                 .Select(nt => new NguoiThanDto
@@ -30,6 +30,7 @@ namespace HumanResourcesManagement.Service
                     Ten = nt.Ten,
                     Gioitinh = nt.Gioitinh,
                     Ngaysinh = nt.Ngaysinh,
+                    Quanhe= nt.Quanhe,
                     QuanheTen = nt.QuanheNavigation.Ten,
                     Nghenghiep = nt.Nghenghiep,
                     Diachi = nt.Diachi,
@@ -39,7 +40,7 @@ namespace HumanResourcesManagement.Service
                 }).ToListAsync();
             if (listNguoiThan == null)
             {
-                throw new KeyNotFoundException($"list is empty {maNV}");
+                throw new KeyNotFoundException($"Danh sách trống {maNV}");
             }
 
             return listNguoiThan;
@@ -50,7 +51,7 @@ namespace HumanResourcesManagement.Service
             var nt = await _context.TblNguoiThans.FindAsync(id);
             if (nt == null)
             {
-                throw new Exception("khong co id nay");
+                throw new Exception("Không có id này");
             }
             return nt;
         }
@@ -59,21 +60,14 @@ namespace HumanResourcesManagement.Service
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);
             if (nv == null)
             {
-                throw new KeyNotFoundException($"not found {req.Ma}");
+                throw new KeyNotFoundException($"Không tìm thấy {req.Ma}");
             }
             var parsedDate = DateTime.Parse(req.Ngaysinh);
 
             if (parsedDate > DateTime.Today)
             {
-                throw new Exception("date is in the future. must be in the past. check it");
+                throw new Exception("Ngày phải là ngày trong quá khứ.");
             }
-
-            if (!System.Text.RegularExpressions.Regex.IsMatch(req.Dienthoai, @"^0\d{9}$"))
-            {
-                throw new Exception("Dienthoai should be a 10-digit number and start with 0");
-            }
-            //ten not null
-
             var nt = new TblNguoiThan
             {
                 Ma = req.Ma,
@@ -97,7 +91,7 @@ namespace HumanResourcesManagement.Service
             var nguoiThan = await _context.TblNguoiThans.FindAsync(id);
             if (nguoiThan == null)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new KeyNotFoundException($"Không tìm thấy {id}");
             }
 
             _context.TblNguoiThans.Remove(nguoiThan);
@@ -111,12 +105,12 @@ namespace HumanResourcesManagement.Service
                 var nguoiThan = await _context.TblNguoiThans.FindAsync(req.Id);
                 if (nguoiThan == null)
                 {
-                    throw new KeyNotFoundException($"not found {req.Id}");
+                    throw new KeyNotFoundException($"Không tìm thấy {req.Id}");
                 }
                 var parsedDate = DateTime.Parse(req.Ngaysinh);
                 if (parsedDate > DateTime.Today)
                 {
-                    throw new Exception("date is in the future. must be in the past. check it");
+                    throw new Exception("Ngày phải là ngày trong quá khứ.");
                 }
                 nguoiThan.Ten = req.Ten;
                 nguoiThan.Gioitinh = req.Gioitinh;
@@ -135,14 +129,14 @@ namespace HumanResourcesManagement.Service
             {
                 throw new Exception(ex.Message);
             }
-            
+
         }
         public async Task<IEnumerable<TblDanhMucNguoiThan>> GetDanhMucNguoiThan()
         {
             var list = await _context.TblDanhMucNguoiThans.ToListAsync();
             if (list == null)
             {
-                throw new Exception("Empty list!!");
+                throw new Exception("Danh sách trống!!");
             }
             return list;
         }

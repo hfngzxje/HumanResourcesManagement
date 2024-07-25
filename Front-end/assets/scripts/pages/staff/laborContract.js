@@ -1,6 +1,8 @@
-const isEdit = !!id
-
+const vaiTroID = localStorage.getItem("vaiTroID")
 let maHopDongHienTai = null
+const table = document.querySelector('base-table')
+const popupRemoveBtn = document.getElementById("deleteBtn")
+const popupSaveBtn = document.getElementById("updateBtn")
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -10,12 +12,15 @@ var MaritalOptions = [
 var TableColumns = [
     {
         label: 'Mã hợp đồng',
-        key: 'mahopdong'
+        key: 'mahopdong',
     },
     {
-        label: 'Lương cơ bản',
-        key: 'luongcoban',
-        type: 'currency'
+        label: 'Loại hợp đồng',
+        key: 'loaihopdong'
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh'
     },
     {
         label: 'Từ ngày',
@@ -28,23 +33,40 @@ var TableColumns = [
         type: 'datetime'
     },
     {
+        label: 'Trạng thái',
+        key: 'trangThai'
+    },
+    {
         label: 'Ghi chú',
         key: 'ghichu'
     },
     {
-        label: 'Hành động',
-        key: 'action',
-        actions: [
-            { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => { fetchContract(row.mahopdong) } },
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.mahopdong) } }
-        ]
+      label: 'Hành động',
+      key: 'action',
+      actions: [
+        {
+                        type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                            isPopupEdit = true
+                            fetchContract(row.mahopdong);
+                            showPopup()
+                        }
+                    }
+      ]
     }
 ]
 
+// var tableEvent = { 
+//     rowClick: (row) => {
+//         console.log('row click ', row);
+//         fetchContract(row.mahopdong)
+//     }
+// }
+
+
 function backToList() {
-    const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-    url.searchParams.set("id", id);
-    window.location.replace(url.toString());
+    
+        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
+  
 }
 
 function buildPayload(formValue) {
@@ -54,9 +76,24 @@ function buildPayload(formValue) {
 
     return formClone
 }
+function showPopup() {
+    var modal = document.getElementById("editLaborContract");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues("editLaborContract");
+        }
+    } 
+}
+
+function closePopup(){
+    var modal = document.getElementById("editLaborContract");
+    modal.style.display="none"
+}
 
 function fetchContract(mahopdong) {
-    console.log(mahopdong);
+    console.log("ma hợp đồng : " +mahopdong);
     setLoading(true)
     maHopDongHienTai = mahopdong
     $.ajax({
@@ -64,8 +101,8 @@ function fetchContract(mahopdong) {
         url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
-            setFormValue('laborContract_form', data, 'fetch');
-            setFormValue('laborContract_form', data)
+            setFormValue('editLaborContract', data, 'fetch');
+            setFormValue('editLaborContract', data)
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -77,18 +114,18 @@ function fetchContract(mahopdong) {
 }
 
 function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm hợp đồng lao động?')
+    if (!isConfirm) return
     const valid = validateForm('laborContract_form')
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
+    
+    formValue['ma'] = maNhanVien;
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-    formValue['ma'] = employeeId;
-
-    console.log(employeeId);
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         
         url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
@@ -97,7 +134,8 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function (data) {
             alert('Tạo Thành Công!');
-            backToList();
+            table.handleCallFetchData();
+            clearFormValues("relationship_form")
         },
         error: (err) => {
             console.log('err ', err);
@@ -120,18 +158,21 @@ function handleCreate() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
 
 function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
     if (!isConfirm) return
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
         method: 'DELETE',
         success: function (data) {
             alert('Xóa Thành Công!');
-            backToList();
+            closePopup();
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -141,39 +182,19 @@ function handleRemove() {
             setLoading(false)
         }
     });
-}
-
-function handleRemoveRow(mahopdong) {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + mahopdong,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+}, 1000); 
 }
 
 function handleSave() {
-    const formValue = getFormValues('laborContract_form')
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa hợp đồng lao động?')
+    if (!isConfirm) return
+    const formValue = getFormValues('editLaborContract')
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const employeeId = urlParams.get('id');
-
-    formValue['ma'] = employeeId;
+    formValue['ma'] = maNhanVien;
 
     const payload = buildPayload(formValue)
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
@@ -182,7 +203,8 @@ function handleSave() {
         success: function (data) {
             console.log('fetchContract res :: ', data);
             alert('Lưu Thành Công!');
-            backToList();
+            closePopup();
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('err ', err);
@@ -203,6 +225,19 @@ function handleSave() {
             setLoading(false)
         }
     });
+}, 1000); 
+}
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
+
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
 }
 
 function renderActionByStatus() {
@@ -215,21 +250,23 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const removeBtn = buildButton('Xóa', 'red', 'bx bx-trash')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
+    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
-    removeBtn.addEventListener('click', handleRemove)
-    saveBtn.addEventListener('click', handleSave)
+    clear.addEventListener('click', function() {
+        clearFormValues('laborContract_form');
+    });
 
-    actionEl.append(createBtn, removeBtn, saveBtn)
+    actionEl.append(createBtn,clear)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + id
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
+    popupRemoveBtn.addEventListener("click", handleRemove)
+    popupSaveBtn.addEventListener("click", handleSave)
 })
 

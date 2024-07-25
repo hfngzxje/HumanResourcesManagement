@@ -30,17 +30,17 @@ namespace HumanResourcesManagement.Service
             double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
             double phuCapKhac = request.Phucapkhac ?? 0;
 
-            double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
 
             var hsl = new TblLuong
             {
                 Mahopdong = request.Mahopdong,
                 Nhomluong = request.Nhomluong,
-                Hesoluong = request.Hesoluong,
-                Bacluong = request.Bacluong,
+                //Hesoluong = request.Hesoluong,
+                //Bacluong = request.Bacluong,
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
-                Tongluong = tongLuong,
+                Tongluong = 10,
                 Thoihanlenluong = request.Thoihanlenluong,
                 Ngayhieuluc = request.Ngayhieuluc,
                 Ngayketthuc = request.Ngayketthuc,
@@ -61,9 +61,10 @@ namespace HumanResourcesManagement.Service
             double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
             double phuCapKhac = request.Phucapkhac ?? 0;
 
-            double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            double tongLuong = 0;
 
-            return tongLuong;
+            return 10;
         }
 
         public void suaHoSoLuong(int id, InsertHoSoLuong request)
@@ -89,15 +90,16 @@ namespace HumanResourcesManagement.Service
             double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
             double phuCapKhac = request.Phucapkhac ?? 0;
 
-            double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
+            double tongLuong = 0;
 
             hoSoLuong.Mahopdong = request.Mahopdong;
             hoSoLuong.Nhomluong = request.Nhomluong;
-            hoSoLuong.Hesoluong = request.Hesoluong;
-            hoSoLuong.Bacluong = request.Bacluong;
+            //hoSoLuong.Hesoluong = request.Hesoluong;
+            //hoSoLuong.Bacluong = request.Bacluong;
             hoSoLuong.Phucaptrachnhiem = request.Phucaptrachnhiem;
             hoSoLuong.Phucapkhac = request.Phucapkhac;
-            hoSoLuong.Tongluong = tongLuong;
+            hoSoLuong.Tongluong = 10;
             hoSoLuong.Thoihanlenluong = request.Thoihanlenluong;
             hoSoLuong.Ngayhieuluc = request.Ngayhieuluc;
             hoSoLuong.Ngayketthuc = request.Ngayketthuc;

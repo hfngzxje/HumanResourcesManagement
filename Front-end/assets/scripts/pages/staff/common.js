@@ -1,15 +1,17 @@
 const params = new URL(document.location.toString()).searchParams;
 const id = params.get("id");
-
+const maNhanVien = localStorage.getItem("maNhanVien")
+const vaitro = localStorage.getItem("vaiTroID");
 const TAB = {
-  RESUME: 1 ,
-  PERSON_HISTORY: 2,
-  CULTURAL_PROFICIENCY: 3,
-  FAMILY_RELATIONSHIP: 4,
-  EMPLOYMENT_CONTRACT: 5,
-  SALARY_PROFILE: 6,
-  EMPLOYMENT_HISTORY: 7,
-  REWARDS_DISCIPLINE: 8,
+  RESUME: 1,
+  PROFILE: 2,
+  PERSON_HISTORY: 3,
+  CULTURAL_PROFICIENCY: 4,
+  FAMILY_RELATIONSHIP: 5,
+  EMPLOYMENT_CONTRACT: 6,
+  SALARY_PROFILE: 7,
+  EMPLOYMENT_HISTORY: 8,
+  REWARDS_DISCIPLINE: 9,
 };
 const tabList = document.querySelector("#tabList");
 let currentPath = window.location.pathname; // text-white bg-blue-600 active
@@ -22,6 +24,11 @@ const TAB_LIST = [
     activeByPath: "/pages/staff/resume.html",
   },
   {
+    key: TAB.RESUME,
+    label: "Hồ sơ",
+    activeByPath: "/pages/staff/profile.html",
+  },
+  {
     key: TAB.PERSON_HISTORY,
     label: "Lịch sử bản thân",
     activeByPath: "",
@@ -31,16 +38,20 @@ const TAB_LIST = [
     label: "Trình độ văn hóa",
     activeByPath: "/pages/staff/qualifications.html",
   },
-  { key: TAB.FAMILY_RELATIONSHIP, 
-    label: "Quan hệ gia đình", 
-    activeByPath: "/pages/staff/FamilyRelationship.html" },
+  {
+    key: TAB.FAMILY_RELATIONSHIP,
+    label: "Quan hệ gia đình",
+    activeByPath: "/pages/staff/FamilyRelationship.html"
+  },
   {
     key: TAB.EMPLOYMENT_CONTRACT,
     label: "Hợp đồng lao động",
     activeByPath: "/pages/staff/laborContract.html",
   },
-  { key: TAB.SALARY_PROFILE, label: "Hồ sơ lương",
-    activeByPath: "/pages/staff/salaryRecord.html" },
+  {
+    key: TAB.SALARY_PROFILE, label: "Hồ sơ lương",
+    activeByPath: "/pages/staff/salaryRecord.html"
+  },
   {
     key: TAB.EMPLOYMENT_HISTORY,
     label: "Quá trình công tác",
@@ -68,13 +79,13 @@ function renderTab() {
 
     const aElement = document.createElement("a");
     let _class =
-      "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100";
-    const isActive = tab?.activeByPath !== "" && currentPath.includes(tab?.activeByPath) ;
+      "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100 font-bold";
+    const isActive = tab?.activeByPath !== "" && currentPath.includes(tab?.activeByPath);
     if (isActive) {
       _class += " text-white bg-blue-600";
     }
     aElement.id = getTabId(tab.key);
-    aElement.href = '../..' + tab.activeByPath + '?id=' + id; // chuyển trang kèm id
+    aElement.href = '../..' + tab.activeByPath; // chuyển trang kèm id
     aElement.className = _class;
     aElement.textContent = tab.label;
 
