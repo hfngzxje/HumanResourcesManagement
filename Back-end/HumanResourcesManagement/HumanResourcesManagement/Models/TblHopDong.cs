@@ -19,6 +19,7 @@ namespace HumanResourcesManagement.Models
         public string? Ma { get; set; }
         public int? TrangThai { get; set; }
 
+        public virtual TblDanhMucChucDanh? ChucdanhNavigation { get; set; }
         public virtual TblDanhMucLoaiHopDong? LoaihopdongNavigation { get; set; }
         public virtual TblNhanVien? MaNavigation { get; set; }
         public virtual ICollection<TblLuong> TblLuongs { get; set; }
