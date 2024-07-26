@@ -16,12 +16,11 @@ function handleLogOut() {
         contentType: 'application/json',
         data: JSON.stringify({}),
         success: function (data) {
-            // localStorage.removeItem("maNhanVien");
-            // localStorage.removeItem("vaiTroID");
-            // localStorage.removeItem("maDetail");
+            localStorage.removeItem("maNhanVien");
+            localStorage.removeItem("vaiTroID");
+            localStorage.removeItem("maDetail");
 
 
-            localStorage.clear();
             MaNhanVien = localStorage.getItem("maNhanVien");
             vaiTroID = localStorage.getItem("vaiTroID");
 

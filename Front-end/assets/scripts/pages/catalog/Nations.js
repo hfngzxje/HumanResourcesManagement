@@ -8,10 +8,17 @@ const table = document.querySelector('base-table')
 
 let idDanToc = null
 
+var oldValue = null;
+
+
 var TableColumns = [
     {
         label: 'ID',
         key: 'id'
+    },
+    {
+        label: 'Mã',
+        key: 'ma'
     },
     {
         label: 'Tên',
@@ -62,6 +69,7 @@ function fetchDanToc(id) {
 
             // setFormValue('editTeam', data, 'fetch');
             setFormValue('editNation', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -239,6 +247,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Dân Tộc"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
@@ -248,6 +257,18 @@ function showPopup() {
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
+    }
+}
+function checkValues() {
+    const formValue = getFormValues('editNation');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -263,5 +284,10 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenDanToc = document.querySelector('base-input[name="ten"]');
+    if (inputTenDanToc) {
+        inputTenDanToc.addEventListener('input', checkValues);
+    }
 })
 

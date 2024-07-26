@@ -24,16 +24,77 @@ class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
         <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
-  <div class="p-3 flex items-center border-b border-gray-300">
-    <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
-    <div class="ml-3">
-      <p class="text-lg text-gray-700">Nguyễn Sinh Duy</p>
-      <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700">Admin</span>
+    <div class="p-3 flex items-center border-b border-gray-300">
+      <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
+      <div class="ml-3">
+        <p class="text-lg text-gray-700" id="tenNhanVien">Nguyễn Sinh Duy</p>
+        <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700" id="vaiTro">Admin</span>
+      </div>
     </div>
-  </div>
-  <div class="">
-  
-    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6 pt-10" id="menu1">
+    <div class="border-b border-gray-300  pt-10 ">
+      <a href="/pages/staffSideBar/listLaborContract.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-file'></i>
+          </span>
+          <span> Hợp đồng </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
+          </span>
+          <span> Điều chuyển </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
+          </span>
+          <span> Khen thưởng </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-shield'></i> <!-- Kỷ luật -->
+          </span>
+          <span> Kỷ luật </span>
+        </div>
+      </a>
+      <a href="/pages/catalog/catalog.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-category-alt'></i>
+          </span>
+          <span> Danh mục </span>
+        </div>
+      </a>
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu4">
+        <span class="w-10">
+          <i class='bx bxs-report'></i>
+        </span>
+        <a href="/pages/staffSideBar/report.html">
+          <span> Báo cáo </span>
+        </a>
+        <div
+          class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
+          id="submenu4">
+        
+        </div>
+      </div>
+    </div>
+    <a href="/pages/employee/overview.html">
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+        <span class="w-10">
+          <i class='bx bx-group text-lg'></i>
+        </span>
+        <span> Chuyển trang nhân viên </span>
+      </div>
+    </a>
+    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu1">
       <span class="w-10">
         <i class='bx bxs-badge-dollar'></i>
       </span>
@@ -43,104 +104,43 @@ class CustomSidebar extends HTMLElement {
         <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
       </div>
     </div>
-    <a href="/pages/employee/overview.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-group text-lg'></i>
-        </span>
-        <span> Hồ sơ </span>
-      </div>
-    </a>
-    <a href="/pages/catalog/catalog.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-file'></i> <!-- Hợp đồng -->
-        </span>
-        <span> Hợp đồng </span>
-      </div>
-    </a>
-    <a href="/pages/catalog/catalog.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
-        </span>
-        <span> Điều chuyển </span>
-      </div>
-    </a>
-    <a href="/pages/catalog/catalog.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
-        </span>
-        <span> Khen thưởng </span>
-      </div>
-    </a>
-    <a href="/pages/catalog/catalog.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-shield'></i> <!-- Kỷ luật -->
-        </span>
-        <span> Kỷ luật </span>
-      </div>
-    </a>
-    <a href="/pages/catalog/catalog.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-category-alt'></i>
-        </span>
-        <span> Danh mục </span>
-      </div>
-    </a>
-    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu4">
-      <span class="w-10">
-        <i class='bx bxs-report'></i>
-      </span>
-      <a href="/pages/staffSideBar/report.html">
-        <span> Báo cáo </span>
-      </a>
-      <div class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu4">
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhân viên</a>
-        <div class="flex items-center cursor-pointer transition relative" id="menu-child4">
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px; display: flex; justify-content: space-between; align-items: center;">
-            <span>Hồ sơ lương</span>
-            <i class='bx bxs-chevron-right'></i>
-          </a>
-          <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu4-child"> <!-- Mục con mới -->
-            <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Tạm ứng lương</a>
-            <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng lương tháng</a>
-            <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng chấm công</a>
-          </div>
+  </div>
+
+  <div id="myModal" class="modal" style="z-index: 100;">
+    <div class="change-container">
+      <span class="close">&times;</span>
+      <form id="change_form">
+        <div class="form-header">
+          <h2>Đổi Mật Khẩu</h2>
         </div>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sinh nhật</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách đảng viên</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách trình độ CBCNV</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhóm lương</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách người thân</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách diện chính sách</a>
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sổ bảo hiểm</a>
-      </div>
+
+        <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+        <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+        <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+      </form>
+      <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
     </div>
   </div>
-</div>
-
-<div id="myModal" class="modal" style="z-index: 100;">
-  <div class="change-container">
-    <span class="close">&times;</span>
-    <form id="change_form">
-      <div class="form-header">
-        <h2>Đổi Mật Khẩu</h2>
-      </div>
-
-      <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
-      <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-      <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
-    </form>
-    <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-  </div>
-</div>
 
         `;
 
+    var tenNhanVien = localStorage.getItem('tenNhanVien');
+    if (tenNhanVien) {
+      // Tìm phần tử <p> và thay đổi nội dung của nó
+      var pElement = document.querySelector('p#tenNhanVien');
+      if (pElement) {
+          pElement.textContent = tenNhanVien;
+      }
+  }
+
+  var vaiTro = localStorage.getItem('vaiTroId')
+  var textVaiTro = document.querySelector(' span#vaiTro');
+  if(vaiTro === '1'){
+    textVaiTro.textContent = "Admin"
+  }
+  else{
+    textVaiTro.textContent = "Employee"
+  }
     const menuItem = this.querySelector("#menu1");
     const subMenu = this.querySelector("#submenu1");
 
@@ -162,26 +162,26 @@ class CustomSidebar extends HTMLElement {
     // menuItem3.addEventListener("mouseleave", function () {
     //   subMenu3.classList.add("hidden");
     // });
-    const menuItem4 = this.querySelector("#menu4");
-    const subMenu4 = this.querySelector("#submenu4");
-    const menu4Child = this.querySelector("#menu-child4");
-    const submenu4Child = this.querySelector("#submenu4-child");
+    // const menuItem4 = this.querySelector("#menu4");
+    // const subMenu4 = this.querySelector("#submenu4");
+    // const menu4Child = this.querySelector("#menu-child4");
+    // const submenu4Child = this.querySelector("#submenu4-child");
 
-    menuItem4.addEventListener("mouseenter", function () {
-      subMenu4.classList.remove("hidden");
-    });
+    // menuItem4.addEventListener("mouseenter", function () {
+    //   subMenu4.classList.remove("hidden");
+    // });
 
-    menuItem4.addEventListener("mouseleave", function () {
-      subMenu4.classList.add("hidden");
-    });
+    // menuItem4.addEventListener("mouseleave", function () {
+    //   subMenu4.classList.add("hidden");
+    // });
 
-    menu4Child.addEventListener("mouseenter", function () {
-      submenu4Child.classList.remove("hidden");
-    });
+    // menu4Child.addEventListener("mouseenter", function () {
+    //   submenu4Child.classList.remove("hidden");
+    // });
 
-    menu4Child.addEventListener("mouseleave", function () {
-      submenu4Child.classList.add("hidden");
-    });
+    // menu4Child.addEventListener("mouseleave", function () {
+    //   submenu4Child.classList.add("hidden");
+    // });
   }
 }
 class BaseInput extends HTMLElement {
@@ -496,16 +496,26 @@ class BaseUpload extends HTMLElement {
 }
 
 class BaseButton extends HTMLElement {
-  static observedAttributes = ["label", "type", "icon", "mini", "id"];
+  static observedAttributes = ["label", "type", "icon", "mini", "id", "disabled"];
 
   connectedCallback() {
+    this.render();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "disabled") {
+      this.render();
+    }
+  }
+
+  render() {
     const label = this.getAttribute("label") || "Base input";
     const type = this.getAttribute("type") || "primary";
     const icon = this.getAttribute("icon");
     const mini = this.getAttribute("mini") === "true";
     const id = this.getAttribute("id");
+    const disabled = this.hasAttribute("disabled");
 
-    // Các class chung
     let commonClasses = "focus:outline-none font-medium rounded-lg text-sm";
 
     if (mini) {
@@ -514,7 +524,6 @@ class BaseButton extends HTMLElement {
       commonClasses += " py-2.5 px-5";
     }
 
-    // Các class riêng cho từng button
     const BtnClass = {
       primary:
         "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300",
@@ -526,33 +535,16 @@ class BaseButton extends HTMLElement {
     };
 
     const contentClass = BtnClass[type] || BtnClass.primary;
+    const disabledClass = disabled ? "button-disabled" : "";
 
     this.innerHTML = `
-    <button id="${id}" type="button" class="${commonClasses} ${contentClass}">
-      ${icon ? `<i class='${icon} mr-1'></i>` : ""} <span class="button-label">${label}</span>
-     
-    </button>
-  `;
- // <span class="loader hidden"></span>
-    // this.querySelector('button').addEventListener('click', () => this.handleClick());
+      <button id="${id}" type="button" class="${commonClasses} ${contentClass} ${disabledClass}" ${disabled ? 'disabled' : ''}>
+        ${icon ? `<i class='${icon} mr-1'></i>` : ""} <span class="button-label">${label}</span>
+      </button>
+    `;
   }
-
-  // handleClick() {
-  //   const button = this.querySelector('button');
-  //   const label = button.querySelector('.button-label');
-  //   const loader = button.querySelector('.loader');
-
-  //   button.disabled = true;
-  //   label.classList.add('hidden');
-  //   loader.classList.remove('hidden');
-
-  //   setTimeout(() => {
-  //     label.classList.remove('hidden');
-  //     loader.classList.add('hidden');
-  //     button.disabled = false;
-  //   }, 5000);
-  // }
 }
+
 
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html

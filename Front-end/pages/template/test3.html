@@ -6,52 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../../assets/styles/pages/employee/test.css" />
   <link rel="stylesheet" href="../../assets/styles/common/common.css" />
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
   <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-  <script src="../../assets/scripts/common/registerComponent.js"></script>
-  <title>Danh sách quan hệ gia đình</title>
+  <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
 </head>
 
 <body>
   <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
-    <div class="p-3 flex items-center">
+    <div class="p-3 flex items-center border-b border-gray-300">
       <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
       <div class="ml-3">
         <p class="text-lg text-gray-700">Nguyễn Sinh Duy</p>
         <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700">Admin</span>
       </div>
     </div>
-    <div class="border-b border-gray-200 ">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu1">
-        <span class=" w-10">
-        <i class='bx bxs-badge-dollar'></i>
-        </span>
-        <span> Hệ thống </span>
-        <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
-          id="submenu1">
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
-          <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
-        </div>
-      </div>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
-        <span class=" w-10">
-          <i class='bx bx-group text-lg'></i>
-          </span>
-          <span> Hồ sơ </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+    <div class="border-b border-gray-200  pt-10 ">
+      <a href="/pages/staffSideBar/listLaborContract.html">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
           <span class="w-10">
-            <i class='bx bx-file'></i> <!-- Hợp đồng -->
+            <i class='bx bx-file'></i>
           </span>
           <span> Hợp đồng </span>
         </div>
       </a>
       <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
           <span class="w-10">
             <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
           </span>
@@ -59,7 +39,7 @@
         </div>
       </a>
       <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
           <span class="w-10">
             <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
           </span>
@@ -67,28 +47,28 @@
         </div>
       </a>
       <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
           <span class="w-10">
             <i class='bx bx-shield'></i> <!-- Kỷ luật -->
           </span>
           <span> Kỷ luật </span>
         </div>
       </a>
-      
       <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3">
-        <span class=" w-10">
-          <i class='bx bx-category-alt'></i>
+        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+          <span class="w-10">
+            <i class='bx bx-category-alt'></i>
           </span>
           <span> Danh mục </span>
         </div>
       </a>
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4">
-        <span class=" w-10">
-        <i class='bx bxs-report'></i>
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu4">
+        <span class="w-10">
+          <i class='bx bxs-report'></i>
         </span>
         <a href="/pages/staffSideBar/report.html">
-          <span> Báo cáo </span> </a>
+          <span> Báo cáo </span>
+        </a>
         <div
           class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
           id="submenu4">
@@ -99,8 +79,8 @@
               <span>Hồ sơ lương</span>
               <i class='bx bxs-chevron-right'></i>
             </a>
-            <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"" id="
-              submenu4-child"> <!-- Mục con mới -->
+            <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
+              id="submenu4-child"> <!-- Mục con mới -->
               <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Tạm ứng lương</a>
               <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng lương tháng</a>
               <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng chấm công</a>
@@ -118,7 +98,24 @@
         </div>
       </div>
     </div>
-   
+    <a href="/pages/employee/overview.html">
+      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
+        <span class="w-10">
+          <i class='bx bx-group text-lg'></i>
+        </span>
+        <span> Thông tin cá nhân </span>
+      </div>
+    </a>
+    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu1">
+      <span class="w-10">
+        <i class='bx bxs-badge-dollar'></i>
+      </span>
+      <span> Hệ thống </span>
+      <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
+        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
+        <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
+      </div>
+    </div>
   </div>
 
   <div id="myModal" class="modal" style="z-index: 100;">
