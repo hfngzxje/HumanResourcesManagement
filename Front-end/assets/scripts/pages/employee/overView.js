@@ -31,11 +31,6 @@ var TableColumnsLaborContract = [
         key: 'mahopdong',
     },
     {
-        label: 'Lương cơ bản',
-        key: 'luongcoban',
-        type: 'currency'
-    },
-    {
         label: 'Từ ngày',
         key: 'hopdongtungay',
         type: 'datetime'

@@ -77,17 +77,6 @@ document.addEventListener("DOMContentLoaded", () => {
     departmentSelect.disabled = !enabled;
     genderSelect.disabled = !enabled;
   }
-
-  // Cập nhật trạng thái của các thẻ khi chọn giá trị từ "Lọc theo"
-  // filterSelect.addEventListener("change", (event) => {
-  //   if (event.target.value === "Tất cả") {
-  //     toggleInputs(true); // Bật tất cả các thẻ
-  //   } else {
-  //     toggleInputs(false); // Tắt tất cả các thẻ
-  //   }
-  // });
-
-  // Khởi tạo trạng thái ban đầu
   toggleInputs(filterSelect.value === "Tất cả");
 });
 
@@ -155,19 +144,6 @@ function handleSearch() {
 
 }
 
-function showDateTimeNow() {
-  const dateTimeElement = document.getElementById("datetime");
-  if (!dateTimeElement) return;
-  const now = new Date();
-  const formattedDate = formatVietnameseDate(now);
-  dateTimeElement.textContent = `Hà Nội, ${formattedDate}`;
-}
-function formatVietnameseDate(date) {
-  const day = date.getDate();
-  const month = date.toLocaleString("vi-VN", { month: "long" });
-  const year = date.getFullYear();
-  return `${day} ${month} năm ${year}`;
-}
 function buildApiUrl() {
   return apiTable;
 }
@@ -221,7 +197,6 @@ function handleSelectFilterBy() {
 document.addEventListener("DOMContentLoaded", () => {
   console.log(123);
   renderActionByStatus();
-  showDateTimeNow();
   handleSelectFilterBy();
   handleSearch();
 });

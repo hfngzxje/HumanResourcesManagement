@@ -1,89 +1,88 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Khen thưởng, kỷ luật | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <title>Danh sách khen thưởng - kỷ luật</title>
-    <script>
-        // Đặt đoạn mã kiểm tra vào đây
-        (function () {
-            if (!localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/authentic/login.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
-            }
-            const vaiTroID = localStorage.getItem('vaiTroId');
-            if (vaiTroID !== "1") {
-                window.location.href = "/pages/error.html";
-                return; // Chuyển hướng nếu vai trò không phải là 1
-            }
-        })();
-    </script>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+
 </head>
 
-<body class="text-gray-600">
-    <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <a href="../../"></a>
-
-                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
-                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
-                    </div>
-                    <!-- Nội dung form theo từng màn hình -->
-                    <div class="mt-3">
-                        <form id="award_form">
-                            <div class="grid gap-4 mb-4 grid-cols-4">
-                                <div class="col-span-2 sm:col-span-1 ">
-                                    <base-select label="Tên" name="ten" keyValue="id" keyLabel="ten"
-                                        api="https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 ">
-                                    <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian(*)" name="ngay"
-                                        required="true"></base-datepicker>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-input label="Nội dung(*)" required="true" name="noidung"></base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-input label="Lý do(*)" required="true" name="lido"></base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-select label="Trạng Thái" name="khenthuongkiluat" options="MaritalOptions"
-                                        required="true"></base-select>
-                                </div>
-
-                            </div>
-                        </form>
-                        <div id="award_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
-                    </div>
-                </div>
-                <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-                    <p class="text-xl">Danh sách khen thưởng</p>
-                </div>
-                <div class="mt-3">
-                    <base-table api="buildApiUrlKhenThuong" columns="TableColumns">
-                    </base-table>
-                </div>
-
-                <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-                    <p class="text-xl">Danh sách kỷ luật</p>
-                </div>
-                <div class="mt-3">
-                    <base-table api="buildApiUrlKyLuat" columns="TableColumns" event="tableEvent">
-                    </base-table>
-                </div>
-            </div>
+<body onload="time()" class="app sidebar-mini rtl">
+    <!-- Navbar-->
+    <layout-header></layout-header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <layout-sidebar></layout-sidebar>
+    <main class="app-content">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
         </div>
-    </div>
+        <div class="app-title mt-3">
+            <ul class="app-breadcrumb breadcrumb side">
+                <li class="breadcrumb-item active"><a href="#"><b>Khen thưởng, kỷ luật</b></a></li>
+            </ul>
+            <div id="clock"></div>
+        </div>
+
+        <div class="mt-3">
+            <form id="award_form">
+                <div class="grid gap-4 mb-4 grid-cols-4">
+                    <div class="col-span-2 sm:col-span-1 ">
+                        <base-select label="Tên" name="ten" keyValue="id" keyLabel="ten"
+                            api="https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 ">
+                        <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian(*)" name="ngay"
+                            required="true"></base-datepicker>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <base-input label="Nội dung(*)" required="true" name="noidung"></base-input>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <base-input label="Lý do(*)" required="true" name="lido"></base-input>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <base-select label="Trạng Thái" name="khenthuongkiluat" options="MaritalOptions"
+                            required="true"></base-select>
+                    </div>
+                </div>
+                <div id="award_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+            </form>
+        </div>
+        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+            <p class="text-xl">Danh sách khen thưởng</p>
+        </div>
+        <div class="mt-3">
+            <base-table api="buildApiUrlKhenThuong" columns="TableColumns">
+            </base-table>
+        </div>
+
+        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+            <p class="text-xl">Danh sách kỷ luật</p>
+        </div>
+        <div class="mt-3">
+            <base-table api="buildApiUrlKyLuat" columns="TableColumns" event="tableEvent">
+            </base-table>
+        </div>
+    </main>
+
+    <!--
+  MODAL
+-->
+
+    <!--
+  MODAL
+-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
@@ -92,8 +91,11 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/award.js"></script>
-    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/registerComponent.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>

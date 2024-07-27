@@ -5,6 +5,8 @@ const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
+var oldValue = null;
+
 let idChuyenMon = null
 
 var TableColumns = [
@@ -64,6 +66,7 @@ function fetchChuyenMon(id) {
         success: function (data) {
             // setFormValue('editChuyenMon', data, 'fetch');
             setFormValue('editChuyenMon', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -145,10 +148,12 @@ function handleRemoveRow() {
     }, 1000);
 }
 function handleSave() {
+
     const isConfirm = confirm('Bạn chắc chắn muốn lưu danh mục chuyên môn?')
     if (!isConfirm) return
     const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
+    console.log("Ten Truong: " + payload["ten"])
     setLoading(true)
     console.log('maTo: ', idChuyenMon)
     setTimeout(() => {
@@ -235,6 +240,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Chuyên Môn"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
@@ -244,6 +250,20 @@ function showPopup() {
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
+    }
+}
+
+
+function checkValues() {
+    const formValue = getFormValues('editChuyenMon');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -259,5 +279,10 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenChuyenMon = document.querySelector('base-input[name="ten"]');
+    if (inputTenChuyenMon) {
+        inputTenChuyenMon.addEventListener('input', checkValues);
+    }
 })
 

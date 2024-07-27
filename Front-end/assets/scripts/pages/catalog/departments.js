@@ -1,4 +1,4 @@
-const isEdit = !!id
+
 let Eid = null;
 let temp = false
 let isPopupEdit = false
@@ -9,6 +9,7 @@ const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
 let idPhongBan = null
+var oldValue = null;
 
 var TableColumns = [
     {
@@ -65,6 +66,7 @@ function fetchPhongBan(id) {
         method: 'GET',
         success: function (data) {
             setFormValue('editPhongBan', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -238,6 +240,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Phòng Ban"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
@@ -247,6 +250,18 @@ function showPopup() {
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
+    }
+}
+function checkValues() {
+    const formValue = getFormValues('editPhongBan');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -262,6 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenPhongBan = document.querySelector('base-input[name="ten"]');
+    if (inputTenPhongBan) {
+        inputTenPhongBan.addEventListener('input', checkValues);
+    }
 })
 
 

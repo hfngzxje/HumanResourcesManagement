@@ -1,5 +1,9 @@
 var TableColumns = [
     {
+        label: 'Ngạch nhân viên',
+        key: '',
+    },
+    {
         label: 'Bậc lương',
         key: '',
     },

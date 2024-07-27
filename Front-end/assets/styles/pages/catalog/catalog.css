@@ -31,3 +31,7 @@
 .category-item:hover {
     background-color: #cbd5e0;
 }
+.button-disabled {
+    opacity: 0.6; /* Điều chỉnh mức độ mờ theo ý thích */
+    cursor: not-allowed; /* Thay đổi con trỏ khi di chuột qua nút bấm bị vô hiệu hóa */
+  }

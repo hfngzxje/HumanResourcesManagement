@@ -6,7 +6,8 @@ const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
-let idChucDanh = null
+var oldValue = null;
+let idNgachCongChuc = null 
 
 var TableColumns = [
     {
@@ -20,10 +21,6 @@ var TableColumns = [
     {
         label: 'Tên',
         key: 'ten'
-    },
-    {
-        label: 'Phụ cấp',
-        key: 'phucap'
     },
     {
         label: 'Hành động',
@@ -63,14 +60,15 @@ function buildPayload(formValue) {
 function fetchNgachCongChuc(id) {
     console.log("Name:", id);
     setLoading(true)
-    idChucDanh = id
+    idNgachCongChuc = id
     $.ajax({
-        url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + id,
+        url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + id,
         method: 'GET',
         success: function (data) {
 
             // setFormValue('editTeam', data, 'fetch');
             setFormValue('editCivilServantRank', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -132,7 +130,7 @@ function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
+            url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idNgachCongChuc,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
@@ -160,7 +158,7 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
+            url: 'https://localhost:7141/api/ChucDanh/updateChucDanh?id=' + idNgachCongChuc,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -229,7 +227,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChucDanh/getAllChucDanh'
+    return 'https://localhost:7141/api/NhanVien/ngachCongChuc'
 }
 
 function showPopup() {
@@ -246,18 +244,31 @@ function showPopup() {
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Sửa Tiêu Đề Chức Danh"
+        popupTitle.textContent = "Sửa Tiêu Đề Ngạch Công Chức"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Chức Danh"
+        popupTitle.textContent = "Thêm mới Tiêu Đề Ngạch Công Chức"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
+    }
+}
+function checkValues() {
+    const formValue = getFormValues('editCivilServantRank');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -274,5 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenChucDanh = document.querySelector('base-input[name="ten"]');
+    if (inputTenChucDanh) {
+        inputTenChucDanh.addEventListener('input', checkValues);
+    }
 })
 
