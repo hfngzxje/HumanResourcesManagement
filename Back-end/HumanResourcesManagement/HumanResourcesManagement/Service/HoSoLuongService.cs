@@ -1,6 +1,8 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HumanResourcesManagement.Service
@@ -148,6 +150,66 @@ namespace HumanResourcesManagement.Service
             }
             return hoSoLuong;
         }
+
+        public IdAndName getChucDanhByHopDong(string maHopDong)
+        {
+            var hopDong = _context.TblHopDongs
+                .Include(hd => hd.ChucdanhNavigation)
+                .FirstOrDefault(hd => hd.Mahopdong == maHopDong);
+
+            if (hopDong == null || hopDong.ChucdanhNavigation == null)
+            {
+                throw new Exception("Không tìm thấy hợp đồng hoặc chức danh tương ứng.");
+            }
+
+            return new IdAndName
+            {
+                Id = hopDong.ChucdanhNavigation.Id,
+                Ten = hopDong.ChucdanhNavigation.Ten
+            };
+        }
+
+        public ActionResult<TblDanhMucChucDanh> getPhuCapByChucDanh(int id)
+        {
+            var phuCap = _context.TblDanhMucChucDanhs.Find(id);
+            return phuCap;
+        }
+
+        public ActionResult<TblDanhMucNhomLuong> GetBacLuongByChucDanh(int id)
+        {
+            throw new NotImplementedException();
+        }
+        
+
+
+        public async Task<List<TblDanhMucNhomLuong>> GetBacLuongByChucDanhAsync(int chucDanhId)
+        {
+            return await _context.TblDanhMucNhomLuongs
+                .Where(bl => bl.Chucdanh == chucDanhId)
+                .ToListAsync();
+        }
+
+
+
+        public async Task<List<TblDanhMucNhomLuong>> GetLuongDetailsAsync(int? chucDanhId, int? bacLuongId)
+        {
+            IQueryable<TblDanhMucNhomLuong> query = _context.TblDanhMucNhomLuongs.AsQueryable();
+
+            if (chucDanhId.HasValue)
+            {
+                query = query.Where(bl => bl.Chucdanh == chucDanhId.Value);
+            }
+
+            if (bacLuongId.HasValue)
+            {
+                query = query.Where(bl => bl.Nhomluong == bacLuongId.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
+
+
 
     }
 }
