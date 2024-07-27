@@ -34,6 +34,7 @@ public class Program
         builder.Services.AddScoped<ILoaiHopDongService, LoaiHopDongService>();
         builder.Services.AddScoped<IDangNhapService, DangNhapService>();
         builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
+        builder.Services.AddScoped<IDanhMucNhomLuongService, DanhMucNhomLuongService>();
 
 
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));

@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
@@ -103,5 +104,66 @@ namespace HumanResourcesManagement.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+
+
+        [HttpGet("getChucDanhByHopDong/{maHopDong}")]
+        public ActionResult<IdAndName> GetChucDanhByHopDong(string maHopDong)
+        {
+            try
+            {
+                var chucDanh = _hoSoLuongService.getChucDanhByHopDong(maHopDong);
+                return Ok(chucDanh);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getPhuCapByChucDanh/{id}")]
+        public ActionResult<TblDanhMucChucDanh> GetPhuCapByChucDanh(int id)
+        {
+            try
+            {
+                var chucDanh = _hoSoLuongService.getPhuCapByChucDanh(id);
+                return Ok(chucDanh);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("getBacLuongByChucDanh/{id}")]
+        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetBacLuongByChucDanh(int id)
+        {
+            var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(id);
+
+            if (bacLuongs == null || bacLuongs.Count == 0)
+            {
+                return NotFound("Không tìm thấy bậc lương cho chức danh với ID tương ứng.");
+            }
+
+            return Ok(bacLuongs);
+        }
+
+
+        [HttpGet("getLuongDetails")]
+        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetLuongDetails([FromQuery] int? chucDanhId, [FromQuery] int? bacLuongId)
+        {
+            var luongs = await _hoSoLuongService.GetLuongDetailsAsync(chucDanhId, bacLuongId);
+
+            if (luongs == null || luongs.Count == 0)
+            {
+                return NotFound("Không tìm thấy thông tin lương cho các tham số được cung cấp.");
+            }
+
+            return Ok(luongs);
+        }
+
+
+
     }
 }

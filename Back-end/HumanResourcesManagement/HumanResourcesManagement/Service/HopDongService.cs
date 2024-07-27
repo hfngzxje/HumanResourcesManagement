@@ -105,12 +105,11 @@ namespace HumanResourcesManagement.Service
                 Mahopdong = newMaHopDong,
                 Loaihopdong = request.Loaihopdong,
                 Chucdanh = request.Chucdanh,
-                //Luongcoban = request.Luongcoban,
                 Hopdongtungay = request.Hopdongtungay,
                 Hopdongdenngay = request.Hopdongdenngay,
                 Ghichu = request.Ghichu,
                 Ma = request.Ma,
-                TrangThai = 1,
+                TrangThai = request.TrangThai
             };
 
             _context.TblHopDongs.Add(hopDong);
