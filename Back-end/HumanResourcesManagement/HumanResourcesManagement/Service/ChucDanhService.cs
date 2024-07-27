@@ -89,16 +89,16 @@ namespace HumanResourcesManagement.Service
                     throw new Exception("Không tồn tại id này.");
                 }
 
-                //var temp = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ma == req.Ma);
-                //if (temp != null && temp.Ma.Equals(req.Ma))
-                //{
-                //    throw new Exception($"{req.Ma} đã tồn tại.");
-                //}
-                var cdTen = await _context.TblDanhMucChucDanhs.FirstOrDefaultAsync(d => d.Ten == req.Ten);
-                if (cdTen != null)
+                var notThis = await _context.TblDanhMucChucDanhs.Where(t => !t.Ten.Equals(dt.Ten)).ToListAsync();
+
+                foreach (var item in notThis)
                 {
-                    throw new Exception("Tên đã tồn tại");
+                    if (req.Ten.Equals(item.Ten))
+                    {
+                        throw new Exception("Chức danh này đã tồn tại.");
+                    }
                 }
+
                 var generatedCode = GenerateCodeFromName(req.Ten);
                 dt.Ma = generatedCode;
                 dt.Ten = req.Ten;
