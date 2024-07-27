@@ -7,6 +7,8 @@ const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 
+const table = document.querySelector('base-table')
+
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
@@ -31,11 +33,6 @@ var TableColumns = [
         key: 'chucdanh',
     },
     {
-        label: 'Lương cơ bản',
-        key: 'luongcoban',
-        type: 'currency'
-    },
-    {
         label: 'Từ ngày',
         key: 'hopdongtungay',
         type: 'datetime'
@@ -48,34 +45,50 @@ var TableColumns = [
     {
         label: 'Trạng thái',
         key: 'trangThai'
+    },
+    ,
+    {
+        label: 'Hành động',
+        key: 'action',
+        actions: [
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchContract(row.mahopdong)
+                    hiddenMaNhanVien();
+                    showPopup()
+                    console.log('row double click ', row);
+                }
+            }
+        ]
     }
 ]
 
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
-   
+
         isPopupEdit = true
-       
+
         fetchContract(row.mahopdong)
         hiddenMaNhanVien();
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 
-function hiddenMaNhanVien(){
+function hiddenMaNhanVien() {
     var modal = document.getElementById("maNhanVien");
     const popupMa = modal.querySelector('base-select');
     popupMa.classList.add('hidden');
 }
-function RemovehiddenMaNhanVien(){
+function RemovehiddenMaNhanVien() {
     var modal = document.getElementById("maNhanVien");
     const popupMa = modal.querySelector('base-select');
     popupMa.classList.remove('hidden');
 }
 function backToList() {
-        const url = new URL("/pages/staffSideBar.html", window.location.origin);
+    const url = new URL("/pages/staffSideBar.html", window.location.origin);
 }
 
 function buildPayload(formValue) {
@@ -114,58 +127,66 @@ function handleCreate() {
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        
-        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            alert('Tạo Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+
+            url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                alert('Tạo Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+
+
+            },
+            complete: () => {
+                setLoading(false)
             }
-
-
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 function handleRemove() {
     const isConfirm = confirm('Xác nhận xóa')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+            method: 'DELETE',
+            success: function (data) {
+                alert('Xóa Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchContract err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
 function handleSave() {
@@ -173,35 +194,39 @@ function handleSave() {
 
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchContract res :: ', data);
-            alert('Lưu Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchContract res :: ', data);
+                alert('Lưu Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 function clearFormValues() {
     const form = document.getElementById('editHopDong');
@@ -242,7 +267,7 @@ function clearFormValues(formId) {
     inputs.forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
             input.checked = false;
-        } 
+        }
         else {
             input.value = '';
             input.selectedIndex = 0;
@@ -258,7 +283,6 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            // setFormValue('editHopDong', {ma: "",chucdanh: "",hopdongtungay: "",hopdongdenngay: "",loaihopdong: "",luongcoban: "",trangThai: "" })
             clearFormValues();
         }
     }
@@ -269,25 +293,27 @@ function showPopup() {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Hợp Đồng"
         popupRemoveBtn.classList.remove('hidden')
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         RemovehiddenMaNhanVien();
         popupTitle.textContent = "Thêm Hợp Đồng"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
 
+function closePopup() {
+    var modal = document.getElementById("editHopDong");
+    modal.style.display = "none"
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return;
-    }
+
     renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');

@@ -1,88 +1,149 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng lương nhân viên | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Danh sách nhân viên</title>
-    <script>
-        // Đặt đoạn mã kiểm tra vào đây
-        (function() {
-            if (!localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/authentic/login.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
-            }
-            const vaiTroID = localStorage.getItem('vaiTroId');
-            if (vaiTroID !== "1") {
-                window.location.href = "/pages/error.html";
-                return; // Chuyển hướng nếu vai trò không phải là 1
-            }
-        })();
-    </script>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+
 </head>
 
-<body class="text-gray-600">
-    <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
-                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
-                    </div>
-                    <!-- Nội dung form theo từng màn hình -->
-                    <div class="mt-3">
-                        <form id="salaryRecord_form" >
-                            <div class="flex gap-x-5">
-                                <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+<body onload="time()" class="app sidebar-mini rtl">
+    <!-- Navbar-->
+    <layout-header></layout-header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <layout-sidebar></layout-sidebar>
+    <main class="app-content">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+        </div>
+        <div class="app-title mt-3">
+            <ul class="app-breadcrumb breadcrumb side">
+                <li class="breadcrumb-item active"><a href="#"><b>Bảng lương nhân viên</b></a></li>
+            </ul>
+            <div id="clock"></div>
+        </div>
 
-                                    <base-select label="Mã hợp đồng(*)" name="mahopdong" keyValue="mahopdong" required="true"
-                                        keyLabel="mahopdong" api="buildApiHopDong"></base-select> <br>
-                                    <base-input-number label="Hệ số lương(*)" name="hesoluong"required="true" readonly></base-input-number>
-                                    <!-- <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
-                                            required="true"></base-select>  -->
-                                            <base-input-number label="Lương cơ bản" name="luongcoban"  required="true" readonly></base-input-number>
-                                    <base-input-number label="Phụ cấp khác"required="true" name="phucapkhac"></base-input-number>
-                                    <base-input-number label="Thời hạn lên lương"required="true" name="thoihanlenluong"></base-input-number>
-                                   
-                                </div>
-                                <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
-                               
+        <div class="mt-3">
+            <form id="salaryRecord_form">
+                <div class="flex gap-x-5">
+                    <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-6 w-full">
 
-                                        <!-- gioi han 0-7 -->
-                                        <!-- <base-select label="Nhóm Lương" name="nhomluong" options="MaritalOptions"
-                                            required="true"></base-select> <br>  -->
-                                            <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
-                                            required="true"></base-select> <br>
-                                        <base-input-number label="Phụ cấp chúc vụ"required="true" name="phucaptrachnhiem" readonly></base-input-number>
-                                        <base-input-number label="Tiền lương"required="true" name="tongluong" readonly  ></base-input-number>
-                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
-                                        name="ngayhieuluc"></base-datepicker>
-                                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
-                                        name="ngayketthuc"></base-datepicker>    
-                                </div>
-                                <div id="tinhluong_form_Action" class="flex gap-x-5 mt-5 justify-end" style="margin-top:auto"></div>
-                            </div>
-                             <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
-  
-                        </form>
-                       
+                        <base-select label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong" required="true"
+                            keyLabel="mahopdong" api="buildApiHopDong"></base-select>
+                        <base-select label="Nhóm ngạch nhân viên" name="nhomluong" options="MaritalOptions"
+                            required="true"></base-select>
+                        <base-input-number label="Hệ số lương" name="hesoluong" required="true"></base-input-number>
+                        <base-input-number label="Lương cơ bản" name="luongcoban" required="true"></base-input-number>
+                        <base-input-number label="Phụ cấp khác" required="true" name="phucapkhac"></base-input-number>
+                        <base-input-number label="Thời hạn lên lương" required="true"
+                            name="thoihanlenluong"></base-input-number>
+
                     </div>
-                    <div id="salary_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                    <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
+                        <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                            required="true"></base-select> <br>
+                        <base-input-number label="Phụ cấp chúc vụ" required="true"
+                            name="phucaptrachnhiem"></base-input-number>
+                        <base-input-number label="Tiền lương" required="true" name="tongluong"
+                            readonly></base-input-number>
+                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
+                            name="ngayhieuluc"></base-datepicker>
+                        <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
+                            name="ngayketthuc"></base-datepicker>
+                    </div>
+                    <div id="tinhluong_form_Action" class="flex gap-x-5 mt-5 justify-end" style="margin-top:auto"></div>
                 </div>
-                <div class="flex justify-between" style="color: blue; margin-top: 5%;">
-                    <p class="text-xl">Danh sách Lương</p>
+                <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+
+            </form>
+
+        </div>
+        <div id="salary_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+            <p class="text-xl">Danh sách Lương</p>
+        </div>
+        <div class="mt-3">
+            <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
+            </base-table>
+        </div>
+    </main>
+
+    <div id="editSalaryRecord">
+        <div class="change-container"
+            style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
+            <span class="close">&times;</span>
+            <form>
+                <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Sửa hồ sơ lương
+                    </h2>
                 </div>
-                <div class="mt-3">
-                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                    </base-table>
+                <div class="p-4">
+                    <div class="grid gap-4 mb-4 grid-cols-4">
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-select label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong" required="true"
+                                keyLabel="mahopdong" api="buildApiHopDong"></base-select>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-select label="Nhóm ngạch nhân viên" name="nhomluong" options="MaritalOptions"
+                                required="true"></base-select>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
+                                required="true"></base-select>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1"></div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input-number label="Hệ số lương" name="hesoluong" required="true"></base-input-number>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input-number label="Lương cơ bản" name="luongcoban"
+                                required="true"></base-input-number>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-input-number label="Phụ cấp chúc vụ" required="true"
+                                name="phucaptrachnhiem"></base-input-number>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input-number label="Phụ cấp khác" required="true"
+                                name="phucapkhac"></base-input-number>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-input-number label="Thời hạn lên lương" required="true"
+                                name="thoihanlenluong"></base-input-number>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-datepicker  style="margin: 0;" label="Ngày hiệu lực"
+                                name="ngayhieuluc"></base-datepicker>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
+                                name="ngayketthuc"></base-datepicker>
+                        </div>
+                        <div class="col-span-2  sm:col-span-1">
+                            <base-input-number label="Tổng lương" required="true" name="tongluong"
+                                readonly></base-input-number>
+                        </div>
+                        <div class="col-span-4 ">
+                            <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+                        </div>
+                    </div>
                 </div>
+            </form>
+            <div class="flex gap-x-5 mt-5 justify-center">
+                <base-button id="updateBtn" label="Cập nhật" icon="bx bx-save" type="green"></base-button>
+                <base-button id="deleteBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
             </div>
         </div>
     </div>
@@ -94,8 +155,11 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/salaryRecord.js"></script>
+    <script src="/assets/scripts/common/registerComponent.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>

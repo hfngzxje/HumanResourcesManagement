@@ -1,4 +1,4 @@
-const isEdit = !!id
+
 let Eid = null;
 let temp = false
 let isPopupEdit = false
@@ -6,9 +6,10 @@ const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
-
+const table = document.querySelector('base-table')
 
 let idPhongBan = null
+var oldValue = null;
 
 var TableColumns = [
     {
@@ -22,32 +23,30 @@ var TableColumns = [
     {
         label: 'Tên Phòng Ban',
         key: 'ten'
+    },
+    {
+        label: 'Hành động',
+        key: 'action',
+        actions: [
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchPhongBan(row.id);
+                    showPopup()
+                }
+            }
+        ]
     }
-    // {
-    //     label: 'Hành động',
-    //     key: 'action',
-    //     actions: [
-    //         {
-    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-    //                 isPopupEdit = true
-    //                 fetchPhongBan(row.id);
-    //                 var modal = document.getElementById("editChuyenMon");
-    //                 showPopup()
-    //             }
-    //         },
-    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-    //     ]
-    // }
 ]
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
-   
+
         isPopupEdit = true
-       
+
         fetchPhongBan(row.id)
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -67,6 +66,7 @@ function fetchPhongBan(id) {
         method: 'GET',
         success: function (data) {
             setFormValue('editPhongBan', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -87,57 +87,65 @@ function handleCreate() {
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/addPhongBan',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchPhongBan res :: ', data);
-            alert("Thêm thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/PhongBan/addPhongBan',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchPhongBan res :: ', data);
+                alert("Thêm thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 function handleRemoveRow() {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục phòng ban?')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/removePhongBan?id=' + idPhongBan,
-        method: 'DELETE',
-        success: function (data) {
-            console.log('fetchPhongBan res :: ', data);
-            alert("Xóa thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchPhongBan err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/PhongBan/removePhongBan?id=' + idPhongBan,
+            method: 'DELETE',
+            success: function (data) {
+                console.log('fetchPhongBan res :: ', data);
+                alert("Xóa thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchPhongBan err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục phòng ban?')
@@ -145,49 +153,42 @@ function handleSave() {
     const formValue = getFormValues('editPhongBan')
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/updatePhongBan?id=' + idPhongBan,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchPhongBan res :: ', data);
-            alert('Lưu Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/PhongBan/updatePhongBan?id=' + idPhongBan,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchPhongBan res :: ', data);
+                alert('Lưu Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea, select');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function clearFormValues() {
     const form = document.getElementById('editPhongBan');
     const inputs = form.querySelectorAll('input, textarea');
@@ -238,19 +239,35 @@ function showPopup() {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Phòng Ban"
         popupRemoveBtn.classList.remove('hidden')
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Phòng Ban"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
-
+function checkValues() {
+    const formValue = getFormValues('editPhongBan');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
+    }
+}
+function closePopup() {
+    var modal = document.getElementById("editPhongBan");
+    modal.style.display = "none"
+}
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
@@ -260,6 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenPhongBan = document.querySelector('base-input[name="ten"]');
+    if (inputTenPhongBan) {
+        inputTenPhongBan.addEventListener('input', checkValues);
+    }
 })
 
 

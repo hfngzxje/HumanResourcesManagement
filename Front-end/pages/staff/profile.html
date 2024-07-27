@@ -1,209 +1,191 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông tin nhân viên | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Danh sách nhân viên</title>
-    <script>
-        // Đặt đoạn mã kiểm tra vào đây
-        (function() {
-            if (!localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/authentic/login.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
-            }
-            const vaiTroID = localStorage.getItem('vaiTroId');
-            if (vaiTroID !== "1") {
-                window.location.href = "/pages/error.html";
-                return; // Chuyển hướng nếu vai trò không phải là 1
-            }
-        })();
-    </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+    
 </head>
 
-<body class="text-gray-600">
-    <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
-                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
-                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
-                    </div> <br><br>
-                    <!-- Nội dung form theo từng màn hình -->
-                    <div class="container">
-                        <div class="row gutters">
-                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <div>
-                                            <div class="user-profile">
-
-                                                <h1 id="name-text"
-                                                    style="font-weight: bold; text-align: center; margin-top: 20px; font-size: 25px;">
-                                                </h1>
-                                                <h6 id="email-text" style=" text-align: center; margin-top: 10px; ">
-                                                </h6>
-                                            </div>
-                                            <div class="about">
-                                                <h1
-                                                    style="font-weight: bold; text-align: center; margin-top: 20px; font-size: 25px; color: blue;">
-                                                    Tổng quan</h1>
-                                                <!-- <p >I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.</p> -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-
-                                <div class="card h-100">
-
-                                    <div class="card-body">
-                                        <div class="container">
-                                            <form id="profile_form">
-                                                <div class="col-span-1 h-[300px]  ">
-                                                    <base-upload name="anh" idImage="employeeImage"></base-upload>
-                                                </div>
-                                                <!-- ---------hidden Item--------------- -->
-                                                <base-input-number label="CMND(*)" name="cmnd"
-                                                    style="display: none;"></base-input-number>
-                                                <base-select label="Dân tộc(*)" name="dantoc"
-                                                    api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
-                                                    keyLabel="ten" style="display: none;"></base-select>
-                                                <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
-                                                    style="display: none;"></base-input>
-                                                <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"
-                                                    style="display: none;"></base-input>
-                                                <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
-                                                    style="display: none;"></base-input>
-
-                                                <base-select label="Ngân hàng(*)" name="Nganhang" options="BankList"
-                                                    style="display: none;"></base-select>
-                                                <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
-                                                    name="thuongtru" style="display: none;"></base-input>
-                                                <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
-                                                    style="display: none;"></base-datepicker>
-                                                <base-input label="Nơi cấp(*)" name="cmndnoicap"
-                                                    style="display: none;"></base-input>
-                                                <base-select label="Tôn giáo" name="tongiao"
-                                                    api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
-                                                    keyLabel="ten" style="display: none;"></base-select>
-                                                <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
-                                                    api="https://localhost:7141/api/NhanVien/ngachCongChuc"
-                                                    keyValue="id" keyLabel="ten" 
-                                                    style="display: none;"></base-select>
-                                                <!-- ----------------------------------------- -->
-                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <h6 class="mb-2 text-primary">Thông tin cá nhân</h6>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
-                                                            required="true"></base-input>
-                                                    </div>
-                                                    <div class="col">
-                                                        <base-input label="Email (*)" name="email"
-                                                            required="true"></base-input>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <base-input-phone label="Di động(*)" name="didong"
-                                                            required="true"></base-input-phone>
-                                                    </div>
-                                                    <div class="col">
-                                                        <base-datepicker label="Ngày sinh(*)" name="ngaysinh"
-                                                            required="true"></base-datepicker>
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label-form-item name="Giới tính(*)"
-                                                                required="true"></label-form-item>
-                                                            <div class="flex gap-5">
-                                                                <base-radio label="Nam" name="gioitinh" value="1"
-                                                                    checked></base-radio>
-                                                                <base-radio label="Nữ" name="gioitinh"
-                                                                    value="0"></base-radio>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <h6 class="mt-3 mb-2 text-primary">Công việc</h6>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                                                            api="https://localhost:7141/api/NhanVien/chucDanh"
-                                                            keyValue="id" keyLabel="ten"></base-select>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <base-select label="Phòng" name="phong"
-                                                            api="https://localhost:7141/api/NhanVien/phong"
-                                                            keyValue="id" keyLabel="ten"></base-select>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <base-select label="Tổ" name="to"
-                                                            api="https://localhost:7141/api/NhanVien/to" keyValue="id"
-                                                            keyLabel="ten"></base-select>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                                <div class="row">
-                                                    <div class="col">
-                                                        <base-datepicker label="Ngày vào ban"
-                                                            name="ngayvaoban"></base-datepicker>
-                                                    </div>
-                                                    <div class="col">
-                                                        <base-datepicker label="Ngày công tác"
-                                                            name="ngaychinhthuc"></base-datepicker>
-                                                    </div>
-                                                </div>
-
-                                            </form>
-
-                                        </div>
-                                        <div class="row gutters">
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <div id="profile_form_action" class="flex gap-x-5 mt-5 justify-end">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                </div>
-
-
-            </div>
-        </div>
+<body onload="time()" class="app sidebar-mini rtl">
+  <!-- Navbar-->
+  <layout-header></layout-header>
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <layout-sidebar></layout-sidebar>
+  <main class="app-content">
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+    </div>
+    <div class="app-title mt-3">
+      <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Thông tin nhân viên</b></a></li>
+      </ul>
+      <div id="clock"></div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-    <script src="../../assets/scripts/common/transform.js"></script>
-    <script src="../../assets/scripts/common/loading.js"></script>
-    <script src="../../assets/scripts/pages/staff/common.js"></script>
-    <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/profile.js"></script>
-    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
-    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <div class="container">
+        <div class="row justify-content-center">
+            
+            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+
+                <div class="card h-100" style="border: none;">
+
+                    <div class="card-body">
+                        <div class="container">
+                            <form id="profile_form">
+                                <div class="col-span-1 ">
+                                    <base-upload name="anh" idImage="employeeImage"></base-upload>
+                                </div>
+                                <!-- ---------hidden Item--------------- -->
+                                <base-input-number label="CMND(*)" name="cmnd"
+                                    style="display: none;"></base-input-number>
+                                <base-select label="Dân tộc(*)" name="dantoc"
+                                    api="https://localhost:7141/api/NhanVien/danToc" keyValue="id"
+                                    keyLabel="ten" style="display: none;"></base-select>
+                                <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
+                                    style="display: none;"></base-input>
+                                <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"
+                                    style="display: none;"></base-input>
+                                <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
+                                    style="display: none;"></base-input>
+
+                                <base-select label="Ngân hàng(*)" name="Nganhang" options="BankList"
+                                    style="display: none;"></base-select>
+                                <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
+                                    name="thuongtru" style="display: none;"></base-input>
+                                <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
+                                    style="display: none;"></base-datepicker>
+                                <base-input label="Nơi cấp(*)" name="cmndnoicap"
+                                    style="display: none;"></base-input>
+                                <base-select label="Tôn giáo" name="tongiao"
+                                    api="https://localhost:7141/api/NhanVien/tonGiao" keyValue="id"
+                                    keyLabel="ten" style="display: none;"></base-select>
+                                <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
+                                    api="https://localhost:7141/api/NhanVien/ngachCongChuc"
+                                    keyValue="id" keyLabel="ten" 
+                                    style="display: none;"></base-select>
+                                <!-- ----------------------------------------- -->
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h6 class="mb-2 text-primary">Thông tin cá nhân</h6>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col">
+                                        <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
+                                            required="true"></base-input>
+                                    </div>
+                                    <div class="col">
+                                        <base-input label="Email (*)" name="email"
+                                            required="true"></base-input>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-2">
+                                        <base-input-phone label="Di động(*)" name="didong"
+                                            required="true"></base-input-phone>
+                                    </div>
+                                    <div class="col">
+                                        <base-datepicker label="Ngày sinh(*)" name="ngaysinh"
+                                            required="true"></base-datepicker>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col mt-2">
+                                        <div class="form-group">
+                                            <label-form-item name="Giới tính(*)"
+                                                required="true"></label-form-item>
+                                            <div class="flex gap-5">
+                                                <base-radio label="Nam" name="gioitinh" value="1"
+                                                    checked></base-radio>
+                                                <base-radio label="Nữ" name="gioitinh"
+                                                    value="0"></base-radio>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h6 class="mt-3 mb-2 text-primary">Công việc</h6>
+                                </div>
+                                <div class="row mt-5">
+                                    <div class="col-md-4">
+                                        <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
+                                            api="https://localhost:7141/api/NhanVien/chucDanh"
+                                            keyValue="id" keyLabel="ten"></base-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <base-select label="Phòng" name="phong"
+                                            api="https://localhost:7141/api/NhanVien/phong"
+                                            keyValue="id" keyLabel="ten"></base-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <base-select label="Tổ" name="to"
+                                            api="https://localhost:7141/api/NhanVien/to" keyValue="id"
+                                            keyLabel="ten"></base-select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <base-datepicker label="Ngày vào ban"
+                                            name="ngayvaoban"></base-datepicker>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <base-datepicker label="Ngày công tác"
+                                            name="ngaychinhthuc"></base-datepicker>
+                                    </div>
+                                    <div class="col-md-4"></div>
+                                </div>
+
+                            </form>
+
+                        </div>
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div id="profile_form_action" class="flex gap-x-5 mt-5 justify-end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+  </main>
+
+  <!--
+  MODAL
+-->
+ 
+  <!--
+  MODAL
+-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+<script src="../../assets/scripts/common/transform.js"></script>
+<script src="../../assets/scripts/common/loading.js"></script>
+<script src="../../assets/scripts/pages/staff/common.js"></script>
+<script src="../../assets/scripts/common/formHanlde.js"></script>
+<script src="../../assets/scripts/pages/staff/profile.js"></script>
+<script src="/assets/scripts/common/registerComponent.js"></script>
+<script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+<script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+<script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>

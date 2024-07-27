@@ -20,6 +20,7 @@ function handleLogOut() {
             localStorage.removeItem("vaiTroID");
             localStorage.removeItem("maDetail");
 
+
             MaNhanVien = localStorage.getItem("maNhanVien");
             vaiTroID = localStorage.getItem("vaiTroID");
 

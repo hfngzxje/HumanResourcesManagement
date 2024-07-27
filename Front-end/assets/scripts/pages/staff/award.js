@@ -1,7 +1,7 @@
 const isEdit = !!id
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
-
+const table = document.querySelectorAll('base-table')
 
 let maHopDongHienTai = null
 
@@ -11,6 +11,10 @@ var MaritalOptions = [
 ];
 
 var TableColumns = [
+    {
+        label: 'Tên',
+        key: 'ten'
+    },
     {
         label: 'Thời gian',
         key: 'ngay',
@@ -58,6 +62,7 @@ function handleCreate() {
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
         method: 'POST',
@@ -65,7 +70,12 @@ function handleCreate() {
         data: JSON.stringify(payload),
         success: function (data) {
             alert('Tạo Thành Công!');
-            backToList();
+            table.forEach(table => {
+                if (table.handleCallFetchData) {
+                    table.handleCallFetchData();
+                }
+            });
+            clearFormValues("award_form")
         },
         error: (err) => {
             console.log('err ', err);
@@ -88,18 +98,35 @@ function handleCreate() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
+function clearFormValues(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('input, textarea');
 
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else {
+            input.value = '';
+        }
+    });
+}
 function handleRemoveRow(id) {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa  khen thưởng - kỷ luật?')
     if (!isConfirm) return
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
         method: 'DELETE',
         success: function (data) {
             alert('Xóa Thành Công!');
-            backToList();
+            table.forEach(table => {
+                if (table.handleCallFetchData) {
+                    table.handleCallFetchData();
+                }
+            });
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -109,6 +136,7 @@ function handleRemoveRow(id) {
             setLoading(false)
         }
     });
+}, 1000); 
 }
 
 
@@ -141,10 +169,6 @@ function buildApiUrlKyLuat() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.replace("/pages/error.html");
-        return;
-    }
     renderActionByStatus()
 })
 

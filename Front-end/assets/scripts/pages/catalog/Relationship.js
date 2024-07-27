@@ -4,6 +4,9 @@ const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
+const table = document.querySelector('base-table')
+
+var oldValue = null;
 
 let idQuanhe = null
 
@@ -15,32 +18,30 @@ var TableColumns = [
     {
         label: 'Tên',
         key: 'ten'
+    },
+    {
+        label: 'Hành động',
+        key: 'action',
+        actions: [
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchNguoiThan(row.id);
+                    showPopup()
+                }
+            }
+        ]
     }
-    // {
-    //     label: 'Hành động',
-    //     key: 'action',
-    //     actions: [
-    //         {
-    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-    //                 isPopupEdit = true
-    //                 fetchNguoiThan(row.id);
-    //                 var modal = document.getElementById("editRelationship");
-    //                 showPopup()
-    //             }
-    //         },
-    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-    //     ]
-    // }
 ]
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
-   
+
         isPopupEdit = true
-       
+
         fetchNguoiThan(row.id)
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -62,6 +63,7 @@ function fetchNguoiThan(id) {
 
             // setFormValue('editTeam', data, 'fetch');
             setFormValue('editRelationship', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -83,65 +85,74 @@ function handleCreate() {
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchEmployee res :: ', data);
-            alert("Thêm thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchEmployee res :: ', data);
+                alert("Thêm thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 function handleRemoveRow() {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa danh người thân?')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
-        method: 'DELETE',
-        success: function (data) {
-            console.log('fetchPhongBan res :: ', data);
-            alert("Xóa thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchPhongBan err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
+            method: 'DELETE',
+            success: function (data) {
+                console.log('fetchPhongBan res :: ', data);
+                alert("Xóa thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchPhongBan err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 function handleSave() {
-        const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục quan hệ?')
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục quan hệ?')
     if (!isConfirm) return
-        const formValue = getFormValues('editRelationship')
-        const payload = buildPayload(formValue)
-        console.log('payload ', payload);
-        setLoading(true)
+    const formValue = getFormValues('editRelationship')
+    const payload = buildPayload(formValue)
+    console.log('payload ', payload);
+    setLoading(true)
+    setTimeout(() => {
         $.ajax({
             url: 'https://localhost:7141/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
             method: 'PUT',
@@ -150,7 +161,9 @@ function handleSave() {
             success: function (data) {
                 console.log('fetchLanguage res :: ', data);
                 alert('Lưu Thành Công!');
-                backToList();
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('err ', err);
@@ -171,7 +184,7 @@ function handleSave() {
                 setLoading(false)
             }
         });
-
+    }, 1000);
 }
 
 function clearFormValues() {
@@ -229,19 +242,35 @@ function showPopup() {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Quan Hệ"
         popupRemoveBtn.classList.remove('hidden')
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Quan Hệ"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
-
+function checkValues() {
+    const formValue = getFormValues('editRelationship');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
+    }
+}
+function closePopup() {
+    var modal = document.getElementById("editRelationship");
+    modal.style.display = "none"
+}
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
@@ -251,5 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    const inputTenQuanHe = document.querySelector('base-input[name="ten"]');
+    if (inputTenQuanHe) {
+        inputTenQuanHe.addEventListener('input', checkValues);
+    }
 })
 

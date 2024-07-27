@@ -3,9 +3,11 @@ const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
-
+const table = document.querySelector('base-table')
 
 let idDaoTao = null
+var oldValue = null;
+
 
 var TableColumns = [
     {
@@ -16,31 +18,29 @@ var TableColumns = [
         label: 'Tên ',
         key: 'ten'
     },
-    // {
-    //     label: 'Hành động',
-    //     key: 'action',
-    //     actions: [
-    //         {
-    //             type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
-    //                 isPopupEdit = true
-    //                 fetchKhenThuong(row.id);
-    //                 var modal = document.getElementById("editChuyenMon");
-    //                 showPopup()
-    //             }
-    //         },
-    //         { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
-    //     ]
-    // }
+    {
+        label: 'Hành động',
+        key: 'action',
+        actions: [
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchDaoTao(row.id);
+                    showPopup()
+                }
+            }
+        ]
+    }
 ]
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
-   
+
         isPopupEdit = true
-       
+
         fetchDaoTao(row.id)
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -60,6 +60,7 @@ function fetchDaoTao(id) {
         method: 'GET',
         success: function (data) {
             setFormValue('editDaoTao', data)
+            oldValue = data.ten
         },
         error: (err) => {
             console.log('fetchKhenThuong err :: ', err);
@@ -80,96 +81,108 @@ function handleCreate() {
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchKhenThuong res :: ', data);
-            alert("Thêm thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchKhenThuong res :: ', data);
+                alert("Thêm thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 function handleRemoveRow() {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục hình thức đào tạo?')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
-        method: 'DELETE',
-        success: function (data) {
-            console.log('fetchKhenThuong res :: ', data);
-            alert("Xóa thành công !")
-            backToList()
-        },
-        error: (err) => {
-            console.log('fetchKhenThuong err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
+            method: 'DELETE',
+            success: function (data) {
+                console.log('fetchKhenThuong res :: ', data);
+                alert("Xóa thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchKhenThuong err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục hình thức đào tạo?')
     if (!isConfirm) return
     const valid = validateForm('editDaoTao')
-    if(!valid) return
+    if (!valid) return
     const formValue = getFormValues('editDaoTao')
     formValue['id'] = idDaoTao
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao',
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchKhenThuong res :: ', data);
-            alert('Lưu Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchKhenThuong res :: ', data);
+                alert('Lưu Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 function clearFormValues() {
@@ -213,7 +226,7 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            setFormValue('editDaoTao', {ten: "" })
+            setFormValue('editDaoTao', { ten: "" })
         }
     }
 
@@ -223,19 +236,35 @@ function showPopup() {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Hình Thức Đào Tạo"
         popupRemoveBtn.classList.remove('hidden')
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled','');
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Hình Thức Đào Tạo"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
-
+function checkValues() {
+    const formValue = getFormValues('editDaoTao');
+    const newValue = formValue.ten;
+    console.log("oldValue: ", oldValue, "newValue: ", newValue);
+    if (oldValue === newValue) {
+        popupSaveBtn.setAttribute('disabled','');
+        console.log(popupSaveBtn)
+    } else {
+        popupSaveBtn.removeAttribute('disabled') ; 
+        console.log(popupSaveBtn)
+    }
+}
+function closePopup() {
+    var modal = document.getElementById("editDaoTao");
+    modal.style.display = "none"
+}
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
@@ -245,5 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+    
+    const inputTenHinhThucDaoTao = document.querySelector('base-input[name="ten"]');
+    if (inputTenHinhThucDaoTao) {
+        inputTenHinhThucDaoTao.addEventListener('input', checkValues);
+    }
 })
 
