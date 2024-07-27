@@ -37,12 +37,8 @@ var TableColumns = [
       key: 'ten',
     },
     {
-      label: 'Ảnh thẻ',
-      key: 'phong',
-    },
-    {
       label: 'Địa chỉ',
-      key: 'diachi',
+      key: 'thuongtru',
     },
     {
       label: 'Ngày sinh',
