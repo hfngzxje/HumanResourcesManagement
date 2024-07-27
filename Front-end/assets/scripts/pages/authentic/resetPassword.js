@@ -1,6 +1,9 @@
 
-
+var matKhauMoi = document.getElementById("matKhauMoi-field")
+var xacNhanMatKhauMoi = document.getElementById("xacNhanMatKhauMoi-field")
+var layMatKhauBtn = document.getElementById("submit")
 var token = null;
+
 function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
@@ -15,7 +18,6 @@ function handleReset() {
 
     payload['token'] = token;
     console.log("payload: " , payload)
-    setLoading(true)
     $.ajax({
         url: 'https://localhost:7141/api/DangNhap/reset-password',
         method: 'POST',
@@ -52,44 +54,24 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('reset_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
-        return btnEl
-    }
-    const loginBtn = buildButton('Reset', 'green', 'bx bx-plus')
-
-    loginBtn.addEventListener('click', handleReset)
-
-
-    actionEl.append(loginBtn)
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+   layMatKhauBtn.addEventListener("click", handleReset)
     const url = new URL(window.location.href);
-    
-    // Tạo đối tượng URLSearchParams từ URL
     const params = new URLSearchParams(url.search);
     
-    // Lấy giá trị của tham số 'token'
     const tokenURL = params.get('token');
      console.log("Token: " , tokenURL)
-    token = tokenURL
-    // if (tokenURL) {
-    //     // Lưu token vào cookie (có thể sử dụng HttpOnly và Secure nếu cần)
-    //     document.cookie = `AuthToken=${token}; path=/; secure; samesite=strict`;
+    
+    if (tokenURL) {
+        // Lưu token vào cookie (có thể sử dụng HttpOnly và Secure nếu cần)
+        document.cookie = `AuthToken=${tokenURL}; path=/; secure; samesite=strict`;
         
-    //     // Xóa token khỏi URL
-    //     window.history.replaceState({}, document.title, window.location.pathname);
+        // Xóa token khỏi URL
+        window.history.replaceState({}, document.title, window.location.pathname);
         
-    //     // Sử dụng token (nếu cần)
-    //     console.log("Token stored in cookie.");
-    // }
-    // token = getCookie('AuthToken');
-    // console.log("Token from cookie: ", token);
+        // Sử dụng token (nếu cần)
+        console.log("Token stored in cookie.");
+    }
+    token = getCookie('AuthToken');
+    console.log("Token from cookie: ", token);
 })

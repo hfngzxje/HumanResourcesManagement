@@ -29,16 +29,15 @@
             <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
             <div class="flex-1 bg-gray-200 p-3 overflow-auto">
                 <div class="h-fit w-full bg-white rounded-lg p-3">
-                    
-                    <!-- Nội dung form theo từng màn hình -->
                     <div class="mt-3">
                         <form id="relationship_form" class="flex gap-x-5">
                             <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-5">
-                                <!-- <base-input class="col-span-2" label="Mã Số (*)" name="ma"></base-input> -->
-                                <base-input label="Họ và tên (*)" name="ten"required="true"></base-input> <br>
-                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten" api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
-                                <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"required="true"></base-input>
-                             
+                                <base-input label="Họ và tên (*)" name="ten" required="true"></base-input> <br>
+                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten"
+                                    api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
+                                <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"
+                                    required="true"></base-input>
+
 
                             </div>
                             <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5">
@@ -51,31 +50,86 @@
                                                 <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
                                             </div>
                                         </div>
-                                        <base-datepicker class="ml-auto" label="Năm sinh(*)"
-                                            name="ngaysinh"required="true"></base-datepicker> <!-- Thêm lớp ml-auto -->
+                                        <base-datepicker class="ml-auto" label="Năm sinh(*)" name="ngaysinh"
+                                            required="true"></base-datepicker>
                                     </div>
-                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)"
-                                        name="nghenghiep"required="true"></base-input>
-                                    <base-input-phone label="Số điện thoại" name="dienthoai"required="true"></base-input-phone>
+                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)" name="nghenghiep"
+                                        required="true"></base-input>
+                                    <base-input-phone label="Số điện thoại" name="dienthoai"
+                                        required="true"></base-input-phone>
                                 </div>
                             </div>
-                            <base-textarea label="Ghi chú" name="khac"></base-textarea>
+                            <base-textarea label="Ghi chú" name="khac" row="9.9"></base-textarea>
+
+
                         </form>
                         <div id="relationship_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                     </div>
-                    
                 </div>
-                <div class="flex justify-between" style="color: blue; margin-top: 5%;">
+                <div class="flex justify-between" style="color: blue; margin-top: 2%; ">
                     <p class="text-xl">Danh sách người thân</p>
                 </div>
                 <div class="mt-3">
-                    <base-table 
-                        api="buildApiUrl"
-                        columns="TableColumns"
-                        event="tableEvent"
-                    >
+                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
                     </base-table>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editFamily">
+        <div class="change-container"
+            style="max-width: 900px; width: 100%; margin: 200px auto; padding: 10px; background-color: #f0f0f0;">
+            <span class="close">&times;</span>
+            <form>
+                <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Sửa quan hệ gia đình
+                    </h2>
+                </div>
+                
+                <div class="p-4">
+                    <div class="grid gap-4 mb-4 grid-cols-2">
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
+                                required="true"></base-input>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 ">
+                            <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten"
+                                api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-datepicker class="ml-auto" label="Năm sinh(*)" name="ngaysinh"
+                                required="true"></base-datepicker>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 mt-2 ">
+                            <label-form-item name="Giới tính(*)"></label-form-item>
+                            <div class="flex gap-5">
+                                <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
+                                <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                            </div>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input class="col-span-2" label="Nghề Nghiệp (*)" name="nghenghiep"
+                                required="true"></base-input>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 mt-2 ">
+                            <base-input-phone label="Số điện thoại" name="dienthoai" required="true"></base-input-phone>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-input class="col-span-2" label="Địa chỉ (*)" name="diachi"
+                                required="true"></base-input>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-textarea label="Ghi chú" name="khac" row="5"></base-textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="flex gap-x-5 mt-5 justify-center">
+                <base-button id="updateBtn" label="Cập nhật" icon="bx bx-save" type="green"></base-button>
+                <base-button id="deleteBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
             </div>
         </div>
     </div>

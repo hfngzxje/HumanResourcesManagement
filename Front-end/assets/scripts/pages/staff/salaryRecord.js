@@ -1,7 +1,9 @@
 let idLuongHienTai = null
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
-
+const table = document.querySelector('base-table')
+const popupRemoveBtn = document.getElementById("deleteBtn")
+const popupSaveBtn = document.getElementById("updateBtn")
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -74,7 +76,13 @@ var TableColumns = [
         label: 'Hành động',
         key: 'action',
         actions: [
-            { type: 'red', icon: 'bx bx-trash', label: 'Xóa', onClick: (row) => { handleRemoveRow(row.id) } }
+            {
+                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                    isPopupEdit = true
+                    fetchSalaryToEdit(row.id)
+                    showPopup()
+                }
+            }
         ]
     }
 ]
@@ -99,7 +107,20 @@ function buildPayload(formValue) {
 
     return formClone
 }
-
+function showPopup() {
+    var modal = document.getElementById("editSalaryRecord");
+    modal.style.display = "block";
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            clearFormValues("editSalaryRecord");
+        }
+    }
+}
+function closePopup() {
+    var modal = document.getElementById("editSalaryRecord");
+    modal.style.display = "none"
+}
 function fetchSalaryToEdit(id) {
     setLoading(true)
     idLuongHienTai = id
@@ -108,7 +129,7 @@ function fetchSalaryToEdit(id) {
         url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('salaryRecord_form', data)
+            setFormValue('editSalaryRecord', data)
         },
         error: (err) => {
             console.log('fetchSalary err :: ', err);
@@ -144,34 +165,37 @@ async function handleCreate() {
 
     const payload = buildPayload(formValue)
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            alert('Tạo Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                alert('Tạo Thành Công!');
+                table.handleCallFetchData();
+                clearFormValues("salaryRecord_form")
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo mới không thành công!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+        });
+    }, 1000);
 }
 
 async function fetchContractCodeStatus(mahopdong) {
@@ -186,50 +210,54 @@ function handleRemove() {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
     if (!isConfirm) return
     setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
+            method: 'DELETE',
+            success: function (data) {
+                alert('Xóa Thành Công!');
+                closePopup();
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('fetchContract err :: ', err);
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
-    if (!isConfirm) return
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            backToList();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
+// function handleRemoveRow(id) {
+//     const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
+//     if (!isConfirm) return
+//     setLoading(true)
+//     $.ajax({
+//         url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
+//         method: 'DELETE',
+//         success: function (data) {
+//             alert('Xóa Thành Công!');
+//             backToList();
+//         },
+//         error: (err) => {
+//             console.log('fetchContract err :: ', err);
+//             alert("Xóa thất bại!")
+//         },
+//         complete: () => {
+//             setLoading(false)
+//         }
+//     });
+// }
 
 function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
     if (!isConfirm) return
-    const formValue = getFormValues('salaryRecord_form')
+    const formValue = getFormValues('editSalaryRecord')
     const payload = buildPayload(formValue)
     setLoading(true)
+    setTimeout(() => {
     $.ajax({
         url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
         method: 'PUT',
@@ -238,7 +266,8 @@ function handleSave() {
         success: function (data) {
             console.log('fetchContract res :: ', data);
             alert('Lưu Thành Công!');
-            backToList();
+            closePopup();
+            table.handleCallFetchData();
         },
         error: (err) => {
             console.log('err ', err);
@@ -259,6 +288,7 @@ function handleSave() {
             setLoading(false)
         }
     });
+}, 1000); 
 }
 
 async function fetchSalary() {
@@ -337,16 +367,14 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
-    saveBtn.addEventListener('click', handleSave)
-    clear.addEventListener('click', function() {
+    clear.addEventListener('click', function () {
         clearFormValues('salaryRecord_form');
     });
 
-    actionEl.append(createBtn, saveBtn,clear)
+    actionEl.append(createBtn, clear)
 }
 
 function buildApiHopDong() {
@@ -360,10 +388,8 @@ function buildApiUrl() {
     return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 document.addEventListener('DOMContentLoaded', () => {
-    if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return;
-    }
     renderActionByStatus()
+    popupRemoveBtn.addEventListener("click", handleRemove)
+    popupSaveBtn.addEventListener("click", handleSave)
 })
 

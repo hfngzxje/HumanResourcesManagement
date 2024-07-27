@@ -13,12 +13,6 @@ var TableColumns = [
         key: 'chucdanh'
     },
     {
-        label: 'Lương Cơ Bản',
-        key: 'luongcoban',
-         type: 'currency',
-         formatter: (giatri) => giatri + ' VNĐ'
-    },
-    {
         label: 'Hợp Đồng Từ Ngày',
         key: 'hopdongtungay',
         type: 'datetime'

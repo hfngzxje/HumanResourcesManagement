@@ -1,46 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sơ yếu lý lịch | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../assets/styles/common/common.css" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <title>Danh sách nhân viên</title>
-    <script>
-        // Đặt đoạn mã kiểm tra vào đây
-        (function() {
-            if (!localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/authentic/login.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
-            }
-            const vaiTroID = localStorage.getItem('vaiTroId');
-            if (vaiTroID !== "1") {
-                window.location.href = "/pages/error.html";
-                return; // Chuyển hướng nếu vai trò không phải là 1
-            }
-        })();
-    </script>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+    
 </head>
 
-<body class="text-gray-600">
-    <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                <div class="h-fit w-full bg-white rounded-lg p-3">
+<body onload="time()" class="app sidebar-mini rtl">
+  <!-- Navbar-->
+  <layout-header></layout-header>
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <layout-sidebar></layout-sidebar>
+  <main class="app-content">
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+    </div>
+    <div class="app-title mt-3">
+      <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item active"><a href="#"><b>Sơ yếu lý lịch</b></a></li>
+      </ul>
+      <div id="clock"></div>
+    </div>
 
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <div class="tile-body">
 
-                    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
-                        <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
-                    </div>
-
-                    <!-- Nội dung form theo từng màn hình -->
-                    <div class="flex mt-3">
+            <div class="flex mt-3">
 
                         <div id="div1" class="w-1/6 bg-gray-100 rounded-lg p-3 mr-3 h-screen" style="max-width: 300px;">
                             <form id="a">
@@ -141,9 +140,10 @@
                                         required="true"></base-input>
                                     <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
                                         required="true"></base-input>
-                                    <div class="col-span-2 flex flex-col gap-y-2">
                                         <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
-                                            options="MaritalOptions" required="true"></base-select>
+                                        options="MaritalOptions" required="true"></base-select>
+                                    <div class="col-span-2 flex flex-col gap-y-2">
+                                       
                                         <div class="flex gap-x-2">
                                             <base-input label="Nghề nghiệp" name="nghenghiep"
                                                 class="flex-1"></base-input>
@@ -178,7 +178,7 @@
                                         <div class="col-span-2 flex items-center gap-x-5">
                                             <base-checkbox label="Là thương binh hạng" class="!mb-0"
                                                 name="lathuongbinh"></base-checkbox>
-                                            <base-input class="flex-1" hide-label="true" name="thuongbinh"></base-input>
+                                            <base-input  class="flex-1" hide-label="true" name="thuongbinh"></base-input>
                                         </div>
                                     </div>
 
@@ -220,7 +220,7 @@
                                         name="coquantuyendung"></base-input>
                                     <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
                                         api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
-                                        keyLabel="ten" style="margin-top: 7px;"></base-select>
+                                        keyLabel="ten" ></base-select>
 
 
                                     <!-- <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker> -->
@@ -272,24 +272,35 @@
 
                                 </div>
                             </form>
-
                             <div id="resume_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
                         </div>
                     </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </main>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-    <script src="../../assets/scripts/common/transform.js"></script>
-    <script src="../../assets/scripts/common/loading.js"></script>
-    <script src="../../assets/scripts/pages/staff/common.js"></script>
-    <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/resume.js"></script>
-    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
-    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+  <!--
+  MODAL
+-->
+ 
+  <!--
+  MODAL
+-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+<script src="../../assets/scripts/common/transform.js"></script>
+<script src="../../assets/scripts/common/loading.js"></script>
+<script src="../../assets/scripts/pages/staff/common.js"></script>
+<script src="../../assets/scripts/common/formHanlde.js"></script>
+<script src="../../assets/scripts/pages/staff/resume.js"></script>
+<script src="/assets/scripts/common/registerComponent.js"></script>
+<script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+<script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+<script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>
