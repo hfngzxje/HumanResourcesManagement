@@ -2,76 +2,100 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh mục | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
     <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
-    <script src="../../assets/scripts/common/registerComponent.js"></script>
-    <script>
-        // Đặt đoạn mã kiểm tra vào đây
-        (function() {
-            if (!localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/authentic/login.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
-            }
-            const vaiTroID = localStorage.getItem('vaiTroId');
-            if (vaiTroID !== "1") {
-                window.location.href = "/pages/error.html";
-                return; // Chuyển hướng nếu vai trò không phải là 1
-            }
-        })();
-    </script>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- Font-icon css-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
 </head>
 
-<body>
-    <div class="h-screen w-screen flex flex-col overflow-auto">
-        <layout-header></layout-header>
-        <div class="flex flex-1 overflow-auto">
-            <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-            <div class="container">
-                <div class="flex justify-center mt-6">
-                    <div class="relative w-full max-w-md">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <i class="bx bx-search"></i>
+<body onload="time()" class="app sidebar-mini rtl">
+    <!-- Navbar-->
+    <layout-header></layout-header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <layout-sidebar></layout-sidebar>
+    <main class="app-content">
+        <div class="app-title">
+            <ul class="app-breadcrumb breadcrumb side">
+                <li class="breadcrumb-item active"><a href="#"><b>Danh mục</b></a></li>
+            </ul>
+            <div id="clock"></div>
+        </div>
+        <div class="h-screen w-screen flex flex-col overflow-auto">
+            <layout-header></layout-header>
+            <div class="flex flex-1 overflow-auto">
+                <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
+                <div class="container ml-6">
+                    <div class="flex justify-center mt-6">
+                        <div class="relative w-full max-w-md">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-1 pointer-events-none">
+                                <i class="bx bx-search"></i>
+                            </div>
+                            <input type="text" id="search-input"
+                                class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search..." />
                         </div>
-                        <input type="text" id="search-input"
-                            class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Search..." />
                     </div>
-                </div>
-                <br> <br> <br>
-                <div class="categories">
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/Nations.html')">Danh mục Dân tộc</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/position.html')">Danh mục Chức danh</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/specializations.html')">Danh mục chuyên môn</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/qualifications.html')">Danh mục trình độ</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/foreignLanguages.html')">Danh mục ngoại ngữ</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/teams.html')">Danh mục tổ</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/religions.html')">Danh mục tôn giáo</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/awardsAndDisciplinaryActions.html')">Danh mục khen thưởng - kỷ luật</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/departments.html')">Danh mục phòng ban</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/TypeOfContract.html')">Danh mục loại hợp đồng</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/SalaryGroup.html')">Danh mục nhóm lương</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/FormOfTraining.html')">Danh mục hình thức đào tạo</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/CivilServantRank.html')">Danh mục ngạch công chức</div>
-                    <div class="category-item" onclick="navigateTo('/pages/catalog/Relationship.html')">Danh mục quan hệ</div>
-                    <!-- Thêm danh mục khác tại đây nếu cần -->
+                    <br> <br> <br>
+                    <div class="categories">
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/Nations.html')">Danh mục Dân tộc
+                        </div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/position.html')">Danh mục Chức
+                            danh</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/specializations.html')">Danh mục
+                            chuyên môn</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/qualifications.html')">Danh mục
+                            trình độ</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/foreignLanguages.html')">Danh mục
+                            ngoại ngữ</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/teams.html')">Danh mục tổ</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/religions.html')">Danh mục tôn
+                            giáo</div>
+                        <div class="category-item"
+                            onclick="navigateTo('/pages/catalog/awardsAndDisciplinaryActions.html')">Danh mục khen
+                            thưởng - kỷ luật</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/departments.html')">Danh mục
+                            phòng ban</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/TypeOfContract.html')">Danh mục
+                            loại hợp đồng</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/SalaryGroup.html')">Danh mục nhóm
+                            lương</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/FormOfTraining.html')">Danh mục
+                            hình thức đào tạo</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/CivilServantRank.html')">Danh mục
+                            ngạch công chức</div>
+                        <div class="category-item" onclick="navigateTo('/pages/catalog/Relationship.html')">Danh mục
+                            quan hệ</div>
+                        <!-- Thêm danh mục khác tại đây nếu cần -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
+    </main>
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
     <script src="../../assets/scripts/common/transform.js"></script>
     <script src="../../assets/scripts/common/loading.js"></script>
+    <!-- <script src="../../assets/scripts/pages/staff/common.js"></script> -->
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/catalog/catalog.js"></script>
+    <script src="/assets/scripts/common/registerComponent.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>

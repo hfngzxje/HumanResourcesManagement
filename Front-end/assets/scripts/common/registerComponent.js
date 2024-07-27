@@ -1,16 +1,26 @@
 class CustomHeader extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-    <header class="bg-gray-700 p-3 flex">
-      <div class="flex items-center text-white w-[300px]">
-        <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
-        <span id="hrmLink" class="ml-3 text-xl font-bold">
-          <a href="/pages/staff/list.html">HRM</a>
-        </span>
-      </div>
-    </header>
+     <header class="app-header">
+    <!-- Sidebar toggle button-->
+          <span id="hrmLink" class="ml-3 text-xl font-bold">
+            <a href="/pages/staff/list.html"><b style="color:white;">HRM  </b><a/>
+          </span>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+      <!-- User Menu-->
+      <li><a id="logOut" class="app-nav__item" ><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+      </li>
+    </ul>
+  </header>
       `;
-    const hrmLink = this.querySelector("#hrmLink");
+
+      const hrmLink = this.querySelector("#hrmLink");
+      hrmLink.style.setProperty('margin-left', '250px', 'important');
+      hrmLink.style.setProperty('margin-top', '12px', 'important');
 
     // Thêm sự kiện click vào span HRM
     hrmLink.addEventListener("click", () => {
@@ -23,167 +33,89 @@ class CustomHeader extends HTMLElement {
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-        <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
-    <div class="p-3 flex items-center border-b border-gray-300">
-      <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
-      <div class="ml-3">
-        <p class="text-lg text-gray-700" id="tenNhanVien">Nguyễn Sinh Duy</p>
-        <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700" id="vaiTro">Admin</span>
+        <aside class="app-sidebar">
+    <div class="app-sidebar__user"><img id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px"
+        alt="User Image">
+      <div>
+        <p class="app-sidebar__user-name"><b>Nguyễn Sinh Duy</b></p>
+        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
       </div>
     </div>
-    <div class="border-b border-gray-300  pt-10 ">
-      <a href="/pages/staffSideBar/listLaborContract.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-file'></i>
-          </span>
-          <span> Hợp đồng </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
-          </span>
-          <span> Điều chuyển </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
-          </span>
-          <span> Khen thưởng </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-shield'></i> <!-- Kỷ luật -->
-          </span>
-          <span> Kỷ luật </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-category-alt'></i>
-          </span>
-          <span> Danh mục </span>
-        </div>
-      </a>
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu4">
-        <span class="w-10">
-          <i class='bx bxs-report'></i>
-        </span>
-        <a href="/pages/staffSideBar/report.html">
-          <span> Báo cáo </span>
-        </a>
-        <div
-          class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
-          id="submenu4">
-        
-        </div>
-      </div>
-    </div>
-    <a href="/pages/employee/overview.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-group text-lg'></i>
-        </span>
-        <span> Chuyển trang nhân viên </span>
-      </div>
-    </a>
-    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu1">
-      <span class="w-10">
-        <i class='bx bxs-badge-dollar'></i>
-      </span>
-      <span> Hệ thống </span>
-      <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
-        <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
-      </div>
-    </div>
-  </div>
+    <hr>
+    <ul class="app-menu">
+      <li><a class="app-menu__item" href="/pages/staff/index.html"><i class='app-menu__icon bx bx-tachometer'></i><span
+            class="app-menu__label">Bảng điều khiển</span></a></li>
+      <li><a class="app-menu__item" href="/pages/staff/list.html"><i class='app-menu__icon bx bx-id-card'></i> <span
+            class="app-menu__label">Quản lý nhân viên</span></a></li>
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i class='app-menu__icon bx bx-file'></i><span
+            class="app-menu__label">Quản lý hợp đồng</span></a></li>
+      <li><a class="app-menu__item" href="table-data-product.html"><i
+            class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Quản lý điều chuyển</span></a>
+      </li>
+      <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-trophy'></i><span
+            class="app-menu__label">Quản lý khen thưởng</span></a></li>
+      <li><a class="app-menu__item" href="table-data-banned.html"><i class='app-menu__icon bx bx-shield'></i><span
+            class="app-menu__label">Quản lý kỷ luật</span></a></li>
+      <li><a class="app-menu__item" href="/pages/catalog/catalog.html"><i class='app-menu__icon bx bx-category-alt'></i><span
+            class="app-menu__label">Danh mục</span></a></li>
+      <li><a class="app-menu__item" href="/pages/staffSideBar/report.html"><i
+            class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo </span></a>
+      </li>
+      <li><a class="app-menu__item" href="page-calendar.html"><i class='app-menu__icon bx bx-user'></i><span
+            class="app-menu__label">Chi tiết cá nhân </span></a></li>
+      <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
+    </ul>
+  </aside>
 
-  <div id="myModal" class="modal" style="z-index: 100;">
-    <div class="change-container">
-      <span class="close">&times;</span>
-      <form id="change_form">
-        <div class="form-header">
-          <h2>Đổi Mật Khẩu</h2>
-        </div>
-
-        <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
-        <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-        <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
-      </form>
-      <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-    </div>
-  </div>
-
+   <div id="myModal" class="modal" style="z-index: 100;">
+            <div class="change-container">
+             <span class="close">&times;</span>
+              <form id="change_form">
+                  <div class="form-header">
+                     <h2>Đổi Mật Khẩu</h2>
+                  </div>
+                
+                <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+             </form>
+            <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+           </div>
+          </div>
         `;
+        const avatarSrc = localStorage.getItem('userAvatar');
+        if (avatarSrc) {
+          this.querySelector('#userAvatar').src ='data:image/png;base64, '+ avatarSrc;
+        }
+    
+    this.updateActiveLink();
+    this.addEventListeners();
+  }
 
-    var tenNhanVien = localStorage.getItem('tenNhanVien');
-    if (tenNhanVien) {
-      // Tìm phần tử <p> và thay đổi nội dung của nó
-      var pElement = document.querySelector('p#tenNhanVien');
-      if (pElement) {
-          pElement.textContent = tenNhanVien;
+  updateActiveLink() {
+    const currentPath = window.location.pathname;
+    const menuItems = this.querySelectorAll('.app-menu__item');
+    
+    menuItems.forEach(item => {
+      item.classList.remove('active');
+      const linkPath = item.getAttribute('href');
+      if (currentPath.includes(linkPath)) {
+        item.classList.add('active');
       }
-  }
-
-  var vaiTro = localStorage.getItem('vaiTroId')
-  var textVaiTro = document.querySelector(' span#vaiTro');
-  if(vaiTro === '1'){
-    textVaiTro.textContent = "Admin"
-  }
-  else{
-    textVaiTro.textContent = "Employee"
-  }
-    const menuItem = this.querySelector("#menu1");
-    const subMenu = this.querySelector("#submenu1");
-
-    menuItem.addEventListener("mouseenter", function () {
-      subMenu.classList.remove("hidden");
     });
-
-    menuItem.addEventListener("mouseleave", function () {
-      subMenu.classList.add("hidden");
-    });
-
-    // const menuItem3 = this.querySelector("#menu3");
-    // const subMenu3 = this.querySelector("#submenu3");
-
-    // menuItem3.addEventListener("mouseenter", function () {
-    //   subMenu3.classList.remove("hidden");
-    // });
-
-    // menuItem3.addEventListener("mouseleave", function () {
-    //   subMenu3.classList.add("hidden");
-    // });
-    // const menuItem4 = this.querySelector("#menu4");
-    // const subMenu4 = this.querySelector("#submenu4");
-    // const menu4Child = this.querySelector("#menu-child4");
-    // const submenu4Child = this.querySelector("#submenu4-child");
-
-    // menuItem4.addEventListener("mouseenter", function () {
-    //   subMenu4.classList.remove("hidden");
-    // });
-
-    // menuItem4.addEventListener("mouseleave", function () {
-    //   subMenu4.classList.add("hidden");
-    // });
-
-    // menu4Child.addEventListener("mouseenter", function () {
-    //   submenu4Child.classList.remove("hidden");
-    // });
-
-    // menu4Child.addEventListener("mouseleave", function () {
-    //   submenu4Child.classList.add("hidden");
-    // });
   }
-}
+
+  addEventListeners() {
+    const menuItems = this.querySelectorAll('.app-menu__item');
+    
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  }
+}   
 class BaseInput extends HTMLElement {
   static observedAttributes = [
     "label",
@@ -203,10 +135,10 @@ class BaseInput extends HTMLElement {
 
     this.innerHTML = `
     <div>
-      <label for="base-input" class="block  text-sm font-medium text-gray-900 ${
+      <label for="base-input" class="block  text-sm  text-gray-900 ${
         hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-      <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
     </div>
     `;
   }
@@ -229,10 +161,10 @@ class BaseTextArea extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full">
-    <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
+    <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${
       hideLabel ? "" : "hidden"
     }">${label}</label>
-      <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+      <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-ffffff border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
   }
@@ -247,15 +179,15 @@ class BaseDatePicker extends HTMLElement {
     const required = this.getAttribute("required");
 
     this.innerHTML = `
-    <div>
-      <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
+    <div class="flex flex-col h-full w-full">
+      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
       <div class="relative max-w-sm">
         <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
           <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
         </div>
-        <input datepicker type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+        <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
       </div>
     </div>
     `;
@@ -272,8 +204,8 @@ class BaseInputPhone extends HTMLElement {
 
     this.innerHTML = `
     <div class="">
-      <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
-      <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
+      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+      <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
     </div>
     `;
   }
@@ -302,8 +234,8 @@ class BaseInputNumber extends HTMLElement {
 
     this.innerHTML = `
     <div class="">
-      <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
       this._readonly ? "readonly" : ""
     }>
     </div>
@@ -355,7 +287,7 @@ class BaseRadio extends HTMLElement {
       <input type="radio" value="${value}" name="${name}" ${
       checked !== null ? "checked" : ""
     } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
-      <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
+      <label for="default-radio-1" class="ms-2 text-sm  text-gray-900 ">${label}</label>
     </div>
     `;
   }
@@ -368,7 +300,7 @@ class LabelFormItem extends HTMLElement {
     const name = this.getAttribute("name") || "Base input";
 
     this.innerHTML = `
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${name}</label>
+      <label for="base-input" class="block mb-2 text-sm  text-gray-900">${name}</label>
     `;
   }
 }
@@ -427,9 +359,9 @@ class BaseSelect extends HTMLElement {
     });
 
     this.innerHTML = `
-    <div class="max-w-sm mx-auto" style="margin: 0;">
-      <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-      <select name="${name}" required="${required}" class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+    <div class="max-w-sm" style="margin: 0;">
+      <label class="block mb-2 text-sm  text-gray-900">${label}</label>
+      <select name="${name}" required="${required}" class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
@@ -447,7 +379,7 @@ class BaseCheckbox extends HTMLElement {
     this.innerHTML = `
     <div class="flex items-center mb-4 ${contentClass}">
         <input type="checkbox" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-        <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900">${label}</label>
+        <label for="default-checkbox" class="ms-2 text-sm  text-gray-900">${label}</label>
     </div>
     `;
   }
@@ -464,11 +396,11 @@ class BaseUpload extends HTMLElement {
 
     this.innerHTML = `
      <div class="flex items-center justify-center w-full h-full">
-    <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-gray-50 relative overflow-hidden">
+    <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-ffffff relative overflow-hidden">
         <img 
             id="${idImage}"
             src="" 
-            class="absolute h-full w-full object-cover rounded-full opacity-0 bg-gray-50"
+            class="absolute h-full w-full object-cover rounded-full opacity-0 bg-ffffff"
         />
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
             <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -516,7 +448,7 @@ class BaseButton extends HTMLElement {
     const id = this.getAttribute("id");
     const disabled = this.hasAttribute("disabled");
 
-    let commonClasses = "focus:outline-none font-medium rounded-lg text-sm";
+    let commonClasses = "focus:outline-none  rounded-lg text-sm";
 
     if (mini) {
       commonClasses += " py-1 px-2";
@@ -531,7 +463,7 @@ class BaseButton extends HTMLElement {
         "text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300",
       red: "text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300",
       plain:
-        "text-sm font-medium text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
+        "text-sm  text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
     };
 
     const contentClass = BtnClass[type] || BtnClass.primary;
@@ -929,7 +861,7 @@ class BaseTable extends HTMLElement {
     this.innerHTML = `
     <div id="wrapper-table" class="relative overflow-x-auto bg-gray-100">
       <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50"></thead>
+        <thead class=" text-gray-700 uppercase bg-ffffff"></thead>
         <tbody></tbody>
       </table>
       <div class="pagination flex items-center justify-center -space-x-px h-8 mt-3 gap-2"></div>

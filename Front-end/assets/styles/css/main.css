@@ -45,7 +45,11 @@
 	padding: var(--padding_0); 
 	box-sizing: border-box;
 }
-
+body, html {
+	height: var(--onehundred_percent);
+  font-family: var(--font_family);
+  background: var(--white_bg);
+}
 /*---------------------------------------------*/
 a {
  font-family: var(--font_family);
@@ -74,10 +78,10 @@ ul, li {
 	list-style-type: var(--none);
 }
 /*---------------------------------------------*/
-/* input {
+input {
 	outline: var(--none);
 	border: var(--none);
-} */
+}
 textarea:focus, input:focus {
   border-color: var(--transparent) !important;
 }

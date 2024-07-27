@@ -1,4 +1,4 @@
-const isEdit = !!id
+
 let Eid = null;
 let temp = false
 let isPopupEdit = false

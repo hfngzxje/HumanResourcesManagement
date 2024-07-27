@@ -13,7 +13,7 @@ function buildPayload(formValue) {
 }
 function handleLoginSuccess(vaitroID) {
     if (vaitroID === 1) {
-        window.location.replace("/pages/staff/list.html");
+        window.location.replace("/pages/staff/index.html");
     } else {
         window.location.replace("/pages/employee/overview.html");
     }
@@ -37,11 +37,12 @@ function Login() {
             localStorage.setItem("maNhanVien", maNhanVien);
             const vaitroID = data.nhanVien.vaiTroId
             const tenNhanVien = data.nhanVien.ten
-
+            const anh = data.nhanVien.anh
 
             if (vaitroID !== undefined) {
                 localStorage.setItem("vaiTroId", vaitroID);
                 localStorage.setItem("tenNhanVien", tenNhanVien)
+                localStorage.setItem("userAvatar", anh)
                 handleLoginSuccess(vaitroID)
                 alert("Đăng Nhập Thành Công")
 

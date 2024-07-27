@@ -2,36 +2,38 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Báo cáo diện chính sách | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../../assets/styles/common/common.css" />
   <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-  <link rel="stylesheet" href="../../assets/styles/pages/staffSideBar/common.css" />
-  <script src="../../assets/scripts/common/registerComponent.js"></script>
-  <title>Danh sách nhân viên</title>
-  <script>
-    // Đặt đoạn mã kiểm tra vào đây
-    (function () {
-      if (!localStorage.getItem('maNhanVien')) {
-        window.location.href = '/pages/authentic/login.html';
-        return; // Chuyển hướng nếu không có mã nhân viên
-      }
-      const vaiTroID = localStorage.getItem('vaiTroId');
-      if (vaiTroID !== "1") {
-        window.location.href = "/pages/error.html";
-        return; // Chuyển hướng nếu vai trò không phải là 1
-      }
-    })();
-  </script>
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/staffSideBar/common.css">
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- Font-icon css-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+  <script src="/assets/scripts/common/registerComponent.js"></script>
 </head>
 
-<body class="text-gray-600">
-  <div class="h-screen w-screen flex flex-col overflow-auto">
+<body onload="time()" class="app sidebar-mini rtl">
+  
+    <!-- Navbar-->
     <layout-header></layout-header>
-    <div class="flex flex-1 overflow-auto">
-      <layout-sidebar class="zIndexSideBar"></layout-sidebar>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <layout-sidebar></layout-sidebar>
+    <main class="app-content">
+
+      <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item active"><a href="#"><b>Báo cáo diện chính sách</b></a></li>
+        </ul>
+        <div id="clock"></div>
+      </div>
+
       <div class="container">
         <div class="right">
 
@@ -54,9 +56,9 @@
                   </base-select>
                   <base-select label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten"
                     api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
-                  <base-datepicker class="ml-auto" style="margin: 0" label="Từ ngày" name=""
+                  <base-datepicker class="mt-2" style="margin: 0" label="Từ ngày" name=""
                     required="true"></base-datepicker>
-                  <base-datepicker class="ml-auto" style="margin: 0" label="Đến ngày" name=""
+                  <base-datepicker class="mt-2" style="margin: 0" label="Đến ngày" name=""
                     required="true"></base-datepicker>
                   <base-select label="Giới tính" options="gioiTinh" required="true"
                     style="margin-top: 9px"></base-select>
@@ -83,8 +85,11 @@
           </div>
         </div>
       </div>
+
     </div>
-  </div>
+  </main>
+
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
@@ -95,6 +100,7 @@
   <script src="../../assets/scripts/pages/staffSideBar/reportDifficultHouseholds.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+  <script src="/assets/scripts/common/dateTime.js"></script>
 </body>
 
 </html>
