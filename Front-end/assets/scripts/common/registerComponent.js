@@ -11,7 +11,7 @@ class CustomHeader extends HTMLElement {
 
 
       <!-- User Menu-->
-      <li><a id="logOut" class="app-nav__item" ><i class='bx bx-log-out bx-rotate-180'></i> </a>
+      <li><a id="logOut" class="app-nav__item" style="cursor: pointer;" ><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
       </li>
     </ul>
@@ -34,10 +34,11 @@ class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
         <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px"
+    <div class="app-sidebar__user" style="display: flex; align-items: center; flex-direction: column;"><img id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px"
         alt="User Image">
       <div>
-        <p class="app-sidebar__user-name"><b>Nguyễn Sinh Duy</b></p>
+        <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold;"></p>
+        <p id="role" style="color: #003366; font-weight: bold; border: 2px solid blue; padding: 2px 20px; border-radius: 25px; display: inline-block;background-color: white;"> </p>
         <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
       </div>
     </div>
@@ -83,15 +84,71 @@ class CustomSidebar extends HTMLElement {
            </div>
           </div>
         `;
-        const avatarSrc = localStorage.getItem('userAvatar');
-        if (avatarSrc) {
-          this.querySelector('#userAvatar').src ='data:image/png;base64, '+ avatarSrc;
-        }
-    
+    this.fetchAvatar();
+    this.fetchTen();
+    this.fetchRole();
     this.updateActiveLink();
     this.addEventListeners();
   }
 
+  async fetchAvatar() {
+    const maNhanVien = localStorage.getItem('maNhanVien');
+    if (!maNhanVien) {
+      console.error('maNhanVien không tồn tại trong localStorage');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const data = await response.json();
+      const avatarUrl = data.anh;
+      if (avatarUrl) {
+        this.querySelector('#userAvatar').src = 'data:image/png;base64,' + avatarUrl;
+      }
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
+    }
+  }
+  async fetchTen() {
+    const maNhanVien = localStorage.getItem('maNhanVien');
+    if (!maNhanVien) {
+      console.error('maNhanVien không tồn tại trong localStorage');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const data = await response.json();
+      const dataTen = data.ten;
+      if (dataTen) {
+        const tenNhanVienElement = this.querySelector('p#tenNhanVien');
+        tenNhanVienElement.textContent = data.ten;
+      }
+    } catch (error) {
+      console.error('Error fetching ten:', error);
+    }
+  }
+  async fetchRole() {
+    const maNhanVien = localStorage.getItem('vaiTroId');
+    if (!maNhanVien) {
+      console.error('vaiTroId không tồn tại trong localStorage');
+      return;
+    }
+
+    try {
+      if (maNhanVien) {
+        const maNhanVienElement = this.querySelector('p#role');
+       if(maNhanVien === '1'){
+        maNhanVienElement.textContent = 'Admin'
+       }
+       else{
+        maNhanVienElement.textContent = "Employee"
+       }
+      }
+    } catch (error) {
+      console.error('Error fetching role:', error);
+    }
+  }
   updateActiveLink() {
     const currentPath = window.location.pathname;
     const menuItems = this.querySelectorAll('.app-menu__item');
