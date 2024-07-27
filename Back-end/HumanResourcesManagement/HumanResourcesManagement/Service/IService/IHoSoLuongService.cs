@@ -7,7 +7,7 @@ namespace HumanResourcesManagement.Service.IService
 {
     public interface IHoSoLuongService
     {
-        void themHoSoLuong(InsertHoSoLuong request);
+        void ThemHoSoLuong(InsertHoSoLuong request);
 
         double tinhLuong(TinhLuongRequest request);
 

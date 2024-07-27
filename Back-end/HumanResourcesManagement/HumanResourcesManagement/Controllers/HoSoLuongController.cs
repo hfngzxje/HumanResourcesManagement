@@ -26,7 +26,7 @@ namespace HumanResourcesManagement.Controllers
         {
             try
             {
-                _hoSoLuongService.themHoSoLuong(request);
+                _hoSoLuongService.ThemHoSoLuong(request);
                 return Ok("Them ho so luong thanh cong!!");
             }
             catch (System.Exception ex)
