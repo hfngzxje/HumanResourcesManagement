@@ -199,8 +199,76 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<DanhSachSinhNhatResponse>> getDanhSachSinhNhat(DanhSachSinhNhatRequest req)
         {
-            return null;
+            var query = _context.TblNhanViens.AsQueryable();
+
+            if (req.PhongBan.HasValue)
+            {
+                query = query.Where(x => x.Phong == req.PhongBan.Value);
+            }
+
+            if (req.StartDate.HasValue && req.EndDate.HasValue)
+            {
+                query = query.Where(x => x.Ngaysinh >= req.StartDate.Value && x.Ngaysinh <= req.EndDate.Value);
+            }
+
+            if (req.Thang.HasValue)
+            {
+                query = query.Where(x => x.Ngaysinh.Value.Month == req.Thang.Value);
+            }
+
+            if (req.Quy.HasValue)
+            {
+                query = query.Where(x => (x.Ngaysinh.Value.Month - 1) / 3 + 1 == req.Quy.Value);
+            }
+
+            var today = DateTime.Today;
+
+            var result = await query.Select(x => new DanhSachSinhNhatResponse
+            {
+                MaNV = x.Ma,
+                TenNV = x.Ten,
+                PhongId = x.PhongNavigation.Id,
+                TenPhong = x.PhongNavigation.Ten,
+                NgaySinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
+                ThangSinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.Month : (int?)null,
+                SinhNhat = x.Ngaysinh.HasValue ? new DateTime(today.Year, x.Ngaysinh.Value.Month, x.Ngaysinh.Value.Day).ToString("dd/MM/yyyy") : null,
+                TinhTrang = x.Ngaysinh.HasValue ? GetTinhTrang(x.Ngaysinh.Value, today) : "Không có"
+            }).ToListAsync();
+
+            return result;
         }
+
+
+        public static string GetTinhTrang(DateTime ngaySinh, DateTime today)
+        {
+            var currentYearBirthday = new DateTime(today.Year, ngaySinh.Month, ngaySinh.Day);
+            var dayDifference = (currentYearBirthday - today).Days;
+
+            if (dayDifference == 0)
+            {
+                return "Hôm nay";
+            }
+            else if (dayDifference > 0 && dayDifference <= 7)
+            {
+                return "Sắp đến";
+            }
+            else if (dayDifference < 0)
+            {
+                return "Đã qua";
+            }
+            else if (currentYearBirthday.Month == today.Month)
+            {
+                return "Trong tháng";
+            }
+            else if (currentYearBirthday > today)
+            {
+                return "Chưa đến";
+            }
+
+            return "Không có";
+        }
+
+
 
         public async Task<IEnumerable<DanhSachDienChinhSachResponse>> getDanhSachDienChinhSach(DanhSachDienChinhSachRequest req)
         {
@@ -268,5 +336,7 @@ namespace HumanResourcesManagement.Service
             }
             return resp;
         }
+
+       
     }
 }
