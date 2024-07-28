@@ -20,12 +20,11 @@ namespace HumanResourcesManagement.Controllers
         {
             try {
                 _birthdayService.CheckAndSendBirthdayEmails();
-                return Ok();
+                return Ok("Gửi email thành công!!");
             }catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            
         }
 
         [HttpGet("email-history")]

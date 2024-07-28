@@ -44,6 +44,7 @@ public class Program
 
 
 
+        builder.Services.AddHostedService<BirthdayEmailBackgroundService>();
 
         builder.Services.AddScoped<EmailService>();
         builder.Services.AddScoped<BirthdayService>();
