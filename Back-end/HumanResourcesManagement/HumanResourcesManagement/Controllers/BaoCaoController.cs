@@ -101,5 +101,20 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
+
+
+        [HttpPost("getBaoCaoSinhNhat")]
+        public async Task<IActionResult> GetReportSinhNhat([FromForm] DanhSachSinhNhatRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachSinhNhat(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
     }
 }
