@@ -4,6 +4,7 @@ using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Config.Mapper;
 using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.Config;
 
 public class Program
 {
@@ -35,6 +36,17 @@ public class Program
         builder.Services.AddScoped<IDangNhapService, DangNhapService>();
         builder.Services.AddScoped<IBaoCaoService, BaoCaoService>();
         builder.Services.AddScoped<IDanhMucNhomLuongService, DanhMucNhomLuongService>();
+
+
+
+
+
+
+
+
+
+        builder.Services.AddScoped<EmailService>();
+        builder.Services.AddScoped<BirthdayService>();
 
 
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
@@ -85,5 +97,16 @@ public class Program
         });
 
         app.Run();
+
+
+        var host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                 {
+                       services.AddSingleton<EmailService>();
+                       services.AddSingleton<BirthdayService>();
+                       services.AddHostedService<BirthdayCheckHostedService>();
+                }).Build();
+
+        host.Run();
     }
 }
