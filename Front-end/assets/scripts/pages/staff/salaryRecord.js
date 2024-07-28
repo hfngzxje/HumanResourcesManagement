@@ -4,24 +4,16 @@ const maDetail = localStorage.getItem("maDetail")
 const table = document.querySelector('base-table')
 const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupSaveBtn = document.getElementById("updateBtn")
+let danhSachMaHopDong = []
+let thongTinNgachLuong = null
+let danhSachluongCoBanHeSo = []
 
-var MaritalOptions = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-    { label: '5', value: 5 }
-];
-
-var MaritalOptionsBacLuong = [
-    { label: '1/7', value: '1/7' },
-    { label: '2/7', value: '2/7' },
-    { label: '3/7', value: '3/7' },
-    { label: '4/7', value: '4/7' },
-    { label: '5/7', value: '5/7' },
-    { label: '6/7', value: '6/7' },
-    { label: '7/7', value: '7/7' }
-];
+let luongCoBan = null
+let heSo = null
+let phuCapInput = null
+let phuCapKhacInput = null
+let tongLuongVal = null
+let maHopDongDauTien = null
 
 var TableColumns = [
     {
@@ -96,8 +88,7 @@ var tableEvent = { // global: ở đau cũng truy cập được
 
 
 function backToList() {
-    const url = new URL("/pages/staff/salaryRecord.html", window.location.origin);
-    // url.searchParams.set("id", id);
+    const url = new URL("/pages/staff/laborcontract.html", window.location.origin);
     window.location.replace(url.toString());
 }
 
@@ -230,26 +221,6 @@ function handleRemove() {
     }, 1000);
 }
 
-// function handleRemoveRow(id) {
-//     const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
-//     if (!isConfirm) return
-//     setLoading(true)
-//     $.ajax({
-//         url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + id,
-//         method: 'DELETE',
-//         success: function (data) {
-//             alert('Xóa Thành Công!');
-//             backToList();
-//         },
-//         error: (err) => {
-//             console.log('fetchContract err :: ', err);
-//             alert("Xóa thất bại!")
-//         },
-//         complete: () => {
-//             setLoading(false)
-//         }
-//     });
-// }
 
 function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
@@ -258,92 +229,40 @@ function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchContract res :: ', data);
-            alert('Lưu Thành Công!');
-            closePopup();
-            table.handleCallFetchData();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Cập nhật thất bại!")
-            }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
-}
-
-async function fetchSalary() {
-    const formValue = getFormValues('salaryRecord_form');
-    const payload = buildPayload(formValue);
-    setLoading(true);
-
-    try {
-        const salary = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/TinhLuong',
-            method: 'POST',
+        $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
+            method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchContract res :: ', data);
+                alert('Lưu Thành Công!');
+                closePopup();
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
         });
-
-        // Gán giá trị lương vào trường input số
-        const inputElement = document.querySelector('base-input-number[name="tongluong"]');
-        if (inputElement instanceof BaseInputNumber) {
-            inputElement.value = salary;
-        }
-
-        // alert(salary);
-        return salary;
-    } catch (error) {
-        console.error(error);
-        throw error;
-    } finally {
-        setLoading(false);
-    }
+    }, 1000);
 }
 
-const hesoluongInput = document.querySelector('base-input-number[name="hesoluong"]');
-const phucaptrachnhiemInput = document.querySelector('base-input-number[name="phucaptrachnhiem"]');
-const phucapkhacInput = document.querySelector('base-input-number[name="phucapkhac"]');
 
-hesoluongInput.addEventListener('input', handleInputChange);
-phucaptrachnhiemInput.addEventListener('input', handleInputChange);
-phucapkhacInput.addEventListener('input', handleInputChange);
-
-function handleInputChange() {
-    // Lấy giá trị từ các trường input
-    const hesoluongValue = hesoluongInput.value;
-    const phucaptrachnhiemValue = phucaptrachnhiemInput.value;
-    const phucapkhacValue = phucapkhacInput.value;
-
-    // Kiểm tra nếu đủ dữ liệu đã được nhập
-    if (hesoluongValue !== '' || phucaptrachnhiemValue !== '' || phucapkhacValue !== '') {
-        // Gọi hàm fetchSalary()
-        fetchSalary()
-            .catch(error => {
-                // Xử lý lỗi nếu cần
-                console.error(error);
-            });
-    }
-}
 function clearFormValues(formId) {
     const form = document.getElementById(formId);
     const inputs = form.querySelectorAll('input, textarea');
@@ -387,9 +306,199 @@ async function buildApiHopDongA(id) {
 function buildApiUrl() {
     return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
+function buidApiBacLuong() {
+    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByChucDanh/' + thongTinNgachLuong;
+
+}
+function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
+    phucapkhacInput = phucapkhacInput || 0;
+    const tongLuong = document.querySelector('#tongLuong input')
+    const tongLuongTinhToan = (luongcobanInput * hesoInput) + phucapInput + phucapkhacInput
+    tongLuong.value = formatCurrency(tongLuongTinhToan)
+}
+function handleLuongHeSo() {
+    const bacLuong = document.querySelector('#bacLuong select')
+    bacLuong.addEventListener("change", (event) => {
+
+        const thongTinLuong = danhSachluongCoBanHeSo.find(item => item.bacluong == event.target.value)
+        setGiaTriLuong(thongTinLuong.luongcoban)
+        setGiaTriHeSo(thongTinLuong.hesoluong)
+
+        luongCoBan = thongTinLuong.luongcoban
+        heSo = thongTinLuong.hesoluong
+
+        tinhLuong(luongCoBan, heSo, phuCapInput, phuCapKhacInput)
+        console.log("Luong co ban: ", luongCoBan)
+        console.log("He so: ", heSo)
+    })
+}
+async function apiLuongHeSo() {
+    try {
+        const bacLuong = await $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByChucDanh/' + thongTinNgachLuong,
+            method: 'GET',
+            contentType: 'application/json',
+
+        });
+        danhSachluongCoBanHeSo = bacLuong
+        const luongCoBanHeSoDauTien = bacLuong[0]
+        if (luongCoBanHeSoDauTien) {
+            setGiaTriLuong(luongCoBanHeSoDauTien.luongcoban)
+            setGiaTriHeSo(luongCoBanHeSoDauTien.hesoluong)
+
+            tinhLuong(luongCoBanHeSoDauTien.luongcoban, luongCoBanHeSoDauTien.hesoluong, phuCapInput, phuCapKhacInput)
+        }
+    } catch (error) {
+        console.log("Error")
+    }
+}
+function setGiaTriLuong(value) {
+    const luongCoBan = document.querySelector('#luongCoBan input')
+    luongCoBan.value = formatCurrency(value)
+}
+function setGiaTriHeSo(valueHeSo) {
+    const heSo = document.querySelector('#hesoluong input')
+    heSo.value = valueHeSo
+}
+function layThongTinBacLuong() {
+    const bacLuong = document.getElementById('bacLuong')
+    bacLuong.renderOption()
+}
+
+
+// ------------------fetch ngach nhan vien theo hop dong ----------------------
+
+async function apiDanhSachHopDong() {
+    try {
+        const hopDong = await $.ajax({
+            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        console.log("b", hopDong)
+        danhSachMaHopDong = hopDong
+        const hopDongDautien = hopDong[0]
+        datGiaTriMacDinhNgachNV(hopDongDautien.mahopdong)
+        maHopDongDauTien = hopDong.maHopDong
+    } catch (error) {
+        console.log("Error", "ajaj")
+    }
+}
+
+function datGiaTriMacDinhNgachNV(mahopdong) {
+    const thongTinHopDong = danhSachMaHopDong.find(item => item.mahopdong === mahopdong)
+    console.log("TT hd: ", thongTinHopDong)
+    const ngachNhanVien = document.querySelector('#ngachNhanVien select')
+    ngachNhanVien.value = thongTinHopDong.chucdanh
+
+    thongTinNgachLuong = ngachNhanVien.value
+    layThongTinBacLuong()
+    apiLuongHeSo()
+    apiPhuCap()
+}
+
+function handleMaHopDong() {
+    const maHopDong = document.querySelector('base-select#maHopDong select')
+    maHopDong.addEventListener("change", (event) => {
+        console.log("e: ", event.target.value)
+
+        datGiaTriMacDinhNgachNV(event.target.value)
+    });
+}
+
+// -------------------
+function handlePhuCapKhac() {
+    let luongVal = null
+    let heSoVal = null
+    const phuCapKhac = document.querySelector('#phuCapKhac input')
+
+    phuCapKhac.addEventListener("change", (event) => {
+        const value = event.target.value;
+        if (value) {
+            const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+            phuCapKhac.value = formatCurrency(numericValue);
+
+            luongVal = parseCurrency(document.querySelector('#luongCoBan input').value)
+            heSoVal = parseCurrency(document.querySelector('#hesoluong input').value)
+
+            phuCapKhacInput = parseFloat(value);
+            console.log("Phụ cấp khác: ", phuCapKhacInput);
+            console.log("Luong co ban: ", luongVal)
+            console.log("he so: ", heSoVal)
+
+        } else {
+            phuCapKhacInput = 0;
+        }
+
+        tinhLuong(luongVal, heSoVal, phuCapInput, phuCapKhacInput);
+    });
+
+}
+function setNullPhuCapKhac(){
+    const phuCapKhac = document.querySelector('#phuCapKhac input')
+    phuCapKhac.value =""
+}
+// ------------- fetch Phu Cap -----------------------
+
+async function apiPhuCap() {
+    try {
+        const response = await $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        const valuePhuCap = response.value
+        if (!valuePhuCap) {
+            console.log("Dữ liệu không tồn tại trong phản hồi");
+            return;
+        }
+        console.log("HopDongPhuCap:", valuePhuCap)
+        const phuCap = document.querySelector('#phuCap input')
+        if (phuCap) {
+            phuCap.value = formatCurrency(valuePhuCap.phucap)
+            phuCapInput = valuePhuCap.phucap
+        }
+        else {
+            console.log("Khong tim thay ban ghi chua phu cap")
+        }
+    } catch (error) {
+        console.log("Error", error)
+    }
+}
+
+function formatCurrency(val) {
+    return val.toLocaleString("it-IT", {
+        minimumFractionDigits: 0, // số lượng chữ số thập phân tối thiểu
+        maximumFractionDigits: 2 
+    });
+}
+function parseCurrency(value) {
+    // Loại bỏ ký tự không phải số và dấu thập phân
+    const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
+    return parseFloat(cleanedValue);
+}
+async function checkSoLuongHopDong(){
+    try {
+        const hopDong = await $.ajax({
+            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+    } catch (error) {
+        alert("Nhân viên chưa có hợp đồng nào, vui lòng tạo hợp đồng trước khi truy cập")
+        backToList()
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
+    checkSoLuongHopDong()
+    handleMaHopDong();
+    apiDanhSachHopDong()
+    handleLuongHeSo()
+    handlePhuCapKhac()
     renderActionByStatus()
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupSaveBtn.addEventListener("click", handleSave)
+
+
 })
 

@@ -3,6 +3,7 @@ let maHopDongHienTai = null
 const table = document.querySelector('base-table')
 const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupSaveBtn = document.getElementById("updateBtn")
+var maDetail = localStorage.getItem('maDetail')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -120,7 +121,7 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
     
-    formValue['ma'] = maNhanVien;
+    formValue['ma'] = maDetail;
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -135,7 +136,7 @@ function handleCreate() {
         success: function (data) {
             alert('Tạo Thành Công!');
             table.handleCallFetchData();
-            clearFormValues("relationship_form")
+            clearFormValues("laborContract_form")
         },
         error: (err) => {
             console.log('err ', err);
@@ -190,7 +191,7 @@ function handleSave() {
     if (!isConfirm) return
     const formValue = getFormValues('editLaborContract')
 
-    formValue['ma'] = maNhanVien;
+    formValue['ma'] = maDetail;
 
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -261,7 +262,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maNhanVien
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

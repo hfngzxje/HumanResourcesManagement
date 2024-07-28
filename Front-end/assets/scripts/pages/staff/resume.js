@@ -65,7 +65,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + maDetail,
+        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (maDetail) {
         fetchEmployee()
         getImage()
-        const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maDetail;
+        const apiUrl = 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail;
 
         // Thực hiện yêu cầu API
         fetch(apiUrl)

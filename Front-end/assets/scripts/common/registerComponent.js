@@ -99,7 +99,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -117,7 +117,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -386,8 +386,8 @@ class BaseSelect extends HTMLElement {
       if (!window[api]) return api;
       return window[api]();
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
+    const renderOption = () =>{
+      this.querySelector('select').innerHTML = ""
       if (!!api) {
         $.ajax({
           url: getApiUrl(),
@@ -413,6 +413,11 @@ class BaseSelect extends HTMLElement {
         option.innerText = label;
         this.querySelector("select").append(option);
       });
+    }
+    this.renderOption = renderOption
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderOption()
     });
 
     this.innerHTML = `

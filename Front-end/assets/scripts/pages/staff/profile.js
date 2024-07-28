@@ -52,7 +52,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + maDetail,
+        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('profile_form', data)

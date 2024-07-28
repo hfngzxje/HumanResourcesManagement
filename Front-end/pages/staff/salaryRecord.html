@@ -39,23 +39,23 @@
                 <div class="flex gap-x-5">
                     <div class="flex-1 h-fit grid grid-cols-2 gap-y-2 gap-x-6 w-full">
 
-                        <base-select label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong" required="true"
-                            keyLabel="mahopdong" api="buildApiHopDong"></base-select>
-                        <base-select label="Nhóm ngạch nhân viên" name="nhomluong" options="MaritalOptions"
-                            required="true"></base-select>
-                        <base-input-number label="Hệ số lương" name="hesoluong" required="true"></base-input-number>
-                        <base-input-number label="Lương cơ bản" name="luongcoban" required="true"></base-input-number>
-                        <base-input-number label="Phụ cấp khác" required="true" name="phucapkhac"></base-input-number>
+                        <base-select id="maHopDong" label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong"
+                            required="true" keyLabel="mahopdong" api="buildApiHopDong"></base-select>
+                        <base-select id="ngachNhanVien" api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
+                            keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên" name="nhomluong"></base-select>
+                        <base-input-number id="hesoluong" label="Hệ số lương" name="hesoluong" readonly></base-input-number>
+                        <base-input-number id = "luongCoBan" label="Lương cơ bản" name="luongcoban" readonly></base-input-number>
+                        <base-input-number  id="phuCapKhac" label="Phụ cấp khác" required="true" name="phucapkhac"></base-input-number>
                         <base-input-number label="Thời hạn lên lương" required="true"
                             name="thoihanlenluong"></base-input-number>
 
                     </div>
                     <div class="flex-1 grid grid-cols-2 gap-y-2 gap-x-5 w-full">
-                        <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
-                            required="true"></base-select> <br>
-                        <base-input-number label="Phụ cấp chúc vụ" required="true"
-                            name="phucaptrachnhiem"></base-input-number>
-                        <base-input-number label="Tiền lương" required="true" name="tongluong"
+                        <base-select id="bacLuong" label="Bậc Lương" name="bacluong" api="buidApiBacLuong" keyvalue="bacluong"
+                            keylabel="bacluong" required="true"></base-select> <br>
+                        <base-input-number id="phuCap" label="Phụ cấp chúc vụ" required="true"
+                            name="phucaptrachnhiem" readonly></base-input-number>
+                        <base-input-number id="tongLuong" label="Tiền lương" required="true" name="tongluong"
                             readonly></base-input-number>
                         <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
                             name="ngayhieuluc"></base-datepicker>
@@ -96,8 +96,7 @@
                                 keyLabel="mahopdong" api="buildApiHopDong"></base-select>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <base-select label="Nhóm ngạch nhân viên" name="nhomluong" options="MaritalOptions"
-                                required="true"></base-select>
+                            <base-input label="Nhóm ngạch nhân viên" name="nhomluong" readonly></base-input>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
                             <base-select label="Bậc Lương" name="bacluong" options="MaritalOptionsBacLuong"
@@ -124,7 +123,7 @@
                                 name="thoihanlenluong"></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-datepicker  style="margin: 0;" label="Ngày hiệu lực"
+                            <base-datepicker style="margin: 0;" label="Ngày hiệu lực"
                                 name="ngayhieuluc"></base-datepicker>
                         </div>
                         <div class="col-span-2  sm:col-span-1">

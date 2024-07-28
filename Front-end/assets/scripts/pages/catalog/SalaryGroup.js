@@ -6,33 +6,41 @@ const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
+let idNhomLuong = null
+
+var MaritalOptions = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+    { label: '5', value: 5 },
+    { label: '6', value: 6 },
+    { label: '7', value: 7 }
+]
+
 var TableColumns = [
     {
-        label: 'ID',
-        key: 'id'
-    },
-    {
         label: 'Nhóm ngạch nhân viên',
-        key: 'ten'
+        key: 'chucdanh'
     }
     ,
     {
         label: 'Bậc lương',
-        key: 'ten'
+        key: 'bacluong'
     }
     ,
     {
         label: 'Hệ số lương',
-        key: 'ten'
+        key: 'hesoluong'
     },
     {
         label: 'Lương cơ bản',
-        key: 'ten'
+        key: 'luongcoban'
     }
     ,
     {
         label: 'Ghi chú',
-        key: 'ten'
+        key: 'ghichu'
     },
     {
         label: 'Hành động',
@@ -41,7 +49,7 @@ var TableColumns = [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
-                    // fetchDanToc(row.id);
+                    fetchNhomLuong(row.id)
                     showPopup()
                 }
             }
@@ -52,23 +60,146 @@ var TableColumns = [
 var tableEvent = {
     
     rowDoubleClick: (row) => {
-   
         isPopupEdit = true
-       
-        // fetchNgachCongChuc(row.id)
+        fetchNhomLuong(row.id)
         showPopup()
         console.log('row double click ',row);
     }
 };
-function backToList() {
-    window.location.replace("/pages/catalog/salaryGroup.html");
-}
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
+function fetchNhomLuong(id) {
+    console.log("Name:", id);
+    setLoading(true)
+    idNhomLuong = id
+    $.ajax({
+        url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
+        method: 'GET',
+        success: function (data) {
+            // setFormValue('editNhomLuong', data, 'fetch');
+            setFormValue('editNhomLuong', data)
 
+        },
+        error: (err) => {
+            console.log('fetchDepartments err :: ', err);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}
+function handleCreate() {
+    const isConfirm = confirm('Bạn chắc chắn muốn tạo nhóm lương?')
+    if (!isConfirm) return
+    const valid = validateForm('editNhomLuong')
+    if (!valid) return
+    const formValue = getFormValues('editNhomLuong')
+    console.log('formValue ', formValue);
+    const payload = buildPayload(formValue)
+    setLoading(true)
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/add',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetch Nhóm Lương res :: ', data);
+                alert("Thêm thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        // $('.error-message').text(err.responseText).show();
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Tạo mới không thành công!")
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
+}
+
+function handleRemoveRow() {
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục nhóm lương?')
+    if (!isConfirm) return
+    setLoading(true)
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/delete/' + idNhomLuong,
+            method: 'DELETE',
+            success: function (data) {
+                alert("Xóa thành công !")
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                alert("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
+}
+function handleSave() {
+    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục nhóm lương?')
+    if (!isConfirm) return
+    const valid = validateForm('editNhomLuong')
+    if (!valid) return
+    const formValue = getFormValues('editTonGiao')
+    const payload = buildPayload(formValue)
+    setLoading(true)
+    setTimeout(() => {
+        $.ajax({
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/update/' + idNhomLuong,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                alert('Lưu Thành Công!');
+                closePopup()
+                clearFormValues()
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Cập nhật thất bại!")
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
+}
 
 function showPopup() {
     var modal = document.getElementById("editNhomLuong");
@@ -76,7 +207,6 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            // setFormValue('editTeam', { ma: "", ten: "", tenPhong: "", })
             clearFormValues()
         }
     }
@@ -138,7 +268,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChucDanh/getAllChucDanh'
+    return 'https://localhost:7141/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
@@ -146,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     console.log('save click');
     //     handleSave()
     // })
-    // popupCreateBtn.addEventListener("click", handleCreate)
+    popupCreateBtn.addEventListener("click", handleCreate)
     // popupRemoveBtn.addEventListener("click", handleRemoveRow)
     // popupClearBtn.addEventListener("click", clearFormValues)
 })

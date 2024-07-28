@@ -40,35 +40,36 @@
                         <p class="text-xl">Danh sách nhóm lương</p>
                     </div>
                     <div class="mt-3">
-                        <base-table api="buildApiUrl" columns="TableColumns"event="tableEvent">
+                        <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
                         </base-table>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-  
+
     <div id="editNhomLuong" class="modal">
         <div class="change-container">
-         <span class="close">&times;</span>
-          <form >
-              <div class="form-header">
-                 <h2>Sửa Nhóm Lương</h2> 
-              </div>
-              <base-select label="Nhóm ngạch nhân viên"></base-select>
-              <base-select label="Bậc lương"></base-select>
-              <base-input-number label="Hệ số lương"></base-input-number>
-              <base-input-number label="Lương cơ bản"></base-input-number>
-              
-         </form>
-         <div class="flex gap-x-5 mt-5 justify-center">
-            <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green" ></base-button>
-            <base-button id="saveBtn" label="Lưu" icon="bx bx-save" ></base-button>
-            <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type = "red"></base-button>
-            <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type = "black"></base-button>
+            <span class="close">&times;</span>
+            <form>
+                <div class="form-header">
+                    <h2>Sửa Nhóm Lương</h2>
+                </div>
+                <base-select label="Nhóm ngạch chức danh" name="chucdanh"
+                    api="https://localhost:7141/api/ChucDanh/getAllChucDanh" keyValue="id" keyLabel="ten"></base-select>
+                <base-select label="Bậc lương" name="bacluong" options="MaritalOptions"></base-select>
+                <base-input-number name="hesoluong" label="Hệ số lương"></base-input-number>
+                <base-input-number name="luongcoban" label="Lương cơ bản"></base-input-number>
+
+            </form>
+            <div class="flex gap-x-5 mt-5 justify-center">
+                <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
+                <base-button id="saveBtn" label="Lưu" icon="bx bx-save"></base-button>
+                <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
+                <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
+            </div>
         </div>
-       </div>
-      </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
