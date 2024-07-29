@@ -23,14 +23,27 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper;
         }
 
-        public List<TblNhanVien> GetAllNhanVien()
+        public List<NhanVienResponse> GetAllNhanVien()
         {
-            var nhanViens = _context.TblNhanViens.ToList();
+            var nhanViens = _context.TblNhanViens.Include(nv => nv.ToNavigation).Include(nv => nv.PhongNavigation).Include(nv => nv.ChucvuhientaiNavigation).ToList();
+            
             if (!nhanViens.Any())
             {
                 throw new Exception("Danh sách không có nhân viên nào!!");
             }
-            return nhanViens;
+            var resp = _mapper.Map<List<NhanVienResponse>>(nhanViens);
+            foreach (var item in resp)
+            {
+                var temp = nhanViens.FirstOrDefault(nv => nv.Ma == item.Ma);
+                if(temp != null)
+                {
+                    item.tenPhong = temp.PhongNavigation.Ten;
+                    item.tenTo = temp.ToNavigation.Ten;
+                    item.tenChucVu = temp.ChucvuhientaiNavigation.Ten;
+                    item.tenPhongBan = temp.PhongNavigation.Ten;
+                }
+            }
+            return resp;
         }
 
 
