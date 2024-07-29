@@ -8,7 +8,7 @@ namespace HumanResourcesManagement.DTOS.Request
         public string? Mahopdong { get; set; }
         public double? Phucaptrachnhiem { get; set; }
         public double? Phucapkhac { get; set; }
-        public float? TongLuong { get; set; }
+        public float? Tongluong { get; set; }
         public string? Thoihanlenluong { get; set; }
         [Required(ErrorMessage = "Ngay hieu luc khong duoc de trong")]
         public DateTime? Ngayhieuluc { get; set; }

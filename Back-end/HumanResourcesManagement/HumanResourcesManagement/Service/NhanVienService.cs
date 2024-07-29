@@ -37,7 +37,6 @@ namespace HumanResourcesManagement.Service
                 var temp = nhanViens.FirstOrDefault(nv => nv.Ma == item.Ma);
                 if(temp != null)
                 {
-                    item.tenPhong = temp.PhongNavigation.Ten;
                     item.tenTo = temp.ToNavigation.Ten;
                     item.tenChucVu = temp.ChucvuhientaiNavigation.Ten;
                     item.tenPhongBan = temp.PhongNavigation.Ten;
@@ -409,6 +408,7 @@ namespace HumanResourcesManagement.Service
             var nhanVien = await _context.TblNhanViens
                     .Include(nv => nv.ChucvuhientaiNavigation)
                     .Include(nv => nv.PhongNavigation)
+                    .Include(nv=>nv.ToNavigation)
                     .FirstOrDefaultAsync(nv => nv.Ma == id);
 
             if (nhanVien == null)
@@ -418,6 +418,7 @@ namespace HumanResourcesManagement.Service
 
 
             var response = _mapper.Map<NhanVienResponse>(nhanVien);
+            response.tenTo = nhanVien.ToNavigation.Ten;
             response.tenChucVu = nhanVien.ChucvuhientaiNavigation.Ten; 
             response.tenPhongBan = nhanVien.PhongNavigation?.Ten;
             return response;
