@@ -2,9 +2,10 @@
 {
     public class DanhSachSinhNhatRequest
     {
-        public string? SearchRules { get; set; }
-        public int? Phong { get; set; }
+        public int? PhongBan { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set;}
+        public int? Thang { get; set; }
+        public int? Quy { get; set; }
     }
 }

@@ -7,6 +7,8 @@ namespace HumanResourcesManagement.Models
     {
         public TblDanhMucChucDanh()
         {
+            TblDanhMucNhomLuongs = new HashSet<TblDanhMucNhomLuong>();
+            TblHopDongs = new HashSet<TblHopDong>();
             TblNhanViens = new HashSet<TblNhanVien>();
         }
 
@@ -15,6 +17,8 @@ namespace HumanResourcesManagement.Models
         public string? Ten { get; set; }
         public double? Phucap { get; set; }
 
+        public virtual ICollection<TblDanhMucNhomLuong> TblDanhMucNhomLuongs { get; set; }
+        public virtual ICollection<TblHopDong> TblHopDongs { get; set; }
         public virtual ICollection<TblNhanVien> TblNhanViens { get; set; }
     }
 }

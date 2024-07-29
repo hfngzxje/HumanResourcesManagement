@@ -16,6 +16,7 @@ namespace HumanResourcesManagement.Models
         {
         }
 
+        public virtual DbSet<EmailHistory> EmailHistories { get; set; } = null!;
         public virtual DbSet<TblDanhMucChucDanh> TblDanhMucChucDanhs { get; set; } = null!;
         public virtual DbSet<TblDanhMucChuyenMon> TblDanhMucChuyenMons { get; set; } = null!;
         public virtual DbSet<TblDanhMucDanToc> TblDanhMucDanTocs { get; set; } = null!;
@@ -52,6 +53,35 @@ namespace HumanResourcesManagement.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<EmailHistory>(entity =>
+            {
+                entity.ToTable("EmailHistory");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(255)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Greeting).HasColumnName("greeting");
+
+                entity.Property(e => e.Ma)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("ma")
+                    .IsFixedLength();
+
+                entity.Property(e => e.SentDateTime)
+                    .HasColumnType("datetime")
+                    .HasColumnName("sentDateTime");
+
+                entity.HasOne(d => d.MaNavigation)
+                    .WithMany(p => p.EmailHistories)
+                    .HasForeignKey(d => d.Ma)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__EmailHistory__ma__3C34F16F");
+            });
+
             modelBuilder.Entity<TblDanhMucChucDanh>(entity =>
             {
                 entity.ToTable("tblDanhMucChucDanh");
@@ -206,11 +236,20 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Bacluong).HasColumnName("bacluong");
 
+                entity.Property(e => e.Chucdanh).HasColumnName("chucdanh");
+
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(100)
                     .HasColumnName("ghichu");
 
                 entity.Property(e => e.Hesoluong).HasColumnName("hesoluong");
+
+                entity.Property(e => e.Luongcoban).HasColumnName("luongcoban");
+
+                entity.HasOne(d => d.ChucdanhNavigation)
+                    .WithMany(p => p.TblDanhMucNhomLuongs)
+                    .HasForeignKey(d => d.Chucdanh)
+                    .HasConstraintName("FK_chucdanh_nhomluong");
             });
 
             modelBuilder.Entity<TblDanhMucPhongBan>(entity =>
@@ -376,6 +415,11 @@ namespace HumanResourcesManagement.Models
                     .HasColumnName("ma")
                     .IsFixedLength();
 
+                entity.HasOne(d => d.ChucdanhNavigation)
+                    .WithMany(p => p.TblHopDongs)
+                    .HasForeignKey(d => d.Chucdanh)
+                    .HasConstraintName("FK_ChucDanh");
+
                 entity.HasOne(d => d.LoaihopdongNavigation)
                     .WithMany(p => p.TblHopDongs)
                     .HasForeignKey(d => d.Loaihopdong)
@@ -435,8 +479,6 @@ namespace HumanResourcesManagement.Models
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(100)
                     .HasColumnName("ghichu");
-
-                entity.Property(e => e.Luongcoban).HasColumnName("luongcoban");
 
                 entity.Property(e => e.Mahopdong)
                     .HasMaxLength(30)
@@ -643,6 +685,8 @@ namespace HumanResourcesManagement.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("email");
+
+                entity.Property(e => e.EmailHistoryId).HasColumnName("emailHistoryId");
 
                 entity.Property(e => e.Gioitinh).HasColumnName("gioitinh");
 

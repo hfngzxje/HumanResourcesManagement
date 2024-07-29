@@ -199,7 +199,144 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<DanhSachSinhNhatResponse>> getDanhSachSinhNhat(DanhSachSinhNhatRequest req)
         {
-            return null;
+            var query = _context.TblNhanViens.AsQueryable();
+
+            if (req.PhongBan.HasValue)
+            {
+                query = query.Where(x => x.Phong == req.PhongBan.Value);
+            }
+
+            if (req.StartDate.HasValue && req.EndDate.HasValue)
+            {
+                query = query.Where(x => x.Ngaysinh >= req.StartDate.Value && x.Ngaysinh <= req.EndDate.Value);
+            }
+
+            if (req.Thang.HasValue)
+            {
+                query = query.Where(x => x.Ngaysinh.Value.Month == req.Thang.Value);
+            }
+
+            if (req.Quy.HasValue)
+            {
+                query = query.Where(x => (x.Ngaysinh.Value.Month - 1) / 3 + 1 == req.Quy.Value);
+            }
+
+            var today = DateTime.Today;
+
+            var result = await query.Select(x => new DanhSachSinhNhatResponse
+            {
+                MaNV = x.Ma,
+                TenNV = x.Ten,
+                PhongId = x.PhongNavigation.Id,
+                TenPhong = x.PhongNavigation.Ten,
+                NgaySinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
+                ThangSinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.Month : (int?)null,
+                SinhNhat = x.Ngaysinh.HasValue ? new DateTime(today.Year, x.Ngaysinh.Value.Month, x.Ngaysinh.Value.Day).ToString("dd/MM/yyyy") : null,
+                TinhTrang = x.Ngaysinh.HasValue ? GetTinhTrang(x.Ngaysinh.Value, today) : "Không có"
+            }).ToListAsync();
+
+            return result;
         }
+
+
+        public static string GetTinhTrang(DateTime ngaySinh, DateTime today)
+        {
+            var currentYearBirthday = new DateTime(today.Year, ngaySinh.Month, ngaySinh.Day);
+            var dayDifference = (currentYearBirthday - today).Days;
+
+            if (dayDifference == 0)
+            {
+                return "Hôm nay";
+            }
+            else if (dayDifference > 0 && dayDifference <= 7)
+            {
+                return "Sắp đến";
+            }
+            else if (dayDifference < 0)
+            {
+                return "Đã qua";
+            }
+            else if (currentYearBirthday.Month == today.Month)
+            {
+                return "Trong tháng";
+            }
+            else if (currentYearBirthday > today)
+            {
+                return "Chưa đến";
+            }
+
+            return "Không có";
+        }
+
+
+
+        public async Task<IEnumerable<DanhSachDienChinhSachResponse>> getDanhSachDienChinhSach(DanhSachDienChinhSachRequest req)
+        {
+            var all = await _context.TblNhanViens.Where(n => n.Laconchinhsach == true).ToListAsync();
+            var searchRules = req.SearchRules.ToLower();
+            if(searchRules == "phòng ban")
+            {
+                all = all.Where(n => n.Phong == req.PhongBan).ToList();
+            }
+            if(!string.IsNullOrEmpty(req.GioiTinh) && !(req.GioiTinh.ToLower().Equals("tất cả")))
+            {
+                all = all.Where(n => n.Gioitinh.ToString().ToLower().Equals(req.GioiTinh.ToLower())).ToList();
+            }
+
+            var resp = all.Select(r => new DanhSachDienChinhSachResponse
+            {
+                MaNV = r.Ma,
+                TenNV = r.Ten,
+                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
+                NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
+                DienThoai = r.Didong,
+                PhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == r.Phong)?.Ten,
+                DienChinhSach = r.Conchinhsach,
+                Khac = "idk",
+            }).ToList();
+
+            if(resp == null || !resp.Any())
+            {
+                throw new Exception("Không có nhân viên nào thuộc diện chính sách.");
+            }
+            return resp;
+        }
+
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
+        {
+            var data = await getDanhSachDienChinhSach(req);
+            string[] headers = { "Mã Nhân Viên", "Tên Nhân Viên"};
+            return await ExportToExcel("DANH SÁCH BÁO CÁO DIỆN CHÍNH SÁCH", data, "BaoCao_DanhSachDienChinhSach", headers);
+         }
+
+        public async Task<IEnumerable<DanhSachNhomLuongResponse>> getDanhSachNhomLuong(DanhSachNhomLuongRequest req)
+        {
+            var all = await _context.TblDanhMucNhomLuongs.ToListAsync();
+            if(req.ChucDanh.HasValue)
+            {
+                all = all.Where(l => l.Chucdanh == req.ChucDanh).ToList();
+            }
+            if(req.BacLuong.HasValue)
+            {
+                all = all.Where(l => l.Bacluong == req.BacLuong).ToList();
+            }
+
+            var resp = all.Select(r => new DanhSachNhomLuongResponse
+            {
+                ChucDanh = _context.TblDanhMucChucDanhs.Find(r.Chucdanh).Ten,
+                BacLuong = (double)r.Bacluong,
+                HeSoLuong = (double)r.Hesoluong,
+                LuongCoBan = (double)r.Luongcoban,
+                PhuCap = (double)_context.TblDanhMucChucDanhs.Find(r.Chucdanh).Phucap,
+                Khac = r.Ghichu
+            });
+            if (!resp.Any() || resp == null)
+            {
+                throw new Exception("Danh sách trống");
+            }
+            return resp;
+        }
+
+       
     }
 }

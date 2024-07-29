@@ -15,7 +15,6 @@ namespace HumanResourcesManagement.Models
         public DateTime? Ngayketthuc { get; set; }
         public string? Ghichu { get; set; }
         public int? Nhomluong { get; set; }
-        public double? Luongcoban { get; set; }
 
         public virtual TblHopDong? MahopdongNavigation { get; set; }
         public virtual TblDanhMucNhomLuong? NhomluongNavigation { get; set; }

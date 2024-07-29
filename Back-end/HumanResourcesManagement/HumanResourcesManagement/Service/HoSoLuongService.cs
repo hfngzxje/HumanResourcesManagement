@@ -1,6 +1,8 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HumanResourcesManagement.Service
@@ -14,37 +16,32 @@ namespace HumanResourcesManagement.Service
             _context = context;
         }
 
-        public void themHoSoLuong(InsertHoSoLuong request)
+        public void ThemHoSoLuong(InsertHoSoLuong request)
         {
             var hopDong = _context.TblHopDongs.FirstOrDefault(x => x.Mahopdong == request.Mahopdong);
             if (hopDong == null)
             {
-                throw new Exception("Khong co ma hop dong hop le");
+                throw new Exception("Không có mã hợp đồng hợp lệ.");
             }
 
-            if (request.Hesoluong <= 0)
+            if (request.Nhomluong == null)
             {
-                throw new Exception("He so luong phai lon hon 0 ");
+                throw new Exception("Nhóm lương không được để trống.");
             }
-
-            double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
-            double phuCapKhac = request.Phucapkhac ?? 0;
-
-            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
 
             var hsl = new TblLuong
             {
                 Mahopdong = request.Mahopdong,
                 Nhomluong = request.Nhomluong,
-                //Hesoluong = request.Hesoluong,
-                //Bacluong = request.Bacluong,
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
-                Tongluong = 10,
+                Tongluong = request.TongLuong, 
                 Thoihanlenluong = request.Thoihanlenluong,
                 Ngayhieuluc = request.Ngayhieuluc,
                 Ngayketthuc = request.Ngayketthuc,
+                Ghichu = request.Ghichu 
             };
+
             _context.TblLuongs.Add(hsl);
             _context.SaveChanges();
         }
@@ -72,41 +69,28 @@ namespace HumanResourcesManagement.Service
             var hoSoLuong = _context.TblLuongs.Find(id);
             if (hoSoLuong == null)
             {
-                throw new KeyNotFoundException("Khong tim tay ho so luong!");
+                throw new KeyNotFoundException("Không tìm thấy hồ sơ lương với ID tương ứng.");
             }
-
-            if (request.Hesoluong <= 0)
-            {
-                throw new Exception("He so luong phai lon hon 0 ");
-            }
-
-
             var hopDong = _context.TblHopDongs.FirstOrDefault(x => x.Mahopdong == request.Mahopdong);
             if (hopDong == null)
             {
-                throw new Exception("Khong co ma hop dong hop le");
+                throw new Exception("Không có mã hợp đồng hợp lệ.");
             }
-
-            double phuCapTrachNhiem = request.Phucaptrachnhiem ?? 0;
-            double phuCapKhac = request.Phucapkhac ?? 0;
-
-            //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
-            double tongLuong = 0;
 
             hoSoLuong.Mahopdong = request.Mahopdong;
             hoSoLuong.Nhomluong = request.Nhomluong;
-            //hoSoLuong.Hesoluong = request.Hesoluong;
-            //hoSoLuong.Bacluong = request.Bacluong;
             hoSoLuong.Phucaptrachnhiem = request.Phucaptrachnhiem;
             hoSoLuong.Phucapkhac = request.Phucapkhac;
-            hoSoLuong.Tongluong = 10;
+            hoSoLuong.Tongluong = request.TongLuong;
             hoSoLuong.Thoihanlenluong = request.Thoihanlenluong;
             hoSoLuong.Ngayhieuluc = request.Ngayhieuluc;
             hoSoLuong.Ngayketthuc = request.Ngayketthuc;
             hoSoLuong.Ghichu = request.Ghichu;
+
             _context.TblLuongs.Update(hoSoLuong);
             _context.SaveChanges();
         }
+
 
         public void xoaHoSoLuong(int id)
         {
@@ -147,6 +131,63 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("ID không tồn tại!");
             }
             return hoSoLuong;
+        }
+
+        public IdAndName getChucDanhByHopDong(string maHopDong)
+        {
+            var hopDong = _context.TblHopDongs
+                .Include(hd => hd.ChucdanhNavigation)
+                .FirstOrDefault(hd => hd.Mahopdong == maHopDong);
+
+            if (hopDong == null || hopDong.ChucdanhNavigation == null)
+            {
+                throw new Exception("Không tìm thấy hợp đồng hoặc chức danh tương ứng.");
+            }
+
+            return new IdAndName
+            {
+                Id = hopDong.ChucdanhNavigation.Id,
+                Ten = hopDong.ChucdanhNavigation.Ten
+            };
+        }
+
+        public ActionResult<TblDanhMucChucDanh> getPhuCapByChucDanh(int id)
+        {
+            var phuCap = _context.TblDanhMucChucDanhs.Find(id);
+            return phuCap;
+        }
+
+        public ActionResult<TblDanhMucNhomLuong> GetBacLuongByChucDanh(int id)
+        {
+            throw new NotImplementedException();
+        }
+        
+
+
+        public async Task<List<TblDanhMucNhomLuong>> GetBacLuongByChucDanhAsync(int chucDanhId)
+        {
+            return await _context.TblDanhMucNhomLuongs
+                .Where(bl => bl.Chucdanh == chucDanhId)
+                .ToListAsync();
+        }
+
+
+
+        public async Task<List<TblDanhMucNhomLuong>> GetLuongDetailsAsync(int? chucDanhId, int? bacLuongId)
+        {
+            IQueryable<TblDanhMucNhomLuong> query = _context.TblDanhMucNhomLuongs.AsQueryable();
+
+            if (chucDanhId.HasValue)
+            {
+                query = query.Where(bl => bl.Chucdanh == chucDanhId.Value);
+            }
+
+            if (bacLuongId.HasValue)
+            {
+                query = query.Where(bl => bl.Nhomluong == bacLuongId.Value);
+            }
+
+            return await query.ToListAsync();
         }
 
     }

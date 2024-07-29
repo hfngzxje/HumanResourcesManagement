@@ -75,5 +75,46 @@ namespace HumanResourcesManagement.Controllers
             }
             
         }
+        [HttpPost("getBaoCaoDanhSachDienChinhSach")]
+        public async Task<IActionResult> GetReportDanhSachDienChinhSach([FromForm] DanhSachDienChinhSachRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachDienChinhSach(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+        [HttpPost("getBaoCaoDanhSachNhomLuong")]
+        public async Task<IActionResult> GetReportDanhSachNhomLuong([FromForm] DanhSachNhomLuongRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachNhomLuong(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
+
+        [HttpPost("getBaoCaoSinhNhat")]
+        public async Task<IActionResult> GetReportSinhNhat([FromForm] DanhSachSinhNhatRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachSinhNhat(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
     }
 }
