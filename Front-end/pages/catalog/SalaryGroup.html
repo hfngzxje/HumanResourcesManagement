@@ -26,28 +26,16 @@
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Danh mục nhóm lương</b></a></li>
+                <li class="breadcrumb-item active"><a href="#"><b>Danh sách danh mục nhóm lương</b></a></li>
             </ul>
             <div id="clock"></div>
         </div>
-        <div class="h-screen w-screen flex flex-col overflow-auto">
-            <layout-header></layout-header>
-            <div class="flex flex-1 overflow-auto">
-                <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-                <div class="flex-1 bg-gray-200 p-3 overflow-auto">
-                    <div id="salary_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
-                    <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-                        <p class="text-xl">Danh sách nhóm lương</p>
-                    </div>
-                    <div class="mt-3">
-                        <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                        </base-table>
-                    </div>
-                </div>
-            </div>
+        <div id="salary_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
+        <div class="mt-3">
+            <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
+            </base-table>
         </div>
     </main>
-
     <div id="editNhomLuong" class="modal">
         <div class="change-container">
             <span class="close">&times;</span>

@@ -34,11 +34,13 @@ var TableColumns = [
     },
     {
         label: 'Phụ Cấp trách nhiệm',
-        key: 'phucaptrachnhiem'
+        key: 'phucaptrachnhiem',
+        type:'currency'
     },
     {
         label: 'Phụ Cấp Khác',
-        key: 'phucapkhac'
+        key: 'phucapkhac',
+        type: 'currency'
     },
     {
         label: 'Tổng Lương',
@@ -100,10 +102,15 @@ function buildPayload(formValue) {
 }
 function showPopup() {
     var modal = document.getElementById("editSalaryRecord");
+    apiDanhSachHopDongPopUp()
+    handleBacLuongPopUp()
+    handleBacLuongPopUp()
+    handlePhuCapKhacPop()
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+
             clearFormValues("editSalaryRecord");
         }
     }
@@ -121,6 +128,9 @@ function fetchSalaryToEdit(id) {
         method: 'GET',
         success: function (data) {
             setFormValue('editSalaryRecord', data)
+            // document.querySelector('#luongCoBanPop input').value = formatCurrency(document.querySelector('#luongCoBanPop input').value)
+            // document.querySelector('#phuCapPop input').value = formatCurrency(document.querySelector('#phuCapPop input').value)
+
         },
         error: (err) => {
             console.log('fetchSalary err :: ', err);
@@ -137,8 +147,12 @@ async function handleCreate() {
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
+    formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
+    formValue['phucapkhac'] = parseCurrency(formValue['phucapkhac'])
+    formValue['tongLuong'] = parseCurrency(formValue['tongLuong'])
 
-    // alert(fetchContractCodeStatus(formValue.mahopdong));
+    alert(formValue['tongLuong'])
+
     try {
         // Lấy trạng thái mã hợp đồng
         const contractCodeStatus = await fetchContractCodeStatus(formValue.mahopdong);
@@ -165,7 +179,6 @@ async function handleCreate() {
             success: function (data) {
                 alert('Tạo Thành Công!');
                 table.handleCallFetchData();
-                clearFormValues("salaryRecord_form")
             },
             error: (err) => {
                 console.log('err ', err);
@@ -310,13 +323,21 @@ function buidApiBacLuong() {
     return 'https://localhost:7141/api/HoSoLuong/getBacLuongByChucDanh/' + thongTinNgachLuong;
 
 }
+
+
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
     phucapkhacInput = phucapkhacInput || 0;
     const tongLuong = document.querySelector('#tongLuong input')
     const tongLuongTinhToan = (luongcobanInput * hesoInput) + phucapInput + phucapkhacInput
     tongLuong.value = formatCurrency(tongLuongTinhToan)
 }
-function handleLuongHeSo() {
+function tinhLuongPopUp(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
+    phucapkhacInput = phucapkhacInput || 0;
+    const tongLuong = document.querySelector('#tongLuongPop input')
+    const tongLuongTinhToan = (luongcobanInput * hesoInput) + phucapInput + phucapkhacInput
+    tongLuong.value = formatCurrency(tongLuongTinhToan)
+}
+function handleBacLuong() {
     const bacLuong = document.querySelector('#bacLuong select')
     bacLuong.addEventListener("change", (event) => {
 
@@ -330,6 +351,31 @@ function handleLuongHeSo() {
         tinhLuong(luongCoBan, heSo, phuCapInput, phuCapKhacInput)
         console.log("Luong co ban: ", luongCoBan)
         console.log("He so: ", heSo)
+
+    })
+}
+let danhSachMaHopDongPop = []
+let maHopDongDauTienPop = null
+let danhSachluongCoBanHeSoPop = []
+let luongCoBanPop = null
+let heSoPop = null
+let phuCapKhacInputPop = null
+
+function handleBacLuongPopUp() {
+    const bacLuong = document.querySelector('#bacLuongPop select')
+    bacLuong.addEventListener("change", (event) => {
+
+        const thongTinLuong = danhSachluongCoBanHeSoPop.find(item => item.bacluong == event.target.value)
+        setGiaTriLuongPopUp(thongTinLuong.luongcoban)
+        setGiaTriHeSoPopUp(thongTinLuong.hesoluong)
+
+        luongCoBanPop = thongTinLuong.luongcoban
+        heSoPop = thongTinLuong.hesoluong
+
+        tinhLuongPopUp(luongCoBanPop, heSoPop, phuCapInput, phuCapKhacInputPop)
+        console.log("Luong co ban: ", luongCoBanPop)
+        console.log("He so: ", heSoPop)
+
     })
 }
 async function apiLuongHeSo() {
@@ -352,6 +398,28 @@ async function apiLuongHeSo() {
         console.log("Error")
     }
 }
+
+async function apiLuongHeSoPopUp() {
+    try {
+        const bacLuong = await $.ajax({
+            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByChucDanh/' + thongTinNgachLuong,
+            method: 'GET',
+            contentType: 'application/json',
+
+        });
+        danhSachluongCoBanHeSoPop = bacLuong
+        const luongCoBanHeSoDauTien = bacLuong[0]
+        if (luongCoBanHeSoDauTien) {
+            setGiaTriLuongPopUp(luongCoBanHeSoDauTien.luongcoban)
+            setGiaTriHeSoPopUp(luongCoBanHeSoDauTien.hesoluong)
+
+            // tinhLuong(luongCoBanHeSoDauTien.luongcoban, luongCoBanHeSoDauTien.hesoluong, phuCapInput, phuCapKhacInput)
+        }
+    } catch (error) {
+        console.log("Error")
+    }
+}
+
 function setGiaTriLuong(value) {
     const luongCoBan = document.querySelector('#luongCoBan input')
     luongCoBan.value = formatCurrency(value)
@@ -360,12 +428,23 @@ function setGiaTriHeSo(valueHeSo) {
     const heSo = document.querySelector('#hesoluong input')
     heSo.value = valueHeSo
 }
+function setGiaTriLuongPopUp(value) {
+    const luongCoBan = document.querySelector('#luongCoBanPop input')
+    luongCoBan.value = formatCurrency(value)
+}
+function setGiaTriHeSoPopUp(valueHeSo) {
+    const heSo = document.querySelector('#hesoluongPop input')
+    heSo.value = valueHeSo
+}
 function layThongTinBacLuong() {
     const bacLuong = document.getElementById('bacLuong')
     bacLuong.renderOption()
 }
 
-
+function layThongTinBacLuongPopUp() {
+    const bacLuong = document.getElementById('bacLuongPop')
+    bacLuong.renderOption();
+}
 // ------------------fetch ngach nhan vien theo hop dong ----------------------
 
 async function apiDanhSachHopDong() {
@@ -385,18 +464,45 @@ async function apiDanhSachHopDong() {
     }
 }
 
+async function apiDanhSachHopDongPopUp() {
+    try {
+        const hopDong = await $.ajax({
+            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        danhSachMaHopDongPop = hopDong
+        const hopDongDautien = hopDong[0]
+        datGiaTriMacDinhNgachNVPopUp(document.querySelector('#maHopDongPop select').value)
+        maHopDongDauTienPop = hopDong.maHopDong
+    } catch (error) {
+        console.log("Error", "ajaj")
+    }
+}
+
+
 function datGiaTriMacDinhNgachNV(mahopdong) {
     const thongTinHopDong = danhSachMaHopDong.find(item => item.mahopdong === mahopdong)
     console.log("TT hd: ", thongTinHopDong)
     const ngachNhanVien = document.querySelector('#ngachNhanVien select')
     ngachNhanVien.value = thongTinHopDong.chucdanh
-
     thongTinNgachLuong = ngachNhanVien.value
+
     layThongTinBacLuong()
     apiLuongHeSo()
     apiPhuCap()
 }
+function datGiaTriMacDinhNgachNVPopUp(mahopdong) {
+    const thongTinHopDong = danhSachMaHopDongPop.find(item => item.mahopdong === mahopdong)
+    console.log("TT hd: ", thongTinHopDong)
+    const ngachNhanVien = document.querySelector('#ngachNhanVienPop select')
+    ngachNhanVien.value = thongTinHopDong.chucdanh
+    thongTinNgachLuong = ngachNhanVien.value
 
+    layThongTinBacLuongPopUp();
+    apiLuongHeSoPopUp()
+    // apiPhuCap()
+}
 function handleMaHopDong() {
     const maHopDong = document.querySelector('base-select#maHopDong select')
     maHopDong.addEventListener("change", (event) => {
@@ -419,7 +525,7 @@ function handlePhuCapKhac() {
             phuCapKhac.value = formatCurrency(numericValue);
 
             luongVal = parseCurrency(document.querySelector('#luongCoBan input').value)
-            heSoVal = parseCurrency(document.querySelector('#hesoluong input').value)
+            heSoVal = document.querySelector('#hesoluong input').value
 
             phuCapKhacInput = parseFloat(value);
             console.log("Phụ cấp khác: ", phuCapKhacInput);
@@ -432,11 +538,36 @@ function handlePhuCapKhac() {
 
         tinhLuong(luongVal, heSoVal, phuCapInput, phuCapKhacInput);
     });
-
 }
-function setNullPhuCapKhac(){
+function handlePhuCapKhacPop() {
+    let luongVal = null
+    let heSoVal = null
+    const phuCapKhac = document.querySelector('#phuCapKhacPop input')
+
+    phuCapKhac.addEventListener("change", (event) => {
+        const value = event.target.value;
+        if (value) {
+            const numericValue = parseFloat(value.replace(/[^0-9.-]+/g, ""));
+            phuCapKhac.value = formatCurrency(numericValue);
+
+            luongVal = parseCurrency(document.querySelector('#luongCoBanPop input').value)
+            heSoVal = document.querySelector('#hesoluongPop input').value
+
+            phuCapKhacInputPop = parseFloat(value);
+            console.log("Phụ cấp khác: ", phuCapKhacInputPop);
+            console.log("Luong co ban: ", luongVal)
+            console.log("he so: ", heSoVal)
+
+        } else {
+            phuCapKhacInputPop = 0;
+        }
+
+        tinhLuongPopUp(luongVal, heSoVal, phuCapInput, phuCapKhacInputPop);
+    });
+}
+function setNullPhuCapKhac() {
     const phuCapKhac = document.querySelector('#phuCapKhac input')
-    phuCapKhac.value =""
+    phuCapKhac.value = ""
 }
 // ------------- fetch Phu Cap -----------------------
 
@@ -461,6 +592,7 @@ async function apiPhuCap() {
         else {
             console.log("Khong tim thay ban ghi chua phu cap")
         }
+
     } catch (error) {
         console.log("Error", error)
     }
@@ -469,7 +601,7 @@ async function apiPhuCap() {
 function formatCurrency(val) {
     return val.toLocaleString("it-IT", {
         minimumFractionDigits: 0, // số lượng chữ số thập phân tối thiểu
-        maximumFractionDigits: 2 
+        maximumFractionDigits: 2
     });
 }
 function parseCurrency(value) {
@@ -477,7 +609,7 @@ function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
     return parseFloat(cleanedValue);
 }
-async function checkSoLuongHopDong(){
+async function checkSoLuongHopDong() {
     try {
         const hopDong = await $.ajax({
             url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
@@ -493,12 +625,16 @@ document.addEventListener('DOMContentLoaded', () => {
     checkSoLuongHopDong()
     handleMaHopDong();
     apiDanhSachHopDong()
-    handleLuongHeSo()
+    handleBacLuong()
     handlePhuCapKhac()
+
     renderActionByStatus()
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupSaveBtn.addEventListener("click", handleSave)
-
-
 })
+
+
+
+
+// ------------------fetch ngach nhan vien theo hop dong ----------------------
 

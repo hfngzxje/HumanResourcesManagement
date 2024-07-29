@@ -28,65 +28,67 @@ var BankList = [
   { label: 'VP Bank', value: 'VPB' }
 ];
 var TableColumns = [
-    {
-      label: 'Mã nhân viên',
-      key: 'ma'
-    },
-    {
-      label: 'Họ và tên',
-      key: 'ten',
-    },
-    {
-      label: 'Địa chỉ',
-      key: 'thuongtru',
-    },
-    {
-      label: 'Ngày sinh',
-      key: 'ngaysinh',
-      type:'datetime'
-    },
-    {
-      label: 'Giới tính',
-      key: 'gioitinh',
-      type: "gender"
-    },
-    {
-      label: 'SĐT',
-      key: 'didong',
-    },
-    {
-      label: 'Chức vụ',
-      key: 'chucvuhientai',
-     
-    },
-    {
-      label: 'Phòng ban',
-      key: 'phong',
-    },
-    {
-      label: 'Hành động',
-      key: 'action',
-      actions: [
-        { type: 'plain', icon: 'bx bx-show', label: 'Chi tiết',onClick: (row) => { 
-          
+  {
+    label: 'Mã nhân viên',
+    key: 'ma'
+  },
+  {
+    label: 'Họ và tên',
+    key: 'ten',
+  },
+  {
+    label: 'Ngày sinh',
+    key: 'ngaysinh',
+    type: 'datetime'
+  },
+  {
+    label: 'Giới tính',
+    key: 'gioitinh',
+    type: "gender"
+  },
+  {
+    label: 'Địa chỉ',
+    key: 'thuongtru',
+  },
+  {
+    label: 'SĐT',
+    key: 'didong',
+  },
+  {
+    label: 'Chức vụ',
+    key: 'chucvuhientai',
+
+  },
+  {
+    label: 'Phòng ban',
+    key: 'phong',
+  },
+  {
+    label: 'Hành động',
+    key: 'action',
+    actions: [
+      {
+        type: 'plain', icon: 'bx bx-show', label: 'Chi tiết', onClick: (row) => {
+
           localStorage.setItem("maDetail", row.ma)
-         const maDetail = localStorage.getItem("maDetail")
+          const maDetail = localStorage.getItem("maDetail")
           alert(maDetail)
           backToList(row.ma)
-        } }
-      ]
-    }
-  ]
+        }
+      }
+    ]
+  }
+]
 
-  
+
+window.history.pushState(null, null, window.location.href);
+window.onpopstate = function () {
   window.history.pushState(null, null, window.location.href);
-  window.onpopstate = function () {
-      window.history.pushState(null, null, window.location.href);
-  };
+};
 
-  function backToList(id) {
+function backToList(id) {
 
-    window.location.replace(`/pages/staff/resume.html`);
+  window.location.replace(`/pages/staff/resume.html`);
 }
 function backToListAfterCreate() {
 
@@ -98,26 +100,26 @@ function showPopup() {
   var modal = document.getElementById("createNhanVien");
   modal.style.display = "block";
   window.onclick = function (event) {
-      if (event.target == modal) {
-          modal.style.display = "none";
-          clearFormValues();
-      }
+    if (event.target == modal) {
+      modal.style.display = "none";
+      clearFormValues();
+    }
   }
-      const popupTitle = modal.querySelector('h2')
-      popupTitle.textContent = "Thêm mới nhân viên" 
+  const popupTitle = modal.querySelector('h2')
+  popupTitle.textContent = "Thêm mới nhân viên"
 }
 function clearFormValues(formId) {
   const form = document.getElementById('createNhanVien');
   const inputs = form.querySelectorAll('input, textarea, select');
 
   inputs.forEach(input => {
-      if (input.type === 'checkbox' || input.type === 'radio') {
-          input.checked = false;
-      } 
-      else {
-          input.value = '';
-          input.selectedIndex = 0;
-      }
+    if (input.type === 'checkbox' || input.type === 'radio') {
+      input.checked = false;
+    }
+    else {
+      input.value = '';
+      input.selectedIndex = 0;
+    }
   });
 }
 
@@ -125,42 +127,42 @@ function handleCreate() {
   const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
   if (!isConfirm) return
   const valid = validateForm('createNhanVien')
-  if(!valid) return
-  const {anh, ...rest} = getFormValues('createNhanVien')
+  if (!valid) return
+  const { anh, ...rest } = getFormValues('createNhanVien')
   const payload = buildPayload(rest)
   setLoading(true)
   $.ajax({
-      url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify(payload),
-      success: function(data) {
-          console.log('fetchEmployee res :: ', data);
-          alert("Thêm mới thành công !")
-          backToListAfterCreate()
-      },
-    
-      error: (err) => {
-          console.log('err ', err);
-          try {
-              if(!err.responseJSON) {
-                  alert(err.responseText)
-                  return 
-              }
-              const errObj = err.responseJSON.errors
-              const firtErrKey = Object.keys(errObj)[0]
-              const message = errObj[firtErrKey][0]
-              alert(message)
-          } catch (error) {
-              alert("Tạo thất bại!")
-          }
-      },
-      complete: () => {
-          setLoading(false)
+    url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    success: function (data) {
+      console.log('fetchEmployee res :: ', data);
+      alert("Thêm mới thành công !")
+      backToListAfterCreate()
+    },
+
+    error: (err) => {
+      console.log('err ', err);
+      try {
+        if (!err.responseJSON) {
+          alert(err.responseText)
+          return
+        }
+        const errObj = err.responseJSON.errors
+        const firtErrKey = Object.keys(errObj)[0]
+        const message = errObj[firtErrKey][0]
+        alert(message)
+      } catch (error) {
+        alert("Tạo thất bại!")
       }
+    },
+    complete: () => {
+      setLoading(false)
+    }
   });
 }
-function addNewEmp(){
+function addNewEmp() {
   localStorage.removeItem("maNhanVien")
 }
 

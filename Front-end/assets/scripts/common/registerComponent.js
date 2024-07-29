@@ -62,7 +62,7 @@ class CustomSidebar extends HTMLElement {
       <li><a class="app-menu__item" href="/pages/staffSideBar/report.html"><i
             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo </span></a>
       </li>
-      <li><a class="app-menu__item" href="page-calendar.html"><i class='app-menu__icon bx bx-user'></i><span
+      <li><a class="app-menu__item" href="/pages/employee/overview.html"><i class='app-menu__icon bx bx-user'></i><span
             class="app-menu__label">Chi tiết cá nhân </span></a></li>
       <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
     </ul>
@@ -70,7 +70,6 @@ class CustomSidebar extends HTMLElement {
 
    <div id="myModal" class="modal" style="z-index: 100;">
             <div class="change-container">
-             <span class="close">&times;</span>
               <form id="change_form">
                   <div class="form-header">
                      <h2>Đổi Mật Khẩu</h2>
@@ -371,6 +370,7 @@ class BaseSelect extends HTMLElement {
     "keyValue",
     "keyLabel",
     "required",
+    "disabled"
   ];
 
   connectedCallback() {
@@ -381,6 +381,7 @@ class BaseSelect extends HTMLElement {
     const keyValue = this.getAttribute("keyValue") || "value";
     const keyLabel = this.getAttribute("keyLabel") || "label";
     const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
 
     function getApiUrl() {
       if (!window[api]) return api;
@@ -423,7 +424,7 @@ class BaseSelect extends HTMLElement {
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
       <label class="block mb-2 text-sm  text-gray-900">${label}</label>
-      <select name="${name}" required="${required}" class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
@@ -591,45 +592,6 @@ class BaseTable extends HTMLElement {
 
       return `${month} `;
     }
-    function getBirthDate(dateTimeStr) {
-      const dateTime = new Date(dateTimeStr);
-      const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-      const day = String(dateTime.getDate()).padStart(2, "0");
-
-      return `${day}-${month}-${year} `;
-    }
-    function getNoticeBirthDate(value) {
-      const currentDate = new Date();
-
-      const birthDate = new Date(value);
-      const birthMonth = birthDate.getMonth();
-      const birthDay = birthDate.getDate();
-
-      let thisYearBirthDate = new Date(
-        currentDate.getFullYear(),
-        birthMonth,
-        birthDay
-      );
-
-      if (thisYearBirthDate < currentDate) {
-        thisYearBirthDate.setFullYear(thisYearBirthDate.getFullYear());
-      }
-
-      const differenceInTime = currentDate - thisYearBirthDate;
-
-      const daysUntilBirthday = differenceInTime / (1000 * 60 * 60 * 24);
-
-      if (daysUntilBirthday >= -10 && daysUntilBirthday < 0) {
-        return "Sắp sinh nhật";
-      } else if (daysUntilBirthday > 0) {
-        return "Đã xong";
-      } else {
-        return " ";
-      }
-    }
-
     // định dạg lại kiểu tiền tệ
     function formatCurrency(val) {
       return val.toLocaleString("it-IT", {
@@ -684,6 +646,13 @@ class BaseTable extends HTMLElement {
         const endItem = startItem + pageSize; // Mục két thúc của trang hiện tại
         return sourceTableData.slice(startItem, endItem); // Các mục dữ liệu cho trang hiện tại
       }
+      function getGenderIcon(value) {
+        if (value) {
+          return '<i class="bx bx-male-sign male-icon"></i>'; // Icon nam
+        } else {
+          return '<i class="bx bx-female-sign female-icon"></i>'; // Icon nữ
+        }
+      }
       // Xử lý phần hiển thị bảng
       function renderTable() {
         bodyEl.innerHTML = "";
@@ -724,13 +693,11 @@ class BaseTable extends HTMLElement {
             let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
 
             if (col.type === "noticeBirthdate") {
-              const noticeValue = getNoticeBirthDate(value);
-              if (noticeValue === "Đã xong") {
+              if (value === "Đã qua") {
                 thEl.style.color = "blue";
-              } else if (noticeValue === "Hôm nay sinh nhật") {
-                thEl.style.color = "green";
-              } else if (noticeValue === "Sắp sinh nhật") {
-                thEl.style.color = "red";
+              }
+              else{
+                thEl.style.color = "red"
               }
             }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
@@ -755,14 +722,14 @@ class BaseTable extends HTMLElement {
                 value = formatDateTime(value);
               } else if (col.type == "month") {
                 value = getMonth(value);
-              } else if (col.type == "birthDate") {
-                value = getBirthDate(value);
-              } else if (col.type == "noticeBirthdate") {
-                value = getNoticeBirthDate(value);
-              } else if (col.type === "currency") {
+              } 
+               else if (col.type === "currency") {
                 value = formatCurrency(value);
               } else if (col.type === "gender") {
-                value = value ? "Nam" : "Nữ";
+                value = getGenderIcon(value); // Sử dụng icon thay vì text
+                thEl.innerHTML = value;
+                trEl.appendChild(thEl);
+                return; // Kết thúc xử lý cho cột này
               }
 
               // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng

@@ -26,26 +26,14 @@
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Danh mục khen thưởng - kỷ luật</b></a></li>
+                <li class="breadcrumb-item active"><a href="#"><b>Danh sách danh mục khen thưởng - kỷ luật</b></a></li>
             </ul>
             <div id="clock"></div>
         </div>
-        <div class="h-screen w-screen flex flex-col overflow-auto">
-            <layout-header></layout-header>
-            <div class="flex flex-1 overflow-auto">
-                <layout-sidebar class="zIndexSideBar"> </layout-sidebar>
-
-                <div class="flex-1 bg-gray-200  overflow-auto">
-                    <div id="award_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
-                    <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-                        <p class="text-xl">Danh sách Khen Thưởng, Kỷ Luật</p>
-                    </div>
-                    <div class="mt-3">
-                        <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                        </base-table>
-                    </div>
-                </div>
-            </div>
+        <div id="award_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
+        <div class="mt-3">
+            <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
+            </base-table>
         </div>
     </main>
     <div id="editKhenThuong" class="modal">
