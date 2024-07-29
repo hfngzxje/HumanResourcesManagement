@@ -50,7 +50,8 @@ class CustomSidebar extends HTMLElement {
             class="app-menu__label">Quản lý nhân viên</span></a></li>
       <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i class='app-menu__icon bx bx-file'></i><span
             class="app-menu__label">Quản lý hợp đồng</span></a></li>
-      <li><a class="app-menu__item" href="table-data-product.html"><i
+      <li><a class="app-menu__item" href="WorkingProccess.html"><i
+
             class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Quản lý điều chuyển</span></a>
       </li>
       <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-trophy'></i><span
