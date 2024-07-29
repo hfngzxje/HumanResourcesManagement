@@ -75,7 +75,8 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = dmt.Id,
                     Ten = dmt.Ten,
-                    Idphong = dmt.IdphongNavigation.Ten,
+                    TenPhong = dmt.IdphongNavigation.Ten,
+                    Idphong = dmt.Idphong,
                     Ma = dmt.Ma,
                 }).ToListAsync();
             if (listDanhMucTo == null || !listDanhMucTo.Any())
@@ -99,7 +100,8 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = cm.Id,
                     Ten = cm.Ten,
-                    Idphong = cm.IdphongNavigation.Ten,
+                    TenPhong = cm.IdphongNavigation.Ten,
+                    Idphong =cm.Idphong,
                     Ma = cm.Ma.Trim()
                 })
                 .FirstOrDefaultAsync();

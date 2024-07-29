@@ -46,6 +46,37 @@ namespace HumanResourcesManagement.Controllers
             
         }
 
+        [HttpPost("getBaoCaoDanhSachDangVien")]
+        public async Task<IActionResult> GetReportDanhSachDangVien([FromForm] DanhSachDangVienRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachDangVien(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
+        [HttpPost("ExportBaoCaoDangVienToExecl")]
+        public async Task<IActionResult> ExportBaoCaoDangVien([FromForm] DanhSachDangVienRequest req)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _baoCaoService.ExportBaoCaoDangVienToExcel(req);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel.");
+            }
+
+        }
+
+
+
         [HttpPost("getBaoCaoDanhSachNguoiThan")]
         public async Task<IActionResult> GetReportDanhSachNguoiThan([FromForm] DanhSachNguoiThanRequest req)
         {
