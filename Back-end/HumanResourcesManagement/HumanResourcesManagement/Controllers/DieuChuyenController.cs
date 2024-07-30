@@ -35,13 +35,27 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpPost("DieuChuyen")]
-        public async Task<IActionResult> DieuChuyen(InsertDieuChuyenRequest req)
+        [HttpPost("LuuLichSuDieuChuyen")]
+        public async Task<IActionResult> LuuDieuChuyen(InsertDieuChuyenRequest req)
         {
             try
             {
                 var newDieuChuyen = await _dieuChuyenService.AddDieuChuyen(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Lưu điều chuyển thành công");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
+        [HttpPost("DieuChuyen")]
+        public async Task<IActionResult> DieuChuyen(string maNV, int id)
+        {
+            try
+            {
+                var dc = await _dieuChuyenService.DieuChuyenNhanVien(maNV, id);
+                return StatusCode(200, "Điều chuyển thành công");
             }
             catch (Exception ex)
             {
