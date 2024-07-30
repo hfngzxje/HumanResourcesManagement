@@ -9,6 +9,7 @@
         public bool Gioitinh { get; set; }
         public string? Dienthoai { get; set; }
         public string? Didong { get; set; }
+        public string? Email { get; set; }
         public string? Cmnd { get; set; }
         public DateTime? Cmndngaycap { get; set; }
         public string? Cmndnoicap { get; set; }
@@ -19,13 +20,12 @@
         public string? tenDantoc { get; set; }
         public string? tenTongiao { get; set; }
         public string? Nghenghiep { get; set; }
-        public string? Chucvuhientai { get; set; }
         public DateTime? Ngaytuyendung { get; set; }
         public string? Congviecchinh { get; set; }
         public DateTime? Ngayvaoban { get; set; }
         public DateTime? Ngaychinhthuc { get; set; }
         public string? Coquantuyendung { get; set; }
-        public string? Ngachcongchuc { get; set; }
+        public int? Ngachcongchuc { get; set; }
         public string? Ngachcongchucnoidung { get; set; }
         public DateTime? Ngayvaodang { get; set; }
         public DateTime? Ngayvaodangchinhthuc { get; set; }
@@ -43,10 +43,13 @@
         public string? Bhyt { get; set; }
         public string? Atm { get; set; }
         public string? Nganhang { get; set; }
-        public string? tenPhong { get; set; }
-        public string? tenTo { get; set; }
-        public string? Anh { get; set; }
+        public int? Chucvuhientai { get; set; }
+        public int? Phong { get; set; }
+        public int? To { get; set; }
         public string? tenChucVu { get; set; }
         public string? tenPhongBan { get; set; }
+        public string? tenTo { get; set; }
+        public string? Anh { get; set; }
+
     }
 }

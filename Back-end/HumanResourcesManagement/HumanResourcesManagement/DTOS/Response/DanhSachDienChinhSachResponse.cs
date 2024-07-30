@@ -9,6 +9,5 @@
         public string DienThoai { get; set; }
         public string PhongBan { get; set; }
         public string DienChinhSach { get; set; }
-        public string Khac { get; set; }
     }
 }
