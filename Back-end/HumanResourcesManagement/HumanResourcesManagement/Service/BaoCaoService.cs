@@ -2,10 +2,10 @@
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
-using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace HumanResourcesManagement.Service
 {
@@ -23,7 +23,7 @@ namespace HumanResourcesManagement.Service
             List<TblHopDong> listMaNv = new List<TblHopDong>();
             IEnumerable<TblNhanVien> filtered = all;
 
-            if (searchRule == "phòng ban")
+            if (req.PhongBan.HasValue)
             {
                 filtered = filtered.Where(n => n.Phong == req.PhongBan.Value);
             }
@@ -106,7 +106,7 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNhanVienToExcel(DanhSachNhanVienRequest req)
         {
             var data = await getDanhSachNhanVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú", "Trạng Thái" };
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
             return await ExportToExcel("DANH SÁCH BÁO CÁO NHÂN VIÊN", data, "BaoCao_DanhSachNhanVien.xlsx", headers);
         }
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
@@ -238,9 +238,38 @@ namespace HumanResourcesManagement.Service
                     .ToList();
             }
 
+            if (req.PhongBan.HasValue)
+            {
+                allNhanVien = allNhanVien.Where(n => n.Phong == req.PhongBan).ToList();
+                var mas = allNhanVien.Select(n => n.Ma.Trim()).ToList();
+                allNguoiThan = allNguoiThan.Where(r => mas.Contains(r.Ma.Trim())).ToList();
+            }
+
             if (req.QuanHe.HasValue)
             {
                 allNguoiThan = allNguoiThan.Where(n => n.Quanhe == req.QuanHe).ToList();
+            }
+
+            if (req.TuoiTu.HasValue || req.TuoiDen.HasValue)
+            {
+                var toDay = DateTime.Today.Year;
+                allNguoiThan = allNguoiThan.Where(nt =>
+                {
+                    var tuoi = toDay - nt.Ngaysinh.Value.Year;
+                    if (req.TuoiTu.HasValue && req.TuoiDen.HasValue)
+                    {
+                        return tuoi >= req.TuoiTu.Value && tuoi <= req.TuoiDen.Value;
+                    }
+                    else if (req.TuoiTu.HasValue)
+                    {
+                        return tuoi >= req.TuoiTu.Value;
+                    }
+                    else if (req.TuoiDen.HasValue)
+                    {
+                        return tuoi <= req.TuoiDen.Value;
+                    }
+                    return true;
+                }).ToList();
             }
 
             if (!req.GioiTinh.ToLower().Equals("tất cả"))
@@ -251,7 +280,7 @@ namespace HumanResourcesManagement.Service
             var resp = allNguoiThan.Select(r => new DanhSachNguoiThanResponse
             {
                 Ten = r.Ten,
-                GioiTinh = (bool)r.Gioitinh ? "Nam":"Nữ",
+                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
                 NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 QuanHe = _context.TblDanhMucNguoiThans.Find(r.Quanhe).Ten,
                 NgheNghiep = r.Nghenghiep,
@@ -259,7 +288,7 @@ namespace HumanResourcesManagement.Service
                 DienThoai = r.Dienthoai,
                 MaNV = r.Ma,
                 TenNV = _context.TblNhanViens.Find(r.Ma).Ten,
-                Khac=r.Khac,
+                Khac = r.Khac,
             }).ToList();
 
             if (!resp.Any() || resp == null)
@@ -275,6 +304,7 @@ namespace HumanResourcesManagement.Service
             string[] headers = { "Tên", "Giới Tính", "Ngày Sinh", "Nghề Nghiệp", "Quan Hệ Với Nhân Viên", "Địa Chỉ", "Điện Thoại", "Mã Nhân Viên Tham Chiếu", "Tên Nhân Viên Tham Chiếu", "Khác" };
             return await ExportToExcel("DANH SÁCH BÁO CÁO NGƯỜI THÂN", data, "BaoCao_DanhSachNguoiThan.xlsx", headers);
         }
+
         private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
         {
             using (var package = new ExcelPackage())
@@ -308,7 +338,6 @@ namespace HumanResourcesManagement.Service
                 return (content, fileName);
             }
         }
-
 
         public async Task<IEnumerable<DanhSachSinhNhatResponse>> getDanhSachSinhNhat(DanhSachSinhNhatRequest req)
         {
@@ -381,19 +410,18 @@ namespace HumanResourcesManagement.Service
             return "Không có";
         }
 
-
-
         public async Task<IEnumerable<DanhSachDienChinhSachResponse>> getDanhSachDienChinhSach(DanhSachDienChinhSachRequest req)
         {
             var all = await _context.TblNhanViens.Where(n => n.Laconchinhsach == true).ToListAsync();
-            var searchRules = req.SearchRules.ToLower();
-            if(searchRules == "phòng ban")
-            {
-                all = all.Where(n => n.Phong == req.PhongBan).ToList();
-            }
-            if(!string.IsNullOrEmpty(req.GioiTinh) && !(req.GioiTinh.ToLower().Equals("tất cả")))
+
+            if (!string.IsNullOrEmpty(req.GioiTinh) && !(req.GioiTinh.ToLower().Equals("tất cả")))
             {
                 all = all.Where(n => n.Gioitinh.ToString().ToLower().Equals(req.GioiTinh.ToLower())).ToList();
+            }
+
+            if (req.PhongBan.HasValue)
+            {
+                all = all.Where(n => n.Phong == req.PhongBan).ToList();
             }
 
             var resp = all.Select(r => new DanhSachDienChinhSachResponse
@@ -405,10 +433,9 @@ namespace HumanResourcesManagement.Service
                 DienThoai = r.Didong,
                 PhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == r.Phong)?.Ten,
                 DienChinhSach = r.Conchinhsach,
-                Khac = "idk",
             }).ToList();
 
-            if(resp == null || !resp.Any())
+            if (resp == null || !resp.Any())
             {
                 throw new Exception("Không có nhân viên nào thuộc diện chính sách.");
             }
@@ -418,18 +445,18 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
         {
             var data = await getDanhSachDienChinhSach(req);
-            string[] headers = { "Mã Nhân Viên", "Tên Nhân Viên"};
+            string[] headers = { "Mã Nhân Viên", "Tên Nhân Viên" };
             return await ExportToExcel("DANH SÁCH BÁO CÁO DIỆN CHÍNH SÁCH", data, "BaoCao_DanhSachDienChinhSach", headers);
-         }
+        }
 
         public async Task<IEnumerable<DanhSachNhomLuongResponse>> getDanhSachNhomLuong(DanhSachNhomLuongRequest req)
         {
             var all = await _context.TblDanhMucNhomLuongs.ToListAsync();
-            if(req.ChucDanh.HasValue)
+            if (req.ChucDanh.HasValue)
             {
                 all = all.Where(l => l.Chucdanh == req.ChucDanh).ToList();
             }
-            if(req.BacLuong.HasValue)
+            if (req.BacLuong.HasValue)
             {
                 all = all.Where(l => l.Bacluong == req.BacLuong).ToList();
             }
@@ -450,6 +477,59 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
-       
+        private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+                document.Open();
+
+                Font titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
+                Paragraph titleParagraph = new Paragraph(new Chunk(title, titleFont));
+                titleParagraph.Alignment = Element.ALIGN_CENTER;
+                document.Add(titleParagraph);
+
+                document.Add(new Paragraph("\n"));
+
+                PdfPTable table = new PdfPTable(headers.Length);
+                table.WidthPercentage = 100;
+
+                Font headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                foreach (var header in headers)
+                {
+                    PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    table.AddCell(cell);
+                }
+
+                Font dataFont = FontFactory.GetFont("Arial", 10, Font.NORMAL);
+                foreach (var item in data)
+                {
+                    var properties = item.GetType().GetProperties();
+                    foreach (var prop in properties)
+                    {
+                        var value = prop.GetValue(item)?.ToString() ?? string.Empty;
+                        PdfPCell cell = new PdfPCell(new Phrase(value, dataFont));
+                        cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        table.AddCell(cell);
+                    }
+                }
+
+                document.Add(table);
+                document.Close();
+                writer.Close();
+
+                return (memoryStream.ToArray(), fileName);
+            }
+        }
+
+
+        public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
+        {
+            var list = await getDanhSachNhanVien(req);
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
+            return await ExportToPdf("Báo Cáo Danh Sách Nhân Viên", list, "BaoCao_DanhSachNhanVien.pdf", headers);
+        }
     }
 }

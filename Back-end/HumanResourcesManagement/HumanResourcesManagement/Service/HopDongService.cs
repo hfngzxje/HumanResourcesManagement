@@ -19,7 +19,8 @@ namespace HumanResourcesManagement.Service
             var hopDongs = _context.TblHopDongs.ToList();
             if (!hopDongs.Any())
             {
-                throw new Exception("Không có hợp đồng nào!!");
+                //throw new Exception("Không có hợp đồng nào!!");
+                return null;
             }
 
             return hopDongs;
@@ -31,7 +32,9 @@ namespace HumanResourcesManagement.Service
 
             if (!hopDongs.Any())
             {
-                throw new Exception("Không có hợp đồng nào cho mã nhân viên này!!");
+                //throw new Exception("Không có hợp đồng nào cho mã nhân viên này!!");
+                return null;
+
             }
 
             return hopDongs;
@@ -141,7 +144,8 @@ namespace HumanResourcesManagement.Service
             var loaiHopDong = _context.TblDanhMucLoaiHopDongs.ToList();
             if (!loaiHopDong.Any())
             {
-                throw new Exception("Empty list!!");
+                //throw new Exception("Empty list!!");
+                return null;
             }
             return loaiHopDong;
         }
