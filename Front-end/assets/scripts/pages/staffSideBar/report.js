@@ -16,7 +16,7 @@ var TableColumns = [
   {
     label: "Giới tính",
     key: "gioitinh",
-    type: "gender",
+    // type: "gender",
   },
   {
     label: "Điện thoại",
