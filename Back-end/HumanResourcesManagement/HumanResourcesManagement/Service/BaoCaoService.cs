@@ -2,11 +2,10 @@
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using OfficeOpenXml;
-using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace HumanResourcesManagement.Service
 {
@@ -107,7 +106,7 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNhanVienToExcel(DanhSachNhanVienRequest req)
         {
             var data = await getDanhSachNhanVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú", "Trạng Thái" };
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
             return await ExportToExcel("DANH SÁCH BÁO CÁO NHÂN VIÊN", data, "BaoCao_DanhSachNhanVien.xlsx", headers);
         }
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
@@ -478,6 +477,59 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
+        private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                Document document = new Document(PageSize.A4, 10, 10, 10, 10);
+                PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
+                document.Open();
 
+                Font titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
+                Paragraph titleParagraph = new Paragraph(new Chunk(title, titleFont));
+                titleParagraph.Alignment = Element.ALIGN_CENTER;
+                document.Add(titleParagraph);
+
+                document.Add(new Paragraph("\n"));
+
+                PdfPTable table = new PdfPTable(headers.Length);
+                table.WidthPercentage = 100;
+
+                Font headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
+                foreach (var header in headers)
+                {
+                    PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    table.AddCell(cell);
+                }
+
+                Font dataFont = FontFactory.GetFont("Arial", 10, Font.NORMAL);
+                foreach (var item in data)
+                {
+                    var properties = item.GetType().GetProperties();
+                    foreach (var prop in properties)
+                    {
+                        var value = prop.GetValue(item)?.ToString() ?? string.Empty;
+                        PdfPCell cell = new PdfPCell(new Phrase(value, dataFont));
+                        cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                        table.AddCell(cell);
+                    }
+                }
+
+                document.Add(table);
+                document.Close();
+                writer.Close();
+
+                return (memoryStream.ToArray(), fileName);
+            }
+        }
+
+
+        public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
+        {
+            var list = await getDanhSachNhanVien(req);
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
+            return await ExportToPdf("Báo Cáo Danh Sách Nhân Viên", list, "BaoCao_DanhSachNhanVien.pdf", headers);
+        }
     }
 }
