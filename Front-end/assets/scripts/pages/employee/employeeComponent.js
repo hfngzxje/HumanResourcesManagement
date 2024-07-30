@@ -77,6 +77,9 @@ class CustomHeader extends HTMLElement {
             <li><a class="app-menu__item" href="#"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
             </li>
+            <li id="adminLink"><a class="app-menu__item" href="/pages/staff/index.html"><i
+                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Quay về trang admin </span></a>
+            </li>
             <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span
                         class="app-menu__label">Đổi mật khẩu</span></a></li>
         </ul>
@@ -103,6 +106,7 @@ class CustomHeader extends HTMLElement {
       this.fetchRole();
       this.updateActiveLink();
       this.addEventListeners();
+      this.checkAdminRole()
     }
   
     async fetchAvatar() {
@@ -148,7 +152,6 @@ class CustomHeader extends HTMLElement {
         console.error('vaiTroId không tồn tại trong localStorage');
         return;
       }
-  
       try {
         if (maNhanVien) {
           const maNhanVienElement = this.querySelector('p#role');
@@ -161,6 +164,13 @@ class CustomHeader extends HTMLElement {
         }
       } catch (error) {
         console.error('Error fetching role:', error);
+      }
+    }
+    async checkAdminRole(){
+      const vaiTroId = localStorage.getItem('vaiTroId')
+      const adminLink =  this.querySelector('#adminLink')
+      if(vaiTroId !== '1'){
+        adminLink.style.display =  'none'
       }
     }
     updateActiveLink() {

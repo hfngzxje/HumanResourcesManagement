@@ -81,6 +81,16 @@ function fetchNgachCongChuc(id) {
     });
 }
 
+function recordActivity(action, details) {
+    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
+    const activityEntry = {
+        action: action,
+        details: details,
+        timestamp: new Date().toLocaleString()
+    };
+    activityHistory.push(activityEntry);
+    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
+}
 function handleCreate() {
     const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục ngạch công chức?')
     if (!isConfirm) return
@@ -100,6 +110,7 @@ function handleCreate() {
             success: function (data) {
                 console.log('fetch ngạch công chức res :: ', data);
                 alert("Thêm thành công !")
+                recordActivity('Add', `Thêm danh mục ngạch: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();

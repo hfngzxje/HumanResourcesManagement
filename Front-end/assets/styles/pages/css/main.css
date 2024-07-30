@@ -5667,7 +5667,7 @@ input[type="button"].btn-block {
   line-height: 1;
   color: #000;
   text-shadow: 0 1px 0 #FFF;
-  opacity: .5;
+  /* opacity: .5; */
 }
 
 .close:hover, .close:focus {
@@ -14213,7 +14213,7 @@ be a descendant of the grid when it is being dragged.
   margin-bottom: 0;
   text-align: right;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 15px;
   text-transform: capitalize;
   padding: 0;
   text-align: left;
@@ -15625,7 +15625,7 @@ text-align:center;
 .close {
   color: white !important;
   float: right;
-  font-size: 13px;
+  /* font-size: 13px; */
   font-weight: 500;
   opacity: 1 !important;
   border: 1px solid black;
@@ -15635,7 +15635,7 @@ text-align:center;
   width: 28px;
   height: 28px;
   background: black;
-  margin-top: 7px;
+  margin-top: 2px;
 }
 
 .close:hover,

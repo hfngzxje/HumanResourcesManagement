@@ -37,9 +37,9 @@ class CustomSidebar extends HTMLElement {
     <div class="app-sidebar__user" style="display: flex; align-items: center; flex-direction: column;"><img id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px"
         alt="User Image">
       <div>
-        <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold;"></p>
+        <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold; color: white;"></p>
         <p id="role" style="color: #003366; font-weight: bold; border: 2px solid blue; padding: 2px 20px; border-radius: 25px; display: inline-block;background-color: white;"> </p>
-        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+        <p class="app-sidebar__user-designation" style="color: white">Chào mừng bạn trở lại</p>
       </div>
     </div>
     <hr>
@@ -64,6 +64,9 @@ class CustomSidebar extends HTMLElement {
       </li>
       <li><a class="app-menu__item" href="/pages/employee/overview.html"><i class='app-menu__icon bx bx-user'></i><span
             class="app-menu__label">Chi tiết cá nhân </span></a></li>
+      <li><a class="app-menu__item" href="/pages/history.html"><i class='app-menu__icon bx bx-history'></i><span
+            class="app-menu__label">Lịch sử hoạt động </span></a>
+      </li>
       <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
     </ul>
   </aside>
@@ -71,6 +74,7 @@ class CustomSidebar extends HTMLElement {
    <div id="myModal" class="modal" style="z-index: 100;">
             <div class="change-container">
               <form id="change_form">
+              <span class="close">&times;</span>
                   <div class="form-header">
                      <h2>Đổi Mật Khẩu</h2>
                   </div>
@@ -273,6 +277,7 @@ class BaseInputNumber extends HTMLElement {
     "required",
     "value",
     "readonly",
+    "style"
   ];
 
   constructor() {
@@ -286,12 +291,13 @@ class BaseInputNumber extends HTMLElement {
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const value = this.getAttribute("value") || "";
+    const style = this.getAttribute("style") || "";
     this._readonly = this.hasAttribute("readonly");
 
     this.innerHTML = `
     <div class="">
-      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+      <label for="base-input" class="block  text-sm  text-gray-900" style="${style}">${label}</label>
+      <input type="text" name="${name}" required="${required}"  value="${value}" style="font-weight: normal;" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
       this._readonly ? "readonly" : ""
     }>
     </div>

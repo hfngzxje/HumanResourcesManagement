@@ -169,5 +169,6 @@ function addNewEmp() {
 document.addEventListener('DOMContentLoaded', () => {
   popupCreateBtn.addEventListener("click", handleCreate)
   popupClearBtn.addEventListener("click", clearFormValues)
+  
 
 })

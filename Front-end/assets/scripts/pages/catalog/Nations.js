@@ -1,4 +1,3 @@
-
 let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
@@ -49,6 +48,18 @@ var tableEvent = {
         console.log('row double click ', row);
     }
 };
+
+function recordActivity(action, details) {
+    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
+    const activityEntry = {
+        action: action,
+        details: details,
+        timestamp: new Date().toLocaleString()
+    };
+    activityHistory.push(activityEntry);
+    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
+}
+
 function backToList() {
     window.location.replace("/pages/catalog/Nations.html");
 }
@@ -98,6 +109,7 @@ function handleCreate() {
             success: function (data) {
                 console.log('fetch ngạch công chức res :: ', data);
                 alert("Thêm thành công !")
+                recordActivity('Add', `Thêm danh mục dân tộc: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
