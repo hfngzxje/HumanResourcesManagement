@@ -10,5 +10,6 @@ namespace HumanResourcesManagement.Service.IService
         Task<TblDieuChuyen> AddDieuChuyen(InsertDieuChuyenRequest req);
         Task RemoveDieuChuyen(int id);
         Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV);
+        Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int id);
     }
 }

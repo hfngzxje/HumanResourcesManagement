@@ -61,12 +61,12 @@ namespace HumanResourcesManagement.Service
                     Chitiet = req.ChiTiet,
                 };
 
-                TblNhanVien nhanVien = new TblNhanVien();
-                nhanVien = _nhanVienService.GetNhanVienByMa(req.Ma);
-                nhanVien.Phong = dc.Phong;
-                nhanVien.To = dc.To;
-                nhanVien.Chucvuhientai = dc.Chucvu;
-                nhanVien.Ngaychinhthuc = dc.Ngayhieuluc;
+                //TblNhanVien nhanVien = new TblNhanVien();
+                //nhanVien = _nhanVienService.GetNhanVienByMa(req.Ma);
+                //nhanVien.Phong = dc.Phong;
+                //nhanVien.To = dc.To;
+                //nhanVien.Chucvuhientai = dc.Chucvu;
+                //nhanVien.Ngaychinhthuc = dc.Ngayhieuluc;
 
                 _context.TblDieuChuyens.Add(dc);
                 await _context.SaveChangesAsync();
@@ -76,6 +76,22 @@ namespace HumanResourcesManagement.Service
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int id)
+        {
+            var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == maNV);
+            var dc = _context.TblDieuChuyens.Find(id);
+            nhanVien = _nhanVienService.GetNhanVienByMa(maNV);
+            nhanVien.Phong = dc.Phong;
+            nhanVien.To = dc.To;
+            nhanVien.Chucvuhientai = dc.Chucvu;
+            nhanVien.Ngaychinhthuc = dc.Ngayhieuluc;
+
+            _context.Entry(nhanVien).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return nhanVien;
+
         }
 
         public async Task RemoveDieuChuyen(int id)
