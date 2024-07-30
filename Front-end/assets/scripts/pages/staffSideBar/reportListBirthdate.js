@@ -150,7 +150,7 @@ function handleSearch() {
 
   
   tableReport.handleCallFetchData(params);
-
+  console.log("Param: ", params)
 
 }
 

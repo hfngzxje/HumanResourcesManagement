@@ -1,40 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activity History</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+function handleDieuChuyen(id) {
+    const isConfirm = confirm('Bạn chắc chắn muốn tạo điều chuyển?')
+    if (!isConfirm) return
+    const valid = validateForm('workingProcessChuyenDen_form')
+    if (!valid) return
+    const formValue = getFormValues('workingProcessChuyenDen_form')
+    formValue['maNV'] = maDetail;
+    formValue['id']
+    const payload = buildPayload(formValue)
+    const apiUrl = `https://localhost:7141/api/DieuChuyen/DieuChuyen?maNV=${encodeURIComponent(formValue['maNV'])}&id=${encodeURIComponent(formValue['id'])}`;
+    setLoading(true)
+    setTimeout(() => {
+    $.ajax({
+        
+        url: apiUrl, 
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (data) {
+            table.handleCallFetchData();
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if (!err.responseJSON) {
+                    alert(err.responseText)
+                    return
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("điều chuyển không thành công!")
+            }
+        },
+        complete: () => {
+            setLoading(false)
         }
-        #activityHistoryContainer {
-            margin-top: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: #f0f0f0;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
-
-<h1>Activity History</h1>
-
-<div id="activityHistoryContainer">
-    <h2>Recent Activities</h2>
-    <ul id="activityList"></ul>
-</div>
-
-
-<script src="/history.js"></script>
-
-</body>
-</html>
+    });
+}, 1000); 
+}

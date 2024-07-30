@@ -32,8 +32,8 @@ var TableColumns = [
   },
 ];
 var locTheo = [
-  { label: "Tất cả", value: 'Tất cả' },
-  { label: "Trạng thái", value: 'Trạng thái' },
+  { label: 'Tất cả', value: 'Tất cả' },
+  { label: 'Trạng thái', value: 'Trạng thái' },
   { label: "Phòng ban", value: 'Phòng ban' },
   { label: "Ngày tháng", value: 'Ngày tháng' },
   { label: "Giới tính", value: 'Giới tính' },
@@ -138,10 +138,10 @@ function handleSearch() {
     params.GioiTinh = formValue.GioiTinh;
   }
 
-  
+
   tableReport.handleCallFetchData(params);
 
-
+  console.log("params: ", params)
 }
 
 function buildApiUrl() {

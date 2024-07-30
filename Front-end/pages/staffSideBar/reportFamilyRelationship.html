@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Báo cáo người thân | Quản trị Admin</title>
+  <title>Báo cáo danh sách nhân viên | Quản trị Admin</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,70 +19,68 @@
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
-  
-    <!-- Navbar-->
-    <layout-header></layout-header>
-    <!-- Sidebar menu-->
-    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
-    <layout-sidebar></layout-sidebar>
-    <main class="app-content">
 
-      <div class="app-title">
-        <ul class="app-breadcrumb breadcrumb side">
-          <li class="breadcrumb-item"><a href="#"><b>Báo cáo người thân</b></a></li>
-        </ul>
-        <div id="clock"></div>
-      </div>
+  <!-- Navbar-->
+  <layout-header></layout-header>
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <layout-sidebar></layout-sidebar>
+  <main class="app-content">
 
-      <div class="container">
-        <div class="right">
+    <div class="app-title">
+      <ul class="app-breadcrumb breadcrumb side">
+        <li class="breadcrumb-item"><a href="#"><b>Báo cáo danh sách nhân viên</b></a></li>
+      </ul>
+      <div id="clock"></div>
+    </div>
 
-          <div class="px-5 mb-4 mt-4">
-            <h1 class="text-xl font-bold mb-2"
-              style="display: flex; justify-content: center; font-size: 30px; margin-top: 10px;">
-              HRM
-            </h1>
-            <h1 class="text-xl font-bold mb-2">Mẫu báo cáo</h1>
-            <base-select id="tabList" label=" "> </base-select>
-          </div>
-          <form id="report_form">
-            <div class="top">
-              <div class="input-container">
-                <h1 class="text-xl font-bold mb-4">Danh sách người thân</h1>
-                <div class="grid grid-cols-3 gap-x-5">
-                  <base-select label="Lọc theo" options="locTheo" required="true">
-                  </base-select>
-                  <base-select label="Mã nhân viên" name="" keyValue="id" keyLabel="ma"
-                    api="https://localhost:7141/api/NhanVien"></base-select>
-                  <base-select label="Quan hệ" name="" keyValue="id" keyLabel="ten"
-                    api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc"></base-select>
-                  <base-select label="Giới tính" options="gioiTinh" required="true"
-                    style="margin-top: 9px"></base-select>
-                  <base-select label="Sự kiện" required="true">
-                  </base-select>
-                </div>
-                <div id="report_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+    <div class="container">
+      <div class="right">
+        <div class="px-5 mb-4 mt-4">
+          <h1 class="text-xl font-bold mb-2" style="
+                display: flex;
+                justify-content: center;
+                font-size: 30px;
+                margin-top: 10px;
+              ">
+            HRM
+          </h1>
+          <h1 class="text-xl font-bold mb-2">Mẫu báo cáo</h1>
+          <base-select id="tabList" label=" "> </base-select>
+        </div>
+        <form id="report_form">
+          <div class="top">
+            <div class="input-container">
+              <h1 class="text-xl font-bold mb-4">Danh sách nhân viên</h1>
+              <div class="grid grid-cols-3 gap-x-5">
+                <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
+                  name="searchRules"></base-select>
+                <base-select id="manhanvien" label="Mã Nhân Viên" name="MaNV" keyValue="ma" keyLabel="ma"
+                  api="https://localhost:7141/api/NhanVien"></base-select>
+                <base-select id="quanhe" label="Quan hệ" name="QuanHe" keyValue="id" keyLabel="ten"
+                  api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc"></base-select>
+                <base-input-number id="tuoitu" label="Tuổi từ" name="TuoiTu"></base-input-number>
+                <base-input-number id="tuoiden" label="Tuổi đến" name="TuoiDen"></base-input-number>
+                <base-select id="gioitinh" label="Giới tính" name="GioiTinh" options="gioiTinh" required="true"
+                  style="margin-top: 9px"></base-select>
+                <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
+                  api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
               </div>
+              <div id="report_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
             </div>
-          </form>
+          </div>
+        </form>
 
-          <div class="bottom">
-            <!-- <p
-                id="datetime"
-                class="text-xl font-medium mb-4"
-                style="font-size: 16px"
-              >
-                Hà Nội / Ngày / Tháng
-              </p> -->
 
-            <div class="mt-3">
-              <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
-              <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-              </base-table>
-            </div>
+        <div class="bottom">
+          <div class="mt-3">
+            <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4"
+              method="POST">
+            </base-table>
           </div>
         </div>
       </div>
+    </div>
 
     </div>
   </main>

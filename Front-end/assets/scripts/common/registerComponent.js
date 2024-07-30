@@ -184,6 +184,7 @@ class BaseInput extends HTMLElement {
     "required",
     "type",
     "value",
+    "readonly"
   ];
 
   connectedCallback() {
@@ -192,13 +193,17 @@ class BaseInput extends HTMLElement {
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const type = this.getAttribute("type") || "text";
+    const disabled = this.getAttribute("disabled") !== null;
+    this._readonly = this.hasAttribute("readonly");
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block  text-sm  text-gray-900 ${
         hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-      <input type="${type}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+        this._readonly ? "readonly" : ""
+      }>
     </div>
     `;
   }
@@ -231,12 +236,13 @@ class BaseTextArea extends HTMLElement {
 }
 
 class BaseDatePicker extends HTMLElement {
-  static observedAttributes = ["label", "name", "required"];
+  static observedAttributes = ["label", "name", "required", "disabled"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full">
@@ -247,7 +253,7 @@ class BaseDatePicker extends HTMLElement {
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
         </div>
-        <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+        <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date" ${disabled ? 'disabled' : ''}>
       </div>
     </div>
     `;
@@ -277,7 +283,7 @@ class BaseInputNumber extends HTMLElement {
     "required",
     "value",
     "readonly",
-    "style"
+    "style",
   ];
 
   constructor() {
