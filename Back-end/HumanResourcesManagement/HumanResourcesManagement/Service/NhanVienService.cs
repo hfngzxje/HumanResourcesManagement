@@ -388,7 +388,23 @@ namespace HumanResourcesManagement.Service
             }
         }
 
-
+        public async Task<IEnumerable<TblNhanVien>> getNhanVienByTo(int idTo)
+        {
+            try
+            {
+                var query = _context.TblNhanViens.Where(n => n.Phong == idTo);
+                var list = await query.ToListAsync();
+                if (list == null || !list.Any())
+                {
+                    throw new Exception("Không có nhân viên nào.");
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public async Task<List<TblNhanVien>> SearchNhanVienAsync(string? search)
         {

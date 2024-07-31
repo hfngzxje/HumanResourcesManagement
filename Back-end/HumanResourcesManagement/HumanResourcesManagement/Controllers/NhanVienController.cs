@@ -238,6 +238,20 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        
+        [HttpGet("getByTo")]
+        public async Task<IActionResult> GetByTo(int idTo)
+        {
+            try
+            {
+                var list = await _nhanVienService.getNhanVienByTo(idTo);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpGet("Search")]
         public async Task<ActionResult<List<TblNhanVien>>> SearchNhanVien([FromQuery] string? search)

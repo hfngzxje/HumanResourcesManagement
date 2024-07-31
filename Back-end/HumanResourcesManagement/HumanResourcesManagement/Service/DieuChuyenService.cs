@@ -23,7 +23,7 @@ namespace HumanResourcesManagement.Service
                 {
                     Ma = nt.Ma,
                     Chucvuhientai = _context.TblDanhMucChucDanhs.FirstOrDefault(c => c.Id == nt.Chucvuhientai).Ten,
-                    Ngaychinhthuc = nt.Ngaychinhthuc,
+                    Ngaychinhthuc = nt.Ngayvaoban,
                     Phong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == nt.Phong).Ten,
                     To = _context.TblDanhMucTos.FirstOrDefault(t => t.Id == nt.To).Ten,
                 }).FirstAsync();
@@ -86,7 +86,7 @@ namespace HumanResourcesManagement.Service
             nhanVien.Phong = dc.Phong;
             nhanVien.To = dc.To;
             nhanVien.Chucvuhientai = dc.Chucvu;
-            nhanVien.Ngaychinhthuc = dc.Ngayhieuluc;
+            nhanVien.Ngayvaoban = dc.Ngayhieuluc;
 
             _context.Entry(nhanVien).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -110,6 +110,7 @@ namespace HumanResourcesManagement.Service
             var dc = await _context.TblDieuChuyens.Where(nv => nv.Manv == maNV)
                 .Select(dc => new DieuChuyenResponseDto
                 {
+                    Id= dc.Id,
                     NgayDieuChuyen = dc.Ngayhieuluc,
                     Phong = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == dc.Phong).Ten,
                     To = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == dc.To).Ten,
@@ -118,5 +119,6 @@ namespace HumanResourcesManagement.Service
                 }).ToListAsync();
             return dc;
         }
+
     }
 }
