@@ -25,18 +25,12 @@
   <main class="app-content">
     <div class="app-title">
       <ul class="app-breadcrumb breadcrumb side">
-        <li class="breadcrumb-item active"><a href="#"><b>Danh sách hợp đồng</b></a></li>
+        <li class="breadcrumb-item"><a href="#"><b>Danh sách hợp đồng</b></a></li>
       </ul>
       <div id="clock"></div>
     </div>
-    
-<!-- 
-        <div class="flex  justify-between mt-5" style="color: blue; margin-top: 1%; font-weight: bold;  ">
-            <p class="text-xl">Danh sách hợp đồng</p>
-        </div> -->
         <div id="listContract_form_action" class="flex gap-x-5 mt-5 justify-left"></div>
         <div class="mt-3">
-            <!-- Khai báo tên của biến global tương ứng biếu lưu trữ thông tin của API, Columns, event -->
             <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
             </base-table>
         </div>

@@ -52,10 +52,11 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/id?id=' + maDetail,
+        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('profile_form', data)
+            console.log("Chuc vu:", data.chucvuhientai)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -202,12 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //     return;
     // }
     renderActionByStatus()
-    if (maNhanVien) {
         fetchEmployee()
         getImage()
         
-    }
-
     // const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maDetail;
 
     // // Thực hiện yêu cầu API

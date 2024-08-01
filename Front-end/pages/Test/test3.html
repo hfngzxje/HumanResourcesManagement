@@ -1,138 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="../../assets/styles/pages/employee/test.css" />
-  <link rel="stylesheet" href="../../assets/styles/common/common.css" />
-  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-  <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+<style>
+  html {
+  box-sizing: border-box;
+}
 
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+
+body {
+  background: #f5f5f5;
+  color: #333;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 32px;
+}
+
+h1 {
+  font-size: 32px;
+  text-align: center;
+}
+
+p {
+  font-size: 20px;
+  line-height: 1.5;
+  margin: 40px auto 0;
+  max-width: 640px;
+}
+
+pre {
+  background: #eee;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  padding: 20px;
+}
+
+form {
+  margin: 40px auto 0;
+}
+
+label {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+input {
+  border: 2px solid #333;
+  border-radius: 5px;
+  color: #333;
+  font-size: 32px;
+  margin: 0 0 20px;
+  padding: .5rem 1rem;
+  width: 100%;
+
+}
+
+button {
+  background: #fff;
+  border: 2px solid #333;
+  border-radius: 5px;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+button:hover {
+  background: #333;
+  border: 2px solid #333;
+  color: #fff;
+}
+
+.main {
+  background: #fff;
+  border: 5px solid #ccc;
+  border-radius: 10px;
+  margin: 40px auto;
+  padding: 40px;
+  width: 80%;
+  max-width: 700px;
+}
+</style>
 <body>
-  <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
-    <div class="p-3 flex items-center border-b border-gray-300">
-      <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
-      <div class="ml-3">
-        <p class="text-lg text-gray-700">Nguyễn Sinh Duy</p>
-        <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700">Admin</span>
-      </div>
-    </div>
-    <div class="border-b border-gray-200  pt-10 ">
-      <a href="/pages/staffSideBar/listLaborContract.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-file'></i>
-          </span>
-          <span> Hợp đồng </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-transfer'></i> <!-- Điều chuyển -->
-          </span>
-          <span> Điều chuyển </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-trophy'></i> <!-- Khen thưởng -->
-          </span>
-          <span> Khen thưởng </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-shield'></i> <!-- Kỷ luật -->
-          </span>
-          <span> Kỷ luật </span>
-        </div>
-      </a>
-      <a href="/pages/catalog/catalog.html">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-          <span class="w-10">
-            <i class='bx bx-category-alt'></i>
-          </span>
-          <span> Danh mục </span>
-        </div>
-      </a>
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu4">
-        <span class="w-10">
-          <i class='bx bxs-report'></i>
-        </span>
-        <a href="/pages/staffSideBar/report.html">
-          <span> Báo cáo </span>
-        </a>
-        <div
-          class="absolute top-[calc(-100% - 1px)] left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
-          id="submenu4">
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhân viên</a>
-          <div class="flex items-center cursor-pointer transition relative" id="menu-child4">
-            <a href="#" class="block p-2 hover:bg-gray-100 submenu-item"
-              style="width: 200px; display: flex; justify-content: space-between; align-items: center;">
-              <span>Hồ sơ lương</span>
-              <i class='bx bxs-chevron-right'></i>
-            </a>
-            <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu"
-              id="submenu4-child"> <!-- Mục con mới -->
-              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Tạm ứng lương</a>
-              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng lương tháng</a>
-              <a href="#" class="block p-1 hover:bg-gray-100 submenu-item" style="width: 180px;">Bảng chấm công</a>
-            </div>
-          </div>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sinh nhật</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách đảng viên</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách trình độ
-            CBCNV</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách nhóm lương</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách người thân</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách diện chính
-            sách</a>
-          <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Danh sách sổ bảo hiểm</a>
-        </div>
-      </div>
-    </div>
-    <a href="/pages/employee/overview.html">
-      <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu3">
-        <span class="w-10">
-          <i class='bx bx-group text-lg'></i>
-        </span>
-        <span> Thông tin cá nhân </span>
-      </div>
-    </a>
-    <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative pl-6" id="menu1">
-      <span class="w-10">
-        <i class='bx bxs-badge-dollar'></i>
-      </span>
-      <span> Hệ thống </span>
-      <div class="absolute top-0 left-full bg-white border border-gray-200 hidden p-3 mt-[-1px] sub-menu" id="submenu1">
-        <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Đăng xuất</a>
-        <a id="btn" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="myBtn">Đổi mật khẩu</a>
-      </div>
-    </div>
-  </div>
+  
+<div class="main">
+  <h1>Auto Formatting Currency</h1>
+  
+  <form method="post" action="#">
+  <label for="currency-field">Enter Amount</label>
+  <input type="text" name="currency-field" id="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="$1,000,000.00">
+  <button type="submit">Submit</button>
+</form>
 
-  <div id="myModal" class="modal" style="z-index: 100;">
-    <div class="change-container">
-      <span class="close">&times;</span>
-      <form id="change_form">
-        <div class="form-header">
-          <h2>Đổi Mật Khẩu</h2>
-        </div>
+<p>Auto format currency input field with commas and decimals if needed. Text is automatically formated with commas and cursor is placed back where user left off after formatting vs cursor moving to the end of the input. Validation is on KeyUp and a final validation is done on blur.</p>
 
-        <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
-        <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-        <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
-      </form>
-      <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-    </div>
-  </div>
+<p>To use just add the following to an input field:</p>
+  
+ <pre>data-type="currency"</pre>
+  
+</div><!-- /main -->
+
+<script>
+  // Jquery Dependency
+
+$("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() { 
+      formatCurrency($(this), "blur");
+    }
+});
+
+
+function formatNumber(n) {
+  // format number 1000000 to 1,234,567
+  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+
+
+function formatCurrency(input, blur) {
+  // appends $ to value, validates decimal side
+  // and puts cursor back in right position.
+  
+  // get input value
+  var input_val = input.val();
+  
+  // don't validate empty input
+  if (input_val === "") { return; }
+  
+  // original length
+  var original_len = input_val.length;
+
+  // initial caret position 
+  var caret_pos = input.prop("selectionStart");
+    
+  // check for decimal
+  if (input_val.indexOf(".") >= 0) {
+
+    // get position of first decimal
+    // this prevents multiple decimals from
+    // being entered
+    var decimal_pos = input_val.indexOf(".");
+
+    // split number by decimal point
+    var left_side = input_val.substring(0, decimal_pos);
+    var right_side = input_val.substring(decimal_pos);
+
+    // add commas to left side of number
+    left_side = formatNumber(left_side);
+
+    // validate right side
+    right_side = formatNumber(right_side);
+    
+    // On blur make sure 2 numbers after decimal
+    if (blur === "blur") {
+      right_side += "00";
+    }
+    
+    // Limit decimal to only 2 digits
+    right_side = right_side.substring(0, 2);
+
+    // join number by .
+    input_val = "$" + left_side + "." + right_side;
+
+  } else {
+    // no decimal entered
+    // add commas to number
+    // remove all non-digits
+    input_val = formatNumber(input_val);
+    input_val = "$" + input_val;
+    
+    // final formatting
+    if (blur === "blur") {
+      input_val += ".00";
+    }
+  }
+  
+  // send updated string to input
+  input.val(input_val);
+
+  // put caret back in the right position
+  var updated_len = input_val.length;
+  caret_pos = updated_len - original_len + caret_pos;
+  input[0].setSelectionRange(caret_pos, caret_pos);
+}
+
+
+
+</script>
 </body>
-
 </html>

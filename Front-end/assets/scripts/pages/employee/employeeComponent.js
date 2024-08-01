@@ -1,150 +1,202 @@
 class CustomHeader extends HTMLElement {
-    connectedCallback() {
-      this.innerHTML = `
-      <header class="bg-gray-700 p-3 flex">
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center text-white w-[300px]">
-            <i class='bx bx-menu text-white text-2xl cursor-pointer transition hover:brightness-90'></i>
-            <span class="ml-3 text-xl font-bold">
-              <a href="/pages/employee/overView.html">HRM</a>
-            </span>
-          </div>
-          <div class="flex items-center">
-            <img src="" alt="Avatar" class="w-10 h-10 rounded-full ml-1">
-          </div>
-        </div>
-      </header>
+  connectedCallback() {
+    this.innerHTML = `
+     <header class="app-header">
+    <!-- Sidebar toggle button-->
+          <span id="hrmLink" class="ml-3 text-xl font-bold">
+            <a href="overview.html"><b style="color:white;">HRM  </b><a/>
+          </span>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+
+      <!-- User Menu-->
+      <li><a id="logOut" class="app-nav__item" style="cursor: pointer;" ><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+      </li>
+    </ul>
+  </header>
       `;
-    }
+
+      const hrmLink = this.querySelector("#hrmLink");
+      hrmLink.style.setProperty('margin-left', '250px', 'important');
+      hrmLink.style.setProperty('margin-top', '12px', 'important');
+
+    // Thêm sự kiện click vào span HRM
+    hrmLink.addEventListener("click", () => {
+      // Xóa localStorage
+      localStorage.removeItem("maDetail");
+    });
   }
-  
+}
   
   class CustomSidebar extends HTMLElement {
     connectedCallback() {
       this.innerHTML = `
-          <div class="w-[300px] bg-gray-100/70 h-full border-r border-gray-300">
-    <div class="p-3 flex items-center border-b border-gray-200">
-        <i class="bx bxs-user-circle text-6xl text-gray-700"></i>
-        <div class="ml-3">
-            <p class="text-lg text-gray-700">Nguyễn Sinh Duy</p>
-            <span class="text-xs bg-blue-200 py- px-2 rounded-full text-blue-700">Admin</span>
+          <aside class="app-sidebar">
+        <div class="app-sidebar__user" style="display: flex; align-items: center; flex-direction: column;"><img
+                id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px" alt="User Image">
+            <div>
+                <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold; color:white"></p>
+                <p id="role"
+                    style="color: #003366; font-weight: bold; border: 2px solid blue; padding: 2px 20px; border-radius: 25px; display: inline-block;background-color: white;">
+                </p>
+                <p class="app-sidebar__user-designation"style=" color:white">Chào mừng bạn trở lại</p>
+            </div>
+        </div>
+        <hr>
+        <ul class="app-menu">
+            <li><a class="app-menu__item" href="overview.html"><i class='app-menu__icon bx bx-bar-chart-alt'></i><span
+                        class="app-menu__label">Tổng quan</span></a></li>
+            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-group text-lg'></i>
+                    <span class="app-menu__label">Hồ sơ</span></a></li>
+            <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i
+                        class='app-menu__icon bx bx-file'></i><span class="app-menu__label">Sơ yếu lý lịch</span></a>
+            </li>
+            <li><a class="app-menu__item" href="laborContract.html"><i
+                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Hợp đồng</span></a>
+            </li>
+            <li><a class="app-menu__item" href="salaryRecord.html"><i class='app-menu__icon bx bx-money'></i><span
+                        class="app-menu__label">Bảng lương</span></a></li>
+            <li><a class="app-menu__item" href="familyRelationship.html"><i class='app-menu__icon bx bx-group'></i><span
+                        class="app-menu__label">Quan hệ gia đình</span></a></li>
+            <li><a class="app-menu__item" href="award.html"><i
+                        class='app-menu__icon bx bx-trophy'></i><span class="app-menu__label">Khen
+                        thưởng</span></a>
+            </li>
+            <li><a class="app-menu__item" href="discipline.html"><i
+                        class='app-menu__icon bx bx bx-shield'></i><span class="app-menu__label">Kỷ luật
+                    </span></a>
+            </li>
+            <li><a class="app-menu__item" href="#"><i
+                        class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Thuyên chuyển </span></a>
+            </li>
+            <li><a class="app-menu__item" href="#"><i
+                        class='app-menu__icon bx bx-exit'></i><span class="app-menu__label">Lịch sử nghỉ </span></a>
+            </li>
+            <li><a class="app-menu__item" href="#"><i
+                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
+            </li>
+            <li id="adminLink"><a class="app-menu__item" href="/pages/staff/index.html"><i
+                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Quay về trang admin </span></a>
+            </li>
+            <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span
+                        class="app-menu__label">Đổi mật khẩu</span></a></li>
+        </ul>
+    </aside>
+
+    <div id="myModal" class="modal" style="z-index: 100;">
+        <div class="change-container">
+            <form id="change_form">
+                <div class="form-header">
+                    <h2>Đổi Mật Khẩu</h2>
+                </div>
+
+                <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi"
+                    required="true"></base-input>
+            </form>
+            <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
         </div>
     </div>
-    <div class="border-b border-gray-200 ">
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu1"">
-        <span class=" w-10">
-            <i class='bx bx-bar-chart-alt'></i>
-            </span>
-            <span>
-                <a href="overview.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Tổng Quan</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu2"">
-        <span class=" w-10">
-            <i class='bx bx-group text-lg'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;" id="logOut">Hồ sơ</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu3"">
-        <span class=" w-10">
-            <i class='bx bx-file-find'></i>
-            </span>
-            <span>
-                <a href="laborContract.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hợp Đồng</a>
-            </span>
-
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
-        <span class=" w-10">
-            <i class='bx bx-money'></i>
-            </span>
-            <span>
-                <a href="salaryRecord.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Bảng Lương</a>
-            </span>
-
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
-        <span class=" w-10">
-            <i class='bx bx-group'></i>
-            </span>
-            <span>
-                <a href="familyRelationship.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Quan Hệ Gia Đình</a>
-            </span>
-
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
-        <span class=" w-10">
-            <i class='bx bx-trophy'></i>
-            </span>
-            <span>
-                <a href="award.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Khen Thưởng</a>
-            </span>
-
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200 relative" id="menu4"">
-        <span class=" w-10">
-            <i class='bx bx-shield'></i>
-            </span>
-            <span>
-                <a href="discipline.html" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Kỷ Luật</a>
-            </span>
-
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
-            <span class="w-10">
-                <i class='bx bx-transfer'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Thuyên Chuyển</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
-            <span class="w-10">
-                <i class='bx bx-exit'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Nghỉ Việc</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
-            <span class="w-10">
-                <i class='bx bx-file-find'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Báo Cáo</a>
-            </span>
-        </div>
-        <div class="p-3 flex items-center cursor-pointer transition hover:bg-gray-200">
-            <span class="w-10">
-                <i class='bx bx-user-circle'></i>
-            </span>
-            <span>
-                <a href="#" class="block p-2 hover:bg-gray-100 submenu-item" style="width: 200px;">Hoạt Động Tài Khoản</a>
-            </span>
-        </div>
-    </div>
-</div>
           `;
-          document.addEventListener("DOMContentLoaded", function() {
-            // Lặp qua các mục menu và thêm sự kiện click
-            const menuItems = document.querySelectorAll("#tabList .flex");
-            menuItems.forEach(function(menuItem) {
-              menuItem.addEventListener("click", function() {
-                // Loại bỏ class active-menu khỏi tất cả các mục menu
-                menuItems.forEach(function(item) {
-                  item.classList.remove("active-menu");
-                });
-          
-                // Thêm class active-menu cho mục menu được click
-                this.classList.add("active-menu");
-              });
-            });
-          });
+      this.fetchAvatar();
+      this.fetchTen();
+      this.fetchRole();
+      this.updateActiveLink();
+      this.addEventListeners();
+      this.checkAdminRole()
     }
   
-  }
+    async fetchAvatar() {
+      const maNhanVien = localStorage.getItem('maNhanVien');
+      if (!maNhanVien) {
+        console.error('maNhanVien không tồn tại trong localStorage');
+        return;
+      }
+  
+      try {
+        const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+        const data = await response.json();
+        const avatarUrl = data.anh;
+        if (avatarUrl) {
+          this.querySelector('#userAvatar').src = 'data:image/png;base64,' + avatarUrl;
+        }
+      } catch (error) {
+        console.error('Error fetching avatar:', error);
+      }
+    }
+    async fetchTen() {
+      const maNhanVien = localStorage.getItem('maNhanVien');
+      if (!maNhanVien) {
+        console.error('maNhanVien không tồn tại trong localStorage');
+        return;
+      }
+  
+      try {
+        const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+        const data = await response.json();
+        const dataTen = data.ten;
+        if (dataTen) {
+          const tenNhanVienElement = this.querySelector('p#tenNhanVien');
+          tenNhanVienElement.textContent = data.ten;
+        }
+      } catch (error) {
+        console.error('Error fetching ten:', error);
+      }
+    }
+    async fetchRole() {
+      const maNhanVien = localStorage.getItem('vaiTroId');
+      if (!maNhanVien) {
+        console.error('vaiTroId không tồn tại trong localStorage');
+        return;
+      }
+      try {
+        if (maNhanVien) {
+          const maNhanVienElement = this.querySelector('p#role');
+         if(maNhanVien === '1'){
+          maNhanVienElement.textContent = 'Admin'
+         }
+         else{
+          maNhanVienElement.textContent = "Employee"
+         }
+        }
+      } catch (error) {
+        console.error('Error fetching role:', error);
+      }
+    }
+    async checkAdminRole(){
+      const vaiTroId = localStorage.getItem('vaiTroId')
+      const adminLink =  this.querySelector('#adminLink')
+      if(vaiTroId !== '1'){
+        adminLink.style.display =  'none'
+      }
+    }
+    updateActiveLink() {
+      const currentPath = window.location.pathname;
+      const menuItems = this.querySelectorAll('.app-menu__item');
+      
+      menuItems.forEach(item => {
+        item.classList.remove('active');
+        const linkPath = item.getAttribute('href');
+        if (currentPath.includes(linkPath)) {
+          item.classList.add('active');
+        }
+      });
+    }
+  
+    addEventListeners() {
+      const menuItems = this.querySelectorAll('.app-menu__item');
+      
+      menuItems.forEach(item => {
+        item.addEventListener('click', () => {
+          menuItems.forEach(el => el.classList.remove('active'));
+          item.classList.add('active');
+        });
+      });
+    }
+  }   
   class BaseInput extends HTMLElement {
     static observedAttributes = [
       "label",
@@ -164,10 +216,10 @@ class CustomHeader extends HTMLElement {
   
       this.innerHTML = `
       <div>
-        <label for="base-input" class="block  text-sm font-medium text-gray-900 ${
+        <label for="base-input" class="block  text-sm  text-gray-900 ${
           hideLabel ? "mt-" : "hidden"
         }">${label}</label>
-        <input type="${type}" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+        <input type="${type}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
       </div>
       `;
     }
@@ -190,14 +242,15 @@ class CustomHeader extends HTMLElement {
   
       this.innerHTML = `
       <div class="flex flex-col h-full w-full">
-      <label for="base-textarea" class="block mb-2 text-sm font-medium text-gray-900 ${
+      <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${
         hideLabel ? "" : "hidden"
       }">${label}</label>
-        <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
+        <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-ffffff border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
       </div>
       `;
     }
   }
+  
   
   class BaseDatePicker extends HTMLElement {
     static observedAttributes = ["label", "name", "required"];
@@ -208,20 +261,21 @@ class CustomHeader extends HTMLElement {
       const required = this.getAttribute("required");
   
       this.innerHTML = `
-      <div>
-        <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
+      <div class="flex flex-col h-full w-full">
+        <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
         <div class="relative max-w-sm">
           <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
             <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
               <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
             </svg>
           </div>
-          <input datepicker type="text" name="${name}" required="${required}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+          <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
         </div>
       </div>
       `;
     }
   }
+  
   class BaseInputPhone extends HTMLElement {
     static observedAttributes = ["label", "name", "required"];
   
@@ -232,8 +286,8 @@ class CustomHeader extends HTMLElement {
   
       this.innerHTML = `
       <div class="">
-        <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
-        <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
+        <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+        <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
       </div>
       `;
     }
@@ -262,8 +316,8 @@ class CustomHeader extends HTMLElement {
   
       this.innerHTML = `
       <div class="">
-        <label for="base-input" class="block  text-sm font-medium text-gray-900">${label}</label>
-        <input type="text" name="${name}" required="${required}" value="${value}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+        <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+        <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
         this._readonly ? "readonly" : ""
       }>
       </div>
@@ -315,7 +369,7 @@ class CustomHeader extends HTMLElement {
         <input type="radio" value="${value}" name="${name}" ${
         checked !== null ? "checked" : ""
       } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
-        <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 ">${label}</label>
+        <label for="default-radio-1" class="ms-2 text-sm  text-gray-900 ">${label}</label>
       </div>
       `;
     }
@@ -342,6 +396,7 @@ class CustomHeader extends HTMLElement {
       "keyValue",
       "keyLabel",
       "required",
+      "disabled"
     ];
   
     connectedCallback() {
@@ -352,13 +407,14 @@ class CustomHeader extends HTMLElement {
       const keyValue = this.getAttribute("keyValue") || "value";
       const keyLabel = this.getAttribute("keyLabel") || "label";
       const required = this.getAttribute("required");
+      const disabled = this.getAttribute("disabled") !== null;
   
       function getApiUrl() {
         if (!window[api]) return api;
         return window[api]();
       }
-  
-      document.addEventListener("DOMContentLoaded", () => {
+      const renderOption = () =>{
+        this.querySelector('select').innerHTML = ""
         if (!!api) {
           $.ajax({
             url: getApiUrl(),
@@ -384,12 +440,17 @@ class CustomHeader extends HTMLElement {
           option.innerText = label;
           this.querySelector("select").append(option);
         });
+      }
+      this.renderOption = renderOption
+  
+      document.addEventListener("DOMContentLoaded", () => {
+        renderOption()
       });
   
       this.innerHTML = `
-      <div class="max-w-sm mx-auto" style="margin: 0;">
-        <label class="block mb-2 text-sm font-medium text-gray-900">${label}</label>
-        <select name="${name}" required="${required}" class="h-[42px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <div class="max-w-sm" style="margin: 0;">
+        <label class="block mb-2 text-sm  text-gray-900">${label}</label>
+        <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </select>
       </div>
       `;
@@ -407,7 +468,7 @@ class CustomHeader extends HTMLElement {
       this.innerHTML = `
       <div class="flex items-center mb-4 ${contentClass}">
           <input type="checkbox" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-          <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900">${label}</label>
+          <label for="default-checkbox" class="ms-2 text-sm  text-gray-900">${label}</label>
       </div>
       `;
     }
@@ -424,11 +485,11 @@ class CustomHeader extends HTMLElement {
   
       this.innerHTML = `
        <div class="flex items-center justify-center w-full h-full">
-      <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-gray-50 relative overflow-hidden">
+      <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-ffffff relative overflow-hidden">
           <img 
               id="${idImage}"
               src="" 
-              class="absolute h-full w-full object-cover rounded-full opacity-0 bg-gray-50"
+              class="absolute h-full w-full object-cover rounded-full opacity-0 bg-ffffff"
           />
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
               <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -493,25 +554,10 @@ class CustomHeader extends HTMLElement {
        
       </button>
     `;
-   // <span class="loader hidden"></span>
-      // this.querySelector('button').addEventListener('click', () => this.handleClick());
+
     }
   
-    // handleClick() {
-    //   const button = this.querySelector('button');
-    //   const label = button.querySelector('.button-label');
-    //   const loader = button.querySelector('.loader');
-  
-    //   button.disabled = true;
-    //   label.classList.add('hidden');
-    //   loader.classList.remove('hidden');
-  
-    //   setTimeout(() => {
-    //     label.classList.remove('hidden');
-    //     loader.classList.add('hidden');
-    //     button.disabled = false;
-    //   }, 5000);
-    // }
+
   }
   
   class BaseTable extends HTMLElement {
@@ -565,45 +611,6 @@ class CustomHeader extends HTMLElement {
   
         return `${month} `;
       }
-      function getBirthDate(dateTimeStr) {
-        const dateTime = new Date(dateTimeStr);
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-        const day = String(dateTime.getDate()).padStart(2, "0");
-  
-        return `${day}-${month}-${year} `;
-      }
-      function getNoticeBirthDate(value) {
-        const currentDate = new Date();
-  
-        const birthDate = new Date(value);
-        const birthMonth = birthDate.getMonth();
-        const birthDay = birthDate.getDate();
-  
-        let thisYearBirthDate = new Date(
-          currentDate.getFullYear(),
-          birthMonth,
-          birthDay
-        );
-  
-        if (thisYearBirthDate < currentDate) {
-          thisYearBirthDate.setFullYear(thisYearBirthDate.getFullYear());
-        }
-  
-        const differenceInTime = currentDate - thisYearBirthDate;
-  
-        const daysUntilBirthday = differenceInTime / (1000 * 60 * 60 * 24);
-  
-        if (daysUntilBirthday >= -10 && daysUntilBirthday < 0) {
-          return "Sắp sinh nhật";
-        } else if (daysUntilBirthday > 0) {
-          return "Đã xong";
-        } else {
-          return " ";
-        }
-      }
-  
       // định dạg lại kiểu tiền tệ
       function formatCurrency(val) {
         return val.toLocaleString("it-IT", {
@@ -698,13 +705,11 @@ class CustomHeader extends HTMLElement {
               let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
   
               if (col.type === "noticeBirthdate") {
-                const noticeValue = getNoticeBirthDate(value);
-                if (noticeValue === "Đã xong") {
+                if (value === "Đã qua") {
                   thEl.style.color = "blue";
-                } else if (noticeValue === "Hôm nay sinh nhật") {
-                  thEl.style.color = "green";
-                } else if (noticeValue === "Sắp sinh nhật") {
-                  thEl.style.color = "red";
+                }
+                else{
+                  thEl.style.color = "red"
                 }
               }
               // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
@@ -729,11 +734,8 @@ class CustomHeader extends HTMLElement {
                   value = formatDateTime(value);
                 } else if (col.type == "month") {
                   value = getMonth(value);
-                } else if (col.type == "birthDate") {
-                  value = getBirthDate(value);
-                } else if (col.type == "noticeBirthdate") {
-                  value = getNoticeBirthDate(value);
-                } else if (col.type === "currency") {
+                } 
+                 else if (col.type === "currency") {
                   value = formatCurrency(value);
                 } else if (col.type === "gender") {
                   value = value ? "Nam" : "Nữ";
@@ -897,7 +899,7 @@ class CustomHeader extends HTMLElement {
       this.innerHTML = `
       <div id="wrapper-table" class="relative overflow-x-auto bg-gray-100">
         <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50"></thead>
+          <thead class=" text-gray-700 uppercase bg-ffffff"></thead>
           <tbody></tbody>
         </table>
         <div class="pagination flex items-center justify-center -space-x-px h-8 mt-3 gap-2"></div>

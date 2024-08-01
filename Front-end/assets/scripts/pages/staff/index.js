@@ -94,8 +94,8 @@ async function soLuongKyLuat() {
 }
 
 async function fetchData() {
-    const rewardResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/duyns/1');
-    const disciplineResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/duyns/0');
+    const rewardResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/vinhtd/1');
+    const disciplineResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/vinhtd/0');
 
     const rewardData = await rewardResponse.json();
     const disciplineData = await disciplineResponse.json();

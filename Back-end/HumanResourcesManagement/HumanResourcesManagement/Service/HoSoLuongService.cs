@@ -35,7 +35,7 @@ namespace HumanResourcesManagement.Service
                 Nhomluong = request.Nhomluong,
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
-                Tongluong = request.TongLuong, 
+                Tongluong = request.Tongluong, 
                 Thoihanlenluong = request.Thoihanlenluong,
                 Ngayhieuluc = request.Ngayhieuluc,
                 Ngayketthuc = request.Ngayketthuc,
@@ -81,7 +81,7 @@ namespace HumanResourcesManagement.Service
             hoSoLuong.Nhomluong = request.Nhomluong;
             hoSoLuong.Phucaptrachnhiem = request.Phucaptrachnhiem;
             hoSoLuong.Phucapkhac = request.Phucapkhac;
-            hoSoLuong.Tongluong = request.TongLuong;
+            hoSoLuong.Tongluong = request.Tongluong;
             hoSoLuong.Thoihanlenluong = request.Thoihanlenluong;
             hoSoLuong.Ngayhieuluc = request.Ngayhieuluc;
             hoSoLuong.Ngayketthuc = request.Ngayketthuc;

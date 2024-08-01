@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Khen thưởng, kỷ luật | Quản trị Admin</title>
+    <title>Quá trình công tác | Quản trị Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,51 +29,69 @@
         </div>
         <div class="app-title mt-3">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item"><a href="#"><b>Khen thưởng, kỷ luật</b></a></li>
+                <li class="breadcrumb-item"><a href="#"><b>Quá trình công tác</b></a></li>
             </ul>
             <div id="clock"></div>
         </div>
-
+        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+            <p class="text-xl">Vị trí công tác hiện tại</p>
+        </div>
         <div class="mt-3">
-            <form id="award_form">
+            <form id="workingProcessHienTai_form">
                 <div class="grid gap-4 mb-4 grid-cols-4">
                     <div class="col-span-2 sm:col-span-1 ">
-                        <base-select label="Tên" name="ten" keyValue="id" keyLabel="ten"
-                            api="https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
+                        <base-input label="Phòng ban" name="phong" readonly>
+                        </base-input>
                     </div>
                     <div class="col-span-2 sm:col-span-1 ">
-                        <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian(*)" name="ngay"
-                            required="true"></base-datepicker>
+                        <base-input label="Tổ" name="to" readonly>
+                        </base-input>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
-                        <base-input label="Nội dung(*)" required="true" name="noidung"></base-input>
+                        <base-input label="Chức vụ hiện tại" name="chucvuhientai" readonly>
+                        </base-input>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
-                        <base-input label="Lý do(*)" required="true" name="lido"></base-input>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1">
-                        <base-select label="Trạng Thái" name="khenthuongkiluat" options="MaritalOptions"
-                            required="true"></base-select>
+                        <base-datepicker label="Ngày bắt đầu" name="ngaychinhthuc" disabled></base-datepicker>
                     </div>
                 </div>
-                <div id="award_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
             </form>
-        </div>
-        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-            <p class="text-xl">Danh sách khen thưởng</p>
-        </div>
-        <div class="mt-3">
-            <base-table api="buildApiUrlKhenThuong" columns="TableColumns">
-            </base-table>
         </div>
 
         <div class="flex justify-between" style="color: blue; margin-top: 2%;">
-            <p class="text-xl">Danh sách kỷ luật</p>
+            <p class="text-xl">Vị trí công tác chuyển đến</p>
         </div>
         <div class="mt-3">
-            <base-table api="buildApiUrlKyLuat" columns="TableColumns" event="tableEvent">
-            </base-table>
+            <form id="workingProcessChuyenDen_form">
+                <div class="grid gap-4 mb-4 grid-cols-4">
+                    <div class="col-span-2 sm:col-span-1 mt-2 ">
+                        <base-select label="Phòng ban" name="phong" api="https://localhost:7141/api/NhanVien/phong"
+                            keyValue="id" keyLabel="ten"></base-select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 mt-2">
+                        <base-select label="Tổ" name="to" api="https://localhost:7141/api/NhanVien/to" keyValue="id"
+                            keyLabel="ten"></base-select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 mt-2">
+                        <base-select label="Chức Vụ Hiện Tại" name="chucvu"
+                            api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
+                            keyLabel="ten"></base-select>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                        <base-datepicker id="ngayhieuluc" label="Ngày hiệu lực" name="ngayHieuLuc"></base-datepicker>
+                    </div>
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                    <base-textarea label="Ghi chú" name="chiTiet" cols="10"></base-textarea>
+                </div>
+            </form>
+            <div id="workingProcessChuyenDen_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
         </div>
+        <div class="flex justify-between" style="color: blue; margin-top: 2%;">
+            <p class="text-xl">Danh sách điều chuyển</p>
+        </div>
+        <base-table api="buildApiUrlChuyenDen" columns="TableColumnsChuyenDen">
+        </base-table>
     </main>
 
     <!--
@@ -90,7 +108,7 @@
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/award.js"></script>
+    <script src="../../assets/scripts/pages/staff/workingProcess.js"></script>
     <script src="/assets/scripts/common/registerComponent.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>

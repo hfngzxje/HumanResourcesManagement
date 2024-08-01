@@ -18,12 +18,14 @@ var TableColumns = [
         key: 'bacluong'
     },
     {
-        label: 'Phụ Cấp trách nhiệm',
-        key: 'phucaptrachnhiem'
+        label: 'Phụ cấp chức vụ',
+        key: 'phucaptrachnhiem',
+         type: 'currency'
     },
     {
         label: 'Phụ Cấp Khác',
-        key: 'phucapkhac'
+        key: 'phucapkhac',
+         type: 'currency'
     },
     {
         label: 'Tổng Lương',

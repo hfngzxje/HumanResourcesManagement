@@ -305,7 +305,6 @@ input[type=submit]{
     outline: var(--none);
     font-family: var(--font_family);
 }
-
 .login100-form-btn {
   font-family: var(--font_family);
   font-size: var(--font_15);

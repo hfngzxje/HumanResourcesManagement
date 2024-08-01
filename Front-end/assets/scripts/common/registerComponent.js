@@ -37,9 +37,9 @@ class CustomSidebar extends HTMLElement {
     <div class="app-sidebar__user" style="display: flex; align-items: center; flex-direction: column;"><img id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px"
         alt="User Image">
       <div>
-        <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold;"></p>
+        <p id="tenNhanVien" class="app-sidebar__user-name" style="font-weight: bold; color: white;"></p>
         <p id="role" style="color: #003366; font-weight: bold; border: 2px solid blue; padding: 2px 20px; border-radius: 25px; display: inline-block;background-color: white;"> </p>
-        <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+        <p class="app-sidebar__user-designation" style="color: white">Chào mừng bạn trở lại</p>
       </div>
     </div>
     <hr>
@@ -62,16 +62,19 @@ class CustomSidebar extends HTMLElement {
       <li><a class="app-menu__item" href="/pages/staffSideBar/report.html"><i
             class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo </span></a>
       </li>
-      <li><a class="app-menu__item" href="page-calendar.html"><i class='app-menu__icon bx bx-user'></i><span
+      <li><a class="app-menu__item" href="/pages/employee/overview.html"><i class='app-menu__icon bx bx-user'></i><span
             class="app-menu__label">Chi tiết cá nhân </span></a></li>
+      <li><a class="app-menu__item" href="/pages/history.html"><i class='app-menu__icon bx bx-history'></i><span
+            class="app-menu__label">Lịch sử hoạt động </span></a>
+      </li>
       <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
     </ul>
   </aside>
 
    <div id="myModal" class="modal" style="z-index: 100;">
             <div class="change-container">
-             <span class="close">&times;</span>
               <form id="change_form">
+              <span class="close">&times;</span>
                   <div class="form-header">
                      <h2>Đổi Mật Khẩu</h2>
                   </div>
@@ -99,7 +102,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -117,7 +120,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/id?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -181,6 +184,7 @@ class BaseInput extends HTMLElement {
     "required",
     "type",
     "value",
+    "readonly"
   ];
 
   connectedCallback() {
@@ -189,13 +193,17 @@ class BaseInput extends HTMLElement {
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const type = this.getAttribute("type") || "text";
+    const disabled = this.getAttribute("disabled") !== null;
+    this._readonly = this.hasAttribute("readonly");
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block  text-sm  text-gray-900 ${
         hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-      <input type="${type}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+        this._readonly ? "readonly" : ""
+      }>
     </div>
     `;
   }
@@ -228,12 +236,13 @@ class BaseTextArea extends HTMLElement {
 }
 
 class BaseDatePicker extends HTMLElement {
-  static observedAttributes = ["label", "name", "required"];
+  static observedAttributes = ["label", "name", "required", "disabled"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full">
@@ -244,7 +253,7 @@ class BaseDatePicker extends HTMLElement {
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
         </div>
-        <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+        <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date" ${disabled ? 'disabled' : ''}>
       </div>
     </div>
     `;
@@ -274,6 +283,7 @@ class BaseInputNumber extends HTMLElement {
     "required",
     "value",
     "readonly",
+    "style",
   ];
 
   constructor() {
@@ -287,12 +297,13 @@ class BaseInputNumber extends HTMLElement {
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const value = this.getAttribute("value") || "";
+    const style = this.getAttribute("style") || "";
     this._readonly = this.hasAttribute("readonly");
 
     this.innerHTML = `
     <div class="">
-      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
-      <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
+      <label for="base-input" class="block  text-sm  text-gray-900" style="${style}">${label}</label>
+      <input type="text" name="${name}" required="${required}"  value="${value}" style="font-weight: normal;" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
       this._readonly ? "readonly" : ""
     }>
     </div>
@@ -371,6 +382,7 @@ class BaseSelect extends HTMLElement {
     "keyValue",
     "keyLabel",
     "required",
+    "disabled"
   ];
 
   connectedCallback() {
@@ -381,13 +393,14 @@ class BaseSelect extends HTMLElement {
     const keyValue = this.getAttribute("keyValue") || "value";
     const keyLabel = this.getAttribute("keyLabel") || "label";
     const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
 
     function getApiUrl() {
       if (!window[api]) return api;
       return window[api]();
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
+    const renderOption = () =>{
+      this.querySelector('select').innerHTML = ""
       if (!!api) {
         $.ajax({
           url: getApiUrl(),
@@ -413,12 +426,17 @@ class BaseSelect extends HTMLElement {
         option.innerText = label;
         this.querySelector("select").append(option);
       });
+    }
+    this.renderOption = renderOption
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderOption()
     });
 
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
       <label class="block mb-2 text-sm  text-gray-900">${label}</label>
-      <select name="${name}" required="${required}" class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
       </select>
     </div>
     `;
@@ -586,45 +604,6 @@ class BaseTable extends HTMLElement {
 
       return `${month} `;
     }
-    function getBirthDate(dateTimeStr) {
-      const dateTime = new Date(dateTimeStr);
-      const currentDate = new Date();
-      const year = currentDate.getFullYear();
-      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-      const day = String(dateTime.getDate()).padStart(2, "0");
-
-      return `${day}-${month}-${year} `;
-    }
-    function getNoticeBirthDate(value) {
-      const currentDate = new Date();
-
-      const birthDate = new Date(value);
-      const birthMonth = birthDate.getMonth();
-      const birthDay = birthDate.getDate();
-
-      let thisYearBirthDate = new Date(
-        currentDate.getFullYear(),
-        birthMonth,
-        birthDay
-      );
-
-      if (thisYearBirthDate < currentDate) {
-        thisYearBirthDate.setFullYear(thisYearBirthDate.getFullYear());
-      }
-
-      const differenceInTime = currentDate - thisYearBirthDate;
-
-      const daysUntilBirthday = differenceInTime / (1000 * 60 * 60 * 24);
-
-      if (daysUntilBirthday >= -10 && daysUntilBirthday < 0) {
-        return "Sắp sinh nhật";
-      } else if (daysUntilBirthday > 0) {
-        return "Đã xong";
-      } else {
-        return " ";
-      }
-    }
-
     // định dạg lại kiểu tiền tệ
     function formatCurrency(val) {
       return val.toLocaleString("it-IT", {
@@ -679,6 +658,13 @@ class BaseTable extends HTMLElement {
         const endItem = startItem + pageSize; // Mục két thúc của trang hiện tại
         return sourceTableData.slice(startItem, endItem); // Các mục dữ liệu cho trang hiện tại
       }
+      function getGenderIcon(value) {
+        if (value) {
+          return '<i class="bx bx-male-sign male-icon"></i>'; // Icon nam
+        } else {
+          return '<i class="bx bx-female-sign female-icon"></i>'; // Icon nữ
+        }
+      }
       // Xử lý phần hiển thị bảng
       function renderTable() {
         bodyEl.innerHTML = "";
@@ -719,13 +705,11 @@ class BaseTable extends HTMLElement {
             let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
 
             if (col.type === "noticeBirthdate") {
-              const noticeValue = getNoticeBirthDate(value);
-              if (noticeValue === "Đã xong") {
+              if (value === "Đã qua") {
                 thEl.style.color = "blue";
-              } else if (noticeValue === "Hôm nay sinh nhật") {
-                thEl.style.color = "green";
-              } else if (noticeValue === "Sắp sinh nhật") {
-                thEl.style.color = "red";
+              }
+              else{
+                thEl.style.color = "red"
               }
             }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
@@ -750,14 +734,14 @@ class BaseTable extends HTMLElement {
                 value = formatDateTime(value);
               } else if (col.type == "month") {
                 value = getMonth(value);
-              } else if (col.type == "birthDate") {
-                value = getBirthDate(value);
-              } else if (col.type == "noticeBirthdate") {
-                value = getNoticeBirthDate(value);
-              } else if (col.type === "currency") {
+              } 
+               else if (col.type === "currency") {
                 value = formatCurrency(value);
               } else if (col.type === "gender") {
-                value = value ? "Nam" : "Nữ";
+                value = getGenderIcon(value); // Sử dụng icon thay vì text
+                thEl.innerHTML = value;
+                trEl.appendChild(thEl);
+                return; // Kết thúc xử lý cho cột này
               }
 
               // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
