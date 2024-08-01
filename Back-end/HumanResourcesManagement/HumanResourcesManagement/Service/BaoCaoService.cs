@@ -75,7 +75,7 @@ namespace HumanResourcesManagement.Service
                 }
             }
 
-            if (!req.GioiTinh.ToLower().Equals("tất cả"))
+            if (!string.IsNullOrEmpty(req.GioiTinh) && !req.GioiTinh.ToLower().Equals("tất cả"))
             {
                 filtered = filtered.Where(n => n.Gioitinh.ToString().ToLower() == req.GioiTinh.ToLower());
             }
@@ -91,13 +91,13 @@ namespace HumanResourcesManagement.Service
                 Ma = item.Ma,
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.Value.ToString("dd/MM/yyyy"),
-                Didong = item.Gioitinh ? "Nam" : "Nữ",
+                Didong = item.Didong,
+                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
                 TamTru = item.Tamtru,
                 ThuongTru = item.Thuongtru,
                 TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == item.Phong)?.Ten,
-                TrangThai = "null",
             }).ToList();
 
             return responseList;
@@ -272,7 +272,7 @@ namespace HumanResourcesManagement.Service
                 }).ToList();
             }
 
-            if (!req.GioiTinh.ToLower().Equals("tất cả"))
+            if (!string.IsNullOrEmpty(req.GioiTinh) && !req.GioiTinh.ToLower().Equals("tất cả"))
             {
                 allNguoiThan = allNguoiThan.Where(n => n.Gioitinh.ToString().ToLower() == req.GioiTinh.ToLower()).ToList();
             }
@@ -379,7 +379,6 @@ namespace HumanResourcesManagement.Service
 
             return result;
         }
-
 
         public static string GetTinhTrang(DateTime ngaySinh, DateTime today)
         {
@@ -523,7 +522,6 @@ namespace HumanResourcesManagement.Service
                 return (memoryStream.ToArray(), fileName);
             }
         }
-
 
         public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
         {
