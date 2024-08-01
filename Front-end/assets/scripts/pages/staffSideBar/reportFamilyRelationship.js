@@ -3,10 +3,12 @@ var TableColumns = [
     {
         label: 'Họ tên',
         key: 'ten',
+   
     },
     {
         label: 'Giới tính',
         key: 'gioiTinh',
+        type:'gender'
     },
     {
         label: 'Ngày sinh',
@@ -15,8 +17,7 @@ var TableColumns = [
     },
     {
         label: 'Quan hệ',
-        key: 'quanHe',
-        type:'gender'
+        key: 'quanHe'
     },
     {
         label: 'Nghề nghiệp',
@@ -53,9 +54,9 @@ var locTheo = [
     { label: 'Phòng ban', value: 'Phòng ban' },
 ];
 var gioiTinh = [
-  { label: 'Tất cả', value: 'Tất cả' },
-  { label: 'Nam', value: 'true' },
-  { label: 'Nữ', value: 'false' },
+  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Nam", value: 'true' },
+  { label: "Nữ", value: 'false' },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -193,20 +194,23 @@ function handleSelectFilterBy() {
     
     if (locTheoValue === "Mã nhân viên") {
       maEl.disabled = false;
-      alert("Ma nhan vien")
+      gioiTinhEl.value= "Tất cả"
     }
     if (locTheoValue === "Quan hệ") {
       quanHeEl.disabled = false;
+      gioiTinhEl.value= "Tất cả"
     }
     if (locTheoValue === "Tuổi") {
         tuoiTuEl.disabled = false;
         tuoiDenEl.disabled = false
+        gioiTinhEl.value= "Tất cả"
       }
     if (locTheoValue === "Giới tính") {
       gioiTinhEl.disabled = false;
     }
     if (locTheoValue === "Phòng ban") {
         phongBanEl.disabled = false;
+        gioiTinhEl.value= "Tất cả"
       }
   });
 }

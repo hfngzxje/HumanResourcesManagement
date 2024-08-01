@@ -80,13 +80,6 @@ var TableColumns = [
         ]
     }
 ]
-var tableEvent = { // global: ở đau cũng truy cập được
-    rowClick: (row) => {
-        console.log('row click ', row);
-        fetchSalaryToEdit(row.id)
-    }
-}
-
 
 
 function backToList() {
@@ -149,14 +142,13 @@ async function handleCreate() {
     const formValue = getFormValues('salaryRecord_form')
     formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
     formValue['phucapkhac'] = parseCurrency(formValue['phucapkhac'])
-    formValue['tongLuong'] = parseCurrency(formValue['tongLuong'])
+    formValue['tongluong'] = parseCurrency(formValue['tongluong'])
 
-    alert(formValue['tongLuong'])
+    alert(formValue['tongluong'])
 
     try {
         // Lấy trạng thái mã hợp đồng
         const contractCodeStatus = await fetchContractCodeStatus(formValue.mahopdong);
-        console.log('contractCodeStatus', contractCodeStatus);
         // Kiểm tra trạng thái mã hợp đồng
         if (contractCodeStatus === 0) {
             alert('Đây là hợp đồng chưa chính thức, không thể tạo bảng lương.');
@@ -349,8 +341,6 @@ function handleBacLuong() {
         heSo = thongTinLuong.hesoluong
 
         tinhLuong(luongCoBan, heSo, phuCapInput, phuCapKhacInput)
-        console.log("Luong co ban: ", luongCoBan)
-        console.log("He so: ", heSo)
 
     })
 }
@@ -373,8 +363,6 @@ function handleBacLuongPopUp() {
         heSoPop = thongTinLuong.hesoluong
 
         tinhLuongPopUp(luongCoBanPop, heSoPop, phuCapInput, phuCapKhacInputPop)
-        console.log("Luong co ban: ", luongCoBanPop)
-        console.log("He so: ", heSoPop)
 
     })
 }
@@ -454,7 +442,6 @@ async function apiDanhSachHopDong() {
             method: 'GET',
             contentType: 'application/json',
         });
-        console.log("b", hopDong)
         danhSachMaHopDong = hopDong
         const hopDongDautien = hopDong[0]
         datGiaTriMacDinhNgachNV(hopDongDautien.mahopdong)
@@ -483,7 +470,6 @@ async function apiDanhSachHopDongPopUp() {
 
 function datGiaTriMacDinhNgachNV(mahopdong) {
     const thongTinHopDong = danhSachMaHopDong.find(item => item.mahopdong === mahopdong)
-    console.log("TT hd: ", thongTinHopDong)
     const ngachNhanVien = document.querySelector('#ngachNhanVien select')
     ngachNhanVien.value = thongTinHopDong.chucdanh
     thongTinNgachLuong = ngachNhanVien.value
@@ -494,7 +480,6 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 }
 function datGiaTriMacDinhNgachNVPopUp(mahopdong) {
     const thongTinHopDong = danhSachMaHopDongPop.find(item => item.mahopdong === mahopdong)
-    console.log("TT hd: ", thongTinHopDong)
     const ngachNhanVien = document.querySelector('#ngachNhanVienPop select')
     ngachNhanVien.value = thongTinHopDong.chucdanh
     thongTinNgachLuong = ngachNhanVien.value
@@ -528,10 +513,6 @@ function handlePhuCapKhac() {
             heSoVal = document.querySelector('#hesoluong input').value
 
             phuCapKhacInput = parseFloat(value);
-            console.log("Phụ cấp khác: ", phuCapKhacInput);
-            console.log("Luong co ban: ", luongVal)
-            console.log("he so: ", heSoVal)
-
         } else {
             phuCapKhacInput = 0;
         }
@@ -554,9 +535,6 @@ function handlePhuCapKhacPop() {
             heSoVal = document.querySelector('#hesoluongPop input').value
 
             phuCapKhacInputPop = parseFloat(value);
-            console.log("Phụ cấp khác: ", phuCapKhacInputPop);
-            console.log("Luong co ban: ", luongVal)
-            console.log("he so: ", heSoVal)
 
         } else {
             phuCapKhacInputPop = 0;
@@ -583,7 +561,6 @@ async function apiPhuCap() {
             console.log("Dữ liệu không tồn tại trong phản hồi");
             return;
         }
-        console.log("HopDongPhuCap:", valuePhuCap)
         const phuCap = document.querySelector('#phuCap input')
         if (phuCap) {
             phuCap.value = formatCurrency(valuePhuCap.phucap)

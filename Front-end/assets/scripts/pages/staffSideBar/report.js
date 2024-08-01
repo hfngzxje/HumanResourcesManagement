@@ -16,7 +16,7 @@ var TableColumns = [
   {
     label: "Giới tính",
     key: "gioitinh",
-    // type: "gender",
+    type: "gender",
   },
   {
     label: "Điện thoại",
@@ -27,21 +27,29 @@ var TableColumns = [
     key: "phong",
   },
   {
-    label: "Trạng thái",
-    key: "trangthai",
+    label: "Quê quán",
+    key: "queQuan",
+  },
+  {
+    label: "Thường trú",
+    key: "thuongTru",
+  },
+  {
+    label: "Tạm trú",
+    key: "tamTru",
   },
 ];
 var locTheo = [
   { label: 'Tất cả', value: 'Tất cả' },
-  { label: 'Trạng thái', value: 'Trạng thái' },
+  { label: 'Quê quán', value: 'Quê quán' },
   { label: "Phòng ban", value: 'Phòng ban' },
   { label: "Ngày tháng", value: 'Ngày tháng' },
   { label: "Giới tính", value: 'Giới tính' },
 ];
-var trangThai = [
-  { label: "Tất cả", value: 0 },
-  { label: "Hoạt động", value: 1 },
-  { label: "Nghỉ việc", value: 2 },
+var QueQuan = [
+  { label: "Quê quán", value: "Quê quán" },
+  { label: "Thường trú", value: "Thường trú" },
+  { label: "Tạm trú", value: "Tạm trú" },
 ];
 var gioiTinh = [
   { label: "Tất cả", value: 'Tất cả' },
@@ -59,8 +67,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const toDate = document.querySelector(
     'base-datepicker[description="Đến ngày"]'
   );
-  const statusSelect = document.querySelector(
-    'base-select[description="Trạng thái"]'
+  const queQuanSelect = document.querySelector(
+    'base-select[description="Địa chỉ"]'
+  );
+  const queQuan = document.querySelector(
+    'base-input[description="Quê quán"]'
   );
   const departmentSelect = document.querySelector(
     'base-select[description="Phòng ban"]'
@@ -71,9 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
   function toggleInputs(enabled) {
+    queQuanSelect.disabled = !enabled
     fromDate.disabled = !enabled;
     toDate.disabled = !enabled;
-    statusSelect.disabled = !enabled;
+    queQuan.disabled = !enabled;
     departmentSelect.disabled = !enabled;
     genderSelect.disabled = !enabled;
   }
@@ -122,10 +134,13 @@ function handleSearch() {
     GioiTinh: "Tất cả",
     ToDate: "",
     FromDate:"",
-    PhongBan: ""
+    PhongBan: "",
+    DiaChi:"",
+    QueQuan:""
   };
-  if (formValue.searchRules === "Trạng thái") {
-    params.trangthai = formValue.trangthai;
+  if (formValue.searchRules === "Quê quán") {
+    params.searchRules = formValue.DiaChi
+    params.QueQuan = formValue.QueQuan;
   }
   if (formValue.searchRules === "Phòng ban") {
     params.PhongBan = formValue.PhongBan;
@@ -150,7 +165,8 @@ function buildApiUrl() {
 
 function handleSelectFilterBy() {
   const locTheoEl = document.querySelector("#loctheo select");
-  const trangThaiEl = document.querySelector("#trangthai select");
+  const DiaChiEl = document.querySelector("#selectquequan select");
+  const queQuanEl = document.querySelector("#quequan input");
   const phongBanEl = document.querySelector("#phongban select");
   const tuNgayEl = document.querySelector("#tungay input");
   const denNgayEl = document.querySelector("#denngay input");
@@ -160,22 +176,25 @@ function handleSelectFilterBy() {
     console.log("locTheoValue ", locTheoValue);
 
     if (locTheoValue === "Tất cả") {
-      trangThaiEl.disabled = false;
+      DiaChiEl.disabled = false;
+      queQuanEl.disabled = false;
       phongBanEl.disabled = false;
       tuNgayEl.disabled = false;
       denNgayEl.disabled = false;
       gioiTinhEl.disabled = false;
       return;
     }
-
-    trangThaiEl.disabled = true;
+    DiaChiEl.disabled = false;
+    queQuanEl.disabled = true;
     phongBanEl.disabled = true;
     tuNgayEl.disabled = true;
     denNgayEl.disabled = true;
     gioiTinhEl.disabled = true;
-    if (locTheoValue === "Trạng thái") {
-      trangThaiEl.disabled = false;
+    if (locTheoValue === "Quê quán") {
+      DiaChiEl.disabled = false;
+      queQuanEl.disabled = false;
       phongBanEl.value ="";
+      gioiTinhEl.value= "Tất cả"
     }
     if (locTheoValue === "Phòng ban") {
       phongBanEl.disabled = false;

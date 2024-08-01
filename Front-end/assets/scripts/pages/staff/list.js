@@ -56,12 +56,12 @@ var TableColumns = [
   },
   {
     label: 'Chức vụ',
-    key: 'chucvuhientai',
+    key: 'tenChucVu',
 
   },
   {
     label: 'Phòng ban',
-    key: 'phong',
+    key: 'tenPhongBan',
   },
   {
     label: 'Hành động',
