@@ -35,7 +35,7 @@ namespace HumanResourcesManagement.Service
                 Nhomluong = request.Nhomluong,
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
-                Tongluong = request.TongLuong, 
+                Tongluong = request.Tongluong, 
                 Thoihanlenluong = request.Thoihanlenluong,
                 Ngayhieuluc = request.Ngayhieuluc,
                 Ngayketthuc = request.Ngayketthuc,
