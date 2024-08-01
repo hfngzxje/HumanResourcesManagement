@@ -16,6 +16,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
     <script src="/assets/scripts/common/registerComponent.js"></script>
+    <style>
+        @media (max-width: 768px) {
+            #tabList {
+                display: none;
+            }
+
+            #tabDropdown {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #tabList {
+                display: flex;
+            }
+
+            #tabDropdown {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -28,82 +49,104 @@
     <main class="app-content">
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
             <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
         </div>
-        <div class="app-title">
-            <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item"><a href="#"><b>Quá trình công tác</b></a></li>
-            </ul>
-            <div id="clock"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="app-title">
+                    <ul class="app-breadcrumb breadcrumb">
+                        <li class="breadcrumb-item"><a href="#"><b>Quá trình công tác</b></a></li>
+                    </ul>
+                    <div id="clock"></div>
+                </div>
+            </div>
         </div>
-
-        <div class="container">
-            <div class="right">
-                <form id="workingProcessHienTai_form">
-                    <div class="top">
-                        <div class="input-container">
-                            <h1 class="text-xl font-bold mb-4">Vị trí công tác hiện tại</h1>
-                            <div class="grid grid-cols-4 gap-x-5">
-                                <div class="col-span-2 sm:col-span-1 ">
-                                    <base-input label="Phòng ban" name="phong" readonly>
-                                    </base-input>
+        <div class="container-fluid">
+            <!--Left-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Vị trí công tác hiện tại</h3>
+                        <div>
+                            <form id="workingProcessHienTai_form">
+                                <div class="">
+                                    <div class="input-container">
+                                        <div class="grid grid-cols-4 gap-x-5">
+                                            <div class="col-span-2 sm:col-span-1 mt-2 ">
+                                                <base-input label="Phòng ban" name="phong" readonly>
+                                                </base-input>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-input label="Tổ" name="to" readonly>
+                                                </base-input>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-input label="Chức vụ hiện tại" name="chucvuhientai" readonly>
+                                                </base-input>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-datepicker label="Ngày bắt đầu" name="ngaychinhthuc"
+                                                    disabled></base-datepicker>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-span-2 sm:col-span-1 ">
-                                    <base-input label="Tổ" name="to" readonly>
-                                    </base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-input label="Chức vụ hiện tại" name="chucvuhientai" readonly>
-                                    </base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-datepicker label="Ngày bắt đầu" name="ngaychinhthuc"
-                                        disabled></base-datepicker>
-                                </div>
-                            </div>
-                            <div id="award_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                            </form>
                         </div>
                     </div>
-                </form>
-                <form id="workingProcessChuyenDen_form">
-                    <div class="top">
-                        <div class="input-container">
-                            <h1 class="text-xl font-bold mb-4">Vị trí công tác chuyển đến</h1>
-                            <div class="grid grid-cols-4 gap-x-5">
-                                <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                    <base-select label="Phòng ban" name="phong"
-                                        api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
-                                        keyLabel="ten"></base-select>
+                </div>
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Vị trí công tác chuyển đến</h3>
+                        <div>
+                            <form id="workingProcessChuyenDen_form">
+                                <div class="">
+                                    <div class="input-container">
+                                        <div class="grid grid-cols-4 gap-x-5">
+                                            <div class="col-span-2 sm:col-span-1 mt-2 ">
+                                                <base-select label="Phòng ban" name="phong"
+                                                    api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
+                                                    keyLabel="ten"></base-select>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-select label="Tổ" name="to"
+                                                    api="https://localhost:7141/api/NhanVien/to" keyValue="id"
+                                                    keyLabel="ten"></base-select>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-select label="Chức Vụ Hiện Tại" name="chucvu"
+                                                    api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
+                                                    keyLabel="ten"></base-select>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-datepicker id="ngayhieuluc" label="Ngày hiệu lực"
+                                                    name="ngayHieuLuc"></base-datepicker>
+                                            </div>
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <base-textarea label="Ghi chú" name="chiTiet" cols="10"></base-textarea>
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <div id="workingProcessChuyenDen_form_action" class=" mt-3 justify-end">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <base-select label="Tổ" name="to" api="https://localhost:7141/api/NhanVien/to"
-                                        keyValue="id" keyLabel="ten"></base-select>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <base-select label="Chức Vụ Hiện Tại" name="chucvu"
-                                        api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
-                                        keyLabel="ten"></base-select>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1">
-                                    <base-datepicker id="ngayhieuluc" label="Ngày hiệu lực"
-                                        name="ngayHieuLuc"></base-datepicker>
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <base-textarea label="Ghi chú" name="chiTiet" cols="10"></base-textarea>
-                            </div>
-                            <div id="workingProcessChuyenDen_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
+                            </form>
                         </div>
                     </div>
-                </form>
-                <div class="bottom mt-8">
                     <base-table api="buildApiUrlChuyenDen" columns="TableColumnsChuyenDen"></base-table>
                 </div>
             </div>
         </div>
-
+        <div class="text-center mt-5" style="font-size: 13px">
+            <p><b>Copyright
+                    <script type="text/javascript">
+                        document.write(new Date().getFullYear());
+                    </script> Phần mềm quản lý nhân sự | HRM
+                </b></p>
         </div>
     </main>
-
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

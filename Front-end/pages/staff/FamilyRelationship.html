@@ -16,6 +16,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
     <script src="/assets/scripts/common/registerComponent.js"></script>
+    <style>
+        @media (max-width: 768px) {
+            #tabList {
+                display: none;
+            }
+
+            #tabDropdown {
+                display: block;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #tabList {
+                display: flex;
+            }
+
+            #tabDropdown {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -28,67 +49,91 @@
     <main class="app-content">
         <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
             <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
         </div>
-        <div class="app-title">
-            <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item"><a href="#"><b>Quan hệ gia đình</b></a></li>
-            </ul>
-            <div id="clock"></div>
-        </div>
-        <div class="container">
-            <!-- <div class="container"> -->
-            <div class="right">
-                <form id="laborContract_form">
-                    <div class="top">
-                        <div class="input-container">
-                            <h1 class="text-xl font-bold mb-4">Quan hệ gia đình</h1>
-                            <div class="grid grid-cols-4 gap-x-5">
-                                <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                    <base-input label="Họ và tên (*)" name="ten" required="true"></base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-3">
-                                    <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten"
-                                        api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <base-datepicker class="ml-auto" label="Năm sinh(*)" name="ngaysinh"
-                                        required="true"></base-datepicker>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <label-form-item name="Giới tính(*)"></label-form-item>
-                                    <div class="flex gap-5 mt-4">
-                                        <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
-                                        <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
-                                    </div>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-3">
-                                    <base-input-phone label="Số điện thoại" name="dienthoai"
-                                        required="true"></base-input-phone>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <base-input class="col-span-2" label="Nghề Nghiệp (*)" name="nghenghiep"
-                                        required="true"></base-input>
-                                </div>
-                                <div class="col-span-2 sm:col-span-1 mt-2">
-                                    <base-input class="col-span-2 mt-2" label="Địa chỉ (*)" name="diachi"
-                                        required="true"></base-input>
-                                </div>
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <base-textarea label="Ghi chú" name="khac" row="9.9"></base-textarea>
-                            </div>
-                            <div id="relationship_form_action" class="flex gap-x-5 mt-5 justify-end"></div>
-                        </div>
-                    </div>
-                </form>
-                <div class="bottom mt-8">
-                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                    </base-table>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="app-title">
+                    <ul class="app-breadcrumb breadcrumb">
+                        <li class="breadcrumb-item"><a href="#"><b>Quan hệ gia đình</b></a></li>
+                    </ul>
+                    <div id="clock"></div>
                 </div>
             </div>
         </div>
+        <div class="container-fluid">
+            <!--Left-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Quan hệ gia đình</h3>
+                        <div>
+                            <form id="relationship_form">
+                                <div class="">
+                                    <div class="input-container">
+                                        <div class="grid grid-cols-4 gap-x-5">
+                                            <div class="col-span-2 sm:col-span-1 mt-2 ">
+                                                <base-input label="Họ và tên (*)" name="ten"
+                                                    required="true"></base-input>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-3">
+                                                <base-select label="Quan Hệ" name="quanhe" keyValue="id" keyLabel="ten"
+                                                    api="https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan"></base-select>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-datepicker class="ml-auto" label="Năm sinh(*)" name="ngaysinh"
+                                                    required="true"></base-datepicker>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <label-form-item name="Giới tính(*)"></label-form-item>
+                                                <div class="flex flex-col sm:flex-row gap-5 mt-4">
+                                                    <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
+                                                    <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-input-phone label="Số điện thoại" name="dienthoai"
+                                                    required="true"></base-input-phone>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 ">
+                                                <base-input class="col-span-2" label="Nghề Nghiệp (*)" name="nghenghiep"
+                                                    required="true"></base-input>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 ">
+                                                <base-input class="col-span-2 mt-2" label="Địa chỉ (*)" name="diachi"
+                                                    required="true"></base-input>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <base-textarea label="Ghi chú" name="khac" row="9.9"></base-textarea>
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1">
+                                            <div id="relationship_form_action" class=" mt-3 justify-end">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
+                        </base-table>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="text-center mt-5" style="font-size: 13px">
+            <p><b>Copyright
+                    <script type="text/javascript">
+                        document.write(new Date().getFullYear());
+                    </script> Phần mềm quản lý nhân sự | HRM
+                </b></p>
         </div>
     </main>
+
     <div class="modal" id="editFamily">
         <div class="change-container"
             style="max-width: 900px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
@@ -143,6 +188,7 @@
             </div>
         </div>
     </div>
+
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -165,7 +165,5 @@ function buildApiUrlKhenThuong() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-     const trangThaiVal = document.querySelector('#trangthai input')
-    trangThaiVal.value = "Khen thưởng"
 })
 

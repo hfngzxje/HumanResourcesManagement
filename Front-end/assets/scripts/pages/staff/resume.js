@@ -249,17 +249,6 @@ function renderActionByStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // if (vaiTroID !== "1") {
-    //     window.location.href = "/pages/error.html";
-    //     return;
-    // }
-    var div1 = document.getElementById("div1");
-    var div2 = document.getElementById("div2");
-
-    // Lấy chiều cao của div2
-    var div2Height = div2.offsetHeight;
-    // Đặt chiều cao của div1 bằng chiều cao của div2
-    div1.style.height =( div2Height - 35) + "px";
     renderActionByStatus()
     if (maDetail) {
         fetchEmployee()

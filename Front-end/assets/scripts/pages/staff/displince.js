@@ -163,7 +163,6 @@ function buildApiUrlKyLuat() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-    const trangThaiVal = document.querySelector('#trangthai input')
-    trangThaiVal.value = "Kỷ luật"
+   
 })
 
