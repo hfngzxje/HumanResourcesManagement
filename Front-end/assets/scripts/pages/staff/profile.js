@@ -55,8 +55,11 @@ function fetchEmployee() {
         url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
-            setFormValue('profile_form', data)
-            console.log("Chuc vu:", data.chucvuhientai)
+           
+            setTimeout(() => {
+                setFormValue('profile_form', data)
+            }, 1000);
+            console.log("Chuc vu:", data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);

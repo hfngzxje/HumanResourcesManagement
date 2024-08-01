@@ -5,9 +5,9 @@ const table = document.querySelectorAll('base-table')
 
 let maHopDongHienTai = null
 
-// var MaritalOptions = [
-//     { label: 'Khen Thưởng', value: 1 }
-// ];
+var MaritalOptions = [
+    { label: 'Kỷ Luật', value: 2 },
+];
 
 var TableColumns = [
     {
@@ -49,7 +49,7 @@ function buildPayload(formValue) {
 }
 
 function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm khen thưởng?')
+    const isConfirm = confirm('Bạn chắc chắn muốn thêm  kỷ luật?')
     if (!isConfirm) return
     const valid = validateForm('award_form')
     if (!valid) return
@@ -57,9 +57,8 @@ function handleCreate() {
 
     
     formValue['ma'] = maDetail;
-
-    console.log('formValue ', formValue);
     formValue['khenthuongkiluat'] = '2'
+    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -113,7 +112,7 @@ function clearFormValues(formId) {
     });
 }
 function handleRemoveRow(id) {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa  khen thưởng ?')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa kỷ luật?')
     if (!isConfirm) return
     setLoading(true)
     setTimeout(() => {
@@ -156,16 +155,15 @@ function renderActionByStatus() {
     actionEl.append(createBtn)
 }
 
-function buildApiUrlKhenThuong() {
-    
+function buildApiUrlKyLuat() {
     let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
-    let string2 = '/1'
+    let string2 = '/0'
     return string1 + string2;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-     const trangThaiVal = document.querySelector('#trangthai input')
-    trangThaiVal.value = "Khen thưởng"
+    const trangThaiVal = document.querySelector('#trangthai input')
+    trangThaiVal.value = "Kỷ luật"
 })
 
