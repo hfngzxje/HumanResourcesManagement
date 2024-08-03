@@ -54,7 +54,7 @@ var locTheo = [
     { label: 'Phòng ban', value: 'Phòng ban' },
 ];
 var gioiTinh = [
-  { label: "Tất cả", value: 'Tất cả' },
+  // { label: "Tất cả", value: 'Tất cả' },
   { label: "Nam", value: 'true' },
   { label: "Nữ", value: 'false' },
 ];
@@ -129,7 +129,8 @@ function handleSearch() {
     return;
   }
   const params = {
-    GioiTinh: "Tất cả",
+    // searchRules:"tát cả",
+    GioiTinh: "true",
     MaNV:"",
     QuanHe: "",
     TuoiTu: "",

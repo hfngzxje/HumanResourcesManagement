@@ -234,7 +234,6 @@ function buildApiUrlChuyenDen() {
 document.addEventListener('DOMContentLoaded', () => {
     fetchDieuChuyen()
     renderActionByStatus()
-    alert(maDetail)
     // popupRemoveBtn.addEventListener("click", handleRemove)
     // popupSaveBtn.addEventListener("click", handleSave)
 })

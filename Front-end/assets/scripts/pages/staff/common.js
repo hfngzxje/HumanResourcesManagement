@@ -14,6 +14,8 @@ const TAB = {
   REWARDS_DISCIPLINE: 9,
 };
 const tabList = document.querySelector("#tabList");
+const tabDropdown = document.querySelector("#tabDropdown");
+
 let currentPath = window.location.pathname; // text-white bg-blue-600 active
 const tabListEl = [];
 
@@ -64,6 +66,38 @@ const TAB_LIST = [
   },
 ];
 
+function populateSelectOptions() {
+  const baseSelectElement = document.querySelector("#tabDropdown select");
+
+  if (!baseSelectElement) return;
+
+  baseSelectElement.innerHTML = ''; // Xóa các tùy chọn hiện tại nếu có
+
+  TAB_LIST.forEach((tab) => {
+    const optionEl = document.createElement('option');
+    optionEl.value = tab.key;
+    optionEl.textContent = tab.label;
+    baseSelectElement.appendChild(optionEl);
+  });
+
+  // Đặt giá trị của select tương ứng với đường dẫn hiện tại
+  const currentTab = TAB_LIST.find(tab => tab.activeByPath !== "" && window.location.pathname.includes(tab.activeByPath));
+  if (currentTab) {
+    baseSelectElement.value = currentTab.key;
+  }
+}
+
+function handleSelectChange() {
+  tabDropdown.addEventListener('change', (event) => {
+    const selectedValue = event.target.value;
+    const selectedTab = TAB_LIST.find(tab => tab.key === Number(selectedValue));
+    if (selectedTab) {
+      const href = '../..' + selectedTab.activeByPath + '?id=' + id;
+      window.location.href = href; // Chuyển hướng đến trang mới
+    }
+  });
+}
+
 function getTabId(key) {
   return "tab_" + key;
 }
@@ -71,7 +105,6 @@ function getTabId(key) {
 function getContentId(key) {
   return "content_" + key;
 }
-
 function renderTab() {
   TAB_LIST.forEach((tab) => {
     const liElement = document.createElement("li");
@@ -89,6 +122,13 @@ function renderTab() {
     aElement.className = _class;
     aElement.textContent = tab.label;
 
+    if (aElement.href.includes('award.html') && currentPath.includes('displince.html')) {
+      aElement.className = "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100 font-bold text-white bg-blue-600";
+    }
+    if (aElement.href.includes('qualifications.html') && currentPath.includes('language.html')) {
+      aElement.className = "inline-block px-4 py-3 rounded-t-lg hover:text-gray-900 hover:bg-gray-100 font-bold text-white bg-blue-600";
+    }
+
     liElement.appendChild(aElement);
     tabList.appendChild(liElement);
     tabListEl.push(liElement);
@@ -96,7 +136,10 @@ function renderTab() {
 }
 
 function init() {
+  populateSelectOptions();
+  handleSelectChange();
   renderTab();
+  
 }
 
 window.addEventListener("DOMContentLoaded", () => {
