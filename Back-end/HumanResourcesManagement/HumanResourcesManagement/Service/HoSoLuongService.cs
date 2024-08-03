@@ -29,20 +29,30 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Nhóm lương không được để trống.");
             }
 
+            var oldHoSoLuongs = _context.TblLuongs.Where(x => x.Mahopdong == request.Mahopdong && x.Trangthai == 1).ToList();
+
+            foreach (var oldHsl in oldHoSoLuongs)
+            {
+                oldHsl.Trangthai = 2;
+                _context.TblLuongs.Update(oldHsl);
+            }
+
             var hsl = new TblLuong
             {
                 Mahopdong = request.Mahopdong,
                 Nhomluong = request.Nhomluong,
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
-                Tongluong = request.Tongluong, 
+                Tongluong = request.Tongluong,
                 Thoihanlenluong = request.Thoihanlenluong,
-                Ghichu = request.Ghichu 
+                Ghichu = request.Ghichu,
+                Trangthai = 1 
             };
 
             _context.TblLuongs.Add(hsl);
             _context.SaveChanges();
         }
+
 
 
         public double tinhLuong(TinhLuongRequest request)
