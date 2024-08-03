@@ -9,6 +9,8 @@ namespace HumanResourcesManagement.Models
         {
             TblDanhMucNhomLuongs = new HashSet<TblDanhMucNhomLuong>();
             TblHopDongs = new HashSet<TblHopDong>();
+            TblLichSuDieuChuyenIdChucVuCuNavigations = new HashSet<TblLichSuDieuChuyen>();
+            TblLichSuDieuChuyenIdChucVuMoiNavigations = new HashSet<TblLichSuDieuChuyen>();
             TblNhanViens = new HashSet<TblNhanVien>();
         }
 
@@ -19,6 +21,8 @@ namespace HumanResourcesManagement.Models
 
         public virtual ICollection<TblDanhMucNhomLuong> TblDanhMucNhomLuongs { get; set; }
         public virtual ICollection<TblHopDong> TblHopDongs { get; set; }
+        public virtual ICollection<TblLichSuDieuChuyen> TblLichSuDieuChuyenIdChucVuCuNavigations { get; set; }
+        public virtual ICollection<TblLichSuDieuChuyen> TblLichSuDieuChuyenIdChucVuMoiNavigations { get; set; }
         public virtual ICollection<TblNhanVien> TblNhanViens { get; set; }
     }
 }

@@ -5,6 +5,11 @@ namespace HumanResourcesManagement.Models
 {
     public partial class TblDieuChuyen
     {
+        public TblDieuChuyen()
+        {
+            TblLichSuDieuChuyens = new HashSet<TblLichSuDieuChuyen>();
+        }
+
         public int Id { get; set; }
         public string Manv { get; set; } = null!;
         public DateTime? Ngayhieuluc { get; set; }
@@ -16,5 +21,6 @@ namespace HumanResourcesManagement.Models
         public virtual TblNhanVien ManvNavigation { get; set; } = null!;
         public virtual TblDanhMucPhongBan? PhongNavigation { get; set; }
         public virtual TblDanhMucTo? ToNavigation { get; set; }
+        public virtual ICollection<TblLichSuDieuChuyen> TblLichSuDieuChuyens { get; set; }
     }
 }

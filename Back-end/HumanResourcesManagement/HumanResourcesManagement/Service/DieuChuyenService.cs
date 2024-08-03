@@ -29,7 +29,7 @@ namespace HumanResourcesManagement.Service
                 }).FirstAsync();
             if (ht == null)
             {
-                throw new KeyNotFoundException($"list is empty {maNV}");
+                return null;
             }
             return ht;
         }
@@ -44,11 +44,11 @@ namespace HumanResourcesManagement.Service
                 var toHienTai = _context.TblDanhMucTos.FirstOrDefault(t => t.Id == req.To).Ten;
                 if ((ht.Phong == phongHienTai && ht.To == toHienTai && cv == req.Chucvu))
                 {
-                    throw new Exception("dieu chuyen phai khac voi hien tai.");
+                    throw new Exception("Điều chuyển phải khác với vị trí hiện tại.");
                 }
                 if (req.NgayHieuLuc < DateTime.Today)
                 {
-                    throw new Exception("ngay dieu chuyen khong duoc la ngay trong qua khu");
+                    throw new Exception("Ngày điều chuyển không hợp lệ.");
                 }
 
                 var dc = new TblDieuChuyen
@@ -60,15 +60,25 @@ namespace HumanResourcesManagement.Service
                     Ngayhieuluc = req.NgayHieuLuc,
                     Chitiet = req.ChiTiet,
                 };
+                await _context.TblDieuChuyens.AddAsync(dc);
+                await _context.SaveChangesAsync();
 
-                //TblNhanVien nhanVien = new TblNhanVien();
-                //nhanVien = _nhanVienService.GetNhanVienByMa(req.Ma);
-                //nhanVien.Phong = dc.Phong;
-                //nhanVien.To = dc.To;
-                //nhanVien.Chucvuhientai = dc.Chucvu;
-                //nhanVien.Ngaychinhthuc = dc.Ngayhieuluc;
+                var ls = new TblLichSuDieuChuyen
+                {
+                    IdDieuChuyen = dc.Id,
+                    Ma = req.Ma,
+                    NgayDieuChuyen = req.NgayHieuLuc,
+                    IdPhongCu = ht.Phong == phongHienTai ? null : _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Ten == ht.Phong)?.Id,
+                    IdPhongMoi = req.Phong,
+                    IdToCu = ht.To == toHienTai ? null : _context.TblDanhMucTos.FirstOrDefault(t => t.Ten == ht.To)?.Id,
+                    IdToMoi = req.To,
+                    IdChucVuCu = cv,
+                    IdChucVuMoi = req.Chucvu,
+                    GhiChu = req.ChiTiet,
+                    TrangThai = 0
+                };
 
-                _context.TblDieuChuyens.Add(dc);
+                await _context.TblLichSuDieuChuyens.AddAsync(ls);
                 await _context.SaveChangesAsync();
                 return dc;
             }
@@ -78,16 +88,19 @@ namespace HumanResourcesManagement.Service
             }
         }
 
-        public async Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int id)
+        public async Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int idDieuChuyen)
         {
             var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == maNV);
-            var dc = _context.TblDieuChuyens.Find(id);
-            nhanVien = _nhanVienService.GetNhanVienByMa(maNV);
-            nhanVien.Phong = dc.Phong;
-            nhanVien.To = dc.To;
-            nhanVien.Chucvuhientai = dc.Chucvu;
-            nhanVien.Ngayvaoban = dc.Ngayhieuluc;
+            var dc = _context.TblDieuChuyens.Find(idDieuChuyen);
 
+            var phongCu = nhanVien.Phong;
+            var toCu = nhanVien.To;
+            var chucVuCu = nhanVien.Chucvuhientai;
+
+            var ls = await _context.TblLichSuDieuChuyens.FirstOrDefaultAsync(ls => ls.IdDieuChuyen == dc.Id);
+            ls.TrangThai = 1;
+
+            _context.Entry(ls).State = EntityState.Modified;
             _context.Entry(nhanVien).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return nhanVien;
@@ -105,20 +118,49 @@ namespace HumanResourcesManagement.Service
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV)
+        //public async Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV)
+        //{
+        //    var dc = await _context.TblDieuChuyens.Where(nv => nv.Manv == maNV)
+        //        .Select(dc => new DieuChuyenResponseDto
+        //        {
+        //            Id= dc.Id,
+        //            NgayDieuChuyen = dc.Ngayhieuluc,
+        //            Phong = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == dc.Phong).Ten,
+        //            To = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == dc.To).Ten,
+        //            ChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(d => d.Id == dc.Chucvu).Ten,
+        //            ChiTiet = dc.Chitiet,
+        //        }).ToListAsync();
+        //    return dc;
+        //}
+        public async Task<IEnumerable<DieuChuyenResponseDto>> getLichSuDieuChuyen(string maNV)
         {
-            var dc = await _context.TblDieuChuyens.Where(nv => nv.Manv == maNV)
-                .Select(dc => new DieuChuyenResponseDto
+            var all = await _context.TblLichSuDieuChuyens
+                .Include(l => l.IdChucVuCuNavigation)
+                .Include(l => l.IdChucVuMoiNavigation)
+                .Include(l => l.IdPhongCuNavigation)
+                .Include(l => l.IdPhongMoiNavigation)
+                .Include(l => l.IdToCuNavigation)
+                .Include(l => l.IdToMoiNavigation)
+                .Where(l => l.Ma == maNV)
+                .Select(ls => new DieuChuyenResponseDto
                 {
-                    Id= dc.Id,
-                    NgayDieuChuyen = dc.Ngayhieuluc,
-                    Phong = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == dc.Phong).Ten,
-                    To = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == dc.To).Ten,
-                    ChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(d => d.Id == dc.Chucvu).Ten,
-                    ChiTiet = dc.Chitiet,
+                    Id= ls.Id,
+                    Ma = ls.Ma,
+                    NgayDieuChuyen = ls.NgayDieuChuyen.Value.ToString("dd/MM/yyyy"),
+                    tuPhong = ls.IdPhongCuNavigation.Ten,
+                    denPhong = ls.IdPhongMoiNavigation.Ten,
+                    tuTo = ls.IdToCuNavigation.Ten,
+                    denTo = ls.IdToMoiNavigation.Ten,
+                    tuChucVu = ls.IdChucVuCuNavigation.Ten,
+                    denChucVu = ls.IdChucVuMoiNavigation.Ten,
+                    ChiTiet = ls.GhiChu,
+                    trangThai = ls.TrangThai
                 }).ToListAsync();
-            return dc;
+            if(all == null || !all.Any())
+            {
+                return null;
+            }
+            return all;
         }
-
     }
 }

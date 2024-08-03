@@ -37,8 +37,6 @@ namespace HumanResourcesManagement.Service
                 Phucapkhac = request.Phucapkhac,
                 Tongluong = request.Tongluong, 
                 Thoihanlenluong = request.Thoihanlenluong,
-                Ngayhieuluc = request.Ngayhieuluc,
-                Ngayketthuc = request.Ngayketthuc,
                 Ghichu = request.Ghichu 
             };
 
@@ -59,7 +57,7 @@ namespace HumanResourcesManagement.Service
             double phuCapKhac = request.Phucapkhac ?? 0;
 
             //double tongLuong = hopDong.Luongcoban.Value * request.Hesoluong.Value + phuCapTrachNhiem + phuCapKhac;
-            double tongLuong = 0;
+            //double tongLuong = 0;
 
             return 10;
         }
@@ -83,8 +81,6 @@ namespace HumanResourcesManagement.Service
             hoSoLuong.Phucapkhac = request.Phucapkhac;
             hoSoLuong.Tongluong = request.Tongluong;
             hoSoLuong.Thoihanlenluong = request.Thoihanlenluong;
-            hoSoLuong.Ngayhieuluc = request.Ngayhieuluc;
-            hoSoLuong.Ngayketthuc = request.Ngayketthuc;
             hoSoLuong.Ghichu = request.Ghichu;
 
             _context.TblLuongs.Update(hoSoLuong);
