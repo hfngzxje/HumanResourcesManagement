@@ -69,7 +69,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _dieuChuyenService.RemoveDieuChuyen(id);
-                return StatusCode(200, "remove thanh cong");
+                return StatusCode(200, "Xóa điều chuyển thành công");
             }
             catch (Exception ex)
             {
@@ -77,12 +77,26 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpGet("GetAllDieuChuyen")]
-        public async Task<IActionResult> GetAllDieuChuyen(string maNV)
+        //[HttpGet("GetAllDieuChuyen")]
+        //public async Task<IActionResult> GetAllDieuChuyen(string maNV)
+        //{
+        //    try
+        //    {
+        //        var ht = await _dieuChuyenService.GetAllDieuChuyen(maNV);
+        //        return StatusCode(200, ht);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(501, ex.Message);
+        //    }
+        //}
+
+        [HttpGet("getLichSuDieuChuyen")]
+        public async Task<IActionResult> GetLichSuDieuChuyen(string maNV)
         {
             try
             {
-                var ht = await _dieuChuyenService.GetAllDieuChuyen(maNV);
+                var ht = await _dieuChuyenService.getLichSuDieuChuyen(maNV);
                 return StatusCode(200, ht);
             }
             catch (Exception ex)

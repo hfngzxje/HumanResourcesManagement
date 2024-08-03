@@ -8,6 +8,8 @@ namespace HumanResourcesManagement.Models
         public TblDanhMucTo()
         {
             TblDieuChuyens = new HashSet<TblDieuChuyen>();
+            TblLichSuDieuChuyenIdToCuNavigations = new HashSet<TblLichSuDieuChuyen>();
+            TblLichSuDieuChuyenIdToMoiNavigations = new HashSet<TblLichSuDieuChuyen>();
             TblNhanViens = new HashSet<TblNhanVien>();
         }
 
@@ -18,6 +20,8 @@ namespace HumanResourcesManagement.Models
 
         public virtual TblDanhMucPhongBan IdphongNavigation { get; set; } = null!;
         public virtual ICollection<TblDieuChuyen> TblDieuChuyens { get; set; }
+        public virtual ICollection<TblLichSuDieuChuyen> TblLichSuDieuChuyenIdToCuNavigations { get; set; }
+        public virtual ICollection<TblLichSuDieuChuyen> TblLichSuDieuChuyenIdToMoiNavigations { get; set; }
         public virtual ICollection<TblNhanVien> TblNhanViens { get; set; }
     }
 }
