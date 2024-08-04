@@ -29,7 +29,9 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Nhóm lương không được để trống.");
             }
 
-            var oldHoSoLuongs = _context.TblLuongs.Where(x => x.Mahopdong == request.Mahopdong && x.Trangthai == 1).ToList();
+            var oldHoSoLuongs = _context.TblLuongs
+                .Where(x => x.Mahopdong == request.Mahopdong && x.Trangthai == 1)
+                .ToList();
 
             foreach (var oldHsl in oldHoSoLuongs)
             {
@@ -50,8 +52,10 @@ namespace HumanResourcesManagement.Service
             };
 
             _context.TblLuongs.Add(hsl);
+
             _context.SaveChanges();
         }
+
 
 
 
