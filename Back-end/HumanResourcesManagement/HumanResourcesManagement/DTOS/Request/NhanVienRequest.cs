@@ -8,14 +8,12 @@ namespace HumanResourcesManagement.Models
         [Required(ErrorMessage = "Ten is required")]
         public string? Ten { get; set; }
 
-        [Required(ErrorMessage = "Honnhan is required")]
         public short Honnhan { get; set; }
 
         [Required(ErrorMessage = "Ngaysinh is required")]
         [DataType(DataType.Date)]
         public DateTime? Ngaysinh { get; set; }
 
-        [Required(ErrorMessage = "Gioitinh is required")]
         public bool Gioitinh { get; set; }
 
         [Required(ErrorMessage = "Didong is required")]
@@ -25,26 +23,18 @@ namespace HumanResourcesManagement.Models
         [Required(ErrorMessage = "Cmnd is required")]
         public string? Cmnd { get; set; }
 
-        [Required(ErrorMessage = "Cmndngaycap is required")]
         [DataType(DataType.Date)]
         public DateTime? Cmndngaycap { get; set; }
 
-        [Required(ErrorMessage = "Cmndnoicap is required")]
         public string? Cmndnoicap { get; set; }
-
-        [Required(ErrorMessage = "Noisinh is required")]
         public string? Noisinh { get; set; }
 
-        [Required(ErrorMessage = "Quequan is required")]
         public string? Quequan { get; set; }
 
-        [Required(ErrorMessage = "Thuongtru is required")]
         public string? Thuongtru { get; set; }
 
-        [Required(ErrorMessage = "Tamtru is required")]
         public string? Tamtru { get; set; }
 
-        [Required(ErrorMessage = "Dantoc is required")]
         public int? Dantoc { get; set; }
         
         [Required(ErrorMessage = "Email is required")]
@@ -109,7 +99,6 @@ namespace HumanResourcesManagement.Models
 
         public string? Atm { get; set; }
 
-        [Required(ErrorMessage = "Nganhang is required")]
         public string? Nganhang { get; set; }
 
         public int? Phong { get; set; }
