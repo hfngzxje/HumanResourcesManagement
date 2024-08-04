@@ -91,8 +91,18 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
             }
 
-            var newMaNv = request.Ma.ToUpper();
+            var hopDongsCuaNhanVien = _context.TblHopDongs
+                .Where(hd => hd.Ma == request.Ma && hd.TrangThai != 2)
+                .ToList();
 
+            foreach (var hopDong in hopDongsCuaNhanVien)
+            {
+                hopDong.TrangThai = 2;
+            }
+
+            _context.SaveChanges();
+
+            var newMaNv = request.Ma.ToUpper();
             string baseMaHopDong = newMaNv + "HD";
             int suffix = 1;
 
@@ -103,7 +113,7 @@ namespace HumanResourcesManagement.Service
 
             string newMaHopDong = baseMaHopDong + suffix.ToString("D2");
 
-            var hopDong = new TblHopDong()
+            var newHopDong = new TblHopDong()
             {
                 Mahopdong = newMaHopDong,
                 Loaihopdong = request.Loaihopdong,
@@ -115,9 +125,10 @@ namespace HumanResourcesManagement.Service
                 TrangThai = request.TrangThai
             };
 
-            _context.TblHopDongs.Add(hopDong);
+            _context.TblHopDongs.Add(newHopDong);
             _context.SaveChanges();
         }
+
 
 
 
