@@ -165,5 +165,20 @@ namespace HumanResourcesManagement.Controllers
 
 
 
+        [HttpGet("nhomluong")]
+        public IActionResult GetNhomLuongByChucDanhAndBacLuong(int chucdanh, double bacluong)
+        {
+            var nhomLuong = _context.TblDanhMucNhomLuongs
+                .Where(l => l.Chucdanh == chucdanh && l.Bacluong == bacluong)
+                .Select(l => l.Nhomluong)
+                .FirstOrDefault();
+
+            if (nhomLuong == 0)
+            {
+                return NotFound("Không tìm thấy nhóm lương với chức danh và bậc lương được cung cấp.");
+            }
+
+            return Ok(nhomLuong);
+        }
     }
 }
