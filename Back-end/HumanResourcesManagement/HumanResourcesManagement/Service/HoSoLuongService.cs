@@ -194,11 +194,12 @@ namespace HumanResourcesManagement.Service
 
             if (bacLuongId.HasValue)
             {
-                query = query.Where(bl => bl.Nhomluong == bacLuongId.Value);
+                query = query.Where(bl => bl.Bacluong == bacLuongId.Value);
             }
 
             return await query.ToListAsync();
         }
+
 
     }
 }
