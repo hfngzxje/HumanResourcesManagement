@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 
@@ -25,14 +26,33 @@ namespace HumanResourcesManagement.Service
             _context.SaveChanges();
         }
 
-        public IEnumerable<TblLichSuHoatDong> GetAll()
+        public IEnumerable<LichSuHoatDongResponse> GetAll()
         {
-            return _context.TblLichSuHoatDongs.ToList();
+            var all =  _context.TblLichSuHoatDongs.Select(ls => new LichSuHoatDongResponse
+            {
+                Id = ls.Id,
+                CreatedBy = ls.CreatedBy,
+                CreatedAt = ls.CreatedAt,
+                Detail = ls.Action,
+            }).ToList();
+            return all;
         }
 
-        public TblLichSuHoatDong? GetDetails(int id)
+        public LichSuHoatDongResponse? GetDetails(int id)
         {
-            return _context.TblLichSuHoatDongs.FirstOrDefault(x => x.Id == id);
+            var ls =  _context.TblLichSuHoatDongs.FirstOrDefault(x => x.Id == id);
+            if(ls == null)
+            {
+                return null;
+            }
+            var res = new LichSuHoatDongResponse
+            {
+                Id = ls.Id,
+                CreatedBy = ls.CreatedBy,
+                CreatedAt = ls.CreatedAt,
+                Detail = ls.Action,
+            };
+            return res;
         }
 
         public bool Delete(int id)
