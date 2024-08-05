@@ -114,19 +114,10 @@
                       <base-input-number label="CMND(*)" name="cmnd" required="true"></base-input-number>
                     </div>
                     <div class="col-md-4">
-                      <base-datepicker label="Ngày cấp(*)" name="cmndngaycap" required="true"></base-datepicker>
+                      <base-datepicker label="Ngày cấp" name="cmndngaycap" ></base-datepicker>
                     </div>
                     <div class="col-md-4">
-                      <base-input label="Nơi cấp(*)" name="cmndnoicap" required="true"></base-input>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh" required="true"></base-input>
-                    </div>
-                    <div class="col">
-                      <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)" name="thuongtru"
-                        required="true"></base-input>
+                      <base-input label="Nơi cấp" name="cmndnoicap"></base-input>
                     </div>
                   </div>
                   <div class="row">
@@ -134,26 +125,8 @@
                       <base-input class="col-span-2" label="Quê quán(*)" name="quequan" required="true"></base-input>
                     </div>
                     <div class="col">
-                      <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
-                        required="true"></base-input>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-4">
-                      <base-select label="Tình trạng hôn nhân(*)" name="honnhan" options="MaritalOptions"
-                        required="true"></base-select>
-                    </div>
-                    <div class="col-md-4">
-                      <base-select label="Dân tộc(*)" name="dantoc" api="https://localhost:7141/api/NhanVien/danToc"
-                        keyValue="id" keyLabel="ten"></base-select>
-                    </div>
-                    <div class="col-md-4">
-                      <base-select label="Tôn giáo" name="tongiao" api="https://localhost:7141/api/NhanVien/tonGiao"
-                        keyValue="id" keyLabel="ten"></base-select>
-                    </div>
-                    <div class="col-md-4">
-                      <base-select label="Ngân hàng(*)" name="Nganhang" options="BankList" required="true"
-                        style="margin-top: 20px;"></base-select>
+                      <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)" name="thuongtru"
+                      required="true"></base-input>
                     </div>
                   </div>
                   <div class="flex  justify-between mb-2" style="color: blue; margin-top: 2%;  ">
@@ -170,11 +143,6 @@
                     </div>
                     <div class="col-md-4">
                       <base-select label="Tổ" name="to" api="https://localhost:7141/api/NhanVien/to" keyValue="id"
-                        keyLabel="ten"></base-select>
-                    </div>
-                    <div class="col-md-4">
-                      <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
-                        api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyValue="id"
                         keyLabel="ten"></base-select>
                     </div>
                   </div>

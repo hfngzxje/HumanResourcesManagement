@@ -68,72 +68,66 @@
                             <div>
                                 <form id="a">
                                     <div class="col-span-1 h-[300px]">
-                                        <base-upload name="anh" idImage="employeeImage"></base-upload>
+                                        <base-upload name="anh" idImage="employeeImage"
+                                            class="pointer-events-none"></base-upload>
                                     </div>
 
                                     <h1 id="ma-text"
                                         style="font-weight: bold; text-align: center; margin-top: 6px; font-size: 25px;color: cornflowerblue;">
                                         Mã Nhân Viên</h1>
-                                    <h3 id="trangThai-text"
-                                        style="font-weight: bold; text-align: center;margin-top: 1px; font-size: 18px;color: green;">
-                                        Trạng thái</h1>
+                                    <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                                    <div class="text-sm text-gray-700">
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-group text-lg'></i></span>
+                                            <span id="name" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bxs-home-alt-2'></i></span>
+                                            <span id="phong" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-id-card'></i></span>
+                                            <span id="chucdanh" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+
                                         <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
-                                        <div class="text-sm text-gray-700">
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-group text-lg'></i></span>
-                                                <span id="name" style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bxs-home-alt-2'></i></span>
-                                                <span id="phong" style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-id-card'></i></span>
-                                                <span id="chucdanh"
-                                                    style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
 
-                                            <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-phone'></i></span>
+                                            <span id="sdt" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-envelope'></i></span>
+                                            <span id="email" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-calendar'></i></span>
+                                            <span id="ngaysinh" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-male'></i></span>
+                                            <span id="gioitinh" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
 
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-phone'></i></span>
-                                                <span id="sdt" style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-envelope'></i></span>
-                                                <span id="email" style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-calendar'></i></span>
-                                                <span id="ngaysinh"
-                                                    style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-male'></i></span>
-                                                <span id="gioitinh"
-                                                    style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
+                                        <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
 
-                                            <div style="border-bottom: 2px solid gray; margin: 20px 0;"></div>
+                                        <h3 style="font-size: 18px; margin-top: 20px; color: cornflowerblue;">Ngày
+                                            vào
+                                            làm</h3>
+                                        <p style="margin: 10px 0;">
+                                            <span class="icon" style="margin-right: 8px;"><i
+                                                    class='bx bx-calendar-alt'></i></span>
+                                            <span id="ngayvaolam" style="font-size: 16px; font-weight: lighter;"></span>
+                                        </p>
 
-                                            <h3 style="font-size: 18px; margin-top: 20px; color: cornflowerblue;">Ngày
-                                                vào
-                                                làm</h3>
-                                            <p style="margin: 10px 0;">
-                                                <span class="icon" style="margin-right: 8px;"><i
-                                                        class='bx bx-calendar-alt'></i></span>
-                                                <span id="ngayvaolam"
-                                                    style="font-size: 16px; font-weight: lighter;"></span>
-                                            </p>
-
-                                        </div>
+                                    </div>
                                 </form>
                             </div>
 

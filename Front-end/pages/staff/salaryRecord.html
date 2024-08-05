@@ -81,7 +81,7 @@
                                                 <base-select id="ngachNhanVien"
                                                     api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
                                                     keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên"
-                                                    name="nhomluong" disabled></base-select>
+                                                    name="chucdanh" disabled></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="bacLuong" label="Bậc Lương" name="bacluong"
@@ -113,13 +113,17 @@
                                                 <base-input-number label="Thời hạn lên lương" required="true"
                                                     name="thoihanlenluong"></base-input-number>
                                             </div>
-                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                            <!-- <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker class="ml-auto" style="margin: 0;"
                                                     label="Ngày hiệu lực" name="ngayhieuluc"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
                                                     name="ngayketthuc"></base-datepicker>
+                                            </div> -->
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-input-number id="nhomluong" label="Nhóm lương"
+                                                    name="nhomluong" readonly style="display: none;"></base-input-number>
                                             </div>
                                         </div>
 
@@ -198,16 +202,12 @@
                                 name="thoihanlenluong"></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-datepicker style="margin: 0;" label="Ngày hiệu lực"
-                                name="ngayhieuluc"></base-datepicker>
-                        </div>
-                        <div class="col-span-2  sm:col-span-1">
-                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
-                                name="ngayketthuc"></base-datepicker>
-                        </div>
-                        <div class="col-span-2  sm:col-span-1">
                             <base-input-number id="tongLuongPop" label="Tiền lương" required="true" name="tongluong"
                                 style="color: red; font-weight: bold;" readonly></base-input-number>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 mt-2">
+                            <base-input-number id="nhomluongPop" label="Nhóm lương"
+                                name="nhomluong" readonly style="display: none;" ></base-input-number>
                         </div>
                         <div class="col-span-4 ">
                             <base-textarea label="Ghi chú" name="ghichu"></base-textarea>

@@ -13,26 +13,49 @@ var TableColumnsChuyenDen = [
         key: 'id',
     },
     {
+        label: 'Mã nhân viên',
+        key: 'ma'
+    },
+    {
         label: 'Ngày Điều Chuyển',
-        key: 'ngayDieuChuyen',
-        type: 'datetime'
+        key: 'ngayDieuChuyen'
     },
     {
-        label: 'Phòng Ban',
-        key: 'phong',
+        label: 'từ phòng',
+        key: 'tuPhong',
     },
     {
-        label: 'Chức vụ',
-        key: 'chucVu',
+        label: 'Đến phòng',
+        key: 'denPhong',
     },
     {
-        label: 'Tổ',
-        key: 'to',
+        label: 'Từ tổ',
+        key: 'tuTo ',
 
     },
     {
-        label: 'Chi Tiết',
+        label: 'Đến tổ',
+        key: 'denTo',
+
+    },
+    {
+        label: 'Từ Chức vụ',
+        key: 'tuChucVu',
+
+    },
+    {
+        label: 'Đến chức vụ',
+        key: 'denChucVu',
+
+    },
+    {
+        label: 'Chi tiết',
         key: 'chiTiet',
+
+    },
+    {
+        label: 'Trạng thái',
+        key: 'trangThai',
 
     },
     {
@@ -119,9 +142,9 @@ async function handleLuuLichSuDieuChuyen() {
             success: async function (data) {  // Thêm từ khóa async vào hàm này
                 alert('Tạo Thành Công!');
                 console.log("Data", data);
-                const dulieu = await apiGetDuLieu();  // Sử dụng await để đợi giá trị trả về
-                alert(dulieu);
-                handleDieuChuyen(id);
+                // const dulieu = await apiGetDuLieu();  // Sử dụng await để đợi giá trị trả về
+                // alert(dulieu);
+                // handleDieuChuyen(id);
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -146,46 +169,46 @@ async function handleLuuLichSuDieuChuyen() {
     }, 1000);
 }
 
-function handleDieuChuyen(id) {
-    const valid = validateForm('workingProcessChuyenDen_form')
-    if (!valid) return
-    const formValue = getFormValues('workingProcessChuyenDen_form')
-    formValue['maNV'] = maDetail;
-    formValue['id'] = id
-    const payload = buildPayload(formValue)
-    const apiUrl = `https://localhost:7141/api/DieuChuyen/DieuChuyen?maNV=${encodeURIComponent(formValue['maNV'])}&id=${encodeURIComponent(formValue['id'])}`;
-    setLoading(true)
-    setTimeout(() => {
-    $.ajax({
+// function handleDieuChuyen(id) {
+//     const valid = validateForm('workingProcessChuyenDen_form')
+//     if (!valid) return
+//     const formValue = getFormValues('workingProcessChuyenDen_form')
+//     formValue['maNV'] = maDetail;
+//     formValue['id'] = id
+//     const payload = buildPayload(formValue)
+//     const apiUrl = `https://localhost:7141/api/DieuChuyen/DieuChuyen?maNV=${encodeURIComponent(formValue['maNV'])}&id=${encodeURIComponent(formValue['id'])}`;
+//     setLoading(true)
+//     setTimeout(() => {
+//     $.ajax({
         
-        url: apiUrl, 
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            table.handleCallFetchData();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("điều chuyển không thành công!")
-            }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
-}
+//         url: apiUrl, 
+//         method: 'POST',
+//         contentType: 'application/json',
+//         data: JSON.stringify(payload),
+//         success: function (data) {
+//             table.handleCallFetchData();
+//         },
+//         error: (err) => {
+//             console.log('err ', err);
+//             try {
+//                 if (!err.responseJSON) {
+//                     alert(err.responseText)
+//                     return
+//                 }
+//                 const errObj = err.responseJSON.errors
+//                 const firtErrKey = Object.keys(errObj)[0]
+//                 const message = errObj[firtErrKey][0]
+//                 alert(message)
+//             } catch (error) {
+//                 alert("điều chuyển không thành công!")
+//             }
+//         },
+//         complete: () => {
+//             setLoading(false)
+//         }
+//     });
+// }, 1000); 
+// }
 function handleRemove(id) {
     const isConfirm = confirm('Bạn chắc chắn muốn xóa điều chuyển?')
     if (!isConfirm) return
@@ -228,7 +251,7 @@ function renderActionByStatus() {
 
 
 function buildApiUrlChuyenDen() {
-    return 'https://localhost:7141/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail
+    return 'https://localhost:7141/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

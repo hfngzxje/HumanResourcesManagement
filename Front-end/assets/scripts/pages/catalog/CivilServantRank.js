@@ -3,8 +3,8 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 var oldValue = null;
 let idNgachCongChuc = null 
@@ -56,6 +56,43 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
+function recordActivityAdmin(actor, action){
+    setLoading(true)
+    setLoading(true);
+
+    const payload = {
+        createdBy: actor,
+        action: action,
+    };
+  
+        $.ajax({
+            url: 'https://localhost:7141/api/LichSuHoatDong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('Lịch sử hoạt động đã được lưu:');
+            },
+            error: (err) => {
+                console.log('Lỗi khi lưu lịch sử hoạt động:', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Lưu lịch sử hoạt động không thành công!");
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+}
 
 function fetchNgachCongChuc(id) {
     console.log("Name:", id);
@@ -98,6 +135,8 @@ function handleCreate() {
             success: function (data) {
                 console.log('fetch ngạch công chức res :: ', data);
                 alert("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm danh mục ngạch công chức: ${formValue.ten}`);
+           
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -125,7 +164,7 @@ function handleCreate() {
 }
 
 function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục chức danh?')
+    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục ngạch công chức?')
     if (!isConfirm) return
     setLoading(true)
     setTimeout(() => {
@@ -135,6 +174,8 @@ function handleRemoveRow() {
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
                 alert("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục ngạch công chức: ${oldValue}`);
+              
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -165,6 +206,8 @@ function handleSave() {
             success: function (data) {
                 console.log('fetchLanguage res :: ', data);
                 alert('Lưu Thành Công!');
+                recordActivityAdmin(maNhanVien, `Sửa danh mục ngạch công chức: ${oldValue} => ${payload.ten} `);
+              
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -204,27 +247,27 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('CivilServantRank_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
+// function renderActionByStatus() {
+//     const actionEl = document.getElementById('CivilServantRank_form_action')
+//     const buildButton = (label, type, icon) => {
+//         const btnEl = document.createElement('base-button')
+//         btnEl.setAttribute('label', label)
+//         btnEl.setAttribute('type', type)
+//         btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+//         return btnEl
+//     }
+//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
 
 
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
+//     createBtn.addEventListener('click', function () {
+//         isPopupEdit = false
+//         showPopup()
+//     });
 
-    actionEl.append(createBtn)
+//     actionEl.append(createBtn)
 
-}
+// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/NhanVien/ngachCongChuc'
@@ -249,14 +292,12 @@ function showPopup() {
         popupSaveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Ngạch Công Chức"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
@@ -277,14 +318,12 @@ function closePopup() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
 
     const inputTenChucDanh = document.querySelector('base-input[name="ten"]');
     if (inputTenChucDanh) {

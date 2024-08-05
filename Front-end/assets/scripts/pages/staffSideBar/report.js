@@ -10,8 +10,7 @@ var TableColumns = [
   },
   {
     label: "Ngày sinh",
-    key: "ngaysinh",
-    type: "datetime",
+    key: "ngaysinh"
   },
   {
     label: "Giới tính",
@@ -24,7 +23,7 @@ var TableColumns = [
   },
   {
     label: "Phòng ban",
-    key: "phong",
+    key: "tenPhong",
   },
   {
     label: "Quê quán",
@@ -109,9 +108,13 @@ function renderActionByStatus() {
     handleSearch();
   });
 
-  // removeBtn.addEventListener('click', handleRemove)
-  // saveBtn.addEventListener('click', handleSave)
-  // createBtn.addEventListener('click', handleCreate)
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
+  });
+
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
 
   actionEl.append(DisplayBtn, pdfBtn, excelBtn);
 
@@ -119,7 +122,91 @@ function renderActionByStatus() {
     DisplayBtn.click();
   });
 }
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('searchRules', formValue.searchRules || 'Tất cả');
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
 
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToExecl', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhanVien.xlsx'; 
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('searchRules', formValue.searchRules || 'Tất cả');
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhanVien.pdf'; 
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
 function handleSearch() {
   
   const formValue = getFormValues("report_form");

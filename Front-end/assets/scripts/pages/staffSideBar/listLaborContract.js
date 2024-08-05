@@ -1,4 +1,3 @@
-const isEdit = !!id
 const vaiTroID = localStorage.getItem("vaiTroID")
 let maHopDongHienTai = null
 let isPopupEdit = false
@@ -11,10 +10,9 @@ const table = document.querySelector('base-table')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 0 },
+    { label: 'Hợp đồng quá hạn', value: 2 },
 ];
 
-// Khai báo giá trị định nghĩa columns biến "var" là biến toàn cục
 var TableColumns = [
     {
         label: 'Mã nhân viên',
@@ -33,14 +31,12 @@ var TableColumns = [
         key: 'chucdanh',
     },
     {
-        label: 'Từ ngày',
-        key: 'hopdongtungay',
-        type: 'datetime'
+        label: 'Phòng ban',
+        key: 'phong'
     },
     {
-        label: 'Đến ngày',
-        key: 'hopdongdenngay',
-        type: 'datetime'
+        label: 'Tổ',
+        key: 'to'
     },
     {
         label: 'Trạng thái',
@@ -242,24 +238,7 @@ function clearFormValues() {
 }
 
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('listContract_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-
-    actionEl.append(createBtn)
-}
 function clearFormValues(formId) {
     const form = document.getElementById('editHopDong');
     const inputs = form.querySelectorAll('input, textarea, select');
@@ -314,7 +293,6 @@ function closePopup() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()

@@ -247,7 +247,16 @@ function renderActionByStatus() {
 
     actionEl.append(saveBtn, clear)
 }
+function formatDateTime(dateTimeStr) {
+    const dateTime = new Date(dateTimeStr);
+    const year = dateTime.getFullYear();
+    const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+    const day = String(dateTime.getDate()).padStart(2, "0");
+    const hours = String(dateTime.getHours()).padStart(2, "0");
+    const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
+    return `${day}-${month}-${year} `;
+  }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     if (maDetail) {
@@ -265,15 +274,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const name = document.getElementById('name');
                 name.textContent = data.ten; 
                 const phong = document.getElementById('phong');
-                phong.textContent = data.phong; 
+                phong.textContent = data.tenPhongBan; 
                 const chucDanh = document.getElementById('chucdanh');
-                chucDanh.textContent = data.chucvuhientai; 
+                chucDanh.textContent = data.tenChucVu; 
                 const sdt = document.getElementById('sdt');
                 sdt.textContent = data.didong; 
                 const email = document.getElementById('email');
                 email.textContent = data.email; 
                 const ngaysinh = document.getElementById('ngaysinh');
-                ngaysinh.textContent = data.ngaysinh; 
+                ngaysinh.textContent = formatDateTime(data.ngaysinh); 
                 const gioitinh = document.getElementById('gioitinh');
                 if(data.gioitinh === true){
                     gioitinh.textContent = "Nam";
@@ -282,7 +291,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gioitinh.textContent = "Nữ"
                 }
                 const ngayvaolam = document.getElementById('ngayvaolam');
-                ngayvaolam.textContent = data.ngaychinhthuc;
+                ngayvaolam.textContent = formatDateTime(data.ngaychinhthuc);
                 
             })
             .catch(error => {

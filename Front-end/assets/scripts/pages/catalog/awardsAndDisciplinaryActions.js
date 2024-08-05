@@ -2,7 +2,7 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
+// const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
 let idKhenThuong = null
@@ -198,23 +198,23 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('award_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
+// function renderActionByStatus() {
+//     const actionEl = document.getElementById('award_form_action')
+//     const buildButton = (label, type, icon) => {
+//         const btnEl = document.createElement('base-button')
+//         btnEl.setAttribute('label', label)
+//         btnEl.setAttribute('type', type)
+//         btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-    actionEl.append(createBtn)
-}
+//         return btnEl
+//     }
+//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+//     createBtn.addEventListener('click', function () {
+//         isPopupEdit = false
+//         showPopup()
+//     });
+//     actionEl.append(createBtn)
+// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
@@ -239,14 +239,14 @@ function showPopup() {
         popupSaveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
+        // popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Khen Thưởng - Kỷ Luật"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
+        // popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
@@ -266,14 +266,14 @@ function closePopup() {
     modal.style.display = "none"
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    // renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    // popupClearBtn.addEventListener("click", clearFormValues)
     const inputTenKhenThuong = document.querySelector('base-input[name="ten"]');
     if (inputTenKhenThuong) {
         inputTenKhenThuong.addEventListener('input', checkValues);
