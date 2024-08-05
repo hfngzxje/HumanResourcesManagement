@@ -68,9 +68,9 @@ namespace HumanResourcesManagement.Service
                     IdDieuChuyen = dc.Id,
                     Ma = req.Ma,
                     NgayDieuChuyen = req.NgayHieuLuc,
-                    IdPhongCu = ht.Phong == phongHienTai ? null : _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Ten == ht.Phong)?.Id,
+                    IdPhongCu = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Ten == ht.Phong)?.Id,
                     IdPhongMoi = req.Phong,
-                    IdToCu = ht.To == toHienTai ? null : _context.TblDanhMucTos.FirstOrDefault(t => t.Ten == ht.To)?.Id,
+                    IdToCu = _context.TblDanhMucTos.FirstOrDefault(t => t.Ten == ht.To).Id,
                     IdToMoi = req.To,
                     IdChucVuCu = cv,
                     IdChucVuMoi = req.Chucvu,
@@ -100,6 +100,11 @@ namespace HumanResourcesManagement.Service
             var ls = await _context.TblLichSuDieuChuyens.FirstOrDefaultAsync(ls => ls.IdDieuChuyen == dc.Id);
             ls.TrangThai = 1;
 
+            nhanVien.Phong = dc.Phong;
+            nhanVien.To = dc.To;
+            nhanVien.Chucvuhientai = dc.Chucvu;
+            nhanVien.Ngayvaoban = dc.Ngayhieuluc;
+
             _context.Entry(ls).State = EntityState.Modified;
             _context.Entry(nhanVien).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -107,31 +112,22 @@ namespace HumanResourcesManagement.Service
 
         }
 
-        public async Task RemoveDieuChuyen(int id)
+        public async Task<TblLichSuDieuChuyen> HuyDieuChuyen(int idDieuChuyen)
         {
-            var dc = await _context.TblDieuChuyens.FindAsync(id);
-            if (dc == null)
+            var dc = await _context.TblLichSuDieuChuyens.FirstOrDefaultAsync(l => l.IdDieuChuyen == idDieuChuyen);
+            if(dc.TrangThai == 1 || dc.TrangThai == -1)
             {
-                throw new KeyNotFoundException($"not found {id}");
+                throw new Exception("Lệnh điều chuyển này đã được thực hiện hoặc đã hủy. Không thể điều chuyển.");
             }
-            _context.TblDieuChuyens.Remove(dc);
-            await _context.SaveChangesAsync();
+            else
+            {
+                dc.TrangThai = -1;
+                _context.Entry(dc).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return dc;
+            }
+            
         }
-
-        //public async Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV)
-        //{
-        //    var dc = await _context.TblDieuChuyens.Where(nv => nv.Manv == maNV)
-        //        .Select(dc => new DieuChuyenResponseDto
-        //        {
-        //            Id= dc.Id,
-        //            NgayDieuChuyen = dc.Ngayhieuluc,
-        //            Phong = _context.TblDanhMucPhongBans.FirstOrDefault(d => d.Id == dc.Phong).Ten,
-        //            To = _context.TblDanhMucTos.FirstOrDefault(d => d.Id == dc.To).Ten,
-        //            ChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(d => d.Id == dc.Chucvu).Ten,
-        //            ChiTiet = dc.Chitiet,
-        //        }).ToListAsync();
-        //    return dc;
-        //}
         public async Task<IEnumerable<DieuChuyenResponseDto>> getLichSuDieuChuyen(string maNV)
         {
             var all = await _context.TblLichSuDieuChuyens
@@ -144,7 +140,8 @@ namespace HumanResourcesManagement.Service
                 .Where(l => l.Ma == maNV)
                 .Select(ls => new DieuChuyenResponseDto
                 {
-                    Id= ls.Id,
+                    Id = ls.Id,
+                    IdDieuChuyen = ls.IdDieuChuyen,
                     Ma = ls.Ma,
                     NgayDieuChuyen = ls.NgayDieuChuyen.Value.ToString("dd/MM/yyyy"),
                     tuPhong = ls.IdPhongCuNavigation.Ten,

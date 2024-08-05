@@ -8,7 +8,7 @@ namespace HumanResourcesManagement.Service.IService
     {
         Task<CongViecHienTaiDto> GetCongViecHienTai(string maNV);
         Task<TblDieuChuyen> AddDieuChuyen(InsertDieuChuyenRequest req);
-        Task RemoveDieuChuyen(int id);
+        Task<TblLichSuDieuChuyen> HuyDieuChuyen(int idDieuChuyen);
         //Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV);
         Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int id); 
         Task<IEnumerable<DieuChuyenResponseDto>> getLichSuDieuChuyen(string maNV);
