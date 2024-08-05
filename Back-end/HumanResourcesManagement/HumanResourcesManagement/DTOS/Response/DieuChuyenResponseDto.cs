@@ -5,6 +5,7 @@ namespace HumanResourcesManagement.DTOS.Response
     public class DieuChuyenResponseDto
     {
         public int Id { get; set; }
+        public int? IdDieuChuyen { get; set; }
         public string Ma { get; set; }
         public string? NgayDieuChuyen { get; set; }
         public string? tuPhong { get; set; }
