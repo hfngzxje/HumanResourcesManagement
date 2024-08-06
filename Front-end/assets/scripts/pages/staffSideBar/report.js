@@ -58,25 +58,25 @@ var gioiTinh = [
 
 document.addEventListener("DOMContentLoaded", () => {
   const filterSelect = document.querySelector(
-    'base-select[description="Lọc theo"]'
+    '#loctheo select'
   );
   const fromDate = document.querySelector(
-    'base-datepicker[description="Từ ngày"]'
+    '#tungay input'
   );
   const toDate = document.querySelector(
-    'base-datepicker[description="Đến ngày"]'
+    '#denngay input'
   );
   const queQuanSelect = document.querySelector(
-    'base-select[description="Địa chỉ"]'
+    '#selectquequan select'
   );
   const queQuan = document.querySelector(
-    'base-input[description="Quê quán"]'
+    '#quequan input'
   );
   const departmentSelect = document.querySelector(
-    'base-select[description="Phòng ban"]'
+    '#phongban select'
   );
   const genderSelect = document.querySelector(
-    'base-select[description="Giới tính"]'
+    '#gioitinh select'
   );
 
   // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
@@ -210,6 +210,7 @@ function createDownloadLinkPDF(blob) {
 function handleSearch() {
   
   const formValue = getFormValues("report_form");
+  
   console.log("Form: " , formValue)
   const tableReport = document.getElementById("tableReport");
   if (formValue.searchRules === "Tất cả") {
@@ -305,4 +306,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderActionByStatus();
   handleSelectFilterBy();
   handleSearch();
+
+  
 });

@@ -8,7 +8,9 @@ const table = document.querySelector('base-table')
 const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idNhomLuong = null
-var oldValue = null;
+var oldValue = null
+var oldChucDanh = null
+var oldBacLuong = null
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -23,7 +25,8 @@ var MaritalOptions = [
 var TableColumns = [
     {
         label: 'Nhóm lương',
-        key: 'nhomluong'
+        key: 'nhomluong',
+        type: 'disabled'
     }
     ,
     {
@@ -116,27 +119,44 @@ function recordActivityAdmin(actor, action){
             }
         });
 }
-
-function fetchNhomLuong(id) {
-    console.log("Name:", id);
-    setLoading(true)
-    idNhomLuong = id
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
-        method: 'GET',
-        success: function (data) {
-            // setFormValue('editNhomLuong', data, 'fetch');
-            setFormValue('editNhomLuong', data)
-
-        },
-        error: (err) => {
-            console.log('fetchDepartments err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+async function getChucDanhByID(idChucDanh) {
+    try {
+        const chucDanh = await $.ajax({
+            url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + idChucDanh,
+            method: 'GET',
+            contentType: 'application/json'
+        });
+        // oldChucDanh = chucDanh.ten; 
+        return chucDanh.ten;
+    } catch (error) {
+        console.log("Error");
+    }
 }
+async function fetchNhomLuong(id) {
+    console.log("Name:", id);
+    setLoading(true);
+    idNhomLuong = id;
+    let idChucDanh = null;
+
+    try {
+        const data = await $.ajax({
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
+            method: 'GET',
+            contentType: 'application/json'
+        });
+        oldBacLuong = data.bacluong
+        idChucDanh = data.chucdanh;
+        oldChucDanh = await  getChucDanhByID(idChucDanh); // Chờ đợi kết quả từ getChucDanhByID
+        // alert(oldChucDanh);
+        setFormValue('editNhomLuong', data);
+    } catch (err) {
+        console.log('fetchDepartments err :: ', err);
+    } finally {
+        setLoading(false);
+    }
+}
+   
+
 function handleCreate() {
     const isConfirm = confirm('Bạn chắc chắn muốn tạo nhóm lương?')
     if (!isConfirm) return
@@ -193,6 +213,7 @@ function handleRemoveRow() {
             method: 'DELETE',
             success: function (data) {
                 alert("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -222,6 +243,7 @@ function handleSave() {
             data: JSON.stringify(payload),
             success: function (data) {
                 alert('Lưu Thành Công!');
+                recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();

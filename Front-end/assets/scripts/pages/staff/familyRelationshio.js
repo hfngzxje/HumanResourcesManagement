@@ -53,6 +53,7 @@ var TableColumns = [
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
                     fetchRelationship(row.id);
+                    alert(row.id)
                     showPopup()
                 }
             }

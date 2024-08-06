@@ -184,7 +184,8 @@ class BaseInput extends HTMLElement {
     "required",
     "type",
     "value",
-    "readonly"
+    "readonly",
+    "disabled"
   ];
 
   connectedCallback() {
@@ -195,6 +196,7 @@ class BaseInput extends HTMLElement {
     const type = this.getAttribute("type") || "text";
     const disabled = this.getAttribute("disabled") !== null;
     this._readonly = this.hasAttribute("readonly");
+    
 
     this.innerHTML = `
     <div>
@@ -594,6 +596,15 @@ class BaseTable extends HTMLElement {
       return `${day}-${month}-${year} `;
     }
 
+    function formatTime(dateTimeStr) {
+      const dateTime = new Date(dateTimeStr);
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+      const seconds = String(dateTime.getSeconds()).padStart(2, "0");
+  
+      return `${hours}:${minutes}:${seconds}`;
+  }
+
     function getMonth(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
       const year = dateTime.getFullYear();
@@ -622,11 +633,15 @@ class BaseTable extends HTMLElement {
       // tạo ra 1 thẻ tr mới <tr></tr>
       const headTrEl = document.createElement("tr");
       columns.forEach((col) => {
+        if (col.type === "disabled") {
+          return; // Skip adding header for disabled columns
+        }
         // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
         // tạo 1 thẻ th đại hiện cho cột
         const thEl = document.createElement("th");
         // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
         thEl.setAttribute("class", "px-6 py-3");
+        
         // <th class="px-6 py-3">Mã hợp đồng</th>
         thEl.innerText = col.label;
         // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
@@ -697,6 +712,10 @@ class BaseTable extends HTMLElement {
           }
           // Lặp lần lượt các thông tin cột
           columns.forEach((col) => {
+            if (col.type === "disabled") {
+              return; // Skip adding cell for disabled columns
+            }
+            
             //  Mã hợp đồng, Lương cơ bả, ...
             // tạo thẻ th
             const thEl = document.createElement("th");
@@ -732,7 +751,11 @@ class BaseTable extends HTMLElement {
               // nếu type được khai báo thì định dạng lại giá trị tương ứng
               if (col.type === "datetime") {
                 value = formatDateTime(value);
-              } else if (col.type == "month") {
+              } 
+              else if(col.type === "time"){
+                value = formatTime(value)
+              }
+              else if (col.type == "month") {
                 value = getMonth(value);
               } 
                else if (col.type === "currency") {
@@ -866,34 +889,73 @@ class BaseTable extends HTMLElement {
       }
       const handleCallFetchData = (payload) => {
         $.ajax({
-          url: getApiUrl(), // lấy ra url api của bảng = http://...
-          type: method, // phương thức
-          data: payload,
-          success: (tableData) => {
-            // tableData : dữ liệu Api bảng trả về
-
-            setTableData(tableData);
-            renderTable();
-            renderPagination();
-          },
-          error: (xhr, status, error) => {
-            const hasEmptyEl = this.querySelector("#empty-data");
-            console.log("hasEmptyEl ", hasEmptyEl);
-            if (hasEmptyEl) return;
-            // Trường hợp thất bại
-            const wrapperTable = this.querySelector("#wrapper-table");
-
-            const divEl = document.createElement("div");
-            divEl.setAttribute("id", "empty-data");
-            divEl.setAttribute(
-              "class",
-              "text-center text-gray-400 mt-5 mb-5 text-sm"
-            );
-            divEl.innerText = "Không có dữ liệu!";
-            wrapperTable.append(divEl);
-          },
+            url: getApiUrl(), // lấy ra url api của bảng = http://...
+            type: method, // phương thức
+            data: payload,
+            success: (tableData) => {
+                // tableData : dữ liệu Api bảng trả về
+                
+                // Nếu dữ liệu có thuộc tính nào đó có thể sử dụng để sắp xếp, 
+                // ví dụ: 'createdAt', 'updatedAt', hoặc 'id'.
+                // Trong trường hợp này, giả sử dữ liệu có thuộc tính 'id' để sắp xếp.
+                
+                // Nếu dữ liệu không có thuộc tính thời gian, bạn có thể sắp xếp theo ID hoặc theo thứ tự tự nhiên nếu đó là số tăng dần.
+                const sortedData = tableData.sort((a, b) => b.id - a.id);
+    
+                setTableData(sortedData);
+                renderTable();
+                renderPagination();
+            },
+            error: (xhr, status, error) => {
+                const hasEmptyEl = this.querySelector("#empty-data");
+                console.log("hasEmptyEl ", hasEmptyEl);
+                if (hasEmptyEl) return;
+                // Trường hợp thất bại
+                const wrapperTable = this.querySelector("#wrapper-table");
+    
+                const divEl = document.createElement("div");
+                divEl.setAttribute("id", "empty-data");
+                divEl.setAttribute(
+                    "class",
+                    "text-center text-gray-400 mt-5 mb-5 text-sm"
+                );
+                divEl.innerText = "Không có dữ liệu!";
+                wrapperTable.append(divEl);
+            },
         });
-      };
+    };
+
+    // const handleCallFetchData = (payload) => {
+    //   $.ajax({
+    //     url: getApiUrl(), // lấy ra url api của bảng = http://...
+    //     type: method, // phương thức
+    //     data: payload,
+    //     success: (tableData) => {
+    //       // tableData : dữ liệu Api bảng trả về
+
+    //       setTableData(tableData);
+    //       renderTable();
+    //       renderPagination();
+    //     },
+    //     error: (xhr, status, error) => {
+    //       const hasEmptyEl = this.querySelector("#empty-data");
+    //       console.log("hasEmptyEl ", hasEmptyEl);
+    //       if (hasEmptyEl) return;
+    //       // Trường hợp thất bại
+    //       const wrapperTable = this.querySelector("#wrapper-table");
+
+    //       const divEl = document.createElement("div");
+    //       divEl.setAttribute("id", "empty-data");
+    //       divEl.setAttribute(
+    //         "class",
+    //         "text-center text-gray-400 mt-5 mb-5 text-sm"
+    //       );
+    //       divEl.innerText = "Không có dữ liệu!";
+    //       wrapperTable.append(divEl);
+    //     },
+    //   });
+    // };
+    
       handleCallFetchData();
 
       this.handleCallFetchData = handleCallFetchData;

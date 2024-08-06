@@ -10,7 +10,8 @@ var oldValue = null;
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
     },
     {
         label: 'Tên Ngoại Ngữ',

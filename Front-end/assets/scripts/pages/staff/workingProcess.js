@@ -8,10 +8,10 @@ var maDetail = localStorage.getItem('maDetail')
 
 
 var TableColumnsChuyenDen = [
-    {
-        label: 'id',
-        key: 'id',
-    },
+    // {
+    //     label: 'id',
+    //     key: 'id',
+    // },
     {
         label: 'Mã nhân viên',
         key: 'ma'

@@ -12,7 +12,8 @@ let idChuyenMon = null
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
     },
     {
         label: 'Mã Chuyên Môn',
