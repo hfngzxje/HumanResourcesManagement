@@ -487,7 +487,14 @@ namespace HumanResourcesManagement.Service
                 PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
                 document.Open();
 
-                Font titleFont = FontFactory.GetFont("Arial", 16, Font.BOLD);
+                // Use a system font that supports Vietnamese characters
+                string arialFontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "Arial.ttf");
+                BaseFont baseFont = BaseFont.CreateFont(arialFontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+
+                Font titleFont = new Font(baseFont, 16, Font.BOLD);
+                Font headerFont = new Font(baseFont, 12, Font.BOLD);
+                Font dataFont = new Font(baseFont, 10, Font.NORMAL);
+
                 Paragraph titleParagraph = new Paragraph(new Chunk(title, titleFont));
                 titleParagraph.Alignment = Element.ALIGN_CENTER;
                 document.Add(titleParagraph);
@@ -497,7 +504,6 @@ namespace HumanResourcesManagement.Service
                 PdfPTable table = new PdfPTable(headers.Length);
                 table.WidthPercentage = 100;
 
-                Font headerFont = FontFactory.GetFont("Arial", 12, Font.BOLD);
                 foreach (var header in headers)
                 {
                     PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
@@ -505,7 +511,6 @@ namespace HumanResourcesManagement.Service
                     table.AddCell(cell);
                 }
 
-                Font dataFont = FontFactory.GetFont("Arial", 10, Font.NORMAL);
                 foreach (var item in data)
                 {
                     var properties = item.GetType().GetProperties();
@@ -526,11 +531,20 @@ namespace HumanResourcesManagement.Service
             }
         }
 
+
+
         public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
         {
             var list = await getDanhSachNhanVien(req);
             string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
             return await ExportToPdf("Báo Cáo Danh Sách Nhân Viên", list, "BaoCao_DanhSachNhanVien.pdf", headers);
+        }
+
+        public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToPdf(DanhSachNhomLuongRequest req)
+        {
+            var list = await getDanhSachNhomLuong(req);
+            string[] headers = { "Chức Danh", "Bậc Lương", "Hệ Số Lương", "Lương Cơ Bản", "Phụ Cấp", "Khác" };
+            return await ExportToPdf("Báo Cáo Danh Sách Nhóm Lương", list, "BaoCao_DanhSachNhomLuong.pdf", headers);
         }
     }
 }

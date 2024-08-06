@@ -2,6 +2,7 @@
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResourcesManagement.Service
 {
@@ -78,9 +79,9 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public void TaoHopDong(InsertHopDongRequest request)
+        public async void TaoHopDong(InsertHopDongRequest request)
         {
-            var nhanVien = _context.TblNhanViens.FirstOrDefault(nv => nv.Ma == request.Ma);
+            var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == request.Ma);
             if (nhanVien == null)
             {
                 throw new Exception("Mã nhân viên không tồn tại.");
@@ -91,22 +92,22 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
             }
 
-            var hopDongsCuaNhanVien = _context.TblHopDongs
+            var hopDongsCuaNhanVien = await _context.TblHopDongs
                 .Where(hd => hd.Ma == request.Ma && hd.TrangThai != 2)
-                .ToList();
+                .ToListAsync();
 
             foreach (var hopDong in hopDongsCuaNhanVien)
             {
                 hopDong.TrangThai = 2;
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var newMaNv = request.Ma.ToUpper();
             string baseMaHopDong = newMaNv + "HD";
             int suffix = 1;
 
-            while (_context.TblHopDongs.Any(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
+            while ( await _context.TblHopDongs.AnyAsync(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
             {
                 suffix++;
             }
@@ -125,8 +126,11 @@ namespace HumanResourcesManagement.Service
                 TrangThai = request.TrangThai
             };
 
+            nhanVien.Chucvuhientai = newHopDong.Chucdanh;
+
+            _context.Entry(nhanVien).State = EntityState.Modified; 
             _context.TblHopDongs.Add(newHopDong);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
 

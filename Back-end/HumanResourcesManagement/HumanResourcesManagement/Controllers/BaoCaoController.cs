@@ -85,7 +85,7 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(501, "Lỗi khi xuất file excel.");
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
             }
 
         }
@@ -146,6 +146,19 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPost("ExportBaoCaoNhomLuongToPDF")]
+        public async Task<IActionResult> ExportBaoCaoNhomLuonngPDF([FromForm] DanhSachNhomLuongRequest req)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _baoCaoService.ExportNhomLuongToPdf(req);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+        }
 
         [HttpPost("getBaoCaoSinhNhat")]
         public async Task<IActionResult> GetReportSinhNhat([FromForm] DanhSachSinhNhatRequest req)
