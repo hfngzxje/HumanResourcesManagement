@@ -19,7 +19,7 @@ namespace HumanResourcesManagement.Service
         {
             if (_context.TblTrinhDoVanHoas == null)
             {
-                throw new InvalidOperationException("Không có dữ liệu");
+                return null;
             }
 
             var listTrinhDoVanHoa = await _context.TblTrinhDoVanHoas.Where(nv => nv.Ma == maNV)
@@ -37,7 +37,7 @@ namespace HumanResourcesManagement.Service
 
             if (listTrinhDoVanHoa == null || !listTrinhDoVanHoa.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống {maNV}");
+                return null;
             }
 
             return listTrinhDoVanHoa;

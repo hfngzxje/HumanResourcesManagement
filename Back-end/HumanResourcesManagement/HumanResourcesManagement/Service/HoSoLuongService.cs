@@ -123,7 +123,7 @@ namespace HumanResourcesManagement.Service
 
             if (!maHopDongs.Any())
             {
-                throw new Exception("Không tìm thấy hợp đồng nào cho mã nhân viên này.");
+                return null;
             }
 
             var hoSoLuongs = _context.TblLuongs

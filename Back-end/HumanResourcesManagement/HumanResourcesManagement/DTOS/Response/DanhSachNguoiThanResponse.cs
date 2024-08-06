@@ -3,7 +3,7 @@
     public class DanhSachNguoiThanResponse
     {
         public string? Ten { get; set; }
-        public string? GioiTinh { get; set; }
+        public bool? GioiTinh { get; set; }
         public string? NgaySinh { get; set; }
         public string? NgheNghiep { get; set; }
         public string? QuanHe { get; set; }

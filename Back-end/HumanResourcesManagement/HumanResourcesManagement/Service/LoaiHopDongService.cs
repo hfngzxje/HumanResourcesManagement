@@ -46,7 +46,12 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<TblDanhMucLoaiHopDong>> GetAllLoaiHopDong()
         {
-            return await _context.TblDanhMucLoaiHopDongs.ToListAsync();
+            var all = await _context.TblDanhMucLoaiHopDongs.ToListAsync();
+            if (!all.Any() || all == null)
+            {
+                return null;
+            }
+            return all;
         }
 
         public async Task<TblDanhMucLoaiHopDong> GetLoaiHopDongById(int id)
