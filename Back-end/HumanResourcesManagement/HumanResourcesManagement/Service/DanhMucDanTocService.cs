@@ -63,7 +63,12 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<TblDanhMucDanToc>> GetAllDanToc()
         {
-            return await _context.TblDanhMucDanTocs.ToListAsync();
+            var all = await _context.TblDanhMucDanTocs.ToListAsync();
+            if(!all.Any() || all == null)
+            {
+                return null;
+            }
+            return all;
         }
 
         public async Task<TblDanhMucDanToc> GetDanTocById(int id)

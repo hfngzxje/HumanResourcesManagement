@@ -79,7 +79,7 @@ namespace HumanResourcesManagement.Service
 
             if (listTrinhDo == null || !listTrinhDo.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return listTrinhDo;

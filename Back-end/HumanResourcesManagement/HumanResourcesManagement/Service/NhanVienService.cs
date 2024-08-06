@@ -29,7 +29,7 @@ namespace HumanResourcesManagement.Service
             
             if (!nhanViens.Any())
             {
-                throw new Exception("Danh sách không có nhân viên nào!!");
+                return null;
             }
             var resp = _mapper.Map<List<NhanVienResponse>>(nhanViens);
             foreach (var item in resp)
@@ -307,7 +307,7 @@ namespace HumanResourcesManagement.Service
             var danToc = _context.TblDanhMucDanTocs.ToList();
             if (!danToc.Any())
             {
-                throw new Exception("Danh sách dân tộc trống.");
+                return null;
             }
             return danToc;
         }
@@ -317,7 +317,7 @@ namespace HumanResourcesManagement.Service
             var tonGiao = _context.TblDanhMucTonGiaos.ToList();
             if (!tonGiao.Any())
             {
-                throw new Exception("Danh mục tôn giáo trống");
+                return null;
             }
             return tonGiao;
         }
@@ -327,7 +327,7 @@ namespace HumanResourcesManagement.Service
             var chucDanh = _context.TblDanhMucChucDanhs.ToList();
             if (!chucDanh.Any())
             {
-                throw new Exception("Danh sách chức danh trống.");
+                return null;
             }
             return chucDanh;
         }
@@ -337,7 +337,7 @@ namespace HumanResourcesManagement.Service
             var nghachCongChuc = _context.TblDanhMucNgachCongChucs.ToList();
             if (!nghachCongChuc.Any())
             {
-                throw new Exception("Danh sách ngạch công chức trống.");
+                return null;
             }
             return nghachCongChuc;
         }
@@ -347,7 +347,7 @@ namespace HumanResourcesManagement.Service
             var phong = _context.TblDanhMucPhongBans.ToList();
             if (!phong.Any())
             {
-                throw new Exception("Danh sách phòng ban trống.");
+                return null;
             }
             return phong;
         }
@@ -357,7 +357,7 @@ namespace HumanResourcesManagement.Service
             var to = _context.TblDanhMucTos.ToList();
             if (!to.Any())
             {
-                throw new Exception("Danh sách tổ trống.");
+                return null;
             }
             return to;
         }
@@ -377,7 +377,7 @@ namespace HumanResourcesManagement.Service
 
                 if (list == null || !list.Any())
                 {
-                    throw new Exception("Không có nhân viên nào.");
+                    return null;
                 }
 
                 return list;
@@ -396,7 +396,7 @@ namespace HumanResourcesManagement.Service
                 var list = await query.ToListAsync();
                 if (list == null || !list.Any())
                 {
-                    throw new Exception("Không có nhân viên nào.");
+                    return null;
                 }
                 return list;
             }

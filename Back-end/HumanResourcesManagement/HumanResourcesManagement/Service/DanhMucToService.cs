@@ -81,7 +81,7 @@ namespace HumanResourcesManagement.Service
                 }).ToListAsync();
             if (listDanhMucTo == null || !listDanhMucTo.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return listDanhMucTo;

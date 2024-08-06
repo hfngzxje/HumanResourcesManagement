@@ -73,7 +73,7 @@ namespace HumanResourcesManagement.Service
                 }).ToListAsync();
             if (listDanhMucNgoaiNgu == null || !listDanhMucNgoaiNgu.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return listDanhMucNgoaiNgu;
@@ -83,7 +83,7 @@ namespace HumanResourcesManagement.Service
             var danhMucNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(id);
             if (danhMucNgoaiNgu == null)
             {
-                throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {id}");
+                return null;
             }
 
             var ngoaiNguResponse = await _context.TblDanhMucNgoaiNgus
@@ -98,7 +98,7 @@ namespace HumanResourcesManagement.Service
 
             if (ngoaiNguResponse == null)
             {
-                throw new KeyNotFoundException($"Không có dữ liệu cho id {id}");
+                return null;
             }
 
             return ngoaiNguResponse;

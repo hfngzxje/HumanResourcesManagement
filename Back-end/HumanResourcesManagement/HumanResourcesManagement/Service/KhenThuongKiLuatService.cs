@@ -62,7 +62,7 @@ namespace HumanResourcesManagement.Service
 
             if (_context.TblKhenThuongKyLuats == null)
             {
-                throw new InvalidOperationException("Không có dữ liệu");
+                return null;
             }
 
             var listKhenThuongKiLuat = new List<KhenThuongKyLuatResponse>();
@@ -85,7 +85,7 @@ namespace HumanResourcesManagement.Service
                 listKhenThuongKiLuat = listKhenThuong;
                 if (!listKhenThuong.Any())
                 {
-                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
+                    return null;
                 }
             }
             else
@@ -106,7 +106,7 @@ namespace HumanResourcesManagement.Service
                 listKhenThuongKiLuat = listKiLuat;
                 if (!listKiLuat.Any())
                 {
-                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
+                    return null;
                 }
             }
 

@@ -68,7 +68,12 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<TblDanhMucPhongBan>> GetAllPhongBan()
         {
-            return await _context.TblDanhMucPhongBans.ToListAsync();
+            var all = await _context.TblDanhMucPhongBans.ToListAsync();
+            if(!all.Any() || all == null)
+            {
+                return null;
+            }
+            return all;
         }
 
         public async Task<TblDanhMucPhongBan> GetPhongBanById(int id)

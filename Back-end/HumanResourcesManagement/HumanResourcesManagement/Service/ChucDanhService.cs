@@ -70,7 +70,12 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<TblDanhMucChucDanh>> GetAllChucDanh()
         {
-            return await _context.TblDanhMucChucDanhs.ToListAsync();
+            var all = await _context.TblDanhMucChucDanhs.ToListAsync();
+            if (!all.Any() || all == null)
+            {
+                return null;
+            }
+            return all;
         }
 
         public async Task<TblDanhMucChucDanh> GetChucDanhById(int id)

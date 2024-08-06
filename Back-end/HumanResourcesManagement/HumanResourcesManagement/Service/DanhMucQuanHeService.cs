@@ -2,6 +2,8 @@
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using System.Text.RegularExpressions;
 
 namespace HumanResourcesManagement.Service
 {
@@ -32,20 +34,31 @@ namespace HumanResourcesManagement.Service
         }
         public async Task<TblDanhMucNguoiThan> AddQuanHe(QuanHeRequest req)
         {
-            var nt = await _context.TblDanhMucNguoiThans.FirstOrDefaultAsync(d => d.Ten.ToLower().Trim() == req.Ten.ToLower().Trim());
+            string trimmedTen = req.Ten.Trim();
+
+            if (!Regex.IsMatch(trimmedTen, @"^[a-zA-ZÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZaàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+$"))
+            {
+                throw new Exception("Tên chỉ được chứa chữ cái.");
+            }
+
+            var nt = await _context.TblDanhMucNguoiThans
+                                   .FirstOrDefaultAsync(d => d.Ten.ToLower() == trimmedTen.ToLower());
             if (nt != null)
             {
-                throw new Exception("Quan he da ton tai");
+                throw new Exception("Quan hệ đã tồn tại.");
             }
+
             var d = new TblDanhMucNguoiThan
             {
-                Ten= req.Ten,
-                Ma = GenerateCodeFromName(req.Ten)
+                Ten = trimmedTen,
+                Ma = GenerateCodeFromName(trimmedTen)
             };
+
             _context.TblDanhMucNguoiThans.Add(d);
             await _context.SaveChangesAsync();
             return d;
         }
+
 
         public async Task DeleteQuanHe(int id)
         {
@@ -79,7 +92,7 @@ namespace HumanResourcesManagement.Service
                 var dt = await GetQuanHeById(id);
                 if (dt == null)
                 {
-                    throw new Exception("khong ton tai quan he nay");
+                    return null;
                 }
 
                 var temp = await _context.TblDanhMucNguoiThans.FirstOrDefaultAsync(d => d.Ten == req.Ten);

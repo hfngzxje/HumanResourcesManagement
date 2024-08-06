@@ -28,13 +28,17 @@ namespace HumanResourcesManagement.Service
 
         public IEnumerable<LichSuHoatDongResponse> GetAll()
         {
-            var all =  _context.TblLichSuHoatDongs.Select(ls => new LichSuHoatDongResponse
+            var all = _context.TblLichSuHoatDongs.Select(ls => new LichSuHoatDongResponse
             {
                 Id = ls.Id,
                 CreatedBy = ls.CreatedBy,
                 CreatedAt = ls.CreatedAt,
                 Detail = ls.Action,
             }).ToList();
+            if (!all.Any() || all == null)
+            {
+                return null;
+            }
             return all;
         }
 
