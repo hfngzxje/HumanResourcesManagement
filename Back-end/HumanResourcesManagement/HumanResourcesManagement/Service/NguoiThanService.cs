@@ -21,7 +21,7 @@ namespace HumanResourcesManagement.Service
         {
             if (_context.TblNguoiThans == null)
             {
-                throw new InvalidOperationException("Không có dữ liệu");
+                return null;
             }
             var listNguoiThan = await _context.TblNguoiThans.Where(nv => nv.Ma == maNV)
                 .Select(nt => new NguoiThanDto
@@ -40,7 +40,7 @@ namespace HumanResourcesManagement.Service
                 }).ToListAsync();
             if (listNguoiThan == null)
             {
-                throw new KeyNotFoundException($"Danh sách trống {maNV}");
+                return null;
             }
 
             return listNguoiThan;
@@ -136,7 +136,7 @@ namespace HumanResourcesManagement.Service
             var list = await _context.TblDanhMucNguoiThans.ToListAsync();
             if (list == null)
             {
-                throw new Exception("Danh sách trống!!");
+                return null;
             }
             return list;
         }

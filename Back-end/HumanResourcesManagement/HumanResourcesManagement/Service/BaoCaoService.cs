@@ -19,7 +19,8 @@ namespace HumanResourcesManagement.Service
         public async Task<IEnumerable<DanhSachNhanVienResponse>> getDanhSachNhanVien(DanhSachNhanVienRequest req)
         {
             var all = await _context.TblNhanViens.ToListAsync();
-            var searchRule = req.searchRules.ToLower();
+            var searchRuleDiaChi = req.searchRulesDiaChi.ToLower();
+            var searchRuleNgayThang = req.searchRulesNgayThang.ToLower();
             List<TblHopDong> listMaNv = new List<TblHopDong>();
             IEnumerable<TblNhanVien> filtered = all;
 
@@ -30,19 +31,19 @@ namespace HumanResourcesManagement.Service
 
             if (req.FromDate.HasValue && req.ToDate.HasValue)
             {
-                if (searchRule == "năm sinh")
+                if (searchRuleNgayThang == "năm sinh")
                 {
                     filtered = filtered.Where(n => n.Ngaysinh.HasValue &&
                                                    n.Ngaysinh.Value.Year >= req.FromDate.Value.Year &&
                                                    n.Ngaysinh.Value.Year <= req.ToDate.Value.Year);
                 }
-                else if (searchRule == "tháng sinh")
+                else if (searchRuleNgayThang == "tháng sinh")
                 {
                     filtered = filtered.Where(n => n.Ngaysinh.HasValue &&
                                                    n.Ngaysinh.Value.Month >= req.FromDate.Value.Month &&
                                                    n.Ngaysinh.Value.Month <= req.ToDate.Value.Month);
                 }
-                else if (searchRule == "năm hợp đồng")
+                else if (searchRuleNgayThang == "năm hợp đồng")
                 {
                     listMaNv = await _context.TblHopDongs
                         .Where(n => n.Hopdongtungay.HasValue && n.Hopdongdenngay.HasValue &&
@@ -57,19 +58,19 @@ namespace HumanResourcesManagement.Service
 
             if (!string.IsNullOrEmpty(req.QueQuan))
             {
-                if (searchRule == "quê quán")
+                if (searchRuleDiaChi == "quê quán")
                 {
                     filtered = filtered.Where(n => n.Quequan != null && n.Quequan.ToLower().Contains(req.QueQuan.ToLower()));
                 }
-                else if (searchRule == "nơi sinh")
+                else if (searchRuleDiaChi == "nơi sinh")
                 {
                     filtered = filtered.Where(n => n.Noisinh != null && n.Noisinh.ToLower().Contains(req.QueQuan.ToLower()));
                 }
-                else if (searchRule == "thường trú")
+                else if (searchRuleDiaChi == "thường trú")
                 {
                     filtered = filtered.Where(n => n.Thuongtru != null && n.Thuongtru.ToLower().Contains(req.QueQuan.ToLower()));
                 }
-                else if (searchRule == "tạm trú")
+                else if (searchRuleDiaChi == "tạm trú")
                 {
                     filtered = filtered.Where(n => n.Tamtru != null && n.Tamtru.ToLower().Contains(req.QueQuan.ToLower()));
                 }
@@ -80,10 +81,12 @@ namespace HumanResourcesManagement.Service
                 filtered = filtered.Where(n => n.Gioitinh.ToString().ToLower() == req.GioiTinh.ToLower());
             }
 
+
+
             var list = filtered.ToList();
             if (list == null || !list.Any())
             {
-                throw new Exception("Không có nhân viên nào.");
+                return null;
             }
 
             var responseList = list.Select(item => new DanhSachNhanVienResponse
@@ -92,7 +95,7 @@ namespace HumanResourcesManagement.Service
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 Didong = item.Didong,
-                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
+                Gioitinh = item.Gioitinh,
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
                 TamTru = item.Tamtru,
@@ -193,7 +196,7 @@ namespace HumanResourcesManagement.Service
 
             if (!list.Any())
             {
-                throw new Exception("Không có nhân viên nào.");
+                return null;
             }
 
             var responseList = list.Select(item => new DanhSachDangVienResponse
@@ -201,7 +204,7 @@ namespace HumanResourcesManagement.Service
                 Ma = item.Ma,
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.HasValue ? item.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
-                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
+                Gioitinh = item.Gioitinh,
                 Didong = item.Didong,
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
@@ -280,7 +283,7 @@ namespace HumanResourcesManagement.Service
             var resp = allNguoiThan.Select(r => new DanhSachNguoiThanResponse
             {
                 Ten = r.Ten,
-                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
+                GioiTinh = (bool)r.Gioitinh,
                 NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 QuanHe = _context.TblDanhMucNguoiThans.Find(r.Quanhe).Ten,
                 NgheNghiep = r.Nghenghiep,
@@ -293,7 +296,7 @@ namespace HumanResourcesManagement.Service
 
             if (!resp.Any() || resp == null)
             {
-                throw new Exception("Không có người thân ...");
+                return null;
             }
             return resp;
         }
@@ -427,7 +430,7 @@ namespace HumanResourcesManagement.Service
             {
                 MaNV = r.Ma,
                 TenNV = r.Ten,
-                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
+                GioiTinh = (bool)r.Gioitinh,
                 NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 DienThoai = r.Didong,
                 PhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == r.Phong)?.Ten,
@@ -436,7 +439,7 @@ namespace HumanResourcesManagement.Service
 
             if (resp == null || !resp.Any())
             {
-                throw new Exception("Không có nhân viên nào thuộc diện chính sách.");
+                return null;
             }
             return resp;
         }
@@ -471,7 +474,7 @@ namespace HumanResourcesManagement.Service
             });
             if (!resp.Any() || resp == null)
             {
-                throw new Exception("Danh sách trống");
+                return null;
             }
             return resp;
         }

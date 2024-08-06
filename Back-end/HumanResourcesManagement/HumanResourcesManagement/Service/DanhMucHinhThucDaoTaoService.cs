@@ -71,7 +71,7 @@ namespace HumanResourcesManagement.Service
                .ToListAsync();
             if (!listHinhthucdaotao.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
             return listHinhthucdaotao;
         }
@@ -91,7 +91,7 @@ namespace HumanResourcesManagement.Service
                 }).FirstOrDefaultAsync();
             if (listhinhthucdaotao == null)
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return listhinhthucdaotao;

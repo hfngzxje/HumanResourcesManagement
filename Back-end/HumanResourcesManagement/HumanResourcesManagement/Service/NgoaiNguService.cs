@@ -30,7 +30,7 @@ namespace HumanResourcesManagement.Service
 
             if (_context.TblNgoaiNgus == null)
             {
-                throw new InvalidOperationException("Không có dữ liệu");
+                return null;
             }
 
             var listNgoaiNgu = await _context.TblNgoaiNgus.Where(nv => nv.Ma == maNV)
@@ -46,7 +46,7 @@ namespace HumanResourcesManagement.Service
 
             if (listNgoaiNgu == null || !listNgoaiNgu.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
+                return null;
             }
 
             return listNgoaiNgu;

@@ -87,7 +87,7 @@ namespace HumanResourcesManagement.Service
 
             if (listChuyenMon == null)
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return listChuyenMon;

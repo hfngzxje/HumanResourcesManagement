@@ -73,7 +73,7 @@ namespace HumanResourcesManagement.Service
                 .ToListAsync();
             if (!listKhenThuongKiLuat.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
             return listKhenThuongKiLuat;
         }
@@ -93,7 +93,7 @@ namespace HumanResourcesManagement.Service
                 }).FirstOrDefaultAsync();
             if (ListKhenThuongKiLuat == null)
             {
-                throw new KeyNotFoundException($"Danh sách trống");
+                return null;
             }
 
             return ListKhenThuongKiLuat;

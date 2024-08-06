@@ -166,7 +166,7 @@ namespace HumanResourcesManagement.Service
             var chucDanh = _context.TblDanhMucChucDanhs.ToList();
             if (!chucDanh.Any())
             {
-                throw new Exception("Empty list!!");
+                return null;
             }
             return chucDanh;
         }
