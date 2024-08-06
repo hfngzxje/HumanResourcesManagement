@@ -1,8 +1,11 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.Models;
-using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -50,8 +53,8 @@ namespace HumanResourcesManagement.Controllers
         {
             try
             {
-                var listChuyenMon = await _chuyenMonService.GetChuyenMonById(id);
-                return Ok(listChuyenMon);
+                var chuyenMon = await _chuyenMonService.GetChuyenMonById(id);
+                return Ok(chuyenMon);
             }
             catch (ArgumentException ex)
             {

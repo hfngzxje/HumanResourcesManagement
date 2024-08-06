@@ -20,18 +20,25 @@ namespace HumanResourcesManagement.Controllers
             _context = context;
         }
 
-
         [HttpPost("TaoMoiHopDong")]
         public IActionResult CreateHopDong([FromBody] InsertHopDongRequest request)
         {
             try
             {
                 _hopDongService.TaoHopDong(request);
-                return Ok("Toa hop dong thanh cong!!");
+                return StatusCode(StatusCodes.Status201Created, "Tạo hợp đồng thành công!");
             }
-            catch (System.Exception ex)
+            catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Lỗi khi xử lý yêu cầu.", details = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
@@ -41,11 +48,19 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 _hopDongService.SuaHopDong(id, request);
-                return Ok("Update thanh cong!");
+                return Ok("Cập nhật hợp đồng thành công!");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Lỗi khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
@@ -55,19 +70,38 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 _hopDongService.XoaHopDong(id);
-                return Ok("Xóa hợp đồng thành công.");
+                return StatusCode(StatusCodes.Status204NoContent, "Xóa hợp đồng thành công.");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = "Hợp đồng không tồn tại." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Lỗi khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
         [HttpGet]
         public IActionResult GetAllHopDong()
         {
-            var hopDong = _hopDongService.GetAllHopDong();
-            return Ok(hopDong);
+            try
+            {
+                var hopDong = _hopDongService.GetAllHopDong();
+                return Ok(hopDong);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình lấy dữ liệu.", details = ex.Message });
+            }
         }
 
         [HttpGet("id")]
@@ -76,40 +110,78 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var hopDong = _hopDongService.GetHopDongByMaHopDong(id);
+                if (hopDong == null)
+                {
+                    return NotFound(new { message = "Hợp đồng không tồn tại." });
+                }
                 return Ok(hopDong);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Lỗi khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return NotFound(new { Message = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
-        [HttpGet("GetHopDongByMaNV/id")]
+        [HttpGet("GetHopDongByMaNV/{id}")]
         public IActionResult GetHopDongByMaNV(string id)
         {
             try
             {
                 var hopDong = _hopDongService.GetAllHopDongByMaNV(id);
+                if (hopDong == null || !hopDong.Any())
+                {
+                    return NotFound(new { message = "Danh sách hợp đồng không tồn tại." });
+                }
                 return Ok(hopDong);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Lỗi khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return NotFound(new { Message = ex.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
         [HttpGet("loaiHopDong")]
         public IActionResult GetAllLoaiHopDong()
         {
-            var loaiHopDong = _hopDongService.GetAllLoaiHopDong();
-            return Ok(loaiHopDong);
+            try
+            {
+                var loaiHopDong = _hopDongService.GetAllLoaiHopDong();
+                return Ok(loaiHopDong);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình lấy dữ liệu.", details = ex.Message });
+            }
         }
 
         [HttpGet("chucDanh")]
         public IActionResult GetAllChucDanh()
         {
-            var chucDanh = _hopDongService.GetAllChucDanh();
-            return Ok(chucDanh);
+            try
+            {
+                var chucDanh = _hopDongService.GetAllChucDanh();
+                return Ok(chucDanh);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình lấy dữ liệu.", details = ex.Message });
+            }
         }
     }
 }

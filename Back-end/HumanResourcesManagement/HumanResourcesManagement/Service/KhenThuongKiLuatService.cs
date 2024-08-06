@@ -25,13 +25,14 @@ namespace HumanResourcesManagement.Service
             {
                 throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {req.Ma}");
             }
-            if ( req.Ngay <= DateTime.Now) {
+            if (req.Ngay <= DateTime.Now)
+            {
                 var ktkl = _mapper.Map<TblKhenThuongKyLuat>(req);
                 _context.TblKhenThuongKyLuats.Add(ktkl);
                 await _context.SaveChangesAsync();
             }
             else throw new KeyNotFoundException($"thời gian phải nhỏ hơn hoặc bằng thời điểm hiện tại ");
-            
+
         }
 
         // Xóa khen thưởng kỷ luật theo id
@@ -47,7 +48,7 @@ namespace HumanResourcesManagement.Service
         }
 
         // Lấy danh sách khen thưởng kỷ luật theo mã nhân viên và loại khen thưởng/kỷ luật
-        public async Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV, int khenThuongOrKiLuat)
+        public async Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV, string khenThuongOrKiLuat)
         {
             if (string.IsNullOrWhiteSpace(maNV))
             {
@@ -65,49 +66,39 @@ namespace HumanResourcesManagement.Service
                 throw new InvalidOperationException("Không có dữ liệu");
             }
 
-            var listKhenThuongKiLuat = new List<KhenThuongKyLuatResponse>();
+            var query = _context.TblKhenThuongKyLuats.Where(nv => nv.Ma == maNV);
 
-            if (khenThuongOrKiLuat == 1)
+            if (!string.IsNullOrWhiteSpace(khenThuongOrKiLuat))
             {
-                var listKhenThuong = await _context.TblKhenThuongKyLuats
-                    .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 1)
-                    .Select(kt => new KhenThuongKyLuatResponse
-                    {
-                        Id = kt.Id,
-                        Ten = kt.TenNavigation.Ten,
-                        Ngay = kt.Ngay ?? DateTime.MinValue, 
-                        Noidung = kt.Noidung,
-                        Lido = kt.Lido,
-                        Ma = kt.Ma.Trim()
-                    })
-                    .ToListAsync();
-
-                listKhenThuongKiLuat = listKhenThuong;
-                if (!listKhenThuong.Any())
+                if (khenThuongOrKiLuat.ToLower().Trim() == "khen thưởng")
                 {
-                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
+                    query = query.Where(nv => nv.Khenthuongkiluat == 1);
+                }
+                else if (khenThuongOrKiLuat.ToLower().Trim() == "kỷ luật")
+                {
+                    query = query.Where(nv => nv.Khenthuongkiluat == 2);
+                }
+                else if (khenThuongOrKiLuat.ToLower().Trim() == "khen thưởng và kỷ luật")
+                {
+                    query = query.Where(nv => nv.Khenthuongkiluat == 2 && nv.Khenthuongkiluat == 1);
                 }
             }
-            else
-            {
-                var listKiLuat = await _context.TblKhenThuongKyLuats
-                    .Where(nv => nv.Ma == maNV && nv.Khenthuongkiluat == 2)
-                    .Select(kt => new KhenThuongKyLuatResponse
-                    {
-                        Id = kt.Id,
-                        Ten = kt.TenNavigation.Ten,
-                        Ngay = kt.Ngay ?? DateTime.MinValue, 
-                        Noidung = kt.Noidung,
-                        Lido = kt.Lido,
-                        Ma = kt.Ma.Trim()
-                    })
-                    .ToListAsync();
 
-                listKhenThuongKiLuat = listKiLuat;
-                if (!listKiLuat.Any())
+            var listKhenThuongKiLuat = await query
+                .Select(kt => new KhenThuongKyLuatResponse
                 {
-                    throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
-                }
+                    Id = kt.Id,
+                    Ten = kt.TenNavigation.Ten,
+                    Ngay = kt.Ngay ?? DateTime.MinValue,
+                    Noidung = kt.Noidung,
+                    Lido = kt.Lido,
+                    Ma = kt.Ma.Trim()
+                })
+                .ToListAsync();
+
+            if (!listKhenThuongKiLuat.Any())
+            {
+                throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
             }
 
             return listKhenThuongKiLuat;

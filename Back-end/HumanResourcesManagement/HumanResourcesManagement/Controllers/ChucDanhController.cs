@@ -22,15 +22,29 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getAllChucDanh")]
         public async Task<IActionResult> GetAllChucDanh()
         {
-            var dm = await _chucDanhService.GetAllChucDanh();
-            return Ok(dm);
+            try
+            {
+                var dm = await _chucDanhService.GetAllChucDanh();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("getChucDanhById/{id}")]
         public async Task<IActionResult> GetChucDanhById(int id)
         {
-            var dt = await _chucDanhService.GetChucDanhById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _chucDanhService.GetChucDanhById(id);
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("addChucDanh")]
@@ -43,30 +57,17 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
-        //removechucdanh
-        [HttpDelete("removeChucDanh")]
+
+        [HttpDelete("removeChucDanh/{id}")]
         public async Task<IActionResult> RemoveChucDanh(int id)
         {
             try
             {
                 await _chucDanhService.DeleteChucDanh(id);
-                return StatusCode(200, "Xóa chức danh thành công");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("updateChucDanh")]
-        public async Task<IActionResult> UpdateChucDanh(int id, InsertChucDanh req)
-        {
-            try
-            {
-                await _chucDanhService.UpdateChucDanh(id, req);
-                return StatusCode(200, "Cập nhật chức danh thành công");
+                return StatusCode(200, "Xóa chức danh thành công.");
             }
             catch (Exception ex)
             {
@@ -74,5 +75,18 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPut("updateChucDanh/{id}")]
+        public async Task<IActionResult> UpdateChucDanh(int id, InsertChucDanh req)
+        {
+            try
+            {
+                await _chucDanhService.UpdateChucDanh(id, req);
+                return StatusCode(200, "Cập nhật chức danh thành công.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

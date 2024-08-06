@@ -1,9 +1,10 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.Models;
-using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -14,15 +15,14 @@ namespace HumanResourcesManagement.Controllers
         private readonly IDanhMucNhomLuongService _danhMucNhomLuongService;
         private readonly NhanSuContext _context;
 
-        public DanhMucNhomLuongController(IDanhMucNhomLuongService mucNhomLuongService, NhanSuContext context)
+        public DanhMucNhomLuongController(IDanhMucNhomLuongService danhMucNhomLuongService, NhanSuContext context)
         {
-            _danhMucNhomLuongService = mucNhomLuongService;
+            _danhMucNhomLuongService = danhMucNhomLuongService;
             _context = context;
         }
 
-
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllQuanHe()
+        public async Task<IActionResult> GetAllNhomLuong()
         {
             try
             {
@@ -31,12 +31,12 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetQuanHeById(int id)
+        public async Task<IActionResult> GetNhomLuongById(int id)
         {
             try
             {
@@ -51,60 +51,59 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
 
-
-
-
         [HttpPost("add")]
-        public async Task<IActionResult> AddQuanHe(DanhMucNhomLuongRequest request)
+        public async Task<IActionResult> AddNhomLuong([FromBody] DanhMucNhomLuongRequest request)
         {
             try
             {
                 await _danhMucNhomLuongService.AddNhomLuong(request);
-                return StatusCode(200, "Thêm nhóm lương thành công.");
+                return StatusCode(StatusCodes.Status201Created, "Thêm nhóm lương thành công.");
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateQuanHe(int id, DanhMucNhomLuongRequest request)
+        public async Task<IActionResult> UpdateNhomLuong(int id, [FromBody] DanhMucNhomLuongRequest request)
         {
-            try
             {
-                await _danhMucNhomLuongService.UpdateNhomLuongAsync(id, request);
-                return StatusCode(200, "Sửa nhóm lương thành công.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(501, ex.Message);
+                try
+                {
+                    await _danhMucNhomLuongService.UpdateNhomLuongAsync(id, request);
+                    return StatusCode(200, "Sửa nhóm lương thành công.");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(501, ex.Message);
+                }
             }
         }
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeleteQuanHe(int id)
+        public async Task<IActionResult> DeleteNhomLuong(int id)
         {
             try
             {
                 var result = await _danhMucNhomLuongService.DeleteNhomLuongAsync(id);
-                return result ? NoContent() : NotFound("Nhóm lương không tồn tại.");
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound("Nhóm lương không tồn tại.");
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
             }
         }
-
-
-
     }
 }

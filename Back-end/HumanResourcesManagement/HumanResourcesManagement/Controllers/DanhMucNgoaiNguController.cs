@@ -1,8 +1,11 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.Models;
-using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -50,8 +53,8 @@ namespace HumanResourcesManagement.Controllers
         {
             try
             {
-                var listDanhMucNgoaiNgu = await _danhMucNgoaiNguService.GetDanhMucNgoaiNguById(id);
-                return Ok(listDanhMucNgoaiNgu);
+                var danhMucNgoaiNgu = await _danhMucNgoaiNguService.GetDanhMucNgoaiNguById(id);
+                return Ok(danhMucNgoaiNgu);
             }
             catch (ArgumentException ex)
             {
@@ -77,15 +80,15 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucNgoaiNguService.AddDanhMucNgoaiNgu(req);
-                return StatusCode(200, "Thêm thành công");
+                return StatusCode(StatusCodes.Status200OK, "Thêm thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status501NotImplemented, ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(502, ex.Message);
+                return StatusCode(StatusCodes.Status502BadGateway, ex.Message);
             }
         }
 
@@ -95,15 +98,15 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucNgoaiNguService.DeleteDanhMucNgoaiNgu(id);
-                return StatusCode(200, "Xóa thành công");
+                return StatusCode(StatusCodes.Status200OK, "Xóa thành công");
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "Không tìm thấy");
+                return StatusCode(StatusCodes.Status501NotImplemented, "Không tìm thấy");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -113,11 +116,11 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucNgoaiNguService.UpdateDanhMucNgoaiNgu(req, id);
-                return StatusCode(200, "Sửa thành công");
+                return StatusCode(StatusCodes.Status200OK, "Sửa thành công");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

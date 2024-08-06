@@ -22,15 +22,29 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getDanhMucDanToc")]
         public async Task<IActionResult> GetDanhMucDanToc()
         {
-            var dm = await _danhMucDanTocService.GetAllDanToc();
-            return Ok(dm);
+            try
+            {
+                var dm = await _danhMucDanTocService.GetAllDanToc();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("getDanhMucDanTocById/{id}")]
         public async Task<IActionResult> GetDanhMucDanTocById(int id)
         {
-            var dt = await _danhMucDanTocService.GetDanTocById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _danhMucDanTocService.GetDanTocById(id);
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("addDanhMucDanToc")]
@@ -39,7 +53,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _danhMucDanTocService.AddDanToc(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm dân t?c thành công");
             }
             catch (Exception ex)
             {
@@ -47,26 +61,13 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpDelete("removeDanToc")]
+        [HttpDelete("removeDanToc/{id}")]
         public async Task<IActionResult> RemoveDanToc(int id)
         {
             try
             {
                 await _danhMucDanTocService.DeleteDanToc(id);
-                return StatusCode(200, "xoa dan toc thanh cong");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("updateDanToc")]
-        public async Task<IActionResult> UpdateDanToc(UpdateDanTocRequest req)
-        {
-            try
-            {
-                await _danhMucDanTocService.UpdateDanToc(req);
-                return StatusCode(200, "cap nhat dan toc thanh cong");
+                return StatusCode(200, "Xóa dân t?c thành công");
             }
             catch (Exception ex)
             {
@@ -74,5 +75,18 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPut("updateDanToc")]
+        public async Task<IActionResult> UpdateDanToc(UpdateDanTocRequest req)
+        {
+            try
+            {
+                await _danhMucDanTocService.UpdateDanToc(req);
+                return StatusCode(200, "C?p nh?t dân t?c thành công");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

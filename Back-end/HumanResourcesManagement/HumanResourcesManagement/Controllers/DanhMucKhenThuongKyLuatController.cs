@@ -1,8 +1,11 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.Models;
-using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -22,8 +25,15 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getDanhMucKhenThuongKyLuat")]
         public async Task<IActionResult> GetDanhMucKhenThuongKyLuat()
         {
-            var listDanhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.GetDanhMucKhenThuongKyLuat();
-            return Ok(listDanhMucKhenThuongKyLuat);
+            try
+            {
+                var listDanhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.GetDanhMucKhenThuongKyLuat();
+                return Ok(listDanhMucKhenThuongKyLuat);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpGet("getDanhMucKhenThuongKyLuatById/{id}")]
@@ -31,8 +41,8 @@ namespace HumanResourcesManagement.Controllers
         {
             try
             {
-                var listDanhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.GetDanhMucKhenThuongKyLuatById(id);
-                return Ok(listDanhMucKhenThuongKyLuat);
+                var danhMucKhenThuongKyLuat = await _danhMucKhenThuongKyLuatService.GetDanhMucKhenThuongKyLuatById(id);
+                return Ok(danhMucKhenThuongKyLuat);
             }
             catch (ArgumentException ex)
             {
@@ -62,11 +72,11 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status501NotImplemented, ex.Message);
             }
             catch (Exception ex)
             {
-                return StatusCode(502, ex.Message);
+                return StatusCode(StatusCodes.Status502BadGateway, ex.Message);
             }
         }
 
@@ -80,16 +90,16 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return StatusCode(501, "Không tìm thấy");
+                return StatusCode(StatusCodes.Status501NotImplemented, "Không tìm thấy");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
-        [HttpPut("updateDanhMucKhenThuongKyLuat")]
-        public async Task<IActionResult> UpdateDanhMucKhenThuongKyLuat([FromBody] DanhMucKhenThuongKyLuatRequest req ,int id)
+        [HttpPut("updateDanhMucKhenThuongKyLuat/{id}")]
+        public async Task<IActionResult> UpdateDanhMucKhenThuongKyLuat([FromBody] DanhMucKhenThuongKyLuatRequest req, int id)
         {
             try
             {
@@ -98,7 +108,7 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
     }

@@ -22,16 +22,60 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getDanhMucTonGiao")]
         public async Task<IActionResult> GetDanhMucTonGiao()
         {
-            var dm = await _danhMucTonGiaoService.GetAllTonGiao();
-            return Ok(dm);
+            try
+            {
+                var dm = await _danhMucTonGiaoService.GetAllTonGiao();
+                return Ok(dm);
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle argument-related exceptions
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // Handle cases where data is not found
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ð? x?y ra l?i trong quá tr?nh x? l? yêu c?u.", details = ex.Message });
+            }
         }
+
 
         [HttpGet("getDanhMucTonGiaoById/{id}")]
         public async Task<IActionResult> GetDanhMucTonGiaoById(int id)
         {
-            var dt = await _danhMucTonGiaoService.GetTonGiaoById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _danhMucTonGiaoService.GetTonGiaoById(id);
+
+                if (dt == null)
+                {
+                    return NotFound(new { message = "Danh m?c tôn giáo không t?n t?i." });
+                }
+
+                return Ok(dt);
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle argument-related exceptions
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // Handle cases where data is not found
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected exceptions
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Ð? x?y ra l?i trong quá tr?nh x? l? yêu c?u.", details = ex.Message });
+            }
         }
+
 
         [HttpPost("addDanhMucTonGiao")]
         public async Task<IActionResult> AddTonGiao(InsertTonGiaoRequest req)

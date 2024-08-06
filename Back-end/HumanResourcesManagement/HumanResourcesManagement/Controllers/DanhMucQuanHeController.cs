@@ -19,18 +19,38 @@ namespace HumanResourcesManagement.Controllers
             _danhMucQuanHeService = danhMucQuanHeService;
         }
 
-        [HttpGet("getDanhMucDanToc")]
+        [HttpGet("getDanhMucQuanHe")]
         public async Task<IActionResult> GetDanhMucQuanHe()
         {
-            var dm = await _danhMucQuanHeService.GetAllQuanHe();
-            return Ok(dm);
+            try
+            {
+                var dm = await _danhMucQuanHeService.GetAllQuanHe();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }
         }
 
-        [HttpGet("getDanhMucDanTocById/{id}")]
+        [HttpGet("getDanhMucQuanHeById/{id}")]
         public async Task<IActionResult> GetDanhMucQuanHeById(int id)
         {
-            var dt = await _danhMucQuanHeService.GetQuanHeById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _danhMucQuanHeService.GetQuanHeById(id);
+
+                if (dt == null)
+                {
+                    return NotFound("Danh mục quan hệ không tồn tại.");
+                }
+
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost("addDanhMucQuanHe")]

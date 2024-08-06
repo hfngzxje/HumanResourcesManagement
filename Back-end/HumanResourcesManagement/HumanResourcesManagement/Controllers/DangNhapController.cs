@@ -3,6 +3,8 @@ using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -27,29 +29,35 @@ namespace HumanResourcesManagement.Controllers
                 return BadRequest("Mã nhân viên và mật khẩu không được để trống.");
             }
 
-            var nhanVien = await _dangNhapService.AuthenticateAsync(request.MaNhanVien, request.MatKhau);
-
-            if (nhanVien == null)
+            try
             {
-                return Unauthorized("Mã nhân viên hoặc mật khẩu không đúng.");
-            }
+                var nhanVien = await _dangNhapService.AuthenticateAsync(request.MaNhanVien, request.MatKhau);
 
-            HttpContext.Session.SetString("MaNhanVien", nhanVien.Ma);
-            HttpContext.Session.SetInt32("VaiTroId", nhanVien.VaiTroId.GetValueOrDefault());
-
-            return Ok(new
-            {
-                Message = "Đăng nhập thành công",
-                NhanVien = new
+                if (nhanVien == null)
                 {
-                    Ma = nhanVien.Ma,
-                    Ten = nhanVien.Ten,
-                    Email = nhanVien.Email,
-                    VaiTroId = nhanVien.VaiTroId
+                    return Unauthorized("Mã nhân viên hoặc mật khẩu không đúng.");
                 }
-            });
-        }
 
+                HttpContext.Session.SetString("MaNhanVien", nhanVien.Ma);
+                HttpContext.Session.SetInt32("VaiTroId", nhanVien.VaiTroId.GetValueOrDefault());
+
+                return Ok(new
+                {
+                    Message = "Đăng nhập thành công",
+                    NhanVien = new
+                    {
+                        Ma = nhanVien.Ma,
+                        Ten = nhanVien.Ten,
+                        Email = nhanVien.Email,
+                        VaiTroId = nhanVien.VaiTroId
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
 
         [HttpPost("ChangePassword")]
         public async Task<ActionResult> ChangePassword([FromBody] DoiMatKhauRequest request)
@@ -67,13 +75,12 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
-
         [HttpPost("forgot-password")]
-        public async Task<ActionResult> ForgotPassword(String email)
+        public async Task<ActionResult> ForgotPassword(string email)
         {
             if (string.IsNullOrEmpty(email))
             {
@@ -87,7 +94,7 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
@@ -106,20 +113,24 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
-
 
         [HttpPost("Logout")]
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("MaNhanVien");
-            HttpContext.Session.Remove("VaiTroId");
+            try
+            {
+                HttpContext.Session.Remove("MaNhanVien");
+                HttpContext.Session.Remove("VaiTroId");
 
-            return Ok(new { Message = "Đăng xuất thành công." });
+                return Ok(new { Message = "Đăng xuất thành công." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
-
-
     }
 }

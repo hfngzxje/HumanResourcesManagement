@@ -51,7 +51,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 _nhanVienService.UpdateNhanVien(id, nhanVienRequest);
-                return Ok("Update thanh cong!");
+                return Ok("Update thành công!");
             }
             catch (Exception ex)
             {
@@ -78,7 +78,6 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-
         [HttpDelete("xoaNhanVien/{id}")]
         public IActionResult DeleteNhanVien(string id)
         {
@@ -104,7 +103,6 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
@@ -119,7 +117,6 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
@@ -134,7 +131,6 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
@@ -149,7 +145,6 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
@@ -164,12 +159,11 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
         [HttpGet("getChucVuById/{id}")]
-        public IActionResult getChucVuById(int id)
+        public IActionResult GetChucVuById(int id)
         {
             try
             {
@@ -179,50 +173,91 @@ namespace HumanResourcesManagement.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
-
             }
         }
 
         [HttpGet("danToc")]
         public IActionResult GetAllDanToc()
         {
-            var danToc = _nhanVienService.GetAllDanToc();
-            return Ok(danToc);
+            try
+            {
+                var danToc = _nhanVienService.GetAllDanToc();
+                return Ok(danToc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("tonGiao")]
         public IActionResult GetAllTonGiao()
         {
-            var tonGiao = _nhanVienService.GetAllTonGiao();
-            return Ok(tonGiao);
+            try
+            {
+                var tonGiao = _nhanVienService.GetAllTonGiao();
+                return Ok(tonGiao);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("chucDanh")]
         public IActionResult GetAllChucDanh()
         {
-            var chucDanh = _nhanVienService.GetAllChucDanh();
-            return Ok(chucDanh);
+            try
+            {
+                var chucDanh = _nhanVienService.GetAllChucDanh();
+                return Ok(chucDanh);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("ngachCongChuc")]
         public IActionResult GetAllNgachCongChuc()
         {
-            var ngachCongChuc = _nhanVienService.GetAllNgachCongChuc();
-            return Ok(ngachCongChuc);
+            try
+            {
+                var ngachCongChuc = _nhanVienService.GetAllNgachCongChuc();
+                return Ok(ngachCongChuc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("phong")]
         public IActionResult GetAllPhong()
         {
-            var phong = _nhanVienService.GetAllPhong();
-            return Ok(phong);
+            try
+            {
+                var phong = _nhanVienService.GetAllPhong();
+                return Ok(phong);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("to")]
         public IActionResult GetAllTo()
         {
-            var to = _nhanVienService.GetAllTo();
-            return Ok(to);
+            try
+            {
+                var to = _nhanVienService.GetAllTo();
+                return Ok(to);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
 
         [HttpGet("getByPhongBan")]
@@ -242,16 +277,21 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("Search")]
         public async Task<ActionResult<List<TblNhanVien>>> SearchNhanVien([FromQuery] string? search)
         {
-            var nhanViens = await _nhanVienService.SearchNhanVienAsync(search);
-
-            if (nhanViens == null || nhanViens.Count == 0)
+            try
             {
-                return NotFound("Không có nhân viên nào!!");
-            }
+                var nhanViens = await _nhanVienService.SearchNhanVienAsync(search);
 
-            return Ok(nhanViens);
+                if (nhanViens == null || nhanViens.Count == 0)
+                {
+                    return NotFound("Không có nhân viên nào!!");
+                }
+
+                return Ok(nhanViens);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
-
 }
-

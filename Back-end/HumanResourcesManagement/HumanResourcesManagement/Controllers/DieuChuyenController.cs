@@ -27,25 +27,49 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var ht = await _dieuChuyenService.GetCongViecHienTai(maNV);
-                return StatusCode(200, ht);
+                if (ht == null)
+                {
+                    return NotFound(new { message = "Công việc hiện tại không tìm thấy." });
+                }
+                return Ok(ht);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Có lỗi xảy ra khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
         [HttpPost("DieuChuyen")]
-        public async Task<IActionResult> DieuChuyen(InsertDieuChuyenRequest req)
+        public async Task<IActionResult> DieuChuyen([FromBody] InsertDieuChuyenRequest req)
         {
             try
             {
                 var newDieuChuyen = await _dieuChuyenService.AddDieuChuyen(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(StatusCodes.Status201Created, new { message = "Thêm thành công", data = newDieuChuyen });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Có lỗi xảy ra khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
 
@@ -69,11 +93,27 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var ht = await _dieuChuyenService.GetAllDieuChuyen(maNV);
-                return StatusCode(200, ht);
+                if (ht == null || !ht.Any())
+                {
+                    return NotFound(new { message = "Danh sách chuyển nhượng không tìm thấy." });
+                }
+                return Ok(ht);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Có lỗi xảy ra khi xử lý yêu cầu.", details = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu.", details = ex.Message });
             }
         }
     }

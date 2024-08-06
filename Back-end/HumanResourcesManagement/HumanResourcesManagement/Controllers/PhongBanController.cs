@@ -22,15 +22,29 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getAllPhongBan")]
         public async Task<IActionResult> GetAllPhongBan()
         {
-            var dm = await _phongBanService.GetAllPhongBan();
-            return Ok(dm);
+            try
+            {
+                var dm = await _phongBanService.GetAllPhongBan();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("getPhongBanById/{id}")]
         public async Task<IActionResult> GetPhongBanById(int id)
         {
-            var dt = await _phongBanService.GetPhongBanById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _phongBanService.GetPhongBanById(id);
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("addPhongBan")]
@@ -39,7 +53,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _phongBanService.AddPhongBan(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm phòng ban thành công");
             }
             catch (Exception ex)
             {
@@ -53,20 +67,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 await _phongBanService.DeletePhongBan(id);
-                return StatusCode(200, "xoa chuc danh thanh cong");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("updatePhongBan")]
-        public async Task<IActionResult> UpdatePhongBan(int id,InsertPhongBan req)
-        {
-            try
-            {
-                await _phongBanService.UpdatePhongBan(id,req);
-                return StatusCode(200, "cap nhat phong ban thanh cong");
+                return StatusCode(200, "Xóa phòng ban thành công");
             }
             catch (Exception ex)
             {
@@ -74,5 +75,18 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPut("updatePhongBan")]
+        public async Task<IActionResult> UpdatePhongBan(int id, InsertPhongBan req)
+        {
+            try
+            {
+                await _phongBanService.UpdatePhongBan(id, req);
+                return StatusCode(200, "Cập nhật phòng ban thành công");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

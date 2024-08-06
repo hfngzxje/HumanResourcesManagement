@@ -111,82 +111,33 @@ namespace HumanResourcesManagement.Service
         }
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
         {
-            var searchRule = req.searchRules.ToLower();
-            IQueryable<TblNhanVien> query = _context.TblNhanViens;
+            var query = _context.TblNhanViens.AsQueryable();
 
-            if (searchRule == "phòng ban")
+            if (req.PhongBan.HasValue)
             {
-                query = query.Where(n => n.Phong == req.PhongBan.Value);
-            }
-
-            if (searchRule == "năm tuổi đảng" && req.NamTuoiDang.HasValue)
-            {
-                int currentYear = DateTime.Now.Year;
-                query = query.Where(n => n.Ngayvaodang.HasValue &&
-                                         (currentYear - n.Ngayvaodang.Value.Year) >= req.NamTuoiDang.Value);
+                query = query.Where(x => x.Phong == req.PhongBan.Value);
             }
 
             if (req.FromDate.HasValue && req.ToDate.HasValue)
             {
-                if (searchRule == "năm sinh")
-                {
-                    query = query.Where(n => n.Ngaysinh.HasValue &&
-                                             n.Ngaysinh.Value.Year >= req.FromDate.Value.Year &&
-                                             n.Ngaysinh.Value.Year <= req.ToDate.Value.Year);
-                }
-                else if (searchRule == "năm vào đảng")
-                {
-                    query = query.Where(n => n.Ngayvaodangchinhthuc.HasValue &&
-                                             n.Ngayvaodangchinhthuc.Value.Year >= req.FromDate.Value.Year &&
-                                             n.Ngayvaodangchinhthuc.Value.Year <= req.ToDate.Value.Year);
-                }
-                else if (searchRule == "ngày vào đảng")
-                {
-                    query = query.Where(n => n.Ngayvaodang.HasValue &&
-                                             n.Ngayvaodang.Value >= req.FromDate.Value &&
-                                             n.Ngayvaodang.Value <= req.ToDate.Value);
-                }
-                else if (searchRule == "ngày vào đảng chính thức")
-                {
-                    query = query.Where(n => n.Ngayvaodangchinhthuc.HasValue &&
-                                             n.Ngayvaodangchinhthuc.Value >= req.FromDate.Value &&
-                                             n.Ngayvaodangchinhthuc.Value <= req.ToDate.Value);
-                }
-                else if (searchRule == "năm hợp đồng")
-                {
-                    var hopDongs = await _context.TblHopDongs
-                        .Where(n => n.Hopdongtungay.HasValue && n.Hopdongdenngay.HasValue &&
-                                    n.Hopdongtungay.Value.Year >= req.FromDate.Value.Year &&
-                                    n.Hopdongdenngay.Value.Year <= req.ToDate.Value.Year)
-                        .Select(hd => hd.Ma)
-                        .ToListAsync();
-                    query = query.Where(n => hopDongs.Contains(n.Ma));
-                }
+                query = query.Where(x => x.Ngaysinh >= req.FromDate.Value && x.Ngaysinh <= req.ToDate.Value);
+            }
+
+            if (req.NamVaoDang.HasValue)
+            {
+                query = query.Where(x => x.Ngayvaodang.HasValue && x.Ngayvaodang.Value.Year == req.NamVaoDang.Value);
             }
 
             if (!string.IsNullOrEmpty(req.QueQuan))
             {
-                if (searchRule == "quê quán")
-                {
-                    query = query.Where(n => n.Quequan != null && n.Quequan.ToLower().Contains(req.QueQuan.ToLower()));
-                }
-                else if (searchRule == "nơi sinh")
-                {
-                    query = query.Where(n => n.Noisinh != null && n.Noisinh.ToLower().Contains(req.QueQuan.ToLower()));
-                }
-                else if (searchRule == "thường trú")
-                {
-                    query = query.Where(n => n.Thuongtru != null && n.Thuongtru.ToLower().Contains(req.QueQuan.ToLower()));
-                }
-                else if (searchRule == "tạm trú")
-                {
-                    query = query.Where(n => n.Tamtru != null && n.Tamtru.ToLower().Contains(req.QueQuan.ToLower()));
-                }
+                query = query.Where(x => x.Quequan != null && x.Quequan.ToLower().Contains(req.QueQuan.ToLower()));
             }
 
-            if (!req.GioiTinh.ToLower().Equals("tất cả"))
+            if (req.NamTuoiDang.HasValue)
             {
-                query = query.Where(n => n.Gioitinh.ToString().ToLower() == req.GioiTinh.ToLower());
+                int currentYear = DateTime.Now.Year;
+                query = query.Where(x => x.Ngayvaodang.HasValue &&
+                                         (currentYear - x.Ngayvaodang.Value.Year) >= req.NamTuoiDang.Value);
             }
 
             var list = await query.ToListAsync();
@@ -207,7 +158,7 @@ namespace HumanResourcesManagement.Service
                 NoiSinh = item.Noisinh,
                 TamTru = item.Tamtru,
                 ThuongTru = item.Thuongtru,
-                TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == item.Phong)?.Ten,
+                TenPhong = item.PhongNavigation != null ? item.PhongNavigation.Ten : null,
                 NgayVaoDang = item.Ngayvaodang.HasValue ? item.Ngayvaodang.Value.ToString("dd/MM/yyyy") : null,
                 NgayVaoDangChinhThuc = item.Ngayvaodangchinhthuc.HasValue ? item.Ngayvaodangchinhthuc.Value.ToString("dd/MM/yyyy") : null,
                 TrangThai = "null",
@@ -215,6 +166,7 @@ namespace HumanResourcesManagement.Service
 
             return responseList;
         }
+
 
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToExcel(DanhSachDangVienRequest req)
         {

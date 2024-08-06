@@ -20,14 +20,13 @@ namespace HumanResourcesManagement.Controllers
             _context = context;
         }
 
-
         [HttpPost("TaoMoiHoSoLuong")]
         public IActionResult TaoMoiHoSoLuong([FromBody] InsertHoSoLuong request)
         {
             try
             {
                 _hoSoLuongService.ThemHoSoLuong(request);
-                return Ok("Them ho so luong thanh cong!!");
+                return Ok("Thêm hồ sơ lương thành công!!");
             }
             catch (System.Exception ex)
             {
@@ -55,15 +54,15 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 _hoSoLuongService.suaHoSoLuong(id, request);
-                return Ok("Update thanh cong!");
+                return Ok("Cập nhật thành công!");
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest($"Lỗi: {ex.Message}");
             }
         }
 
-        [HttpDelete("xoaHoSoLuong/{id}")]
+        [HttpDelete("XoaHoSoLuong/{id}")]
         public IActionResult XoaHoSoLuong(int id)
         {
             try
@@ -73,11 +72,11 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest($"Lỗi: {ex.Message}");
             }
         }
 
-        [HttpGet("getAllLuongByMaNV/{maNV}")]
+        [HttpGet("GetAllLuongByMaNV/{maNV}")]
         public IActionResult GetAllLuongByMaNV(string maNV)
         {
             try
@@ -87,11 +86,11 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest($"Lỗi: {ex.Message}");
             }
         }
 
-        [HttpGet("getLuongById/{id}")]
+        [HttpGet("GetLuongById/{id}")]
         public IActionResult GetLuongById(int id)
         {
             try
@@ -101,12 +100,11 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                return BadRequest($"Lỗi: {ex.Message}");
             }
         }
 
-
-        [HttpGet("getChucDanhByHopDong/{maHopDong}")]
+        [HttpGet("GetChucDanhByHopDong/{maHopDong}")]
         public ActionResult<IdAndName> GetChucDanhByHopDong(string maHopDong)
         {
             try
@@ -120,8 +118,7 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-
-        [HttpGet("getPhuCapByChucDanh/{id}")]
+        [HttpGet("GetPhuCapByChucDanh/{id}")]
         public ActionResult<TblDanhMucChucDanh> GetPhuCapByChucDanh(int id)
         {
             try
@@ -135,35 +132,40 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-
-        [HttpGet("getBacLuongByChucDanh/{id}")]
+        [HttpGet("GetBacLuongByChucDanh/{id}")]
         public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetBacLuongByChucDanh(int id)
         {
-            var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(id);
-
-            if (bacLuongs == null || bacLuongs.Count == 0)
+            try
             {
-                return NotFound("Không tìm thấy bậc lương cho chức danh với ID tương ứng.");
+                var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(id);
+                if (bacLuongs == null || bacLuongs.Count == 0)
+                {
+                    return NotFound("Không tìm thấy bậc lương cho chức danh với ID tương ứng.");
+                }
+                return Ok(bacLuongs);
             }
-
-            return Ok(bacLuongs);
+            catch (Exception ex)
+            {
+                return BadRequest($"Lỗi: {ex.Message}");
+            }
         }
 
-
-        [HttpGet("getLuongDetails")]
+        [HttpGet("GetLuongDetails")]
         public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetLuongDetails([FromQuery] int? chucDanhId, [FromQuery] int? bacLuongId)
         {
-            var luongs = await _hoSoLuongService.GetLuongDetailsAsync(chucDanhId, bacLuongId);
-
-            if (luongs == null || luongs.Count == 0)
+            try
             {
-                return NotFound("Không tìm thấy thông tin lương cho các tham số được cung cấp.");
+                var luongs = await _hoSoLuongService.GetLuongDetailsAsync(chucDanhId, bacLuongId);
+                if (luongs == null || luongs.Count == 0)
+                {
+                    return NotFound("Không tìm thấy thông tin lương cho các tham số được cung cấp.");
+                }
+                return Ok(luongs);
             }
-
-            return Ok(luongs);
+            catch (Exception ex)
+            {
+                return BadRequest($"Lỗi: {ex.Message}");
+            }
         }
-
-
-
     }
 }

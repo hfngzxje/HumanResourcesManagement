@@ -3,7 +3,6 @@ using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -18,24 +17,34 @@ namespace HumanResourcesManagement.Controllers
             _nguoiThanService = nguoiThanService;
         }
 
-        //get danh muc nguoi than
+        // Get danh muc nguoi than
         [HttpGet("getDanhMucNguoiThan")]
         public async Task<IActionResult> GetDanhMucNguoiThan()
         {
-
-            var danhMuc = await _nguoiThanService.GetDanhMucNguoiThan();
-            return Ok(danhMuc);
-
+            try
+            {
+                var danhMuc = await _nguoiThanService.GetDanhMucNguoiThan();
+                return Ok(danhMuc);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        //get nhan vien by ma
+        // Get nhan vien by ma
         [HttpGet("getNguoiThanByMaNV/{maNV}")]
         public async Task<IActionResult> GetNguoiThanByMaNV(string maNV)
         {
-
-            var listNguoiThan = await _nguoiThanService.GetNguoiThanByMaNV(maNV);
-            return Ok(listNguoiThan);
-
+            try
+            {
+                var listNguoiThan = await _nguoiThanService.GetNguoiThanByMaNV(maNV);
+                return Ok(listNguoiThan);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("getNguoiThanById/{id}")]
@@ -50,10 +59,9 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
-
         }
 
-        //them nguoi than
+        // Them nguoi than
         [HttpPost("addNguoiThan")]
         public async Task<IActionResult> AddNguoiThan([FromBody] InsertNguoiThanRequest req)
         {

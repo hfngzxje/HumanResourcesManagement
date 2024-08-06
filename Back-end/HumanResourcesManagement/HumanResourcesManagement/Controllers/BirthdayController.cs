@@ -18,10 +18,12 @@ namespace HumanResourcesManagement.Controllers
         [HttpPost("check-and-send")]
         public IActionResult CheckAndSendBirthdayEmails()
         {
-            try {
+            try
+            {
                 _birthdayService.CheckAndSendBirthdayEmails();
                 return Ok("Gửi email thành công!!");
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -30,14 +32,15 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("email-history")]
         public IActionResult GetEmailHistories([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? employeeId)
         {
-            try {
+            try
+            {
                 var emailHistories = _birthdayService.GetEmailHistories(startDate, endDate, employeeId);
                 return Ok(emailHistories);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
     }
 }
-

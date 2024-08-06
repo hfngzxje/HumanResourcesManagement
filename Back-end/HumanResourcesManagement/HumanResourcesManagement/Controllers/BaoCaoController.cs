@@ -14,7 +14,7 @@ namespace HumanResourcesManagement.Controllers
         private readonly IBaoCaoService _baoCaoService;
         public BaoCaoController(IBaoCaoService baoCaoService)
         {
-            _baoCaoService= baoCaoService;
+            _baoCaoService = baoCaoService;
         }
 
         [HttpPost("getBaoCaoDanhSachNhanVien")]
@@ -32,7 +32,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpPost("ExportBaoCaoNhanVienToExecl")]
-        public async Task<IActionResult> ExportBaoCaoNhanVien([FromForm]DanhSachNhanVienRequest req)
+        public async Task<IActionResult> ExportBaoCaoNhanVien([FromForm] DanhSachNhanVienRequest req)
         {
             try
             {
@@ -43,8 +43,8 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(501, "Lỗi khi xuất file excel.");
             }
-            
         }
+
         [HttpPost("getBaoCaoDanhSachDangVien")]
         public async Task<IActionResult> GetReportDanhSachDangVien([FromForm] DanhSachDangVienRequest req)
         {
@@ -71,9 +71,7 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(501, "Lỗi khi xuất file excel.");
             }
-
         }
-
 
         [HttpPost("getBaoCaoDanhSachNguoiThan")]
         public async Task<IActionResult> GetReportDanhSachNguoiThan([FromForm] DanhSachNguoiThanRequest req)
@@ -99,11 +97,10 @@ namespace HumanResourcesManagement.Controllers
             }
             catch (Exception ex)
             {
-
-                return StatusCode(501, "Lỗi khi xuất file excel");
+                return StatusCode(501, "Lỗi khi xuất file excel.");
             }
-            
         }
+
         [HttpPost("getBaoCaoDanhSachDienChinhSach")]
         public async Task<IActionResult> GetReportDanhSachDienChinhSach([FromForm] DanhSachDienChinhSachRequest req)
         {
@@ -117,6 +114,7 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
+
         [HttpPost("getBaoCaoDanhSachNhomLuong")]
         public async Task<IActionResult> GetReportDanhSachNhomLuong([FromForm] DanhSachNhomLuongRequest req)
         {
@@ -130,7 +128,6 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
-
 
         [HttpPost("getBaoCaoSinhNhat")]
         public async Task<IActionResult> GetReportSinhNhat([FromForm] DanhSachSinhNhatRequest req)

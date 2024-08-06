@@ -1,8 +1,9 @@
-using System.Runtime.CompilerServices;
 using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace HumanResourcesManagement.Controllers
 {
@@ -22,57 +23,71 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getLoaiHopDong")]
         public async Task<IActionResult> GetLoaiHopDong()
         {
-            var dm = await _loaiHopDongService.GetAllLoaiHopDong();
-            return Ok(dm);
+            try
+            {
+                var dm = await _loaiHopDongService.GetAllLoaiHopDong();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpGet("getLoaiHopDongById/{id}")]
         public async Task<IActionResult> GetLoaiHopDongById(int id)
         {
-            var dt = await _loaiHopDongService.GetLoaiHopDongById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _loaiHopDongService.GetLoaiHopDongById(id);
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpPost("addLoaiHopDong")]
-        public async Task<IActionResult> AddLoaiHopDong(InsertLoaiHopDongRequest req)
+        public async Task<IActionResult> AddLoaiHopDong([FromBody] InsertLoaiHopDongRequest req)
         {
             try
             {
                 await _loaiHopDongService.AddLoaiHopDong(req);
-                return StatusCode(200, "add thanh cong");
+                return StatusCode(200, "Thêm thành công");
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
-        [HttpDelete("removeLoaiHopDong")]
+        [HttpDelete("removeLoaiHopDong/{id}")]
         public async Task<IActionResult> RemoveLoaiHopDong(int id)
         {
             try
             {
                 await _loaiHopDongService.DeleteLoaiHopDong(id);
-                return StatusCode(200, "xoa dan toc thanh cong");
+                return StatusCode(200, "Xóa thành công");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpPut("updateLoaiHopDong")]
-        public async Task<IActionResult> UpdateLoaiHopDong(int id, InsertLoaiHopDongRequest req)
-        {
-            try
-            {
-                await _loaiHopDongService.UpdateLoaiHopDong(id,req);
-                return StatusCode(200, "cap nhat dan toc thanh cong");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
+        [HttpPut("updateLoaiHopDong/{id}")]
+        public async Task<IActionResult> UpdateLoaiHopDong(int id, [FromBody] InsertLoaiHopDongRequest req)
+        {
+            try
+            {
+                await _loaiHopDongService.UpdateLoaiHopDong(id, req);
+                return StatusCode(200, "C?p nh?t thành công");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
     }
 }

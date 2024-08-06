@@ -20,7 +20,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getKhenThuongKiLuatByMaNV/{maNV}/{khenThuongOrKiLuat}")]
-        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV, int khenThuongOrKiLuat)
+        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV, string khenThuongOrKiLuat)
         {
             try
             {
