@@ -384,7 +384,8 @@ class BaseSelect extends HTMLElement {
     "keyValue",
     "keyLabel",
     "required",
-    "disabled"
+    "disabled",
+    "includeAll" // Thêm thuộc tính mới
   ];
 
   connectedCallback() {
@@ -396,13 +397,23 @@ class BaseSelect extends HTMLElement {
     const keyLabel = this.getAttribute("keyLabel") || "label";
     const required = this.getAttribute("required");
     const disabled = this.getAttribute("disabled") !== null;
+    const includeAll = this.getAttribute("includeAll") !== null; // Kiểm tra thuộc tính mới
 
-    function getApiUrl() {
+    const getApiUrl = () => {
       if (!window[api]) return api;
       return window[api]();
-    }
-    const renderOption = () =>{
-      this.querySelector('select').innerHTML = ""
+    };
+
+    const renderOption = () => {
+      this.querySelector('select').innerHTML = "";
+
+      if (includeAll) {
+        const allOption = document.createElement("option");
+        allOption.value = '';
+        allOption.innerText = 'Tất Cả';
+        this.querySelector("select").append(allOption);
+      }
+
       if (!!api) {
         $.ajax({
           url: getApiUrl(),
@@ -421,6 +432,7 @@ class BaseSelect extends HTMLElement {
         });
         return;
       }
+
       const options = window[optionsKey] || [];
       options.forEach(({ value, label }) => {
         const option = document.createElement("option");
@@ -428,22 +440,25 @@ class BaseSelect extends HTMLElement {
         option.innerText = label;
         this.querySelector("select").append(option);
       });
-    }
-    this.renderOption = renderOption
+    };
+
+    this.renderOption = renderOption;
 
     document.addEventListener("DOMContentLoaded", () => {
-      renderOption()
+      renderOption();
     });
 
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
-      <label class="block mb-2 text-sm  text-gray-900">${label}</label>
-      <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <label class="block mb-2 text-sm text-gray-900">${label}</label>
+      <select name="${name}" ${required ? 'required' : ''} ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
       </select>
     </div>
     `;
   }
 }
+
+
 class BaseCheckbox extends HTMLElement {
   static observedAttributes = ["label", "class", "value", "name"];
 
@@ -893,37 +908,44 @@ class BaseTable extends HTMLElement {
             type: method, // phương thức
             data: payload,
             success: (tableData) => {
-                // tableData : dữ liệu Api bảng trả về
-                
-                // Nếu dữ liệu có thuộc tính nào đó có thể sử dụng để sắp xếp, 
-                // ví dụ: 'createdAt', 'updatedAt', hoặc 'id'.
-                // Trong trường hợp này, giả sử dữ liệu có thuộc tính 'id' để sắp xếp.
-                
-                // Nếu dữ liệu không có thuộc tính thời gian, bạn có thể sắp xếp theo ID hoặc theo thứ tự tự nhiên nếu đó là số tăng dần.
-                const sortedData = tableData.sort((a, b) => b.id - a.id);
+                // Kiểm tra xem tableData có phải là một mảng không
+                if (Array.isArray(tableData)) {
+                    // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
+                    if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
+                        // Sắp xếp theo thuộc tính 'id'
+                        const sortedData = tableData.sort((a, b) => b.id - a.id);
+                        setTableData(sortedData);
+                    } else {
+                        // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
+                        setTableData(tableData);
+                    }
     
-                setTableData(sortedData);
-                renderTable();
-                renderPagination();
+                    renderTable();
+                    renderPagination();
+                } else {
+                  setTableData([]);
+                  renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
+                }
             },
             error: (xhr, status, error) => {
-                const hasEmptyEl = this.querySelector("#empty-data");
-                console.log("hasEmptyEl ", hasEmptyEl);
+                const hasEmptyEl = document.querySelector("#empty-data");
                 if (hasEmptyEl) return;
+                
                 // Trường hợp thất bại
-                const wrapperTable = this.querySelector("#wrapper-table");
-    
+                const wrapperTable = document.querySelector("#wrapper-table");
+                
                 const divEl = document.createElement("div");
                 divEl.setAttribute("id", "empty-data");
                 divEl.setAttribute(
                     "class",
                     "text-center text-gray-400 mt-5 mb-5 text-sm"
                 );
-                divEl.innerText = "Không có dữ liệu!";
+                // divEl.innerText = "Không có dữ liệu!";
                 wrapperTable.append(divEl);
             },
         });
     };
+    
 
     // const handleCallFetchData = (payload) => {
     //   $.ajax({

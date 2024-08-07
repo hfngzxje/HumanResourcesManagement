@@ -4,11 +4,6 @@ const maDetail = localStorage.getItem("maDetail")
 const table = document.querySelectorAll('base-table')
 
 let maHopDongHienTai = null
-
-// var MaritalOptions = [
-//     { label: 'Khen Thưởng', value: 1 }
-// ];
-
 var TableColumns = [
     {
         label: 'Tên',

@@ -13,13 +13,13 @@
 // });
 
 
-// (function(){
-//     if(!localStorage.getItem("maNhanVien")){
-//       window.location.href = 'pages/authentic/login.html'
-//     }
-//     const vaiTroID= localStorage.getItem("vaiTroId")
-//     if(vaiTroID != 1){
-//       window.location.href = '/pages/error.html'
-//       return;
-//     }
-//    })();
+(function(){
+    if(!localStorage.getItem("maNhanVien")){
+      window.location.href = '../authentic/login.html'
+    }
+    const vaiTroID= localStorage.getItem("vaiTroId")
+    if(vaiTroID != 1){
+      window.location.href = '/pages/error.html'
+      return;
+    }
+   })();
