@@ -90,10 +90,26 @@ namespace HumanResourcesManagement.Service
 
         }
 
+        public async Task CheckAndProcessDieuChuyen()
+        {
+            DateTime today = DateTime.Today.Date;
+            var dieuChuyens = await _context.TblDieuChuyens
+                .Where(dc => dc.Ngayhieuluc.Value.Date == today.Date)
+                .ToListAsync();
+
+            foreach (var dc in dieuChuyens)
+            {
+                await DieuChuyenNhanVien(dc.Manv, dc.Id);
+            }
+        }
+
         public async Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int idDieuChuyen)
         {
             var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == maNV);
-            var dc = _context.TblDieuChuyens.Find(idDieuChuyen);
+            var dc = await _context.TblDieuChuyens.FindAsync(idDieuChuyen);
+
+            if (nhanVien == null || dc == null)
+                throw new InvalidOperationException("Nhân viên hoặc điều chuyển không tìm thấy.");
 
             var phongCu = nhanVien.Phong;
             var toCu = nhanVien.To;
@@ -108,12 +124,12 @@ namespace HumanResourcesManagement.Service
             nhanVien.Ngayvaoban = dc.Ngayhieuluc;
 
             var hoSoLuongCu = await _context.TblHopDongs.FirstOrDefaultAsync(hd => hd.Ma == maNV);
-            var isDiff = chucVuCu == dc.Chucvu ? true : false;
-            if (isDiff == true)
+            var isDiff = chucVuCu != dc.Chucvu;
+            if (isDiff)
             {
-                var oldHoSoLuongs = _context.TblLuongs
-                .Where(x => x.Mahopdong == hoSoLuongCu.Mahopdong && x.Trangthai == 1)
-                .ToList();
+                var oldHoSoLuongs = await _context.TblLuongs
+                    .Where(x => x.Mahopdong == hoSoLuongCu.Mahopdong && x.Trangthai == 1)
+                    .ToListAsync();
 
                 foreach (var oldHsl in oldHoSoLuongs)
                 {
@@ -122,11 +138,13 @@ namespace HumanResourcesManagement.Service
                 }
                 await _context.SaveChangesAsync();
             }
+
             _context.Entry(ls).State = EntityState.Modified;
             _context.Entry(nhanVien).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return nhanVien;
         }
+
 
 
 
