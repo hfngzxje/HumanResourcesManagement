@@ -6,7 +6,7 @@ namespace HumanResourcesManagement.Service.IService
 {
     public interface IHopDongService
     {
-        void TaoHopDong(InsertHopDongRequest request);
+        Task<TblHopDong> TaoHopDong(InsertHopDongRequest request);
         void SuaHopDong(string id, UpdateHopDongRequest request);
         void XoaHopDong(string id);
         List<TblHopDong> GetAllHopDong();

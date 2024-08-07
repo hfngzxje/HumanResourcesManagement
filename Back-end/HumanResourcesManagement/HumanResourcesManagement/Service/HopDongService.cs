@@ -79,59 +79,61 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public async void TaoHopDong(InsertHopDongRequest request)
+        public async Task<TblHopDong> TaoHopDong(InsertHopDongRequest request)
         {
-            var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == request.Ma);
-            if (nhanVien == null)
-            {
-                throw new Exception("Mã nhân viên không tồn tại.");
-            }
+           
+                var nhanVien = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma == request.Ma);
+                if (nhanVien == null)
+                {
+                    throw new Exception("Mã nhân viên không tồn tại.");
+                }
 
-            if (request.Hopdongtungay > request.Hopdongdenngay)
-            {
-                throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
-            }
+                if (request.Hopdongtungay > request.Hopdongdenngay)
+                {
+                    throw new Exception("Ngày tạo hợp đồng phải nhỏ hơn ngày hết hạn!");
+                }
 
-            var hopDongsCuaNhanVien = await _context.TblHopDongs
-                .Where(hd => hd.Ma == request.Ma && hd.TrangThai != 2)
-                .ToListAsync();
+                var hopDongsCuaNhanVien = await _context.TblHopDongs
+                    .Where(hd => hd.Ma == request.Ma && hd.TrangThai != 2)
+                    .ToListAsync();
 
-            foreach (var hopDong in hopDongsCuaNhanVien)
-            {
-                hopDong.TrangThai = 2;
-            }
+                foreach (var hopDong in hopDongsCuaNhanVien)
+                {
+                    hopDong.TrangThai = 2;
+                }
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            var newMaNv = request.Ma.ToUpper();
-            string baseMaHopDong = newMaNv + "HD";
-            int suffix = 1;
+                var newMaNv = request.Ma.ToUpper();
+                string baseMaHopDong = newMaNv + "HD";
+                int suffix = 1;
 
-            while ( await _context.TblHopDongs.AnyAsync(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
-            {
-                suffix++;
-            }
+                while (await _context.TblHopDongs.AnyAsync(hd => hd.Mahopdong == baseMaHopDong + suffix.ToString("D2")))
+                {
+                    suffix++;
+                }
 
-            string newMaHopDong = baseMaHopDong + suffix.ToString("D2");
+                string newMaHopDong = baseMaHopDong + suffix.ToString("D2");
 
-            var newHopDong = new TblHopDong()
-            {
-                Mahopdong = newMaHopDong,
-                Loaihopdong = request.Loaihopdong,
-                Chucdanh = request.Chucdanh,
-                Hopdongtungay = request.Hopdongtungay,
-                Hopdongdenngay = request.Hopdongdenngay,
-                Ghichu = request.Ghichu,
-                Ma = request.Ma,
-                TrangThai = request.TrangThai
-            };
+                var newHopDong = new TblHopDong
+                {
+                    Mahopdong = newMaHopDong,
+                    Loaihopdong = request.Loaihopdong,
+                    Chucdanh = request.Chucdanh,
+                    Hopdongtungay = request.Hopdongtungay,
+                    Hopdongdenngay = request.Hopdongdenngay,
+                    Ghichu = request.Ghichu,
+                    Ma = request.Ma,
+                    TrangThai = request.TrangThai
+                };
 
-            nhanVien.Chucvuhientai = newHopDong.Chucdanh;
-
-            _context.Entry(nhanVien).State = EntityState.Modified; 
-            _context.TblHopDongs.Add(newHopDong);
-            await _context.SaveChangesAsync();
+                nhanVien.Chucvuhientai = newHopDong.Chucdanh;
+                _context.Entry(nhanVien).State = EntityState.Modified;
+                _context.TblHopDongs.Add(newHopDong);
+                await _context.SaveChangesAsync();
+                return newHopDong;
         }
+
 
 
 

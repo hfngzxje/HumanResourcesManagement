@@ -43,17 +43,6 @@ namespace HumanResourcesManagement.Service
                                                    n.Ngaysinh.Value.Month >= req.FromDate.Value.Month &&
                                                    n.Ngaysinh.Value.Month <= req.ToDate.Value.Month);
                 }
-                else if (searchRuleNgayThang == "năm hợp đồng")
-                {
-                    listMaNv = await _context.TblHopDongs
-                        .Where(n => n.Hopdongtungay.HasValue && n.Hopdongdenngay.HasValue &&
-                                    n.Hopdongtungay.Value.Year >= req.FromDate.Value.Year &&
-                                    n.Hopdongdenngay.Value.Year <= req.ToDate.Value.Year)
-                        .ToListAsync();
-
-                    var maNvSet = listMaNv.Select(hd => hd.Ma).ToHashSet();
-                    filtered = filtered.Where(n => maNvSet.Contains(n.Ma));
-                }
             }
 
             if (!string.IsNullOrEmpty(req.QueQuan))
@@ -487,7 +476,6 @@ namespace HumanResourcesManagement.Service
                 PdfWriter writer = PdfWriter.GetInstance(document, memoryStream);
                 document.Open();
 
-                // Use a system font that supports Vietnamese characters
                 string arialFontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "Arial.ttf");
                 BaseFont baseFont = BaseFont.CreateFont(arialFontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
