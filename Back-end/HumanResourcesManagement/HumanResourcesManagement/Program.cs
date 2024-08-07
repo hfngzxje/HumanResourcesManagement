@@ -39,16 +39,14 @@ public class Program
         builder.Services.AddScoped<ILichSuHoatDongService, LichSuHoatDongService>();
 
 
-
-
-
-
-
-
+        builder.Services.AddHostedService<DieuChuyenBackgroundService>();
         builder.Services.AddHostedService<BirthdayEmailBackgroundService>();
 
+
+        builder.Services.AddScoped<DieuChuyenService>();
         builder.Services.AddScoped<EmailService>();
         builder.Services.AddScoped<BirthdayService>();
+
 
 
         builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
