@@ -22,14 +22,14 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpPost("TaoMoiHopDong")]
-        public IActionResult CreateHopDong([FromBody] InsertHopDongRequest request)
+        public async Task<IActionResult> CreateHopDong([FromBody] InsertHopDongRequest request)
         {
             try
             {
-                _hopDongService.TaoHopDong(request);
-                return Ok("Toa hop dong thanh cong!!");
+                await _hopDongService.TaoHopDong(request);
+                return StatusCode(200,"Tạo hợp đồng thành công!!");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
