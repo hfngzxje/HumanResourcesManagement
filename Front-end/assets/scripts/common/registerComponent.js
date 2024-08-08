@@ -405,48 +405,51 @@ class BaseSelect extends HTMLElement {
     };
 
     const renderOption = () => {
-      this.querySelector('select').innerHTML = "";
-
+      const selectElement = this.querySelector('select');
+      selectElement.innerHTML = "";
+  
       if (includeAll) {
-        const allOption = document.createElement("option");
-        allOption.value = '';
-        allOption.innerText = 'Tất Cả';
-        this.querySelector("select").append(allOption);
+          const allOption = document.createElement("option");
+          allOption.value = '';
+          allOption.innerText = 'Tất Cả';
+          selectElement.append(allOption);
       }
-
-      if (!!api) {
-        $.ajax({
-          url: getApiUrl(),
-          method: "GET",
-          success: (data) => {
-            data.forEach((item) => {
-              const option = document.createElement("option");
-              option.value = item[keyValue];
-              option.innerText = item[keyLabel];
-              this.querySelector("select").append(option);
-            });
-          },
-          error: (err) => {
-            console.log("Base select api err :: ", err);
-          },
-        });
-        return;
+  
+      if (api) {
+          $.ajax({
+              url: getApiUrl(),
+              method: "GET",
+              success: (data) => {
+                  data.forEach((item) => {
+                      const option = document.createElement("option");
+                      option.value = item[keyValue];
+                      option.innerText = item[keyLabel];
+                      selectElement.append(option);
+                  });
+              },
+              error: (err) => {
+                  console.log("Base select api err :: ", err);
+              },
+          });
+          return;
       }
-
-      const options = window[optionsKey] || [];
+  
+      // Ensure options is an array
+      const options = Array.isArray(window[optionsKey]) ? window[optionsKey] : [];
       options.forEach(({ value, label }) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.innerText = label;
-        this.querySelector("select").append(option);
+          const option = document.createElement("option");
+          option.value = value;
+          option.innerText = label;
+          selectElement.append(option);
       });
-    };
-
-    this.renderOption = renderOption;
-
-    document.addEventListener("DOMContentLoaded", () => {
+  };
+  
+  this.renderOption = renderOption;
+  
+  document.addEventListener("DOMContentLoaded", () => {
       renderOption();
-    });
+  });
+  
 
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
@@ -699,7 +702,7 @@ class BaseTable extends HTMLElement {
       function renderTable() {
         bodyEl.innerHTML = "";
         const itemsForPage = getItemsForPage(); // Các mục dữ liệu để hiện thị cho trang hiện tại
-        console.log("itemsForPage ", itemsForPage);
+        // console.log("itemsForPage ", itemsForPage);
         // lặp lần lượt dữ liệu bảng từ api
         itemsForPage.forEach((row) => {
           // row = { mahopdong: 123123, luongcoban: 12323 }

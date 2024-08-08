@@ -73,7 +73,6 @@ var TableColumns = [
 
           localStorage.setItem("maDetail", row.ma)
           const maDetail = localStorage.getItem("maDetail")
-          alert(maDetail)
           backToList(row.ma)
         }
       }
@@ -131,7 +130,6 @@ function recordActivityAdmin(actor, action){
       createdBy: actor,
       action: action,
   };
-
       $.ajax({
           url: 'https://localhost:7141/api/LichSuHoatDong',
           method: 'POST',
@@ -174,8 +172,6 @@ function handleCreate() {
     contentType: 'application/json',
     data: JSON.stringify(payload),
     success: function (data) {
-      console.log('fetchEmployee res :: ', data);
-      console.log("lol:" , payload)
       alert("Thêm mới thành công !")
       recordActivityAdmin(maNhanVien, `Thêm mới nhân viên: ${payload.ten}`)
       backToListAfterCreate()

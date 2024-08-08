@@ -14,8 +14,7 @@ var TableColumns = [
   },
   {
     label: "Ngày sinh",
-    key: "ngaySinh",
-    type: 'datetime',
+    key: "ngaySinh"
   },
   {
     label: "Tháng sinh",
@@ -33,13 +32,7 @@ var TableColumns = [
   },
 ];
 
-var locTheo = [
-  { label: "Tất cả", value: 'Tất cả' },
-  { label: "Phòng ban", value: 'Phòng ban' },
-  { label: "Ngày tháng", value: 'Ngày tháng' },
-  { label: "Tháng", value: 'Tháng' },
-  { label: "Quý", value: 'Quý' },
-];
+
 var thangSinh = [
   { label: "Tất cả", value: "" },
   { label: "Tháng 1", value: 1 },
@@ -63,37 +56,6 @@ var Quy = [
   { label: "Quý 4", value: 4 },
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filterSelect = document.querySelector(
-    'base-select[description="Lọc theo"]'
-  );
-  const StartDate = document.querySelector(
-    'base-datepicker[description="Từ ngày"]'
-  );
-  const EndDate = document.querySelector(
-    'base-datepicker[description="Đến ngày"]'
-  );
-  const PhongBan = document.querySelector(
-    'base-select[description="Phòng ban"]'
-  );
-  const Thang = document.querySelector(
-    'base-select[description="Tháng sinh"]'
-  );
-  const Quy = document.querySelector(
-    'base-select[description="Quý"]'
-  );
-
-  // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
-  function toggleInputs(enabled) {
-    StartDate.disabled = !enabled;
-    EndDate.disabled = !enabled;
-    PhongBan.disabled = !enabled;
-    Thang.disabled = !enabled;
-    Quy.disabled = !enabled;
-  }
-//   toggleInputs(filterSelect.value === "Tất cả");
-});
-
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
   const buildButton = (label, type, icon) => {
@@ -103,123 +65,83 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const DisplayBtn = buildButton("Tìm báo cáo", "green", "bx bx-search");
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
 
-  DisplayBtn.addEventListener("click", () => {
-    handleSearch();
-  });
-
-  actionEl.append(DisplayBtn, pdfBtn, excelBtn);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    DisplayBtn.click();
-  });
+  actionEl.append(pdfBtn, excelBtn);
 }
 
-function handleSearch() {
-  
-  const formValue = getFormValues("report_form");
-  console.log("Form: " , formValue)
-  const tableReport = document.getElementById("tableReport");
-  if (formValue.searchRules === "Tất cả") {
-    tableReport.handleCallFetchData(formValue);
-    return;
-  }
-  const params = {
-    PhongBan: "",
-    StartDate: "",
-    EndDate:"",
-    Thang: "",
-    Quy: ""
-  };
-  if (formValue.searchRules === "Ngày tháng") {
-    params.StartDate = formValue.StartDate;
-    params.EndDate = formValue.EndDate
-  }
-  if (formValue.searchRules === "Phòng ban") {
-    params.PhongBan = formValue.PhongBan;
-  }
-  if (formValue.searchRules === "Tháng") {
-    params.Thang = formValue.Thang;
-  }
-  if (formValue.searchRules === "Quý") {
-    params.Quy = formValue.Quy;
-  }
+async function handleSearch() {
+  try {
+    const formValue = getFormValues("report_form");
+    const tableReport = document.getElementById("tableReport");
 
-  
-  tableReport.handleCallFetchData(params);
-  console.log("Param: ", params)
+    const params = {
+      PhongBan: formValue.PhongBan,
+      StartDate: formValue.StartDate || "",
+      EndDate: formValue.EndDate || "",
+      Thang: formValue.Thang || "",
+      Quy: formValue.Quy || ""
+    };
 
+    await tableReport.handleCallFetchData(params);
+
+  } catch (error) {
+    console.error("Error in handleSearch:", error);
+  }
 }
-
 function buildApiUrl() {
   return apiTable;
 }
-
-function handleSelectFilterBy() {
-  const locTheoEl = document.querySelector("#loctheo select");
-  const tuNgayEl = document.querySelector("#tungay input");
-  const denNgayEl = document.querySelector("#denngay input");
-  const phongBanEl = document.querySelector("#phongban select");
-  const thangSinhEl = document.querySelector("#thangsinh select");
-  const quyEl = document.querySelector("#quy select");
-  locTheoEl.addEventListener("input", () => {
-    const locTheoValue = locTheoEl.value;
-    console.log("locTheoValue ", locTheoValue);
-
-    if (locTheoValue === "Tất cả") {
-      tuNgayEl.disabled = false;
-      denNgayEl.disabled = false;
-      phongBanEl.disabled = false;
-      thangSinhEl.disabled = false;
-      quyEl.disabled = false;
-
-      tuNgayEl.value ="";
-      denNgayEl.value="";
-      phongBanEl.value="";
-      return;
-    }
-
-    tuNgayEl.disabled = true;
-    denNgayEl.disabled = true;
-    phongBanEl.disabled = true;
-    thangSinhEl.disabled = true;
-    quyEl.disabled = true;
-    if (locTheoValue === "Ngày tháng") {
-        tuNgayEl.disabled = false;
-        denNgayEl.disabled = false;
-        phongBanEl.value = null
-      }
-    if (locTheoValue === "Phòng ban") {
-      phongBanEl.disabled = false;
-      if (phongBanEl.options.length > 0) {
-        phongBanEl.value = phongBanEl.options[0].value;
-      }
-      tuNgayEl.value ="";
-      denNgayEl.value="";
-    }
-    if (locTheoValue === "Tháng") {
-      thangSinhEl.disabled = false;
-      phongBanEl.value = null
-      tuNgayEl.value ="";
-      denNgayEl.value="";
-    }
-    
-    if (locTheoValue === "Quý") {
-      quyEl.disabled = false;
-      phongBanEl.value = null
-      tuNgayEl.value ="";
-      denNgayEl.value="";
-    }
+function phongBanChange() {
+  const phongban = document.querySelector('#phongban select')
+  phongban.addEventListener("change", (event) => {
+    handleSearch()
+  });
+}
+function ThangChange() {
+  const thang = document.querySelector('#thangsinh select')
+  thang.addEventListener("change", (event) => {
+    handleSearch()
+  });
+}
+function QuyChange() {
+  const quy = document.querySelector('#quy select')
+  quy.addEventListener("change", (event) => {
+    handleSearch()
+  });
+}
+let fromDateChanged = false;
+let toDateChanged = false;
+function fromChange() {
+  const fromDatePicker = document.querySelector('#tungay input');
+  fromDatePicker.addEventListener("change", (event) => {
+    fromDateChanged = true;
+    dateChange();
   });
 }
 
+function toChange() {
+  const toDatePicker = document.querySelector('#denngay input');
+  toDatePicker.addEventListener("change", (event) => {
+    toDateChanged = true;
+    dateChange();
+  });
+}
+function dateChange() {
+  if (fromDateChanged && toDateChanged) {
+    handleSearch();
+  }
+}
+function inits() {
+  phongBanChange()
+  ThangChange()
+  QuyChange()
+  fromChange()
+  toChange()
+}
 document.addEventListener("DOMContentLoaded", () => {
   renderActionByStatus();
-  handleSelectFilterBy();
   handleSearch();
-
- 
+  inits();
 });

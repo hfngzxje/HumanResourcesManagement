@@ -1,374 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Danh mục nhóm lương | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+  <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <title>Document</title>
+</head>
+<body>
+-->
+<form action="https://api.web3forms.com/submit" method="POST" id="form" novalidate>
+  <!-- Add your access_key here -->
+  <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+  <input type="checkbox" class="hidden" style="display:none" name="botcheck" />
+
+  <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-14">
+    <div>
+      <input
+      type="text"
+      name="FirstName"
+      required
+      class="peer border-2 border-muted-medium py-4 px-4 rounded-xl placeholder:text-default focus:border-primary focus:ring-1 focus:ring-primary outline-none w-full [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200"
+      placeholder="Name*"
+    />
+      <p class="mt-2 hidden [.validated_&]:peer-invalid:block text-pink-600 text-sm">
+        Please provide your first name.
+      </p>
+    </div>
+    <div>
+      <input
+      type="text"
+      name="LastName"
+      required
+      class="peer border-2 border-muted-medium py-4 px-4 rounded-xl placeholder:text-default focus:border-primary focus:ring-1 focus:ring-primary outline-none w-full [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200"
+      placeholder="Last name*"
+    />
+      <p class="mt-2 hidden [.validated_&]:peer-invalid:block text-pink-600 text-sm">
+        Please provide your last name.
+      </p>
+    </div>
+    <div>
+      <input
+      type="email"
+      name="email"
+      required
+      class="peer border-2 border-muted-medium py-4 px-4 rounded-xl placeholder:text-default focus:border-primary focus:ring-1 focus:ring-primary outline-none w-full [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200"
+      placeholder="Email address*"
+    />
+      <p class="mt-2 hidden [.validated_&]:peer-placeholder-shown:peer-invalid:block text-pink-600 text-sm">
+        Please provide your email.
+      </p>
+      <p
+        class="mt-2 hidden [.validated_&]:peer-[:not(:placeholder-shown)]:peer-invalid:block text-pink-600 text-sm">
+        Please enter a valid email address.
+      </p>
+    </div>
+    <div>
+      <input
+      type="text"
+      name="phone"
+      required
+      class="peer border-2 border-muted-medium py-4 px-4 rounded-xl placeholder:text-default focus:border-primary focus:ring-1 focus:ring-primary outline-none w-full [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200"
+      placeholder="Phone*"
+    />
+      <p class="mt-2 hidden [.validated_&]:peer-invalid:block text-pink-600 text-sm">
+        Please provide your phone number.
+      </p>
+    </div>
+
+    <div class="md:col-span-2">
+      <textarea
+      name="message"
+      required
+      class="peer border-2 border-muted-medium py-4 px-4 rounded-xl placeholder:text-default focus:border-primary focus:ring-1 focus:ring-primary outline-none w-full h-40 [.validated_&]:invalid:border-pink-600 [.validated_&]:invalid:ring-2 [.validated_&]:invalid:ring-pink-200"
+      placeholder="Message*"></textarea>
+      <p class="mt-2 hidden [.validated_&]:peer-invalid:block text-pink-600 text-sm">
+        Please provide your message.
+      </p>
+    </div>
+    <div class="md:col-span-2">
+      <div class="text-center">
+        <button
+        type="submit"
+        class="bg-pink-500 text-lg font-medium rounded-lg py-5 px-14 text-white transition hover:bg-primary-strong">
+        Submit Now
+      </button>
+
+        <div id="result" class="mt-3 text-center"></div>
+      </div>
+    </div>
+  </div>
+</form>
+
 <script>
-    const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNhanVien";
-var TableColumns = [
-  {
-    label: "Mã nhân viên",
-    key: "ma",
-  },
-  {
-    label: "Họ tên",
-    key: "ten",
-  },
-  {
-    label: "Ngày sinh",
-    key: "ngaysinh"
-  },
-  {
-    label: "Giới tính",
-    key: "gioitinh",
-    type: "gender",
-  },
-  {
-    label: "Điện thoại",
-    key: "didong",
-  },
-  {
-    label: "Phòng ban",
-    key: "tenPhong",
-  },
-  {
-    label: "Quê quán",
-    key: "queQuan",
-  },
-  {
-    label: "Thường trú",
-    key: "thuongTru",
-  },
-  {
-    label: "Tạm trú",
-    key: "tamTru",
-  },
-];
-var locTheo = [
-  { label: 'Tất cả', value: 'Tất cả' },
-  { label: 'Quê quán', value: 'Quê quán' },
-  { label: "Phòng ban", value: 'Phòng ban' },
-  { label: "Ngày tháng", value: 'Ngày tháng' },
-  { label: "Giới tính", value: 'Giới tính' },
-];
-var QueQuan = [
-  { label: "Quê quán", value: "Quê quán" },
-  { label: "Thường trú", value: "Thường trú" },
-  { label: "Tạm trú", value: "Tạm trú" },
-];
-var NgayThang = [
-  { label: "Năm sinh", value: "Năm sinh" },
-  { label: "Tháng sinh", value: "Tháng sinh" },
-  { label: "Năm hợp đồng", value: "Năm hợp đồng" },
-];
-var gioiTinh = [
-  { label: "Tất cả", value: 'Tất cả' },
-  { label: "Nam", value: 'true' },
-  { label: "Nữ", value: 'false' },
-];
+	const form = document.getElementById("form");
+  const result = document.getElementById("result");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filterSelect = document.querySelector(
-    '#loctheo select'
-  );
-  const ngaythangSelect = document.querySelector(
-    '#selectngaythang select'
-  );
-  const fromDate = document.querySelector(
-    '#tungay input'
-  );
-  const toDate = document.querySelector(
-    '#denngay input'
-  );
-  const queQuanSelect = document.querySelector(
-    '#selectquequan select'
-  );
-  const queQuan = document.querySelector(
-    '#quequan input'
-  );
-  const departmentSelect = document.querySelector(
-    '#phongban select'
-  );
-  const genderSelect = document.querySelector(
-    '#gioitinh select'
-  );
-
-  // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
-  function toggleInputs(enabled) {
-    ngaythangSelect.disabled != enabled
-    queQuanSelect.disabled = !enabled
-    fromDate.disabled = !enabled;
-    toDate.disabled = !enabled;
-    queQuan.disabled = !enabled;
-    departmentSelect.disabled = !enabled;
-    genderSelect.disabled = !enabled;
-  }
-  toggleInputs(filterSelect.value === "Tất cả");
-});
-
-function getFormValues( ) {
-  // Đảm bảo rằng hàm này trả về đối tượng đúng với các thuộc tính cần thiết
-  const form = document.getElementById(formId);
-  return {
-    GioiTinh: form.querySelector("#gioitinh select").value,
-    searchRulesNgayThang: form.querySelector("#selectngaythang select").value,
-    ToDate: form.querySelector("#denngay input").value,
-    FromDate: form.querySelector("#tungay input").value,
-    PhongBan: form.querySelector("#phongban select").value,
-    searchRulesDiaChi: form.querySelector("#selectquequan select").value,
-    QueQuan: form.querySelector("#quequan input").value
-  };
-}
-
-function renderActionByStatus() {
-  const actionEl = document.getElementById("report_form_action");
-  const buildButton = (label, type, icon) => {
-    const btnEl = document.createElement("base-button");
-    btnEl.setAttribute("label", label);
-    btnEl.setAttribute("type", type);
-    btnEl.setAttribute("icon", icon);
-    return btnEl;
-  };
-  const DisplayBtn = buildButton("Tìm báo cáo", "green", "bx bx-search");
-  const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
-
-  DisplayBtn.addEventListener("click", () => {
-    handleSearch();
-  });
-
-  excelBtn.addEventListener("click", () => {
-    handleExportExcel();
-  });
-
-  pdfBtn.addEventListener("click", () => {
-    handleExportPDF();
-  });
-
-  actionEl.append(DisplayBtn, pdfBtn, excelBtn);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    DisplayBtn.click();
-  });
-}
-// _____________________________________excel_________________________________________________________
-async function handleExportExcel() {
-  const formValue = getFormValues("report_form");
-  const params = new FormData();
-  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi );
-  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang );
-  params.append('FromDate', formValue.FromDate || '');
-  params.append('ToDate', formValue.ToDate || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
-  params.append('PhongBan', formValue.PhongBan || '');
-  params.append('QueQuan', formValue.QueQuan || '');
-
-  try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToExecl', {
-      method: 'POST',
-      body: params,
-      headers: {
-        'accept': '*/*',
-      }
-    });
-
-    if (response.ok) {
-      const blob = await response.blob();
-      createDownloadLinkExcel(blob);
-    } else {
-      console.error('Export failed:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-function createDownloadLinkExcel(blob) {
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'BaoCao_DanhSachNhanVien.xlsx';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
-}
-// _________________________________________________________________________________________________
-
-// ____________________________________________PDF____________________________________________________
-async function handleExportPDF() {
-  const formValue = getFormValues("report_form");
-  const params = new FormData();
-  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi || 'Quê quán');
-  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang || 'Năm sinh');
-  params.append('FromDate', formValue.FromDate || '');
-  params.append('ToDate', formValue.ToDate || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
-  params.append('PhongBan', formValue.PhongBan || '');
-  params.append('QueQuan', formValue.QueQuan || '');
-
-  try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
-      method: 'POST',
-      body: params,
-      headers: {
-        'accept': '*/*',
-      }
-    });
-
-    if (response.ok) {
-      const blob = await response.blob();
-      createDownloadLinkPDF(blob);
-    } else {
-      console.error('Export failed:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-function createDownloadLinkPDF(blob) {
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'BaoCao_DanhSachNhanVien.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
-}
-// _______________________________________________________________________________________________________
-function handleSearch() {
-
-  const formValue = getFormValues("report_form");
-
-  console.log("Form: ", formValue)
-  const tableReport = document.getElementById("tableReport");
-  if ( formValue.searchRulesNgayThang === "Năm sinh" && formValue.searchRulesDiaChi === "Quê quán"  ) {
-    tableReport.handleCallFetchData(formValue);
-    alert("d")
-    return;
-  }
-  const params = {
-    GioiTinh: params.GioiTinh = formValue.GioiTinh || "Tất cả",
-    searchRulesNgayThang: formValue.searchRulesNgayThang,
-    ToDate:params.ToDate = formValue.ToDate || "",
-    FromDate:params.FromDate = formValue.FromDate || "",
-    PhongBan:params.PhongBan = formValue.PhongBan || "",
-    searchRulesDiaChi: formValue.searchRulesDiaChi ,
-    QueQuan: params.QueQuan = formValue.QueQuan || ""
-  };
-  tableReport.handleCallFetchData(params);
-  console.log("params: ", params)
-}
-
-function phongBanChange() {
-  const phongban = document.querySelector('#phongban select')
-  phongban.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-function gioiTinhChange() {
-  const gioitinh = document.querySelector('#gioitinh select')
-  gioitinh.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-
-function queQuanChange() {
-  const quequan = document.querySelector('#quequan input')
-  quequan.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-let fromDateChanged = false;
-let toDateChanged = false;
-
-function fromChange() {
-  const fromDatePicker = document.querySelector('#tungay input');
-  fromDatePicker.addEventListener("input", (event) => {
-    fromDateChanged = true;
-    dateChange();
-  });
-}
-
-function toChange() {
-  const toDatePicker = document.querySelector('#denngay input');
-  toDatePicker.addEventListener("input", (event) => {
-    toDateChanged = true;
-    dateChange();
-  });
-}
-function dateChange(){
-  if(fromDateChanged && toDateChanged){
-    handleSearch();
-  }
-}
-function buildApiUrl() {
-  return apiTable;
-}
-
-function handleSelectFilterBy() {
-  const locTheoEl = document.querySelector("#loctheo select");
-  const searchRulesDiaChiEl = document.querySelector("#selectquequan select");
-  const queQuanEl = document.querySelector("#quequan input");
-  const phongBanEl = document.querySelector("#phongban select");
-  const searchRulesNgayThang = document.querySelector("#selectngaythang select");
-  const tuNgayEl = document.querySelector("#tungay input");
-  const denNgayEl = document.querySelector("#denngay input");
-  const gioiTinhEl = document.querySelector("#gioitinh select");
-  locTheoEl.addEventListener("input", () => {
-    const locTheoValue = locTheoEl.value;
-    console.log("locTheoValue ", locTheoValue);
-
-    if (locTheoValue === "Tất cả") {
-      searchRulesNgayThang.disabled = false;
-      searchRulesDiaChiEl.disabled = false;
-      queQuanEl.disabled = false;
-      phongBanEl.disabled = false;
-      tuNgayEl.disabled = false;
-      denNgayEl.disabled = false;
-      gioiTinhEl.disabled = false;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    form.classList.add("validated");
+    if (!form.checkValidity()) {
+      form.querySelectorAll(":invalid")[0].focus();
       return;
     }
-    searchRulesNgayThang.disabled = true;
-    searchRulesDiaChiEl.disabled = true;
-    queQuanEl.disabled = true;
-    phongBanEl.disabled = true;
-    tuNgayEl.disabled = true;
-    denNgayEl.disabled = true;
-    gioiTinhEl.disabled = true;
-    if (locTheoValue === "Quê quán") {
-      searchRulesDiaChiEl.disabled = false;
-      queQuanEl.disabled = false;
-      phongBanEl.value = "";
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Phòng ban") {
-      phongBanEl.disabled = false;
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Ngày tháng") {
-      searchRulesNgayThang.disabled = false;
-      tuNgayEl.disabled = false;
-      denNgayEl.disabled = false;
-      phongBanEl.value = "";
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Giới tính") {
-      gioiTinhEl.disabled = false;
-      phongBanEl.value = "";
-    }
+    const formData = new FormData(form);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    result.innerHTML = "Sending...";
+
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: json,
+    })
+      .then(async (response) => {
+        let json = await response.json();
+        if (response.status == 200) {
+          result.classList.add("text-green-500");
+          result.innerHTML = json.message;
+        } else {
+          console.log(response);
+          result.classList.add("text-red-500");
+          result.innerHTML = json.message;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        result.innerHTML = "Something went wrong!";
+      })
+      .then(function () {
+        form.reset();
+        form.classList.remove("validated");
+        setTimeout(() => {
+          result.style.display = "none";
+        }, 5000);
+      });
   });
-}
-
-function init(){
-  phongBanChange();
-  gioiTinhChange();
-  queQuanChange();
-}
-document.addEventListener("DOMContentLoaded", () => {
-  console.log(123);
-  renderActionByStatus();
-  handleSelectFilterBy();
-  handleSearch();
-  init();
-
-});
-
 </script>
+</body>
+</html>

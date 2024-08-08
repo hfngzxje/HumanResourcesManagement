@@ -7,7 +7,7 @@ const table = document.querySelector('base-table')
 const maNhanVien = localStorage.getItem('maNhanVien')
 
 var oldValue = null;
-let idNgachCongChuc = null 
+let idNgachCongChuc = null
 
 var TableColumns = [
     {
@@ -46,7 +46,6 @@ var tableEvent = {
 
         fetchNgachCongChuc(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -57,7 +56,7 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-function recordActivityAdmin(actor, action){
+function recordActivityAdmin(actor, action) {
     setLoading(true)
     setLoading(true);
 
@@ -65,38 +64,36 @@ function recordActivityAdmin(actor, action){
         createdBy: actor,
         action: action,
     };
-  
-        $.ajax({
-            url: 'https://localhost:7141/api/LichSuHoatDong',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function (data) {
-                console.log('Lịch sử hoạt động đã được lưu:');
-            },
-            error: (err) => {
-                console.log('Lỗi khi lưu lịch sử hoạt động:', err);
-                try {
-                    if (!err.responseJSON) {
-                        alert(err.responseText)
-                        return
-                    }
-                    const errObj = err.responseJSON.errors
-                    const firtErrKey = Object.keys(errObj)[0]
-                    const message = errObj[firtErrKey][0]
-                    alert(message)
-                } catch (error) {
-                    alert("Lưu lịch sử hoạt động không thành công!");
+
+    $.ajax({
+        url: 'https://localhost:7141/api/LichSuHoatDong',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (data) {
+        },
+        error: (err) => {
+            console.log('Lỗi khi lưu lịch sử hoạt động:', err);
+            try {
+                if (!err.responseJSON) {
+                    alert(err.responseText)
+                    return
                 }
-            },
-            complete: () => {
-                setLoading(false)
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                alert(message)
+            } catch (error) {
+                alert("Lưu lịch sử hoạt động không thành công!");
             }
-        });
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
 }
 
 function fetchNgachCongChuc(id) {
-    console.log("Name:", id);
     setLoading(true)
     idNgachCongChuc = id
     $.ajax({
@@ -124,7 +121,6 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('editCivilServantRank')
 
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -134,10 +130,9 @@ function handleCreate() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetch ngạch công chức res :: ', data);
                 alert("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục ngạch công chức: ${formValue.ten}`);
-           
+
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -173,16 +168,14 @@ function handleRemoveRow() {
             url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idNgachCongChuc,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchPhongBan res :: ', data);
                 alert("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngạch công chức: ${oldValue}`);
-              
+
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
-                console.log('fetchPhongBan err :: ', err);
                 alert("Xóa thất bại!")
             },
             complete: () => {
@@ -196,7 +189,6 @@ function handleSave() {
     if (!isConfirm) return
     const formValue = getFormValues('editCivilServantRank')
     const payload = buildPayload(formValue)
-    console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
@@ -205,10 +197,9 @@ function handleSave() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchLanguage res :: ', data);
                 alert('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục ngạch công chức: ${oldValue} => ${payload.ten} `);
-              
+
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -284,14 +275,13 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Ngạch Công Chức"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -304,13 +294,10 @@ function showPopup() {
 function checkValues() {
     const formValue = getFormValues('editCivilServantRank');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
+        popupSaveBtn.setAttribute('disabled', '');
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
+        popupSaveBtn.removeAttribute('disabled');
     }
 }
 function closePopup() {
@@ -320,7 +307,6 @@ function closePopup() {
 
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)

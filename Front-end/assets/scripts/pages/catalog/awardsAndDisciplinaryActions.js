@@ -40,7 +40,6 @@ var tableEvent = {
 
         fetchKhenThuong(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -79,7 +78,6 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('editKhenThuong')
 
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -89,7 +87,6 @@ function handleCreate() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert("Thêm thành công !")
                 closePopup()
                 clearFormValues()
@@ -126,14 +123,12 @@ function handleRemoveRow() {
             url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert("Xóa thành công !")
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
-                console.log('fetchKhenThuong err :: ', err);
                 alert("Xóa thất bại!")
             },
             complete: () => {
@@ -158,7 +153,6 @@ function handleSave() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert('Lưu Thành Công!');
                 closePopup()
                 clearFormValues()
@@ -230,9 +224,6 @@ function showPopup() {
             setFormValue('editKhenThuong', { ten: "" })
         }
     }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Khen Thưởng - Kỷ Luật"
@@ -253,13 +244,10 @@ function showPopup() {
 function checkValues() {
     const formValue = getFormValues('editKhenThuong');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
         popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
     } else {
         popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -269,7 +257,6 @@ function closePopup() {
 document.addEventListener('DOMContentLoaded', () => {
     // renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)

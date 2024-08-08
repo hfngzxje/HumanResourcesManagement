@@ -52,8 +52,6 @@ function handleCreate() {
 
     
     formValue['ma'] = maDetail;
-
-    console.log('formValue ', formValue);
     formValue['khenthuongkiluat'] = '1'
     const payload = buildPayload(formValue)
     setLoading(true)

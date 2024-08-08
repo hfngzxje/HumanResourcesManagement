@@ -47,7 +47,6 @@ var tableEvent = {
 
         fetchPhongBan(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -74,10 +73,8 @@ function recordActivityAdmin(actor, action){
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('Lịch sử hoạt động đã được lưu:');
             },
             error: (err) => {
-                console.log('Lỗi khi lưu lịch sử hoạt động:', err);
                 try {
                     if (!err.responseJSON) {
                         alert(err.responseText)
@@ -122,7 +119,6 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('editPhongBan')
 
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -132,7 +128,6 @@ function handleCreate() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchPhongBan res :: ', data);
                 alert("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục phòng ban: ${formValue.ten}`);
              
@@ -171,7 +166,6 @@ function handleRemoveRow() {
             url: 'https://localhost:7141/api/PhongBan/removePhongBan?id=' + idPhongBan,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchPhongBan res :: ', data);
                 alert("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục phòng ban: ${oldValue}`);
                 closePopup()
@@ -179,7 +173,6 @@ function handleRemoveRow() {
                 table.handleCallFetchData();
             },
             error: (err) => {
-                console.log('fetchPhongBan err :: ', err);
                 alert("Xóa thất bại!")
             },
             complete: () => {
@@ -201,7 +194,6 @@ function handleSave() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchPhongBan res :: ', data);
                 alert('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục phòng ban: ${oldValue} => ${payload.ten} `);
                 closePopup()
@@ -259,7 +251,6 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
@@ -279,13 +270,10 @@ function showPopup() {
 function checkValues() {
     const formValue = getFormValues('editPhongBan');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
         popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
     } else {
         popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -294,7 +282,6 @@ function closePopup() {
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)

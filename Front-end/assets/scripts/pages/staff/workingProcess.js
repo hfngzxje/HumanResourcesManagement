@@ -93,7 +93,6 @@ function fetchDieuChuyen() {
         method: 'GET',
         success: function (data) {
             setFormValue('workingProcessHienTai_form', data)
-            console.log(data.chucvuhientai)
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);

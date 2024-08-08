@@ -43,6 +43,9 @@
   box-sizing: border-box;
 }
 
+
+
+
 html {
   font-family: var(--font-family-sarabun);
   line-height: 1.15;
@@ -1316,7 +1319,6 @@ pre code {
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
     max-width: 100%;
-    
   }
 
   .order-md-first {

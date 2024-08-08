@@ -45,8 +45,7 @@ var QueQuan = [
 ];
 var NgayThang = [
   { label: "Năm sinh", value: "Năm sinh" },
-  { label: "Tháng sinh", value: "Tháng sinh" },
-  { label: "Năm hợp đồng", value: "Năm hợp đồng" },
+  { label: "Tháng sinh", value: "Tháng sinh" }
 ];
 var gioiTinh = [
   { label: "Tất cả", value: '' },
@@ -54,30 +53,6 @@ var gioiTinh = [
   { label: "Nữ", value: 'false' },
 ];
 
-function renderActionByStatus() {
-  const actionEl = document.getElementById("report_form_action");
-  const buildButton = (label, type, icon) => {
-    const btnEl = document.createElement("base-button");
-    btnEl.setAttribute("label", label);
-    btnEl.setAttribute("type", type);
-    btnEl.setAttribute("icon", icon);
-    return btnEl;
-  };
-  const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
-
-
-  excelBtn.addEventListener("click", () => {
-    handleExportExcel();
-  });
-
-  pdfBtn.addEventListener("click", () => {
-    handleExportPDF();
-  });
-
-  actionEl.append(pdfBtn, excelBtn);
-
-}
 // _____________________________________excel_________________________________________________________
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
@@ -86,7 +61,7 @@ async function handleExportExcel() {
   params.append('searchRulesNgayThang', formValue.searchRulesNgayThang );
   params.append('FromDate', formValue.FromDate || '');
   params.append('ToDate', formValue.ToDate || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('GioiTinh', formValue.GioiTinh || '');
   params.append('PhongBan', formValue.PhongBan || '');
   params.append('QueQuan', formValue.QueQuan || '');
 
@@ -130,7 +105,7 @@ async function handleExportPDF() {
   params.append('searchRulesNgayThang', formValue.searchRulesNgayThang || 'Năm sinh');
   params.append('FromDate', formValue.FromDate || '');
   params.append('ToDate', formValue.ToDate || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('GioiTinh', formValue.GioiTinh || '');
   params.append('PhongBan', formValue.PhongBan || '');
   params.append('QueQuan', formValue.QueQuan || '');
 
@@ -167,9 +142,7 @@ function createDownloadLinkPDF(blob) {
 // _______________________________________________________________________________________________________
 async function handleSearch() {
   try {
-    const formValue = getFormValues("report_form");
-    console.log("Form: ", formValue);
-    
+    const formValue = getFormValues("report_form");    
     const tableReport = document.getElementById("tableReport");
     
     // Khởi tạo đối tượng params
@@ -182,13 +155,14 @@ async function handleSearch() {
       searchRulesDiaChi: formValue.searchRulesDiaChi,
       QueQuan: formValue.QueQuan || ""
     };
-
+   
     // Giả sử handleCallFetchData là một hàm không đồng bộ
     await tableReport.handleCallFetchData(params);
-    console.log("params: ", params);
+     
   } catch (error) {
     console.error("Error in handleSearch:", error);
   }
+  
 }
 
 function phongBanChange() {
@@ -248,9 +222,7 @@ function dateChange(){
 function buildApiUrl() {
   return apiTable;
 }
-
-
-function init(){
+function inits(){
   phongBanChange()
   gioiTinhChange()
   queQuanSelectChange()
@@ -260,8 +232,7 @@ function init(){
   toChange()
 }
 document.addEventListener("DOMContentLoaded", () => {
-  renderActionByStatus();
   handleSearch();
-  init();
+  inits();
 
 });
