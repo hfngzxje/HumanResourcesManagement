@@ -10,9 +10,8 @@ var TableColumns = [
   },
   {
     label: "Ngày sinh",
-    key: "ngaysinh",
-    type: "datetime",
-  },
+    key: "ngaysinh"
+    },
   {
     label: "Giới tính",
     key: "gioitinh",
@@ -124,9 +123,13 @@ function renderActionByStatus() {
     handleSearch();
   });
 
-  // removeBtn.addEventListener('click', handleRemove)
-  // saveBtn.addEventListener('click', handleSave)
-  // createBtn.addEventListener('click', handleCreate)
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
+  });
+
+  // pdfBtn.addEventListener("click", () => {
+  //   handleExportPDF();
+  // });
 
   actionEl.append(DisplayBtn, pdfBtn, excelBtn);
 
@@ -135,8 +138,97 @@ function renderActionByStatus() {
   });
 }
 
-function handleSearch() {
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('searchRules', formValue.searchRules || 'Tất cả');
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
+  params.append('NamTuoiDang', formValue.NamTuoiDang || '');
   
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToExecl', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachDangVien.xlsx'; 
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+// async function handleExportPDF() {
+//   const formValue = getFormValues("report_form");
+//   const params = new FormData();
+//   params.append('searchRules', formValue.searchRules || 'Tất cả');
+//   params.append('FromDate', formValue.FromDate || '');
+//   params.append('ToDate', formValue.ToDate || '');
+//   params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+//   params.append('PhongBan', formValue.PhongBan || '');
+//   params.append('QueQuan', formValue.QueQuan || '');
+// params.append('NamTuoiDang', formValue.NamTuoiDang || '');
+
+//   try {
+//     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+//       method: 'POST',
+//       body: params,
+//       headers: {
+//         'accept': '*/*',
+//       }
+//     });
+
+//     if (response.ok) {
+//       const blob = await response.blob();
+//       createDownloadLinkPDF(blob);
+//     } else {
+//       console.error('Export failed:', response.statusText);
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// }
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhanVien.pdf'; 
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+
+
+function handleSearch() {
   const formValue = getFormValues("report_form");
   console.log("Form: " , formValue)
   const tableReport = document.getElementById("tableReport");

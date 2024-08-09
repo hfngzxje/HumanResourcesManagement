@@ -4,9 +4,6 @@ var logout = document.getElementById("logOut");
 function handleLogOut() {
     var MaNhanVien = localStorage.getItem("maNhanVien");
     var vaiTroID = localStorage.getItem("vaiTroID")
-    console.log("Trước khi đăng xuất:");
-    console.log("Mã Nhân Viên: ", MaNhanVien);
-    console.log("Vai trò ID: ", vaiTroID);
     const isConfirm = confirm('Bạn chắc chắn muốn đăng xuất?')
     if (!isConfirm) return
     setLoading(true)
@@ -19,15 +16,8 @@ function handleLogOut() {
             localStorage.removeItem("maNhanVien");
             localStorage.removeItem("vaiTroID");
             localStorage.removeItem("maDetail");
-
-
             MaNhanVien = localStorage.getItem("maNhanVien");
             vaiTroID = localStorage.getItem("vaiTroID");
-
-            console.log("Sau khi đăng xuất:");
-            console.log("Mã Nhân Viên: ", MaNhanVien); 
-            console.log("Vai trò ID: ", vaiTroID);
-
             window.location.href = '/pages/authentic/login.html';
 
         },
@@ -53,7 +43,6 @@ function handleLogOut() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log(logout)
     if (logout) {
         logout.addEventListener('click', handleLogOut);
     }

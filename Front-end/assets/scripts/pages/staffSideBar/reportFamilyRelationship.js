@@ -1,60 +1,60 @@
 const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNguoiThan";
 var TableColumns = [
-    {
-        label: 'Họ tên',
-        key: 'ten',
-   
-    },
-    {
-        label: 'Giới tính',
-        key: 'gioiTinh',
-        type:'gender'
-    },
-    {
-        label: 'Ngày sinh',
-        key: 'ngaysinh',
-        type:'datetime'
-    },
-    {
-        label: 'Quan hệ',
-        key: 'quanHe'
-    },
-    {
-        label: 'Nghề nghiệp',
-        key: 'ngheNghiep'
-    },
-    {
-        label: 'Quan hệ',
-        key: 'quanHe',
-    },
-    {
-        label: 'Địa chỉ',
-        key: 'diaChi'
-    },
-    {
-        label: 'Điện thoại',
-        key: 'dienThoai'
-    },
-    {
-        label: 'Nhân viên tham chiếu',
-        key: 'tenNV'
-    }
-    ,
-    {
-        label: 'Ghi chú',
-        key: 'khac'
-    }
+  {
+    label: 'Họ tên',
+    key: 'ten',
+
+  },
+  {
+    label: 'Giới tính',
+    key: 'gioiTinh',
+    // type:'gender'
+  },
+  {
+    label: 'Ngày sinh',
+    key: 'ngaysinh',
+    type: 'datetime'
+  },
+  {
+    label: 'Quan hệ',
+    key: 'quanHe'
+  },
+  {
+    label: 'Nghề nghiệp',
+    key: 'ngheNghiep'
+  },
+  {
+    label: 'Quan hệ',
+    key: 'quanHe',
+  },
+  {
+    label: 'Địa chỉ',
+    key: 'diaChi'
+  },
+  {
+    label: 'Điện thoại',
+    key: 'dienThoai'
+  },
+  {
+    label: 'Nhân viên tham chiếu',
+    key: 'tenNV'
+  }
+  ,
+  {
+    label: 'Ghi chú',
+    key: 'khac'
+  }
 ]
 var locTheo = [
-    { label: "Tất cả", value: 'Tất cả' },
-    { label: "Mã nhân viên", value: 'Mã nhân viên' },
-    { label: 'Quan hệ', value: 'Quan hệ' },
-    { label: 'Tuổi', value: 'Tuổi' },
-    { label: 'Giới tính', value: 'Giới tính' },
-    { label: 'Phòng ban', value: 'Phòng ban' },
+  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Mã nhân viên", value: 'Mã nhân viên' },
+  { label: 'Quan hệ', value: 'Quan hệ' },
+  { label: 'Tuổi', value: 'Tuổi' },
+  { label: 'Giới tính', value: 'Giới tính' },
+  { label: 'Phòng ban', value: 'Phòng ban' },
 ];
 var gioiTinh = [
-  // { label: "Tất cả", value: 'Tất cả' },
+  { label: "Tất cả", value: 'Tất cả' },
   { label: "Nam", value: 'true' },
   { label: "Nữ", value: 'false' },
 ];
@@ -110,7 +110,9 @@ function renderActionByStatus() {
   DisplayBtn.addEventListener("click", () => {
     handleSearch();
   });
-
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
+  });
 
   actionEl.append(DisplayBtn, pdfBtn, excelBtn);
 
@@ -119,10 +121,95 @@ function renderActionByStatus() {
   });
 }
 
-function handleSearch() {
-  
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
   const formValue = getFormValues("report_form");
-  console.log("Form: " , formValue)
+  const params = new FormData();
+  params.append('MaNV', formValue.MaNV || '');
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('PhongBan', formValue.PhongBan || '');
+
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNguoiThan.xlsx';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+// async function handleExportPDF() {
+// params.append('MaNV', formValue.MaNV || '');
+// params.append('QuanHe', formValue.QuanHe || '');
+// params.append('TuoiTu', formValue.TuoiTu || '');
+// params.append('TuoiDen', formValue.TuoiDen || '');
+// params.append('PhongBan', formValue.PhongBan || '');
+
+//   try {
+//     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+//       method: 'POST',
+//       body: params,
+//       headers: {
+//         'accept': '*/*',
+//       }
+//     });
+
+//     if (response.ok) {
+//       const blob = await response.blob();
+//       createDownloadLinkPDF(blob);
+//     } else {
+//       console.error('Export failed:', response.statusText);
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// }
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNguoiThan.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+
+
+
+function handleSearch() {
+  const formValue = getFormValues("report_form");
+  console.log("Form: ", formValue)
   const tableReport = document.getElementById("tableReport");
   if (formValue.searchRules === "Tất cả") {
     tableReport.handleCallFetchData(formValue);
@@ -131,10 +218,10 @@ function handleSearch() {
   const params = {
     // searchRules:"tát cả",
     GioiTinh: "true",
-    MaNV:"",
+    MaNV: "",
     QuanHe: "",
     TuoiTu: "",
-    TuoiDen:"",
+    TuoiDen: "",
     PhongBan: ""
   };
   if (formValue.searchRules === "Mã nhân viên") {
@@ -156,7 +243,7 @@ function handleSearch() {
 
   tableReport.handleCallFetchData(params);
 
-  console.log("Param: " , params)
+  console.log("Param: ", params)
 }
 
 function buildApiUrl() {
@@ -192,27 +279,27 @@ function handleSelectFilterBy() {
     gioiTinhEl.disabled = true;
     phongBanEl.disabled = true;
 
-    
+
     if (locTheoValue === "Mã nhân viên") {
       maEl.disabled = false;
-      gioiTinhEl.value= "Tất cả"
+      gioiTinhEl.value = "Tất cả"
     }
     if (locTheoValue === "Quan hệ") {
       quanHeEl.disabled = false;
-      gioiTinhEl.value= "Tất cả"
+      gioiTinhEl.value = "Tất cả"
     }
     if (locTheoValue === "Tuổi") {
-        tuoiTuEl.disabled = false;
-        tuoiDenEl.disabled = false
-        gioiTinhEl.value= "Tất cả"
-      }
+      tuoiTuEl.disabled = false;
+      tuoiDenEl.disabled = false
+      gioiTinhEl.value = "Tất cả"
+    }
     if (locTheoValue === "Giới tính") {
       gioiTinhEl.disabled = false;
     }
     if (locTheoValue === "Phòng ban") {
-        phongBanEl.disabled = false;
-        gioiTinhEl.value= "Tất cả"
-      }
+      phongBanEl.disabled = false;
+      gioiTinhEl.value = "Tất cả"
+    }
   });
 }
 

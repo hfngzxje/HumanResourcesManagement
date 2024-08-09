@@ -5,8 +5,12 @@ const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idNhomLuong = null
+var oldValue = null
+var oldChucDanh = null
+var oldBacLuong = null
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -19,6 +23,12 @@ var MaritalOptions = [
 ]
 
 var TableColumns = [
+    {
+        label: 'Nhóm lương',
+        key: 'nhomluong',
+        type: 'disabled'
+    }
+    ,
     {
         label: 'Nhóm ngạch nhân viên',
         key: 'chucdanh'
@@ -35,7 +45,8 @@ var TableColumns = [
     },
     {
         label: 'Lương cơ bản',
-        key: 'luongcoban'
+        key: 'luongcoban',
+        type:'curency'
     }
     ,
     {
@@ -49,7 +60,7 @@ var TableColumns = [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
-                    fetchNhomLuong(row.id)
+                    fetchNhomLuong(row.nhomluong)
                     showPopup()
                 }
             }
@@ -61,7 +72,7 @@ var tableEvent = {
     
     rowDoubleClick: (row) => {
         isPopupEdit = true
-        fetchNhomLuong(row.id)
+        fetchNhomLuong(row.nhomluong)
         showPopup()
         console.log('row double click ',row);
     }
@@ -71,26 +82,81 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-function fetchNhomLuong(id) {
-    console.log("Name:", id);
+function recordActivityAdmin(actor, action){
     setLoading(true)
-    idNhomLuong = id
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
-        method: 'GET',
-        success: function (data) {
-            // setFormValue('editNhomLuong', data, 'fetch');
-            setFormValue('editNhomLuong', data)
+    setLoading(true);
 
-        },
-        error: (err) => {
-            console.log('fetchDepartments err :: ', err);
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
+    const payload = {
+        createdBy: actor,
+        action: action,
+    };
+  
+        $.ajax({
+            url: 'https://localhost:7141/api/LichSuHoatDong',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('Lịch sử hoạt động đã được lưu:');
+            },
+            error: (err) => {
+                console.log('Lỗi khi lưu lịch sử hoạt động:', err);
+                try {
+                    if (!err.responseJSON) {
+                        alert(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    alert(message)
+                } catch (error) {
+                    alert("Lưu lịch sử hoạt động không thành công!");
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
 }
+async function getChucDanhByID(idChucDanh) {
+    try {
+        const chucDanh = await $.ajax({
+            url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + idChucDanh,
+            method: 'GET',
+            contentType: 'application/json'
+        });
+        // oldChucDanh = chucDanh.ten; 
+        return chucDanh.ten;
+    } catch (error) {
+        console.log("Error");
+    }
+}
+async function fetchNhomLuong(id) {
+    console.log("Name:", id);
+    setLoading(true);
+    idNhomLuong = id;
+    let idChucDanh = null;
+
+    try {
+        const data = await $.ajax({
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
+            method: 'GET',
+            contentType: 'application/json'
+        });
+        oldBacLuong = data.bacluong
+        idChucDanh = data.chucdanh;
+        oldChucDanh = await  getChucDanhByID(idChucDanh); // Chờ đợi kết quả từ getChucDanhByID
+        // alert(oldChucDanh);
+        setFormValue('editNhomLuong', data);
+    } catch (err) {
+        console.log('fetchDepartments err :: ', err);
+    } finally {
+        setLoading(false);
+    }
+}
+   
+
 function handleCreate() {
     const isConfirm = confirm('Bạn chắc chắn muốn tạo nhóm lương?')
     if (!isConfirm) return
@@ -109,6 +175,7 @@ function handleCreate() {
             success: function (data) {
                 console.log('fetch Nhóm Lương res :: ', data);
                 alert("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Chức danh=${formValue.chucdanh}, Bậc lương=${formValue.bacluong}`)
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -146,6 +213,7 @@ function handleRemoveRow() {
             method: 'DELETE',
             success: function (data) {
                 alert("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -164,7 +232,7 @@ function handleSave() {
     if (!isConfirm) return
     const valid = validateForm('editNhomLuong')
     if (!valid) return
-    const formValue = getFormValues('editTonGiao')
+    const formValue = getFormValues('editNhomLuong')
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -175,6 +243,7 @@ function handleSave() {
             data: JSON.stringify(payload),
             success: function (data) {
                 alert('Lưu Thành Công!');
+                recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -245,38 +314,38 @@ function closePopup(){
     var modal = document.getElementById("editNhomLuong");
     modal.style.display="none"
 }
-function renderActionByStatus() {
-    const actionEl = document.getElementById('salary_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
+// function renderActionByStatus() {
+//     const actionEl = document.getElementById('salary_form_action')
+//     const buildButton = (label, type, icon) => {
+//         const btnEl = document.createElement('base-button')
+//         btnEl.setAttribute('label', label)
+//         btnEl.setAttribute('type', type)
+//         btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+//         return btnEl
+//     }
+//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
 
 
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
+//     createBtn.addEventListener('click', function () {
+//         isPopupEdit = false
+//         showPopup()
+//     });
 
-    actionEl.append(createBtn)
+//     actionEl.append(createBtn)
 
-}
+// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
-    // popupSaveBtn.addEventListener("click", () => {
-    //     console.log('save click');
-    //     handleSave()
-    // })
+    // renderActionByStatus()
+    popupSaveBtn.addEventListener("click", () => {
+        console.log('save click');
+        handleSave()
+    })
     popupCreateBtn.addEventListener("click", handleCreate)
-    // popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    // popupClearBtn.addEventListener("click", clearFormValues)
+    popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    popupClearBtn.addEventListener("click", clearFormValues)
 })

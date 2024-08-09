@@ -2,38 +2,17 @@
 <html lang="en">
 
 <head>
-    <title>Tổng quan | Quản trị Admin</title>
+    <title>Sơ yếu lý lịch | Nhân viên</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Main CSS-->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <!-- Font-icon css-->
     <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
-    <style>
-        @media (max-width: 768px) {
-            #tabList {
-                display: none;
-            }
-
-            #tabDropdown {
-                display: block;
-            }
-        }
-
-        @media (min-width: 769px) {
-            #tabList {
-                display: flex;
-            }
-
-            #tabDropdown {
-                display: none;
-            }
-        }
-    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -43,10 +22,6 @@
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <layout-sidebar></layout-sidebar>
     <main class="app-content">
-        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
-            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
-            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="app-title">
@@ -63,7 +38,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="tile">
-                            <h3 class="tile-title">Thông tin nhân viên</h3>
+                            <h3 class="tile-title">Sơ yếu lý lịch</h3>
                             <div>
                                 <form id="a">
                                     <div class="col-span-1 h-[300px]">
@@ -317,10 +292,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
     <script src="../../assets/scripts/common/transform.js"></script>
     <script src="../../assets/scripts/common/loading.js"></script>
-    <script src="../../assets/scripts/pages/staff/common.js"></script>
+    <!-- <script src="../../assets/scripts/pages/staff/common.js"></script> -->
     <script src="../../assets/scripts/common/formHanlde.js"></script>
-    <script src="../../assets/scripts/pages/staff/resume.js"></script>
-    <script src="/assets/scripts/common/registerComponent.js"></script>
+    <script src="../../assets/scripts/pages/employee/resume.js"></script>
+    <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
     <script src="/assets/scripts/common/dateTime.js"></script>

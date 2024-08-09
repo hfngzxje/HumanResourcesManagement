@@ -53,18 +53,8 @@ var TableColumns = [
         formatter: (giatri) => giatri + ' năm'
     },
     {
-        label: 'Ngày Hiệu Lực',
-        key: 'ngayhieuluc',
-        type: 'datetime'
-    },
-    {
-        label: 'Ngày Kết Thúc',
-        key: 'ngayketthuc',
-        type: 'datetime'
-    },
-    {
-        label: 'Ghi chú',
-        key: 'ghichu'
+        label: 'Trạng thái',
+        key: 'trangthai'
     },
     {
         label: 'Hành động',
@@ -73,8 +63,9 @@ var TableColumns = [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
-                    fetchSalaryToEdit(row.id)
                     showPopup()
+                    fetchSalaryToEdit(row.id)
+                    
                 }
             }
         ]
@@ -93,12 +84,12 @@ function buildPayload(formValue) {
 
     return formClone
 }
-function showPopup() {
+async function showPopup() {
     var modal = document.getElementById("editSalaryRecord");
-    apiDanhSachHopDongPopUp()
-    handleBacLuongPopUp()
-    handleBacLuongPopUp()
-    handlePhuCapKhacPop()
+    await apiDanhSachHopDongPopUp()
+    await handleBacLuongPopUp()
+    await handleBacLuongPopUp()
+    await handlePhuCapKhacPop()
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
@@ -112,17 +103,18 @@ function closePopup() {
     var modal = document.getElementById("editSalaryRecord");
     modal.style.display = "none"
 }
-function fetchSalaryToEdit(id) {
+async function fetchSalaryToEdit(id) {
     setLoading(true)
     idLuongHienTai = id
-    $.ajax({
+   await $.ajax({
 
         url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editSalaryRecord', data)
-            // document.querySelector('#luongCoBanPop input').value = formatCurrency(document.querySelector('#luongCoBanPop input').value)
-            // document.querySelector('#phuCapPop input').value = formatCurrency(document.querySelector('#phuCapPop input').value)
+            document.querySelector('#tongLuongPop input').value = formatCurrency(data.tongluong)
+            document.querySelector('#phuCapPop input').value = formatCurrency(data.phucaptrachnhiem)
+            document.querySelector('#phuCapKhacPop input').value = formatCurrency(data.phucapkhac)
 
         },
         error: (err) => {
@@ -231,6 +223,11 @@ function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
     if (!isConfirm) return
     const formValue = getFormValues('editSalaryRecord')
+    formValue['tongluong'] = parseCurrency(formValue['tongluong'])
+    formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
+    formValue['phucapkhac'] = parseCurrency(formValue['phucapkhac'])
+
+    alert(formValue['tongluong'])
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -270,7 +267,7 @@ function handleSave() {
 
 function clearFormValues(formId) {
     const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
+    const inputs = form.querySelectorAll('input, textarea,select');
 
     inputs.forEach(input => {
         if (input.type === 'checkbox') {
@@ -336,7 +333,7 @@ function handleBacLuong() {
         const thongTinLuong = danhSachluongCoBanHeSo.find(item => item.bacluong == event.target.value)
         setGiaTriLuong(thongTinLuong.luongcoban)
         setGiaTriHeSo(thongTinLuong.hesoluong)
-
+        setGiaTriNhomLuong(thongTinLuong.nhomluong)
         luongCoBan = thongTinLuong.luongcoban
         heSo = thongTinLuong.hesoluong
 
@@ -358,7 +355,7 @@ function handleBacLuongPopUp() {
         const thongTinLuong = danhSachluongCoBanHeSoPop.find(item => item.bacluong == event.target.value)
         setGiaTriLuongPopUp(thongTinLuong.luongcoban)
         setGiaTriHeSoPopUp(thongTinLuong.hesoluong)
-
+        setGiaTriNhomLuongPopUp(thongTinLuong.nhomluong)
         luongCoBanPop = thongTinLuong.luongcoban
         heSoPop = thongTinLuong.hesoluong
 
@@ -379,7 +376,8 @@ async function apiLuongHeSo() {
         if (luongCoBanHeSoDauTien) {
             setGiaTriLuong(luongCoBanHeSoDauTien.luongcoban)
             setGiaTriHeSo(luongCoBanHeSoDauTien.hesoluong)
-
+            setGiaTriNhomLuong(luongCoBanHeSoDauTien.nhomluong)
+            // alert("Nhom luong: ", nhomluongId)
             tinhLuong(luongCoBanHeSoDauTien.luongcoban, luongCoBanHeSoDauTien.hesoluong, phuCapInput, phuCapKhacInput)
         }
     } catch (error) {
@@ -400,6 +398,7 @@ async function apiLuongHeSoPopUp() {
         if (luongCoBanHeSoDauTien) {
             setGiaTriLuongPopUp(luongCoBanHeSoDauTien.luongcoban)
             setGiaTriHeSoPopUp(luongCoBanHeSoDauTien.hesoluong)
+            setGiaTriNhomLuongPopUp(luongCoBanHeSoDauTien.nhomluong)
 
             // tinhLuong(luongCoBanHeSoDauTien.luongcoban, luongCoBanHeSoDauTien.hesoluong, phuCapInput, phuCapKhacInput)
         }
@@ -415,6 +414,14 @@ function setGiaTriLuong(value) {
 function setGiaTriHeSo(valueHeSo) {
     const heSo = document.querySelector('#hesoluong input')
     heSo.value = valueHeSo
+}
+function setGiaTriNhomLuong(valueNhomLuong){
+    const nhomluong = document.querySelector('#nhomluong input')
+    nhomluong.value = valueNhomLuong
+}
+function setGiaTriNhomLuongPopUp(valueNhomLuong){
+    const nhomluong = document.querySelector('#nhomluongPop input')
+    nhomluong.value = valueNhomLuong
 }
 function setGiaTriLuongPopUp(value) {
     const luongCoBan = document.querySelector('#luongCoBanPop input')
@@ -459,7 +466,7 @@ async function apiDanhSachHopDongPopUp() {
             contentType: 'application/json',
         });
         danhSachMaHopDongPop = hopDong
-        const hopDongDautien = hopDong[0]
+        // const hopDongDautien = hopDong[0]
         datGiaTriMacDinhNgachNVPopUp(document.querySelector('#maHopDongPop select').value)
         maHopDongDauTienPop = hopDong.maHopDong
     } catch (error) {

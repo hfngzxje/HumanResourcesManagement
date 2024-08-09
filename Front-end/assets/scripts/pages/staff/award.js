@@ -4,11 +4,6 @@ const maDetail = localStorage.getItem("maDetail")
 const table = document.querySelectorAll('base-table')
 
 let maHopDongHienTai = null
-
-// var MaritalOptions = [
-//     { label: 'Khen Thưởng', value: 1 }
-// ];
-
 var TableColumns = [
     {
         label: 'Tên',
@@ -57,9 +52,7 @@ function handleCreate() {
 
     
     formValue['ma'] = maDetail;
-
-    console.log('formValue ', formValue);
-    formValue['khenthuongkiluat'] = '2'
+    formValue['khenthuongkiluat'] = '1'
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {

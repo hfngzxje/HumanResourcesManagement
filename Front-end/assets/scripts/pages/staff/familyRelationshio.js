@@ -53,6 +53,7 @@ var TableColumns = [
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
                     fetchRelationship(row.id);
+                    alert(row.id)
                     showPopup()
                 }
             }
@@ -259,29 +260,7 @@ function renderActionByStatus() {
 function buildApiUrl() {
     return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
-
-function getNameQuanHe() {
-
-    $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan',
-        method: 'GET',
-        success: function (data) {
-            relationshipOptions = data;
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-        }
-    });
-}
-
-getNameQuanHe()
-
-
 document.addEventListener('DOMContentLoaded', () => {
-    // if (vaiTroID !== "1") {
-    //     window.location.href = "/pages/error.html";
-    //     return;
-    // }
     renderActionByStatus();
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupUpdatebtn.addEventListener("click", handleSave)

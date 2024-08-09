@@ -2,7 +2,7 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
+// const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 
 let idKhenThuong = null
@@ -11,7 +11,8 @@ var oldValue = null;
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
     },
     {
         label: 'Tên ',
@@ -39,7 +40,6 @@ var tableEvent = {
 
         fetchKhenThuong(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -78,7 +78,6 @@ function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('editKhenThuong')
 
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -88,7 +87,6 @@ function handleCreate() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert("Thêm thành công !")
                 closePopup()
                 clearFormValues()
@@ -125,14 +123,12 @@ function handleRemoveRow() {
             url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert("Xóa thành công !")
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
-                console.log('fetchKhenThuong err :: ', err);
                 alert("Xóa thất bại!")
             },
             complete: () => {
@@ -157,7 +153,6 @@ function handleSave() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
                 alert('Lưu Thành Công!');
                 closePopup()
                 clearFormValues()
@@ -198,23 +193,23 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('award_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
+// function renderActionByStatus() {
+//     const actionEl = document.getElementById('award_form_action')
+//     const buildButton = (label, type, icon) => {
+//         const btnEl = document.createElement('base-button')
+//         btnEl.setAttribute('label', label)
+//         btnEl.setAttribute('type', type)
+//         btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-    actionEl.append(createBtn)
-}
+//         return btnEl
+//     }
+//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+//     createBtn.addEventListener('click', function () {
+//         isPopupEdit = false
+//         showPopup()
+//     });
+//     actionEl.append(createBtn)
+// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
@@ -229,9 +224,6 @@ function showPopup() {
             setFormValue('editKhenThuong', { ten: "" })
         }
     }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Khen Thưởng - Kỷ Luật"
@@ -239,26 +231,23 @@ function showPopup() {
         popupSaveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
+        // popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Khen Thưởng - Kỷ Luật"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
+        // popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
     const formValue = getFormValues('editKhenThuong');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
         popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
     } else {
         popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -266,14 +255,13 @@ function closePopup() {
     modal.style.display = "none"
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    // renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    // popupClearBtn.addEventListener("click", clearFormValues)
     const inputTenKhenThuong = document.querySelector('base-input[name="ten"]');
     if (inputTenKhenThuong) {
         inputTenKhenThuong.addEventListener('input', checkValues);

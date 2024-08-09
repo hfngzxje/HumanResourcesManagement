@@ -184,7 +184,8 @@ class BaseInput extends HTMLElement {
     "required",
     "type",
     "value",
-    "readonly"
+    "readonly",
+    "disabled"
   ];
 
   connectedCallback() {
@@ -195,6 +196,7 @@ class BaseInput extends HTMLElement {
     const type = this.getAttribute("type") || "text";
     const disabled = this.getAttribute("disabled") !== null;
     this._readonly = this.hasAttribute("readonly");
+    
 
     this.innerHTML = `
     <div>
@@ -382,7 +384,8 @@ class BaseSelect extends HTMLElement {
     "keyValue",
     "keyLabel",
     "required",
-    "disabled"
+    "disabled",
+    "includeAll" // Thêm thuộc tính mới
   ];
 
   connectedCallback() {
@@ -394,54 +397,71 @@ class BaseSelect extends HTMLElement {
     const keyLabel = this.getAttribute("keyLabel") || "label";
     const required = this.getAttribute("required");
     const disabled = this.getAttribute("disabled") !== null;
+    const includeAll = this.getAttribute("includeAll") !== null; // Kiểm tra thuộc tính mới
 
-    function getApiUrl() {
+    const getApiUrl = () => {
       if (!window[api]) return api;
       return window[api]();
-    }
-    const renderOption = () =>{
-      this.querySelector('select').innerHTML = ""
-      if (!!api) {
-        $.ajax({
-          url: getApiUrl(),
-          method: "GET",
-          success: (data) => {
-            data.forEach((item) => {
-              const option = document.createElement("option");
-              option.value = item[keyValue];
-              option.innerText = item[keyLabel];
-              this.querySelector("select").append(option);
-            });
-          },
-          error: (err) => {
-            console.log("Base select api err :: ", err);
-          },
-        });
-        return;
-      }
-      const options = window[optionsKey] || [];
-      options.forEach(({ value, label }) => {
-        const option = document.createElement("option");
-        option.value = value;
-        option.innerText = label;
-        this.querySelector("select").append(option);
-      });
-    }
-    this.renderOption = renderOption
+    };
 
-    document.addEventListener("DOMContentLoaded", () => {
-      renderOption()
-    });
+    const renderOption = () => {
+      const selectElement = this.querySelector('select');
+      selectElement.innerHTML = "";
+  
+      if (includeAll) {
+          const allOption = document.createElement("option");
+          allOption.value = '';
+          allOption.innerText = 'Tất Cả';
+          selectElement.append(allOption);
+      }
+  
+      if (api) {
+          $.ajax({
+              url: getApiUrl(),
+              method: "GET",
+              success: (data) => {
+                  data.forEach((item) => {
+                      const option = document.createElement("option");
+                      option.value = item[keyValue];
+                      option.innerText = item[keyLabel];
+                      selectElement.append(option);
+                  });
+              },
+              error: (err) => {
+                  console.log("Base select api err :: ", err);
+              },
+          });
+          return;
+      }
+  
+      // Ensure options is an array
+      const options = Array.isArray(window[optionsKey]) ? window[optionsKey] : [];
+      options.forEach(({ value, label }) => {
+          const option = document.createElement("option");
+          option.value = value;
+          option.innerText = label;
+          selectElement.append(option);
+      });
+  };
+  
+  this.renderOption = renderOption;
+  
+  document.addEventListener("DOMContentLoaded", () => {
+      renderOption();
+  });
+  
 
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
-      <label class="block mb-2 text-sm  text-gray-900">${label}</label>
-      <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+      <label class="block mb-2 text-sm text-gray-900">${label}</label>
+      <select name="${name}" ${required ? 'required' : ''} ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
       </select>
     </div>
     `;
   }
 }
+
+
 class BaseCheckbox extends HTMLElement {
   static observedAttributes = ["label", "class", "value", "name"];
 
@@ -594,6 +614,15 @@ class BaseTable extends HTMLElement {
       return `${day}-${month}-${year} `;
     }
 
+    function formatTime(dateTimeStr) {
+      const dateTime = new Date(dateTimeStr);
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+      const seconds = String(dateTime.getSeconds()).padStart(2, "0");
+  
+      return `${hours}:${minutes}:${seconds}`;
+  }
+
     function getMonth(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
       const year = dateTime.getFullYear();
@@ -622,11 +651,15 @@ class BaseTable extends HTMLElement {
       // tạo ra 1 thẻ tr mới <tr></tr>
       const headTrEl = document.createElement("tr");
       columns.forEach((col) => {
+        if (col.type === "disabled") {
+          return; // Skip adding header for disabled columns
+        }
         // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
         // tạo 1 thẻ th đại hiện cho cột
         const thEl = document.createElement("th");
         // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
         thEl.setAttribute("class", "px-6 py-3");
+        
         // <th class="px-6 py-3">Mã hợp đồng</th>
         thEl.innerText = col.label;
         // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
@@ -669,7 +702,7 @@ class BaseTable extends HTMLElement {
       function renderTable() {
         bodyEl.innerHTML = "";
         const itemsForPage = getItemsForPage(); // Các mục dữ liệu để hiện thị cho trang hiện tại
-        console.log("itemsForPage ", itemsForPage);
+        // console.log("itemsForPage ", itemsForPage);
         // lặp lần lượt dữ liệu bảng từ api
         itemsForPage.forEach((row) => {
           // row = { mahopdong: 123123, luongcoban: 12323 }
@@ -697,6 +730,10 @@ class BaseTable extends HTMLElement {
           }
           // Lặp lần lượt các thông tin cột
           columns.forEach((col) => {
+            if (col.type === "disabled") {
+              return; // Skip adding cell for disabled columns
+            }
+            
             //  Mã hợp đồng, Lương cơ bả, ...
             // tạo thẻ th
             const thEl = document.createElement("th");
@@ -732,7 +769,11 @@ class BaseTable extends HTMLElement {
               // nếu type được khai báo thì định dạng lại giá trị tương ứng
               if (col.type === "datetime") {
                 value = formatDateTime(value);
-              } else if (col.type == "month") {
+              } 
+              else if(col.type === "time"){
+                value = formatTime(value)
+              }
+              else if (col.type == "month") {
                 value = getMonth(value);
               } 
                else if (col.type === "currency") {
@@ -866,34 +907,80 @@ class BaseTable extends HTMLElement {
       }
       const handleCallFetchData = (payload) => {
         $.ajax({
-          url: getApiUrl(), // lấy ra url api của bảng = http://...
-          type: method, // phương thức
-          data: payload,
-          success: (tableData) => {
-            // tableData : dữ liệu Api bảng trả về
-
-            setTableData(tableData);
-            renderTable();
-            renderPagination();
-          },
-          error: (xhr, status, error) => {
-            const hasEmptyEl = this.querySelector("#empty-data");
-            console.log("hasEmptyEl ", hasEmptyEl);
-            if (hasEmptyEl) return;
-            // Trường hợp thất bại
-            const wrapperTable = this.querySelector("#wrapper-table");
-
-            const divEl = document.createElement("div");
-            divEl.setAttribute("id", "empty-data");
-            divEl.setAttribute(
-              "class",
-              "text-center text-gray-400 mt-5 mb-5 text-sm"
-            );
-            divEl.innerText = "Không có dữ liệu!";
-            wrapperTable.append(divEl);
-          },
+            url: getApiUrl(), // lấy ra url api của bảng = http://...
+            type: method, // phương thức
+            data: payload,
+            success: (tableData) => {
+                // Kiểm tra xem tableData có phải là một mảng không
+                if (Array.isArray(tableData)) {
+                    // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
+                    if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
+                        // Sắp xếp theo thuộc tính 'id'
+                        const sortedData = tableData.sort((a, b) => b.id - a.id);
+                        setTableData(sortedData);
+                    } else {
+                        // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
+                        setTableData(tableData);
+                    }
+    
+                    renderTable();
+                    renderPagination();
+                } else {
+                  setTableData([]);
+                  renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
+                }
+            },
+            error: (xhr, status, error) => {
+                const hasEmptyEl = document.querySelector("#empty-data");
+                if (hasEmptyEl) return;
+                
+                // Trường hợp thất bại
+                const wrapperTable = document.querySelector("#wrapper-table");
+                
+                const divEl = document.createElement("div");
+                divEl.setAttribute("id", "empty-data");
+                divEl.setAttribute(
+                    "class",
+                    "text-center text-gray-400 mt-5 mb-5 text-sm"
+                );
+                // divEl.innerText = "Không có dữ liệu!";
+                wrapperTable.append(divEl);
+            },
         });
-      };
+    };
+    
+
+    // const handleCallFetchData = (payload) => {
+    //   $.ajax({
+    //     url: getApiUrl(), // lấy ra url api của bảng = http://...
+    //     type: method, // phương thức
+    //     data: payload,
+    //     success: (tableData) => {
+    //       // tableData : dữ liệu Api bảng trả về
+
+    //       setTableData(tableData);
+    //       renderTable();
+    //       renderPagination();
+    //     },
+    //     error: (xhr, status, error) => {
+    //       const hasEmptyEl = this.querySelector("#empty-data");
+    //       console.log("hasEmptyEl ", hasEmptyEl);
+    //       if (hasEmptyEl) return;
+    //       // Trường hợp thất bại
+    //       const wrapperTable = this.querySelector("#wrapper-table");
+
+    //       const divEl = document.createElement("div");
+    //       divEl.setAttribute("id", "empty-data");
+    //       divEl.setAttribute(
+    //         "class",
+    //         "text-center text-gray-400 mt-5 mb-5 text-sm"
+    //       );
+    //       divEl.innerText = "Không có dữ liệu!";
+    //       wrapperTable.append(divEl);
+    //     },
+    //   });
+    // };
+    
       handleCallFetchData();
 
       this.handleCallFetchData = handleCallFetchData;
