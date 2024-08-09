@@ -72,18 +72,19 @@
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
-                          name="searchRules"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-select id="selectquequan" label="Địa chỉ" name="DiaChi" options="QueQuan"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 ">
                         <base-input id="quequan" label="Quê quán" name="QueQuan"></base-input>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select class="mt-3" id="phongban" label="Phòng ban" name="PhongBan" keyValue="id"
-                          keyLabel="ten" api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
+                          keyLabel="ten" api="https://localhost:7141/api/PhongBan/getAllPhongBan" includeAll></base-select>
+                      </div>
+                      <div class="col-span-2 sm:col-span-1 ">
+                        <base-input-number id="namtuoidang" label="Năm tuổi đảng"
+                          name="NamTuoiDang"></base-input-number>
+                      </div>
+                      <div class="col-span-2 sm:col-span-1 ">
+                        <base-input-number id="namvaodang" label="Năm vào đảng"
+                          name="NamVaoDang"></base-input-number>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-datepicker id="tungay" class="ml-auto" style="margin: 0; margin-top: 9px;" label="Từ ngày"
@@ -93,18 +94,10 @@
                         <base-datepicker id="denngay" class="ml-auto" style="margin: 0; margin-top: 9px;"
                           label="Đến ngày" name="ToDate" required="true"></base-datepicker>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-3">
-                        <base-select id="gioitinh" label="Giới tính" name="GioiTinh" options="gioiTinh" required="true"
-                          style="margin-top: 9px"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-3">
-                        <base-input-number id="namtuoidang" label="Năm tuổi đảng"
-                          name="NamTuoiDang"></base-input-number>
-                      </div>
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center"></div>
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
                     </div>
                   </div>
                 </div>

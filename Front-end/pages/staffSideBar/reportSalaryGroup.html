@@ -71,18 +71,16 @@
                 <div class="">
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
+                      <div class="col-span-2 sm:col-span-1 "></div>
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
-                          name="searchRules"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select id="chucdanh" label="Chức danh" name="ChucDanh" keyValue="id" keyLabel="ten"
-                          api="https://localhost:7141/api/ChucDanh/getAllChucDanh"></base-select>
+                          api="https://localhost:7141/api/ChucDanh/getAllChucDanh" includeAll></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 ">
                         <base-select id="bacluong" label="Bậc lương" name="BacLuong" options="bacLuong">
                         </base-select>
                       </div>
+                      <div class="col-span-2 sm:col-span-1 mt-2"></div>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                       <div id="report_form_action" class="flex flex-wrap mt-3 justify-center"></div>
@@ -96,7 +94,6 @@
             method="POST">
         </div>
       </div>
-
     </div>
     <div class="text-center mt-5" style="font-size: 13px">
       <p><b>Copyright
