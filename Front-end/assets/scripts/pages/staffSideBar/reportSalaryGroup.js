@@ -40,6 +40,85 @@ var bacLuong = [
 ];
 
 
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('BacLuong', formValue.BacLuong || '');
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhomLuong.xlsx';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('BacLuong', formValue.BacLuong || '');
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhomLuongToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhomLuong.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+
+
 async function handleSearch() {
   try {
     const formValue = getFormValues("report_form");
@@ -88,6 +167,9 @@ function renderActionByStatus() {
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
 
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
   actionEl.append(pdfBtn, excelBtn);
 }
 

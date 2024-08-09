@@ -745,8 +745,17 @@ class BaseTable extends HTMLElement {
               if (value === "Đã qua") {
                 thEl.style.color = "blue";
               }
-              else{
-                thEl.style.color = "red"
+              else if(value === "Hôm nay"){
+                thEl.style.color = "green";
+              }
+              else if(value === "Sắp đến"){
+                thEl.style.color = "Teal";
+              }
+              else if(value === "Trong tháng"){
+                thEl.style.color = "red";
+              }
+              else if(value === "Chưa đến"){
+                thEl.style.color = "black";
               }
             }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng

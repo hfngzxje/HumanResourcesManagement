@@ -22,8 +22,7 @@ var TableColumns = [
   },
   {
     label: "Sinh nhật",
-    key: "sinhNhat",
-    type: 'datetime'
+    key: "sinhNhat"
   },
   {
     label: "Tình trạng",

@@ -150,7 +150,7 @@ function renderActionByStatus() {
 function buildApiUrlKhenThuong() {
     
     let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
-    let string2 = '/1'
+    let string2 = '/Khen thưởng'
     return string1 + string2;
 }
 

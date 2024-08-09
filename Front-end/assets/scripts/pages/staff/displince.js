@@ -157,7 +157,7 @@ function renderActionByStatus() {
 
 function buildApiUrlKyLuat() {
     let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
-    let string2 = '/0'
+    let string2 = '/Kỷ luật'
     return string1 + string2;
 }
 

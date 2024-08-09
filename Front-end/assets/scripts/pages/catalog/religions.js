@@ -16,6 +16,10 @@ var TableColumns = [
         type: 'disabled'
     },
     {
+        label: 'Mã',
+        key: 'ma'
+    },
+    {
         label: 'Tên Tôn Giáo',
         key: 'ten'
     },

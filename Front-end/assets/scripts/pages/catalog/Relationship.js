@@ -17,6 +17,10 @@ var TableColumns = [
         type: 'disabled'
     },
     {
+        label: 'Mã',
+        key: 'ma'
+    },
+    {
         label: 'Tên',
         key: 'ten'
     },

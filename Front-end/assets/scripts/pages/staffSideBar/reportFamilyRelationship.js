@@ -73,13 +73,12 @@ function renderActionByStatus() {
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
+  params.append('GioiTinh', formValue.GioiTinh || '');
   params.append('MaNV', formValue.MaNV || '');
   params.append('QuanHe', formValue.QuanHe || '');
   params.append('TuoiTu', formValue.TuoiTu || '');
   params.append('TuoiDen', formValue.TuoiDen || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
   params.append('PhongBan', formValue.PhongBan || '');
-
 
   try {
     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
@@ -114,32 +113,35 @@ function createDownloadLinkExcel(blob) {
 // _________________________________________________________________________________________________
 
 // ____________________________________________PDF____________________________________________________
-// async function handleExportPDF() {
-// params.append('MaNV', formValue.MaNV || '');
-// params.append('QuanHe', formValue.QuanHe || '');
-// params.append('TuoiTu', formValue.TuoiTu || '');
-// params.append('TuoiDen', formValue.TuoiDen || '');
-// params.append('PhongBan', formValue.PhongBan || '');
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('MaNV', formValue.MaNV || '');
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('PhongBan', formValue.PhongBan || '');
 
-//   try {
-//     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
-//       method: 'POST',
-//       body: params,
-//       headers: {
-//         'accept': '*/*',
-//       }
-//     });
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
 
-//     if (response.ok) {
-//       const blob = await response.blob();
-//       createDownloadLinkPDF(blob);
-//     } else {
-//       console.error('Export failed:', response.statusText);
-//     }
-//   } catch (error) {
-//     console.error('Error:', error);
-//   }
-// }
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 function createDownloadLinkPDF(blob) {
   const url = window.URL.createObjectURL(blob);
@@ -162,7 +164,6 @@ async function handleSearch() {
     const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
     const params = {
-      // searchRules:"tát cả",
       GioiTinh: formValue.GioiTinh || "",
       MaNV: formValue.MaNV || "",
       QuanHe: formValue.QuanHe || "",

@@ -26,7 +26,7 @@ var TableColumns = [
     key: "ngayVaoDang"
   },
   {
-    label: "Ngày vào đảng chính thức",
+    label: "Ngày chính thức",
     key: "ngayVaoDangChinhThuc"
   },
   {
@@ -36,15 +36,7 @@ var TableColumns = [
   {
     label: "Quê quán",
     key: "queQuan",
-  },
-  {
-    label: "Thường trú",
-    key: "thuongTru",
-  },
-  {
-    label: "Tạm trú",
-    key: "tamTru",
-  },
+  }
 ];
 
 function renderActionByStatus() {
@@ -75,14 +67,12 @@ function renderActionByStatus() {
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('searchRules', formValue.searchRules || 'Tất cả');
-  params.append('FromDate', formValue.FromDate || '');
   params.append('ToDate', formValue.ToDate || '');
-  params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
+  params.append('FromDate', formValue.FromDate || '');
   params.append('PhongBan', formValue.PhongBan || '');
   params.append('QueQuan', formValue.QueQuan || '');
   params.append('NamTuoiDang', formValue.NamTuoiDang || '');
-
+  params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToExecl', {
@@ -117,42 +107,41 @@ function createDownloadLinkExcel(blob) {
 // _________________________________________________________________________________________________
 
 // ____________________________________________PDF____________________________________________________
-// async function handleExportPDF() {
-//   const formValue = getFormValues("report_form");
-//   const params = new FormData();
-//   params.append('searchRules', formValue.searchRules || 'Tất cả');
-//   params.append('FromDate', formValue.FromDate || '');
-//   params.append('ToDate', formValue.ToDate || '');
-//   params.append('GioiTinh', formValue.GioiTinh || 'Tất cả');
-//   params.append('PhongBan', formValue.PhongBan || '');
-//   params.append('QueQuan', formValue.QueQuan || '');
-// params.append('NamTuoiDang', formValue.NamTuoiDang || '');
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
+  params.append('NamTuoiDang', formValue.NamTuoiDang || '');
+  params.append('NamVaoDang', formValue.NamVaoDang || '');
 
-//   try {
-//     const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
-//       method: 'POST',
-//       body: params,
-//       headers: {
-//         'accept': '*/*',
-//       }
-//     });
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
 
-//     if (response.ok) {
-//       const blob = await response.blob();
-//       createDownloadLinkPDF(blob);
-//     } else {
-//       console.error('Export failed:', response.statusText);
-//     }
-//   } catch (error) {
-//     console.error('Error:', error);
-//   }
-// }
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 function createDownloadLinkPDF(blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'BaoCao_DanhSachNhanVien.pdf';
+  link.download = 'BaoCao_DanhSachDangVien.pdf';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

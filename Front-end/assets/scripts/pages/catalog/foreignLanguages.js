@@ -14,6 +14,10 @@ var TableColumns = [
         type: 'disabled'
     },
     {
+        label: 'Mã',
+        key: 'ma'
+    },
+    {
         label: 'Tên Ngoại Ngữ',
         key: 'ten'
     },
