@@ -49,8 +49,6 @@ function handleCreate() {
     const valid = validateForm('award_form')
     if (!valid) return
     const formValue = getFormValues('award_form')
-
-    
     formValue['ma'] = maDetail;
     formValue['khenthuongkiluat'] = '1'
     const payload = buildPayload(formValue)

@@ -1,11 +1,13 @@
 
-let idTrinhDo = null
+  let idTrinhDo = null
 let isPopupEdit = false
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
 const table = document.querySelectorAll('base-table')
 const popupRemoveTrinhDoBtn = document.getElementById("deleteBtn")
 const popupUpdateTrinhDobtn = document.getElementById("updateBtn")
+let oldTruong = null;
+let oldChuyenNganh = null;
 
 
 var TableColumns1 = [
@@ -50,7 +52,7 @@ var TableColumns1 = [
         ]
     }
 ]
-var tableEventQualification = { // global: ở đau cũng truy cập được
+var tableEventQualification = { 
     rowClick: (row) => {
         console.log('row click ', row);
         fetchTrinhDo(row.idTrinhDo)
@@ -114,6 +116,8 @@ function fetchTrinhDo(id) {
         success: function (data) {
             setFormValue('editTrinhDo', data, 'fetch');
             setFormValue('editTrinhDo', data)
+            oldTruong = data.tentruong
+            oldChuyenNganh = data.chuyennganh
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -144,6 +148,7 @@ function handleCreateTrinhDo() {
             data: JSON.stringify(payload),
             success: function (data) {
                 alert('Tạo Thành Công!');
+                recordActivityAdmin(maNhanVien, `Thêm mới trình độ nhân viên ${maDetail}: Trường_${formValue.tentruong}`);
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
@@ -182,6 +187,7 @@ function handleRemoveTrinhDo() {
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
+                recordActivityAdmin(maNhanVien, `Xóa trình độ nhân viên ${maDetail} : ${oldTruong}`);
                 closePopup("editTrinhDo")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
@@ -215,7 +221,8 @@ function handleSaveTrinhDo() {
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
-                alert('Lưu Thành Công!');
+                alert('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa trình độ nhân viên ${maDetail}: ${payload.tentruong}`);
                 closePopup("editTrinhDo")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
@@ -274,4 +281,5 @@ document.addEventListener('DOMContentLoaded', () => {
     popupUpdateTrinhDobtn.addEventListener("click", handleSaveTrinhDo)
 
 })
+
 

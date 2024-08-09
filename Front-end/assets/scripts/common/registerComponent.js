@@ -64,7 +64,7 @@ class CustomSidebar extends HTMLElement {
       </li>
       <li><a class="app-menu__item" href="/pages/employee/overview.html"><i class='app-menu__icon bx bx-user'></i><span
             class="app-menu__label">Chi tiết cá nhân </span></a></li>
-      <li><a class="app-menu__item" href="/pages/history.html"><i class='app-menu__icon bx bx-history'></i><span
+      <li><a class="app-menu__item" href="/pages/history/history.html"><i class='app-menu__icon bx bx-history'></i><span
             class="app-menu__label">Lịch sử hoạt động </span></a>
       </li>
       <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>

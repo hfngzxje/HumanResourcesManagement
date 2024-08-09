@@ -65,19 +65,6 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-
-            <div class="row element-button">
-              <div class="col-sm-2">
-
-                <a class="btn btn-add btn-sm" onclick="handleExportExcel()" type="button" title="In"><i
-                    class="fas fa-plus"></i>
-                  Xuất Excel</a>
-              </div>
-              <div class="col-sm-2">
-                <a class="btn btn-delete btn-sm pdf-file" onclick="handleExportPDF()" type="button" title="In"><i
-                    class="fas fa-file-pdf"></i> Xuất PDF</a>
-              </div>
-            </div>
             <h3 class="tile-title">Tìm kiếm nhân viên</h3>
             <div>
               <form id="report_form">
@@ -113,6 +100,9 @@
                           label="Đến ngày" name="ToDate" required="true"></base-datepicker>
                       </div>
 
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
                     </div>
                   </div>
                 </div>

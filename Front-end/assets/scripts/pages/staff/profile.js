@@ -1,5 +1,4 @@
 
-const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
 
@@ -129,8 +128,12 @@ function handleSave() {
         success: function(data) {
             if (anh) {
                 uploadImage(anh);
+                alert("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
             } else {
                 setLoading(false);
+                alert("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
                 backToListUpdate();
             }
         },
@@ -178,16 +181,6 @@ function renderActionByStatus() {
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
         return btnEl
-    }
-    if (!isEdit) {
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
-        // createBtn.addEventListener('click', handleCreate)
-        clear.addEventListener('click', function() {
-            clearFormValues('resume_form');
-        });
-        actionEl.append(createBtn,clear)
-        return
     }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')

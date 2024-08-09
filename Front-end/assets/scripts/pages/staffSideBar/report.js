@@ -231,8 +231,33 @@ function inits(){
   fromChange()
   toChange()
 }
+
+
+function renderActionByStatus() {
+  const actionEl = document.getElementById("report_form_action");
+  const buildButton = (label, type, icon) => {
+    const btnEl = document.createElement("base-button");
+    btnEl.setAttribute("label", label);
+    btnEl.setAttribute("type", type);
+    btnEl.setAttribute("icon", icon);
+    return btnEl;
+  };
+  const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
+
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
+  });
+
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
+  actionEl.append(pdfBtn, excelBtn);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  handleSearch();
-  inits();
+  renderActionByStatus()
+  handleSearch()
+  inits()
 
 });

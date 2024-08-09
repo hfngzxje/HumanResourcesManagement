@@ -8,12 +8,11 @@ var TableColumns = [
   {
     label: 'Giới tính',
     key: 'gioiTinh',
-    // type:'gender'
+    type: 'gender'
   },
   {
     label: 'Ngày sinh',
-    key: 'ngaysinh',
-    type: 'datetime'
+    key: 'ngaySinh'
   },
   {
     label: 'Quan hệ',
@@ -45,54 +44,13 @@ var TableColumns = [
     key: 'khac'
   }
 ]
-var locTheo = [
-  { label: "Tất cả", value: 'Tất cả' },
-  { label: "Mã nhân viên", value: 'Mã nhân viên' },
-  { label: 'Quan hệ', value: 'Quan hệ' },
-  { label: 'Tuổi', value: 'Tuổi' },
-  { label: 'Giới tính', value: 'Giới tính' },
-  { label: 'Phòng ban', value: 'Phòng ban' },
-];
+
 var gioiTinh = [
-  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Tất cả", value: '' },
   { label: "Nam", value: 'true' },
   { label: "Nữ", value: 'false' },
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filterSelect = document.querySelector(
-    'base-select[description="Lọc theo"]'
-  );
-  const ma = document.querySelector(
-    'base-select[description="Mã Nhân Viên"]'
-  );
-  const quanhe = document.querySelector(
-    'base-select[description="Quan hệ"]'
-  );
-  const tuoitu = document.querySelector(
-    'base-input-number[description="Tuổi từ"]'
-  );
-  const tuoiden = document.querySelector(
-    'base-input-number[description="Tuổi đến"]'
-  );
-  const gioitinh = document.querySelector(
-    'base-select[description="Giới tính"]'
-  );
-  const phongban = document.querySelector(
-    'base-select[description="Phòng ban"]'
-  );
-
-  // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
-  function toggleInputs(enabled) {
-    ma.disabled = !enabled;
-    quanhe.disabled = !enabled;
-    tuoitu.disabled = !enabled;
-    tuoiden.disabled = !enabled;
-    gioitinh.disabled = !enabled;
-    phongban.disabled = !enabled;
-  }
-  toggleInputs(filterSelect.value === "Tất cả");
-});
 
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
@@ -103,22 +61,12 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const DisplayBtn = buildButton("Tìm báo cáo", "green", "bx bx-search");
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
-
-  DisplayBtn.addEventListener("click", () => {
-    handleSearch();
-  });
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
   });
-
-  actionEl.append(DisplayBtn, pdfBtn, excelBtn);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    DisplayBtn.click();
-  });
+  actionEl.append(pdfBtn, excelBtn);
 }
 
 // _____________________________________excel_________________________________________________________
@@ -205,106 +153,87 @@ function createDownloadLinkPDF(blob) {
 }
 // _______________________________________________________________________________________________________
 
-
-
-function handleSearch() {
-  const formValue = getFormValues("report_form");
-  console.log("Form: ", formValue)
-  const tableReport = document.getElementById("tableReport");
-  if (formValue.searchRules === "Tất cả") {
-    tableReport.handleCallFetchData(formValue);
-    return;
-  }
-  const params = {
-    // searchRules:"tát cả",
-    GioiTinh: "true",
-    MaNV: "",
-    QuanHe: "",
-    TuoiTu: "",
-    TuoiDen: "",
-    PhongBan: ""
-  };
-  if (formValue.searchRules === "Mã nhân viên") {
-    params.MaNV = formValue.MaNV;
-  }
-  if (formValue.searchRules === "Quan hệ") {
-    params.QuanHe = formValue.QuanHe;
-  }
-  if (formValue.searchRules === "Tuổi") {
-    params.TuoiTu = formValue.TuoiTu;
-    params.TuoiDen = formValue.TuoiDen;
-  }
-  if (formValue.searchRules === "Giới tính") {
-    params.GioiTinh = formValue.GioiTinh;
-  }
-  if (formValue.searchRules === "Phòng ban") {
-    params.PhongBan = formValue.PhongBan;
-  }
-
-  tableReport.handleCallFetchData(params);
-
-  console.log("Param: ", params)
-}
-
 function buildApiUrl() {
   return apiTable;
 }
 
-function handleSelectFilterBy() {
-  const locTheoEl = document.querySelector("#loctheo select");
-  const maEl = document.querySelector("#manhanvien select");
-  const quanHeEl = document.querySelector("#quanhe select");
-  const tuoiTuEl = document.querySelector("#tuoitu input");
-  const tuoiDenEl = document.querySelector("#tuoiden input");
-  const gioiTinhEl = document.querySelector("#gioitinh select");
-  const phongBanEl = document.querySelector("#phongban select");
-  locTheoEl.addEventListener("input", () => {
-    const locTheoValue = locTheoEl.value;
-    console.log("locTheoValue ", locTheoValue);
+async function handleSearch() {
+  try {
+    const formValue = getFormValues("report_form");
+    const tableReport = document.getElementById("tableReport");
+    const params = {
+      // searchRules:"tát cả",
+      GioiTinh: formValue.GioiTinh || "",
+      MaNV: formValue.MaNV || "",
+      QuanHe: formValue.QuanHe || "",
+      TuoiTu: formValue.TuoiTu || "",
+      TuoiDen: formValue.TuoiDen || "",
+      PhongBan: formValue.PhongBan || ""
+    };
+    await tableReport.handleCallFetchData(params);
 
-    if (locTheoValue === "Tất cả") {
-      maEl.disabled = false;
-      quanHeEl.disabled = false;
-      tuoiTuEl.disabled = false;
-      tuoiDenEl.disabled = false;
-      gioiTinhEl.disabled = false;
-      phongBanEl.disabled = false;
-      return;
-    }
+  } catch (error) {
+    console.error("Error in handleSearch:", error);
+  }
+}
+function maNhanVienChange() {
+  const phongban = document.querySelector('#manhanvien select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function quanHeChange() {
+  const phongban = document.querySelector('#quanhe select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function gioiTinhChange() {
+  const phongban = document.querySelector('#gioitinh select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function phongBanChange() {
+  const phongban = document.querySelector('#phongban select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+let tuoiTuChanged = false;
+let tuoiDenChanged = false;
 
-    maEl.disabled = true;
-    quanHeEl.disabled = true;
-    tuoiTuEl.disabled = true;
-    tuoiDenEl.disabled = true;
-    gioiTinhEl.disabled = true;
-    phongBanEl.disabled = true;
-
-
-    if (locTheoValue === "Mã nhân viên") {
-      maEl.disabled = false;
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Quan hệ") {
-      quanHeEl.disabled = false;
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Tuổi") {
-      tuoiTuEl.disabled = false;
-      tuoiDenEl.disabled = false
-      gioiTinhEl.value = "Tất cả"
-    }
-    if (locTheoValue === "Giới tính") {
-      gioiTinhEl.disabled = false;
-    }
-    if (locTheoValue === "Phòng ban") {
-      phongBanEl.disabled = false;
-      gioiTinhEl.value = "Tất cả"
-    }
+function fromChange() {
+  const fromDatePicker = document.querySelector('#tuoitu input');
+  fromDatePicker.addEventListener("change", (event) => {
+    tuoiTuChanged = true;
+    dateChange();
   });
 }
 
+function toChange() {
+  const toDatePicker = document.querySelector('#tuoiden input');
+  toDatePicker.addEventListener("change", (event) => {
+    tuoiDenChanged = true;
+    dateChange();
+  });
+}
+function dateChange(){
+  if(tuoiDenChanged && tuoiTuChanged){
+    handleSearch();
+  }
+}
+
+function inits(){
+  maNhanVienChange()
+  quanHeChange()
+  gioiTinhChange()
+  phongBanChange()
+  fromChange()
+  toChange()
+}
 document.addEventListener("DOMContentLoaded", () => {
-  renderActionByStatus();
-  handleSelectFilterBy();
-  handleSearch();
+  renderActionByStatus()
+  handleSearch()
+  inits()
 });

@@ -1,4 +1,3 @@
-const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
 
@@ -79,46 +78,6 @@ function fetchEmployee() {
     });
 }
 
-
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
-    if (!isConfirm) return
-    const valid = validateForm('resume_form')
-    if(!valid) return
-    const {anh, ...rest} = getFormValues('resume_form')
-    const payload = buildPayload(rest)
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            // backToList()
-        },
-      
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if(!err.responseJSON) {
-                    alert(err.responseText)
-                    return 
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo thất bại!")
-            }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
 function handleSave() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa Lý lịch tư pháp ?')
     if (!isConfirm) return
@@ -139,8 +98,12 @@ function handleSave() {
         success: function(data) {
             if (anh) {
                 uploadImage(anh);
+                alert("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
             } else {
                 setLoading(false);
+                alert("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
                 backToListUpdate();
             }
         },
@@ -226,16 +189,6 @@ function renderActionByStatus() {
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
         return btnEl
-    }
-    if (!isEdit) {
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
-        createBtn.addEventListener('click', handleCreate)
-        clear.addEventListener('click', function() {
-            clearFormValues('resume_form');
-        });
-        actionEl.append(createBtn,clear)
-        return
     }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')

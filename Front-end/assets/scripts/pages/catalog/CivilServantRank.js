@@ -56,42 +56,6 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-function recordActivityAdmin(actor, action) {
-    setLoading(true)
-    setLoading(true);
-
-    const payload = {
-        createdBy: actor,
-        action: action,
-    };
-
-    $.ajax({
-        url: 'https://localhost:7141/api/LichSuHoatDong',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-        },
-        error: (err) => {
-            console.log('Lỗi khi lưu lịch sử hoạt động:', err);
-            try {
-                if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Lưu lịch sử hoạt động không thành công!");
-            }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
 
 function fetchNgachCongChuc(id) {
     setLoading(true)
@@ -170,7 +134,6 @@ function handleRemoveRow() {
             success: function (data) {
                 alert("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngạch công chức: ${oldValue}`);
-
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -199,7 +162,6 @@ function handleSave() {
             success: function (data) {
                 alert('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục ngạch công chức: ${oldValue} => ${payload.ten} `);
-
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -238,28 +200,6 @@ function clearFormValues() {
         }
     });
 }
-
-// function renderActionByStatus() {
-//     const actionEl = document.getElementById('CivilServantRank_form_action')
-//     const buildButton = (label, type, icon) => {
-//         const btnEl = document.createElement('base-button')
-//         btnEl.setAttribute('label', label)
-//         btnEl.setAttribute('type', type)
-//         btnEl.setAttribute('icon', icon)
-
-//         return btnEl
-//     }
-//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-
-
-//     createBtn.addEventListener('click', function () {
-//         isPopupEdit = false
-//         showPopup()
-//     });
-
-//     actionEl.append(createBtn)
-
-// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/NhanVien/ngachCongChuc'

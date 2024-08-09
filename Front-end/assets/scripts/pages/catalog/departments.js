@@ -58,41 +58,6 @@ function buildPayload(formValue) {
     return formClone
 }
 
-function recordActivityAdmin(actor, action){
-    setLoading(true)
-    setLoading(true);
-
-    const payload = {
-        createdBy: actor,
-        action: action,
-    };
-  
-        $.ajax({
-            url: 'https://localhost:7141/api/LichSuHoatDong',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function (data) {
-            },
-            error: (err) => {
-                try {
-                    if (!err.responseJSON) {
-                        alert(err.responseText)
-                        return
-                    }
-                    const errObj = err.responseJSON.errors
-                    const firtErrKey = Object.keys(errObj)[0]
-                    const message = errObj[firtErrKey][0]
-                    alert(message)
-                } catch (error) {
-                    alert("Lưu lịch sử hoạt động không thành công!");
-                }
-            },
-            complete: () => {
-                setLoading(false)
-            }
-        });
-}
 function fetchPhongBan(id) {
     setLoading(true)
     idPhongBan = id

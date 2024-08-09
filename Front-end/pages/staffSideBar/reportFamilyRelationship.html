@@ -71,26 +71,18 @@
                 <div class="">
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
-                      <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
-                          name="searchRules"></base-select>
-                      </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select id="manhanvien" label="Mã Nhân Viên" name="MaNV" keyValue="ma" keyLabel="ma"
-                          api="https://localhost:7141/api/NhanVien"></base-select>
+                          api="https://localhost:7141/api/NhanVien" includeAll></base-select>
+                      </div>
+                      <div class="col-span-2 sm:col-span-1 mt-2 ">
+                        <base-select id="quanhe" label="Quan hệ" name="QuanHe" keyValue="id" keyLabel="ten"
+                          api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc" includeAll></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="quanhe" label="Quan hệ" name="QuanHe" keyValue="id" keyLabel="ten"
-                          api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-input-number id="tuoitu" label="Tuổi từ" name="TuoiTu"></base-input-number>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-datepicker id="tungay" class="ml-auto" style="margin: 0; margin-top: 9px;" label="Từ ngày"
-                          name="FromDate" required="true"></base-datepicker>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
+                      <div class="col-span-2 sm:col-span-1 ">
                         <base-input-number id="tuoiden" label="Tuổi đến" name="TuoiDen"></base-input-number>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-3">
@@ -99,12 +91,12 @@
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-3">
                         <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
-                          api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
+                          api="https://localhost:7141/api/PhongBan/getAllPhongBan" includeAll></base-select>
                       </div>
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center"></div>
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
                     </div>
                   </div>
                 </div>

@@ -2,8 +2,8 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-// const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idKhenThuong = null
 var oldValue = null;
@@ -88,6 +88,7 @@ function handleCreate() {
             data: JSON.stringify(payload),
             success: function (data) {
                 alert("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm danh mục khen thưởng: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -124,6 +125,7 @@ function handleRemoveRow() {
             method: 'DELETE',
             success: function (data) {
                 alert("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục khen thưởng: ${oldValue}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -153,7 +155,8 @@ function handleSave() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Lưu Thành Công!');
+                alert('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa danh mục khen thưởng: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -192,24 +195,6 @@ function clearFormValues() {
         }
     });
 }
-
-// function renderActionByStatus() {
-//     const actionEl = document.getElementById('award_form_action')
-//     const buildButton = (label, type, icon) => {
-//         const btnEl = document.createElement('base-button')
-//         btnEl.setAttribute('label', label)
-//         btnEl.setAttribute('type', type)
-//         btnEl.setAttribute('icon', icon)
-
-//         return btnEl
-//     }
-//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-//     createBtn.addEventListener('click', function () {
-//         isPopupEdit = false
-//         showPopup()
-//     });
-//     actionEl.append(createBtn)
-// }
 
 function buildApiUrl() {
     return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'

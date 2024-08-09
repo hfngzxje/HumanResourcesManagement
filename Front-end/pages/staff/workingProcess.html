@@ -103,22 +103,22 @@
                                     <div class="input-container">
                                         <div class="grid grid-cols-4 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-select label="Phòng ban" name="phong"
+                                                <base-select label="Phòng ban điều chuyển" name="phong"
                                                     api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-select label="Tổ" name="to"
+                                                <base-select label="Tổ điều chuyển" name="to"
                                                     api="https://localhost:7141/api/NhanVien/to" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-select label="Chức Vụ Hiện Tại" name="chucvu"
+                                                <base-select label="Chức Vụ điều chuyển" name="chucvu"
                                                     api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
-                                            <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker id="ngayhieuluc" label="Ngày hiệu lực"
+                                            <div class="col-span-2 sm:col-span-1 ">
+                                                <base-datepicker id="ngayhieuluc" label="Ngày điều chuyển"
                                                     name="ngayHieuLuc"></base-datepicker>
                                             </div>
                                         </div>
@@ -155,6 +155,7 @@
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/workingProcess.js"></script>
+    <script src="../../assets/scripts/pages/history/recordHistory.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
     <script src="/assets/scripts/common/dateTime.js"></script>
