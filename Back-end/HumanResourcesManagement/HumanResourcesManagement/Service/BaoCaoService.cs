@@ -103,7 +103,7 @@ namespace HumanResourcesManagement.Service
         }
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
         {
-            var query = _context.TblNhanViens.AsQueryable();
+            var query = _context.TblNhanViens.Where(nv => nv.Ngayvaodangchinhthuc.HasValue).AsQueryable();
 
             if (req.PhongBan.HasValue)
             {
@@ -151,8 +151,8 @@ namespace HumanResourcesManagement.Service
                 TamTru = item.Tamtru,
                 ThuongTru = item.Thuongtru,
                 TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == item.Phong)?.Ten,
-                NgayVaoDang = item.Ngayvaodang.HasValue ? item.Ngayvaodang.Value.ToString("dd/MM/yyyy") : null,
-                NgayVaoDangChinhThuc = item.Ngayvaodangchinhthuc.HasValue ? item.Ngayvaodangchinhthuc.Value.ToString("dd/MM/yyyy") : null,
+                NgayVaoDang = item.Ngayvaodang.Value.ToString("dd/MM/yyyy"),
+                NgayVaoDangChinhThuc = item.Ngayvaodangchinhthuc.Value.ToString("dd/MM/yyyy"),
             }).ToList();
 
             return responseList;
