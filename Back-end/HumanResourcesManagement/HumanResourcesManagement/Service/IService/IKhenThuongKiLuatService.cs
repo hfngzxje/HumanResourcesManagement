@@ -6,7 +6,7 @@ namespace HumanResourcesManagement.Service.IService
 {
     public interface IKhenThuongKiLuatService
     {
-        Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV,int khenThuongOrKiLuat);
+        Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV, string khenThuongOrKiLuat);
         Task AddKhenThuongKyLuat(KhenThuongKyLuatRequest req);
         Task DeleteKhenThuongKyLuat(int id);
     }
