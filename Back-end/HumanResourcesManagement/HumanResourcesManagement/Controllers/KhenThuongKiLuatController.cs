@@ -20,7 +20,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getKhenThuongKiLuatByMaNV/{maNV}/{khenThuongOrKiLuat}")]
-        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV, int khenThuongOrKiLuat)
+        public async Task<IActionResult> GetKhenThuongKiLuatByMaNV(string maNV, string khenThuongOrKiLuat)
         {
             try
             {
@@ -44,6 +44,8 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
             }
         }
+
+
 
         [HttpPost("addKhenThuongKiLuat")]
         public async Task<IActionResult> AddKhenThuongKiLuat([FromBody] KhenThuongKyLuatRequest req)

@@ -19,8 +19,8 @@ namespace HumanResourcesManagement.Service
         public async Task<IEnumerable<DanhSachNhanVienResponse>> getDanhSachNhanVien(DanhSachNhanVienRequest req)
         {
             var all = await _context.TblNhanViens.ToListAsync();
-            var searchRuleDiaChi = req.searchRulesDiaChi.ToLower();
-            var searchRuleNgayThang = req.searchRulesNgayThang.ToLower();
+            var searchRuleDiaChi = req.searchRulesDiaChi?.ToLower();
+            var searchRuleNgayThang = req.searchRulesNgayThang?.ToLower();
             List<TblHopDong> listMaNv = new List<TblHopDong>();
             IEnumerable<TblNhanVien> filtered = all;
 
@@ -136,7 +136,7 @@ namespace HumanResourcesManagement.Service
 
             if (!list.Any())
             {
-                throw new Exception("Không có nhân viên nào.");
+                return null;
             }
 
             var responseList = list.Select(item => new DanhSachDangVienResponse
@@ -144,16 +144,15 @@ namespace HumanResourcesManagement.Service
                 Ma = item.Ma,
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.HasValue ? item.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
-                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
+                Gioitinh = item.Gioitinh,
                 Didong = item.Didong,
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
                 TamTru = item.Tamtru,
                 ThuongTru = item.Thuongtru,
-                TenPhong = item.PhongNavigation != null ? item.PhongNavigation.Ten : null,
+                TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == item.Phong)?.Ten,
                 NgayVaoDang = item.Ngayvaodang.HasValue ? item.Ngayvaodang.Value.ToString("dd/MM/yyyy") : null,
                 NgayVaoDangChinhThuc = item.Ngayvaodangchinhthuc.HasValue ? item.Ngayvaodangchinhthuc.Value.ToString("dd/MM/yyyy") : null,
-                TrangThai = "null",
             }).ToList();
 
             return responseList;
