@@ -22,16 +22,37 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getAllChucDanh")]
         public async Task<IActionResult> GetAllChucDanh()
         {
-            var dm = await _chucDanhService.GetAllChucDanh();
-            return Ok(dm);
+            try
+            {
+                var dm = await _chucDanhService.GetAllChucDanh();
+                return Ok(dm);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return StatusCode(500, new { message = "Đã xảy ra lỗi khi lấy tất cả chức danh.", error = ex.Message });
+            }
         }
 
         [HttpGet("getChucDanhById/{id}")]
         public async Task<IActionResult> GetChucDanhById(int id)
         {
-            var dt = await _chucDanhService.GetChucDanhById(id);
-            return Ok(dt);
+            try
+            {
+                var dt = await _chucDanhService.GetChucDanhById(id);
+                if (dt == null)
+                {
+                    return NotFound(new { message = "Chức danh không tồn tại." });
+                }
+                return Ok(dt);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if needed
+                return StatusCode(500, new { message = "Đã xảy ra lỗi khi lấy chức danh theo ID.", error = ex.Message });
+            }
         }
+
 
         [HttpPost("addChucDanh")]
         public async Task<IActionResult> AddChucDanh(InsertChucDanh req)
