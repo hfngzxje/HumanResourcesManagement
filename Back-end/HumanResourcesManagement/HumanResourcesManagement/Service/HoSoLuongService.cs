@@ -39,6 +39,8 @@ namespace HumanResourcesManagement.Service
                 _context.TblLuongs.Update(oldHsl);
             }
 
+            int thoihanLenLuong = int.TryParse(request.Thoihanlenluong, out int parsedValue) ? parsedValue : 0;
+
             var hsl = new TblLuong
             {
                 Mahopdong = request.Mahopdong,
@@ -46,13 +48,14 @@ namespace HumanResourcesManagement.Service
                 Phucaptrachnhiem = request.Phucaptrachnhiem,
                 Phucapkhac = request.Phucapkhac,
                 Tongluong = request.Tongluong,
-                Thoihanlenluong = request.Thoihanlenluong,
+                Thoihanlenluong = request.Thoihanlenluong,  
                 Ghichu = request.Ghichu,
-                Trangthai = 1 
+                Ngaybatdau = request.NgayBatDau.Value,
+                Ngayketthuc = request.NgayBatDau.Value.AddYears(thoihanLenLuong), 
+                Trangthai = 1
             };
 
             _context.TblLuongs.Add(hsl);
-
             _context.SaveChanges();
         }
 
@@ -165,6 +168,8 @@ namespace HumanResourcesManagement.Service
                 BacLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hoSoLuong.Nhomluong).Bacluong,
                 HeSoLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hoSoLuong.Nhomluong).Hesoluong,
                 Trangthai = hoSoLuong.Trangthai,
+                Ngaybatdau = hoSoLuong.Ngaybatdau,
+                Ngayketthuc = hoSoLuong.Ngayketthuc
             };
 
             if (resp == null)

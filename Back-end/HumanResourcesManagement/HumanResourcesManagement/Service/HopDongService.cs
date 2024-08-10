@@ -29,17 +29,18 @@ namespace HumanResourcesManagement.Service
 
         public List<TblHopDong> GetAllHopDongByMaNV(string id)
         {
-            var hopDongs = _context.TblHopDongs.Where(hd => hd.Ma == id).ToList();
+            var hopDongs = _context.TblHopDongs
+                .Where(hd => hd.Ma == id && hd.TrangThai == 1) 
+                .ToList();
 
             if (!hopDongs.Any())
             {
-                //throw new Exception("Không có hợp đồng nào cho mã nhân viên này!!");
                 return null;
-
             }
 
             return hopDongs;
         }
+
 
         public TblHopDong GetHopDongByMaHopDong(string id)
         {
@@ -124,7 +125,7 @@ namespace HumanResourcesManagement.Service
                     Hopdongdenngay = request.Hopdongdenngay,
                     Ghichu = request.Ghichu,
                     Ma = request.Ma,
-                    TrangThai = request.TrangThai
+                    TrangThai = 1
                 };
 
                 nhanVien.Chucvuhientai = newHopDong.Chucdanh;
