@@ -5,7 +5,7 @@
         public double? Hesoluong { get; set; }
         public double? Bacluong { get; set; }
         public string? Ghichu { get; set; }
-        public int? Chucdanh { get; set; }
+        public int? Ngachcongchuc { get; set; }
         public double? Luongcoban { get; set; }
     }
 }

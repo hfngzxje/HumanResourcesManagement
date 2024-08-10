@@ -238,8 +238,6 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Bacluong).HasColumnName("bacluong");
 
-                entity.Property(e => e.Chucdanh).HasColumnName("chucdanh");
-
                 entity.Property(e => e.Ghichu)
                     .HasMaxLength(100)
                     .HasColumnName("ghichu");
@@ -248,10 +246,12 @@ namespace HumanResourcesManagement.Models
 
                 entity.Property(e => e.Luongcoban).HasColumnName("luongcoban");
 
-                entity.HasOne(d => d.ChucdanhNavigation)
+                entity.Property(e => e.Ngachcongchuc).HasColumnName("ngachcongchuc");
+
+                entity.HasOne(d => d.NgachcongchucNavigation)
                     .WithMany(p => p.TblDanhMucNhomLuongs)
-                    .HasForeignKey(d => d.Chucdanh)
-                    .HasConstraintName("FK_chucdanh_nhomluong");
+                    .HasForeignKey(d => d.Ngachcongchuc)
+                    .HasConstraintName("FK__tblDanhMu__ngach__0697FACD");
             });
 
             modelBuilder.Entity<TblDanhMucPhongBan>(entity =>
@@ -591,6 +591,14 @@ namespace HumanResourcesManagement.Models
                     .IsUnicode(false)
                     .HasColumnName("mahopdong")
                     .IsFixedLength();
+
+                entity.Property(e => e.Ngaybatdau)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ngaybatdau");
+
+                entity.Property(e => e.Ngayketthuc)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ngayketthuc");
 
                 entity.Property(e => e.Nhomluong).HasColumnName("nhomluong");
 

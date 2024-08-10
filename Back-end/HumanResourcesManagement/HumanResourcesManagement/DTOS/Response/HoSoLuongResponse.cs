@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace HumanResourcesManagement.Models
+﻿namespace HumanResourcesManagement.DTOS.Response
 {
-    public partial class TblLuong
+    public class HoSoLuongResponse
     {
         public int Id { get; set; }
         public string? Mahopdong { get; set; }
@@ -13,11 +10,11 @@ namespace HumanResourcesManagement.Models
         public string? Thoihanlenluong { get; set; }
         public string? Ghichu { get; set; }
         public int? Nhomluong { get; set; }
-        public int? Trangthai { get; set; }
+        public double BacLuong { get; set; }
+        public double HeSoLuong { get; set; }
         public DateTime? Ngaybatdau { get; set; }
         public DateTime? Ngayketthuc { get; set; }
+        public int? Trangthai { get; set; }
 
-        public virtual TblHopDong? MahopdongNavigation { get; set; }
-        public virtual TblDanhMucNhomLuong? NhomluongNavigation { get; set; }
     }
 }
