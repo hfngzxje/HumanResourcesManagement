@@ -114,33 +114,64 @@ namespace HumanResourcesManagement.Service
             _context.SaveChanges();
         }
 
-        public List<TblLuong> getAllHoSoLuongByMaNV(string maNV)
+        public async Task<IEnumerable<HoSoLuongResponse>> getAllHoSoLuongByMaNV(string maNV)
         {
-            var maHopDongs = _context.TblHopDongs
+            var maHopDongs = await _context.TblHopDongs
                                      .Where(hd => hd.Ma == maNV)
                                      .Select(hd => hd.Mahopdong)
-                                     .ToList();
+                                     .ToListAsync();
 
             if (!maHopDongs.Any())
             {
                 return null;
             }
 
-            var hoSoLuongs = _context.TblLuongs
+            var hoSoLuongs = await _context.TblLuongs
                                      .Where(l => maHopDongs.Contains(l.Mahopdong))
-                                     .ToList();
+                                     .ToListAsync();
+            var resp = hoSoLuongs.Select(hl => new HoSoLuongResponse
+            {
+                Id = hl.Id,
+                Mahopdong = hl.Mahopdong,
+                Phucaptrachnhiem = hl.Phucaptrachnhiem,
+                Phucapkhac = hl.Phucapkhac,
+                Tongluong = hl.Tongluong,
+                Thoihanlenluong = hl.Thoihanlenluong,
+                Ghichu = hl.Ghichu,
+                Nhomluong = hl.Nhomluong,
+                BacLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hl.Nhomluong).Bacluong,
+                HeSoLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hl.Nhomluong).Hesoluong,
+                Ngaybatdau = hl.Ngaybatdau,
+                Ngayketthuc = hl.Ngayketthuc,
+                Trangthai = hl.Trangthai,
+            }) ;
 
-            return hoSoLuongs;
+            return resp;
         }
 
-        public TblLuong getHoSoLuongById(int id)
+        public async Task<HoSoLuongResponse> getHoSoLuongById(int id)
         {
-            var hoSoLuong = _context.TblLuongs.Find(id);
-            if (hoSoLuong == null)
+            var hoSoLuong = await _context.TblLuongs.FindAsync(id);
+            var resp = new HoSoLuongResponse
+            {
+                Id = hoSoLuong.Id,
+                Mahopdong = hoSoLuong.Mahopdong,
+                Phucaptrachnhiem = hoSoLuong.Phucaptrachnhiem,
+                Phucapkhac = hoSoLuong.Phucapkhac,
+                Tongluong = hoSoLuong.Tongluong,
+                Thoihanlenluong = hoSoLuong.Thoihanlenluong,
+                Ghichu = hoSoLuong.Ghichu,
+                Nhomluong = hoSoLuong.Nhomluong,
+                BacLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hoSoLuong.Nhomluong).Bacluong,
+                HeSoLuong = (double)_context.TblDanhMucNhomLuongs.FirstOrDefault(l => l.Nhomluong == hoSoLuong.Nhomluong).Hesoluong,
+                Trangthai = hoSoLuong.Trangthai,
+            };
+
+            if (resp == null)
             {
                 throw new Exception("ID không tồn tại!");
             }
-            return hoSoLuong;
+            return resp;
         }
 
         public IdAndName getChucDanhByHopDong(string maHopDong)
@@ -174,22 +205,22 @@ namespace HumanResourcesManagement.Service
         
 
 
-        public async Task<List<TblDanhMucNhomLuong>> GetBacLuongByChucDanhAsync(int chucDanhId)
+        public async Task<List<TblDanhMucNhomLuong>> GetBacLuongByChucDanhAsync(int ngachCongChucId)
         {
             return await _context.TblDanhMucNhomLuongs
-                .Where(bl => bl.Chucdanh == chucDanhId)
+                .Where(bl => bl.Ngachcongchuc == ngachCongChucId)
                 .ToListAsync();
         }
 
 
 
-        public async Task<List<TblDanhMucNhomLuong>> GetLuongDetailsAsync(int? chucDanhId, int? bacLuongId)
+        public async Task<List<TblDanhMucNhomLuong>> GetLuongDetailsAsync(int? ngachCongChucId, int? bacLuongId)
         {
             IQueryable<TblDanhMucNhomLuong> query = _context.TblDanhMucNhomLuongs.AsQueryable();
 
-            if (chucDanhId.HasValue)
+            if (ngachCongChucId.HasValue)
             {
-                query = query.Where(bl => bl.Chucdanh == chucDanhId.Value);
+                query = query.Where(bl => bl.Ngachcongchuc == ngachCongChucId.Value);
             }
 
             if (bacLuongId.HasValue)

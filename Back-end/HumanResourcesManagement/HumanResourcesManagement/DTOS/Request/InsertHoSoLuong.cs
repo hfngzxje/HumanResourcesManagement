@@ -11,7 +11,8 @@ namespace HumanResourcesManagement.DTOS.Request
         public float? Tongluong { get; set; }
         public string? Thoihanlenluong { get; set; }
         public string? Ghichu { get; set; }
-
+        public double BacLuong { get; set; }
+        public double HeSoLuong { get; set; }
         public int? Nhomluong { get; set; }
     }
 }

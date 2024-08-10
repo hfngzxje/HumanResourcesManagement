@@ -24,7 +24,7 @@ namespace HumanResourcesManagement.Service
                 Hesoluong = request.Hesoluong,
                 Bacluong = request.Bacluong,
                 Ghichu = request.Ghichu,
-                Chucdanh = request.Chucdanh,
+                Ngachcongchuc = request.Ngachcongchuc,
                 Luongcoban = request.Luongcoban
             };
 
@@ -46,7 +46,7 @@ namespace HumanResourcesManagement.Service
             nhomLuong.Hesoluong = request.Hesoluong;
             nhomLuong.Bacluong = request.Bacluong;
             nhomLuong.Ghichu = request.Ghichu;
-            nhomLuong.Chucdanh = request.Chucdanh;
+            nhomLuong.Ngachcongchuc = request.Ngachcongchuc;
             nhomLuong.Luongcoban = request.Luongcoban;
 
             _context.TblDanhMucNhomLuongs.Update(nhomLuong);
