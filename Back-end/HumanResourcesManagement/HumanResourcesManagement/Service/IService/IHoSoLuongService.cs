@@ -13,8 +13,8 @@ namespace HumanResourcesManagement.Service.IService
 
         void suaHoSoLuong(int id, InsertHoSoLuong request);
         void xoaHoSoLuong(int id);
-        List<TblLuong> getAllHoSoLuongByMaNV(string maNV);
-        TblLuong getHoSoLuongById(int id);
+        Task<IEnumerable<HoSoLuongResponse>> getAllHoSoLuongByMaNV(string maNV);
+        Task<HoSoLuongResponse> getHoSoLuongById(int id);
 
         IdAndName getChucDanhByHopDong(string maHopDong);
 

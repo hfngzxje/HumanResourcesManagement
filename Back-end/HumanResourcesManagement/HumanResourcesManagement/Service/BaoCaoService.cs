@@ -395,7 +395,7 @@ namespace HumanResourcesManagement.Service
             var all = await _context.TblDanhMucNhomLuongs.ToListAsync();
             if (req.ChucDanh.HasValue)
             {
-                all = all.Where(l => l.Chucdanh == req.ChucDanh).ToList();
+                all = all.Where(l => l.Ngachcongchuc == req.ChucDanh).ToList();
             }
             if (req.BacLuong.HasValue)
             {
@@ -404,11 +404,11 @@ namespace HumanResourcesManagement.Service
 
             var resp = all.Select(r => new DanhSachNhomLuongResponse
             {
-                ChucDanh = _context.TblDanhMucChucDanhs.Find(r.Chucdanh).Ten,
+                ChucDanh = _context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Ten,
                 BacLuong = (double)r.Bacluong,
                 HeSoLuong = (double)r.Hesoluong,
                 LuongCoBan = (double)r.Luongcoban,
-                PhuCap = (double)_context.TblDanhMucChucDanhs.Find(r.Chucdanh).Phucap,
+                PhuCap = (double)_context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Phucap,
                 Khac = r.Ghichu
             });
             if (!resp.Any() || resp == null)

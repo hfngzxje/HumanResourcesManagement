@@ -78,11 +78,11 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getAllLuongByMaNV/{maNV}")]
-        public IActionResult GetAllLuongByMaNV(string maNV)
+        public async Task<IActionResult> GetAllLuongByMaNV(string maNV)
         {
             try
             {
-                var hoSoLuong = _hoSoLuongService.getAllHoSoLuongByMaNV(maNV);
+                var hoSoLuong = await _hoSoLuongService.getAllHoSoLuongByMaNV(maNV);
                 return Ok(hoSoLuong);
             }
             catch (Exception ex)
@@ -92,11 +92,11 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getLuongById/{id}")]
-        public IActionResult GetLuongById(int id)
+        public async Task<IActionResult> GetLuongById(int id)
         {
             try
             {
-                var hoSoLuong = _hoSoLuongService.getHoSoLuongById(id);
+                var hoSoLuong = await _hoSoLuongService.getHoSoLuongById(id);
                 return Ok(hoSoLuong);
             }
             catch (Exception ex)
@@ -136,10 +136,10 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpGet("getBacLuongByChucDanh/{id}")]
-        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetBacLuongByChucDanh(int id)
+        [HttpGet("getBacLuongByNgachCongChuc/{id}")]
+        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetBacLuongByChucDanh(int ngachCongChucId)
         {
-            var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(id);
+            var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(ngachCongChucId);
 
             if (bacLuongs == null || bacLuongs.Count == 0)
             {
@@ -151,9 +151,9 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpGet("getLuongDetails")]
-        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetLuongDetails([FromQuery] int? chucDanhId, [FromQuery] int? bacLuongId)
+        public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetLuongDetails([FromQuery] int? ngachCongChucId, [FromQuery] int? bacLuongId)
         {
-            var luongs = await _hoSoLuongService.GetLuongDetailsAsync(chucDanhId, bacLuongId);
+            var luongs = await _hoSoLuongService.GetLuongDetailsAsync(ngachCongChucId, bacLuongId);
 
             if (luongs == null || luongs.Count == 0)
             {
@@ -169,7 +169,7 @@ namespace HumanResourcesManagement.Controllers
         public IActionResult GetNhomLuongByChucDanhAndBacLuong(int chucdanh, double bacluong)
         {
             var nhomLuong = _context.TblDanhMucNhomLuongs
-                .Where(l => l.Chucdanh == chucdanh && l.Bacluong == bacluong)
+                .Where(l => l.Ngachcongchuc == chucdanh && l.Bacluong == bacluong)
                 .Select(l => l.Nhomluong)
                 .FirstOrDefault();
 
