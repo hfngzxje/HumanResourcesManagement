@@ -136,7 +136,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpGet("getBacLuongByNgachCongChuc/{id}")]
+        [HttpGet("getBacLuongByNgachCongChuc/{ngachCongChucId}")]
         public async Task<ActionResult<List<TblDanhMucNhomLuong>>> GetBacLuongByChucDanh(int ngachCongChucId)
         {
             var bacLuongs = await _hoSoLuongService.GetBacLuongByChucDanhAsync(ngachCongChucId);
