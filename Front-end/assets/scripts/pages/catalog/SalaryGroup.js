@@ -30,8 +30,8 @@ var TableColumns = [
     }
     ,
     {
-        label: 'Nhóm ngạch nhân viên',
-        key: 'chucdanh'
+        label: 'Nhóm ngạch công chức',
+        key: 'ngachcongchuc'
     }
     ,
     {
@@ -46,7 +46,7 @@ var TableColumns = [
     {
         label: 'Lương cơ bản',
         key: 'luongcoban',
-        type:'curency'
+        type:'currency'
     }
     ,
     {

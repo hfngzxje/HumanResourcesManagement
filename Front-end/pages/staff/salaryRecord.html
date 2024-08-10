@@ -79,8 +79,14 @@
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="ngachNhanVien"
                                                     api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
-                                                    keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên"
+                                                    keyvalue="id" keylabel="ten" label="Chức danh"
                                                     name="chucdanh" disabled></base-select>
+                                            </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                                <base-select id="ngachCongChuc"
+                                                    api="https://localhost:7141/api/NhanVien/ngachCongChuc"
+                                                    keyvalue="id" keylabel="ten" label="Ngạch công chức"
+                                                    name="ngachcongchuc"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="bacLuong" label="Bậc Lương" name="bacluong"
