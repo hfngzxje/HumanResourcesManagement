@@ -142,7 +142,7 @@ async function handleCreate() {
         // Lấy trạng thái mã hợp đồng
         const contractCodeStatus = await fetchContractCodeStatus(formValue.mahopdong);
         // Kiểm tra trạng thái mã hợp đồng
-        if (contractCodeStatus === 0) {
+        if (contractCodeStatus === 2) {
             alert('Đây là hợp đồng chưa chính thức, không thể tạo bảng lương.');
             return;
         }

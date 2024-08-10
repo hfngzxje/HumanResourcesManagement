@@ -7,7 +7,7 @@ var maDetail = localStorage.getItem('maDetail')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 0 },
+    { label: 'Hợp đồng quá hạn', value: 2 },
 ];
 
 var TableColumns = [
@@ -55,13 +55,6 @@ var TableColumns = [
       ]
     }
 ]
-
-// var tableEvent = { 
-//     rowClick: (row) => {
-//         console.log('row click ', row);
-//         fetchContract(row.mahopdong)
-//     }
-// }
 
 
 function backToList() {
