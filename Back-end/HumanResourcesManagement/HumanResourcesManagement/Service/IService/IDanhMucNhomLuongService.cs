@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace HumanResourcesManagement.Service.IService
 
         Task<bool> DeleteNhomLuongAsync(int id);
 
-        Task<List<TblDanhMucNhomLuong>> GetAllNhomLuongAsync();
+        Task<IEnumerable<DanhMucNhomLuongResponse>> GetAllNhomLuongAsync();
 
         Task<TblDanhMucNhomLuong?> GetNhomLuongByIdAsync(int id);
     }

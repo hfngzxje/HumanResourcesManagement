@@ -38,6 +38,7 @@ public class Program
         builder.Services.AddScoped<IDanhMucNhomLuongService, DanhMucNhomLuongService>();
         builder.Services.AddScoped<IDanhSachLenLuongService, DanhSachLenLuongService>();
         builder.Services.AddScoped<ILichSuHoatDongService, LichSuHoatDongService>();
+        builder.Services.AddScoped<INgachCongChucService, NgachCongChucService>();
 
 
         builder.Services.AddHostedService<DieuChuyenBackgroundService>();
