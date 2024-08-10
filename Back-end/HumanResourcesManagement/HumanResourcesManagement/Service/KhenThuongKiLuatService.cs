@@ -102,5 +102,27 @@ namespace HumanResourcesManagement.Service
 
             return listKhenThuongKiLuat;
         }
+
+        public async Task<IEnumerable<KhenThuongKyLuatResponse>> GetAllKhenThuongKyLuat()
+        {
+            var all = await _context.TblKhenThuongKyLuats.ToListAsync();
+            var resp = all.Select(r => new KhenThuongKyLuatResponse
+            {
+                Id = r.Id,
+                Ten = _context.TblDanhMucKhenThuongKyLuats.FirstOrDefault(k => k.Id == r.Khenthuongkiluat).Ten,
+                Ngay = r.Ngay ?? DateTime.MinValue,
+                Noidung = r.Noidung,
+                Lido = r.Lido,
+                Khenthuongkiluat = r.Khenthuongkiluat,
+                Ma = r.Ma?.Trim()
+            }).ToList();
+
+            if (!resp.Any() || resp == null)
+            {
+                return null;
+            }
+            return resp;
+        }
+
     }
 }

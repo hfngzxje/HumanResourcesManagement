@@ -1,10 +1,12 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using System.Data.SqlTypes;
 
 namespace HumanResourcesManagement.Service
 {
@@ -71,9 +73,24 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public async Task<List<TblDanhMucNhomLuong>> GetAllNhomLuongAsync()
+        public async Task<IEnumerable<DanhMucNhomLuongResponse>> GetAllNhomLuongAsync()
         {
-            return await _context.TblDanhMucNhomLuongs.ToListAsync();
+            var all =  await _context.TblDanhMucNhomLuongs.ToListAsync();
+            var resp = all.Select(r => new DanhMucNhomLuongResponse
+            {
+                Nhomluong = r.Nhomluong,
+                Bacluong = r.Bacluong,
+                Ghichu = r.Ghichu,
+                Hesoluong = r.Hesoluong,
+                Luongcoban = r.Luongcoban,
+                Ngachcongchuc = r.Ngachcongchuc,
+                TenNgachCongChuc = _context.TblDanhMucNgachCongChucs.Find(r.Ngachcongchuc).Ten,
+            });
+            if (!resp.Any() || resp == null)
+            {
+                return null;
+            }
+            return resp;
         }
 
         public async Task<TblDanhMucNhomLuong?> GetNhomLuongByIdAsync(int id)

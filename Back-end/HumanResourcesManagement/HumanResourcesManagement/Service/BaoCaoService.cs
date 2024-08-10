@@ -418,6 +418,34 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
+        public async Task<IEnumerable<DanhSachBaoHiemResponse>> getDanhSachBaoHiem(DanhSachBaoHiemRequest req)
+        {
+            var all = await _context.TblNhanViens.Where(nv => nv.Bhxh != null || nv.Bhyt != null).ToListAsync();
+
+            if (req.idPhongBan.HasValue)
+            {
+                all = all.Where(p => p.Phong == req.idPhongBan).ToList();
+            }
+
+            var resp = all.Select(r => new DanhSachBaoHiemResponse
+            {
+                MaNV = r.Ma,
+                TenNV = r.Ten,
+                GioiTinh = r.Gioitinh,
+                BHXH = r.Bhxh,
+                BHYT = r.Bhyt,
+                NgaySinh = r.Ngaysinh,
+                PhongBan = r.Phong,
+                TenPhongBan = _context.TblDanhMucPhongBans.Find(r.Phong).Ten,
+            }).ToList();
+
+            if (!resp.Any() || resp == null)
+            {
+                return null;
+            }
+            return resp;
+        }
+
         private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
         {
             using (var memoryStream = new MemoryStream())
