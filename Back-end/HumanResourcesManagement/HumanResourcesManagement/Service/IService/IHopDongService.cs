@@ -9,7 +9,7 @@ namespace HumanResourcesManagement.Service.IService
         Task<TblHopDong> TaoHopDong(InsertHopDongRequest request);
         void SuaHopDong(string id, UpdateHopDongRequest request);
         void XoaHopDong(string id);
-        List<TblHopDong> GetAllHopDong();
+        List<HopDongResponse> GetAllHopDong();
 
         TblHopDong GetHopDongByMaHopDong(string id);
 
