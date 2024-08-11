@@ -52,6 +52,26 @@ namespace HumanResourcesManagement.Service
             return listNgoaiNgu;
         }
 
+        public async Task<NgoaiNguDto> GetNgoaiNguById(int id)
+        {
+            var nn = await _context.TblNgoaiNgus.FindAsync(id);
+            var resp = new NgoaiNguDto
+            {
+                Id = nn.Id,
+                Ngoaingu = nn.NgoainguNavigation.Ten,
+                idNgoaiNgu = nn.Ngoaingu,
+                Ngaycap = nn.Ngaycap,
+                Trinhdo = nn.Trinhdo,
+                Noicap = nn.Noicap,
+                Ma = nn.Ma.Trim()
+            };
+            if (resp == null)
+            {
+                throw new Exception("không có id này.");
+            }
+            return resp;
+        }
+
         // Thêm mới ngoại ngữ cho nhân viên
         public async Task<TblNgoaiNgu> AddNgoaiNgu(InsertNgoaiNguRequest req)
         {

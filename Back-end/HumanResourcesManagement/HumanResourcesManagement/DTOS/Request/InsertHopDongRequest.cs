@@ -26,7 +26,5 @@ namespace HumanResourcesManagement.DTOS.Request
 
         public string? Ma { get; set; }
 
-        public int? TrangThai { get; set; }
-
     }
 }

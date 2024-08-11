@@ -146,6 +146,20 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPost("getBaoCaoDanhSachBaoHiem")]
+        public async Task<IActionResult> GetReportDanhSachBaoHiem([FromForm] DanhSachBaoHiemRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachBaoHiem(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
         [HttpPost("ExportBaoCaoNhomLuongToPDF")]
         public async Task<IActionResult> ExportBaoCaoNhomLuonngPDF([FromForm] DanhSachNhomLuongRequest req)
         {

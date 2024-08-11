@@ -45,6 +45,20 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpGet("getNgoaiNguById/{id}")]
+        public async Task<IActionResult> GetNgoaiNguById(int id)
+        {
+            try
+            {
+                var resp = _ngoaiNguService.GetNgoaiNguById(id);
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
         [HttpPost("addNgoaiNgu")]
         public async Task<IActionResult> AddNgoaiNgu([FromBody] InsertNgoaiNguRequest req)
         {

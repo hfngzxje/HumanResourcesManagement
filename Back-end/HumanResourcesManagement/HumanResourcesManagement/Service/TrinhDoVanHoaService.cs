@@ -43,6 +43,31 @@ namespace HumanResourcesManagement.Service
             return listTrinhDoVanHoa;
         }
 
+        public async Task<TrinhDoVanHoaDto> GetTrinhDoVanHoaById(int id)
+        {
+            var td = await _context.TblTrinhDoVanHoas.FindAsync(id);
+            var resp = new TrinhDoVanHoaDto
+            {
+                Id = td.Id,
+                Tentruong = td.Tentruong,
+                Chuyennganh = _context.TblDanhMucChuyenMons.Find(td.Chuyennganh).Ten,
+                idChuyenNganh = td.Chuyennganh,
+                Tuthoigian = td.Tuthoigian,
+                Denthoigian = td.Denthoigian,
+                Hinhthucdaotao = _context.TblHinhThucDaoTaos.Find(td.Chuyennganh).Ten,
+                idHinhThuc = td.Hinhthucdaotao,
+                Trinhdo = _context.TblDanhMucTrinhDos.Find(td.Chuyennganh).Ten,
+                idTrinhDo = td.Trinhdo,
+
+                Ma = td.Ma.Trim()
+            };
+            if (resp == null)
+            {
+                throw new Exception("không có id này.");
+            }
+            return resp;
+        }
+
         public async Task<TblTrinhDoVanHoa> AddTrinhDoVanHoa(InsertTrinhDoVanHoaRequest req)
         {
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);

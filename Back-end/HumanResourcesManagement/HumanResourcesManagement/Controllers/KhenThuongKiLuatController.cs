@@ -45,7 +45,18 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-
+        [HttpGet("getAllKhenThuongKyLuat")]
+        public async Task<IActionResult> GetAllKhenThuongKyLuat()
+        {
+            try
+            {
+                var resp = await _khenThuongKiLuatService.GetAllKhenThuongKyLuat();
+                return Ok(resp);
+            }catch(Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
 
         [HttpPost("addKhenThuongKiLuat")]
         public async Task<IActionResult> AddKhenThuongKiLuat([FromBody] KhenThuongKyLuatRequest req)

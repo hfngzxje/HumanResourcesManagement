@@ -15,31 +15,61 @@ namespace HumanResourcesManagement.Service
             _context = context;
         }
 
-        public List<TblHopDong> GetAllHopDong()
+        public List<HopDongResponse> GetAllHopDong()
         {
-            var hopDongs = _context.TblHopDongs.ToList();
-            if (!hopDongs.Any())
-            {
-                //throw new Exception("Không có hợp đồng nào!!");
-                return null;
-            }
+            var hopDongs = _context.TblHopDongs
+                .Select(hd => new
+                {
+                    hd.Mahopdong,
+                    hd.Loaihopdong,
+                    hd.Chucdanh,
+                    hd.Hopdongtungay,
+                    hd.Hopdongdenngay,
+                    hd.Ghichu,
+                    hd.Ma
+                })
+                .ToList();
 
-            return hopDongs;
+            var hopDongResponses = hopDongs
+                .Select(hd => new HopDongResponse
+                {
+                    Mahopdong = hd.Mahopdong,
+                    LoaihopdongId = hd.Loaihopdong,
+                    ChucDanhId = hd.Chucdanh,
+                    Hopdongtungay = hd.Hopdongtungay,
+                    Hopdongdenngay = hd.Hopdongdenngay,
+                    Ghichu = hd.Ghichu,
+                    Ma = hd.Ma,
+                    Loaihopdong = _context.TblDanhMucLoaiHopDongs
+                        .Where(ld => ld.Id == hd.Loaihopdong)
+                        .Select(ld => ld.Ten)
+                        .FirstOrDefault(),
+                    Chucdanh = _context.TblDanhMucChucDanhs
+                        .Where(cd => cd.Id == hd.Chucdanh)
+                        .Select(cd => cd.Ten)
+                        .FirstOrDefault()
+                })
+                .ToList();
+
+            return hopDongResponses;
         }
+
+
 
         public List<TblHopDong> GetAllHopDongByMaNV(string id)
         {
-            var hopDongs = _context.TblHopDongs.Where(hd => hd.Ma == id).ToList();
+            var hopDongs = _context.TblHopDongs
+                .Where(hd => hd.Ma == id && hd.TrangThai == 1) 
+                .ToList();
 
             if (!hopDongs.Any())
             {
-                //throw new Exception("Không có hợp đồng nào cho mã nhân viên này!!");
                 return null;
-
             }
 
             return hopDongs;
         }
+
 
         public TblHopDong GetHopDongByMaHopDong(string id)
         {
@@ -124,7 +154,7 @@ namespace HumanResourcesManagement.Service
                     Hopdongdenngay = request.Hopdongdenngay,
                     Ghichu = request.Ghichu,
                     Ma = request.Ma,
-                    TrangThai = request.TrangThai
+                    TrangThai = 1
                 };
 
                 nhanVien.Chucvuhientai = newHopDong.Chucdanh;

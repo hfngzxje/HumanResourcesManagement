@@ -45,6 +45,19 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpGet("getTrinhDoVanHoaById/{id}")]
+        public async Task<IActionResult> GetTrinhDoVanHoaById(int id)
+        {
+            try
+            {
+                var resp = await _trinhDoVanHoaService.GetTrinhDoVanHoaById(id);
+                return Ok(resp);
+            }catch(Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
         [HttpPost("addTrinhDoVanHoa")]
         public async Task<IActionResult> AddTrinhDoVanHoa([FromBody] InsertTrinhDoVanHoaRequest req)
         {
