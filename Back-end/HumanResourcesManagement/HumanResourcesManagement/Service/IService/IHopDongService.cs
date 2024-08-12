@@ -12,6 +12,7 @@ namespace HumanResourcesManagement.Service.IService
         List<HopDongResponse> GetAllHopDong();
 
         TblHopDong GetHopDongByMaHopDong(string id);
+        List<TblHopDong> GetAllHopDongByActiveMaNV(string id);
 
         List<TblHopDong> GetAllHopDongByMaNV(string id);
 
