@@ -60,6 +60,16 @@ var TableColumns = [
         formatter: (giatri) => giatri + ' năm'
     },
     {
+        label: 'Ngày bắt đầu',
+        key: 'ngaybatdau',
+        type: 'datetime'
+    },
+    {
+        label: 'Ngày kết thúc',
+        key: 'ngayketthuc',
+        type: 'datetime'
+    },
+    {
         label: 'Trạng thái',
         key: 'trangthai'
     },

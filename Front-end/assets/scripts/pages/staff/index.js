@@ -73,9 +73,8 @@ async function soLuongHopDong() {
 async function soLuongKhenThuong() {
     const soLuongKhenThuong = document.querySelector('p#countKhenThuong');
     try {
-        const response = await fetch('https://localhost:7141/api/HopDong');
-        const khenThuong = await response.json();
-        soLuongKhenThuong.textContent = `${khenThuong.length} Khen thưởng`;
+        const khenThuong = await getKhenThuongLength();
+        soLuongKhenThuong.textContent = `${khenThuong} Khen thưởng`;
     } catch (error) {
         console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
         soLuongKhenThuong.textContent = 'Không thể lấy dữ liệu';
@@ -84,25 +83,50 @@ async function soLuongKhenThuong() {
 async function soLuongKyLuat() {
     const soLuongKyLuat = document.querySelector('p#countKyLuat');
     try {
-        const response = await fetch('https://localhost:7141/api/HopDong');
-        const kyLuat = await response.json();
-        soLuongKyLuat.textContent = `${kyLuat.length} Kỷ luật`;
+        const kyLuat = await getKyLuatLength();
+        soLuongKyLuat.textContent = `${kyLuat} Kỷ luật`;
     } catch (error) {
         console.error('Có lỗi xảy ra khi lấy dữ liệu:', error);
         soLuongKyLuat.textContent = 'Không thể lấy dữ liệu';
     }
 }
 
-async function fetchData() {
-    const rewardResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/vinhtd/1');
-    const disciplineResponse = await fetch('https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/vinhtd/0');
+async function getKhenThuongLength() {
+    try {
+        const response = await $.ajax({
+            url: 'https://localhost:7141/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        const awards = response.filter(item => item.khenthuongkiluat === 1)
 
-    const rewardData = await rewardResponse.json();
-    const disciplineData = await disciplineResponse.json();
+        return awards.length        
+    } catch (error) {
+        console.log("Error")
+    }
+}
 
+async function getKyLuatLength() {
+    try {
+        const response = await $.ajax({
+            url: 'https://localhost:7141/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        const disciplines = response.filter(item => item.khenthuongkiluat === 2)
+
+        return disciplines.length        
+    } catch (error) {
+        console.log("Error")
+    }
+}
+
+async function fetchData() {    
+    const rewardData = await getKhenThuongLength();
+    const disciplineData = await getKyLuatLength();
     return {
-        reward: rewardData.length,
-        discipline: disciplineData.length
+        reward: rewardData,
+        discipline: disciplineData
     };
 }
 async function fetchDataHopDong() {
@@ -112,12 +136,12 @@ async function fetchDataHopDong() {
     // Tính tổng số hợp đồng theo trạng thái
     const statusCount = {
         1: 0,
-        0: 0
+        2: 0
     };
 
     contracts.forEach(contract => {
-        if (statusCount[contract.trangThai] !== undefined) {
-            statusCount[contract.trangThai]++;
+        if (statusCount[contract.loaihopdongId] !== undefined) {
+            statusCount[contract.loaihopdongId]++;
         }
     });
 
@@ -162,10 +186,10 @@ async function createPieChart() {
     new Chart(ctxHopDong, {
         type: 'pie',
         data: {
-            labels: ['Chính thức', 'Chưa chính thức'],
+            labels: ['Còn thời hạn', 'Hết hạn'],
             datasets: [{
                 label: 'Số lượng hợp đồng',
-                data: [dataHopDong[1], dataHopDong[0]],
+                data: [dataHopDong[1], dataHopDong[2]],
                 backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 159, 64, 0.2)'],
                 borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 159, 64, 1)'],
                 borderWidth: 2
@@ -199,4 +223,6 @@ createPieChart();
 document.addEventListener('DOMContentLoaded', () => {
     soLuongNhanVien()
     soLuongHopDong()
+    soLuongKhenThuong()
+    soLuongKyLuat()
 })

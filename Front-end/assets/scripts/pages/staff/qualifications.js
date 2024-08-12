@@ -111,7 +111,7 @@ function fetchTrinhDo(id) {
     idTrinhDo = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail,
+        url: 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data, 'fetch');
