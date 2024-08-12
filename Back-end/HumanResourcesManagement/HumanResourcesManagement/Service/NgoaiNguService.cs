@@ -28,16 +28,12 @@ namespace HumanResourcesManagement.Service
                 throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {maNV}");
             }
 
-            if (_context.TblNgoaiNgus == null)
-            {
-                return null;
-            }
-
             var listNgoaiNgu = await _context.TblNgoaiNgus.Where(nv => nv.Ma == maNV)
                 .Select(nn => new NgoaiNguDto
                 {
                     Id = nn.Id,
-                    Ngoaingu = nn.NgoainguNavigation.Ten,
+                    Ngoaingu = nn.Ngoaingu,
+                    tenNgoaiNgu = _context.TblDanhMucNgoaiNgus.FirstOrDefault( n => n.Id == nn.Ngoaingu).Ten,
                     Ngaycap = nn.Ngaycap,
                     Trinhdo = nn.Trinhdo,
                     Noicap = nn.Noicap,
@@ -58,8 +54,8 @@ namespace HumanResourcesManagement.Service
             var resp = new NgoaiNguDto
             {
                 Id = nn.Id,
-                Ngoaingu = nn.NgoainguNavigation.Ten,
-                idNgoaiNgu = nn.Ngoaingu,
+                Ngoaingu = nn.Ngoaingu,
+                tenNgoaiNgu = _context.TblDanhMucNgoaiNgus.Find(nn.Ngoaingu).Ten,
                 Ngaycap = nn.Ngaycap,
                 Trinhdo = nn.Trinhdo,
                 Noicap = nn.Noicap,

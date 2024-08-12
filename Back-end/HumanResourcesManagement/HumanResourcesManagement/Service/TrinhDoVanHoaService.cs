@@ -27,11 +27,14 @@ namespace HumanResourcesManagement.Service
                 {
                     Id = tdvh.Id,
                     Tentruong = tdvh.Tentruong,
-                    Chuyennganh = tdvh.ChuyennganhNavigation.Ten,
+                    Chuyennganh = tdvh.Chuyennganh,
+                    tenChuyenNganh = _context.TblDanhMucChuyenMons.FirstOrDefault(n => n.Id == tdvh.Chuyennganh).Ten,
                     Tuthoigian = tdvh.Tuthoigian,
                     Denthoigian = tdvh.Denthoigian,
-                    Hinhthucdaotao = tdvh.HinhthucdaotaoNavigation.Ten,
-                    Trinhdo = tdvh.TrinhdoNavigation.Ten,
+                    Hinhthucdaotao = tdvh.Hinhthucdaotao,
+                    tenHinhThuc = _context.TblHinhThucDaoTaos.FirstOrDefault(n => n.Id == tdvh.Chuyennganh).Ten,
+                    Trinhdo = tdvh.Trinhdo, 
+                    tenTrinhDo = _context.TblDanhMucTrinhDos.FirstOrDefault(n => n.Id == tdvh.Chuyennganh).Ten,
                     Ma = tdvh.Ma.Trim()
                 }).ToListAsync();
 
@@ -50,15 +53,14 @@ namespace HumanResourcesManagement.Service
             {
                 Id = td.Id,
                 Tentruong = td.Tentruong,
-                Chuyennganh = _context.TblDanhMucChuyenMons.Find(td.Chuyennganh).Ten,
-                idChuyenNganh = td.Chuyennganh,
+                Chuyennganh = td.Chuyennganh,
+                tenChuyenNganh = _context.TblDanhMucChuyenMons.Find(td.Chuyennganh).Ten,
                 Tuthoigian = td.Tuthoigian,
                 Denthoigian = td.Denthoigian,
-                Hinhthucdaotao = _context.TblHinhThucDaoTaos.Find(td.Chuyennganh).Ten,
-                idHinhThuc = td.Hinhthucdaotao,
-                Trinhdo = _context.TblDanhMucTrinhDos.Find(td.Chuyennganh).Ten,
-                idTrinhDo = td.Trinhdo,
-
+                Hinhthucdaotao = td.Hinhthucdaotao,
+                tenHinhThuc = _context.TblHinhThucDaoTaos.Find(td.Chuyennganh).Ten,
+                Trinhdo = td.Trinhdo,
+                tenTrinhDo = _context.TblDanhMucTrinhDos.Find(td.Chuyennganh).Ten,
                 Ma = td.Ma.Trim()
             };
             if (resp == null)
