@@ -7,8 +7,7 @@
         public DateTime? NgaySinh { get; set; }
         public string? BHYT { get; set; }
         public string? BHXH { get; set; }
-        public bool? GioiTinh { get; set; }
-        public int? PhongBan { get; set; }
+        public string? GioiTinh { get; set; }
         public string? TenPhongBan { get; set; }
     }
 }
