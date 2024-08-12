@@ -84,12 +84,27 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+
         [HttpGet("GetHopDongByMaNV/id")]
         public IActionResult GetHopDongByMaNV(string id)
         {
             try
             {
                 var hopDong = _hopDongService.GetAllHopDongByMaNV(id);
+                return Ok(hopDong);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("GetHopDongActiveByMaNV/id")]
+        public IActionResult GetHopDongActiveByMaNV(string id)
+        {
+            try
+            {
+                var hopDong = _hopDongService.GetAllHopDongByActiveMaNV(id);
                 return Ok(hopDong);
             }
             catch (Exception ex)

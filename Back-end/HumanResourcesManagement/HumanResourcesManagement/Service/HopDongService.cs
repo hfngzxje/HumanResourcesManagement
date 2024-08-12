@@ -56,10 +56,24 @@ namespace HumanResourcesManagement.Service
 
 
 
-        public List<TblHopDong> GetAllHopDongByMaNV(string id)
+        public List<TblHopDong> GetAllHopDongByActiveMaNV(string id)
         {
             var hopDongs = _context.TblHopDongs
                 .Where(hd => hd.Ma == id && hd.TrangThai == 1) 
+                .ToList();
+
+            if (!hopDongs.Any())
+            {
+                return null;
+            }
+
+            return hopDongs;
+        }
+
+        public List<TblHopDong> GetAllHopDongByMaNV(string id)
+        {
+            var hopDongs = _context.TblHopDongs
+                .Where(hd => hd.Ma == id)
                 .ToList();
 
             if (!hopDongs.Any())
