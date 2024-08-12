@@ -73,7 +73,7 @@ namespace HumanResourcesManagement.Service
         public List<TblHopDong> GetAllHopDongByMaNV(string id)
         {
             var hopDongs = _context.TblHopDongs
-                .Where(hd => hd.Ma == id && hd.TrangThai == 1)
+                .Where(hd => hd.Ma == id)
                 .ToList();
 
             if (!hopDongs.Any())
