@@ -101,17 +101,18 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNhanVienToExcel(DanhSachNhanVienRequest req)
         {
             var data = await getDanhSachNhanVien(req);
-            //string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
-            return await ExportToExcel("E:/BaoCao_DanhSachNhanVien.xlsx", data, "BaoCao_DanhSachNhanVien.xlsx");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhanVien.xlsx");
         }
         //nhan vien pdf
         public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
         {
             var list = await getDanhSachNhanVien(req);
             //string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
-            Console.WriteLine($"Data count: {list.Count()}");
-
-            return await ExportToPdf2("E:/BaoCao_DanhSachNhanVien.pdf", list, "BaoCao_DanhSachNhanVien.pdf");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.pdf");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, list, "BaoCao_DanhSachNhanVien.pdf");
         }
         //dang vien
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
@@ -174,14 +175,15 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToExcel(DanhSachDangVienRequest req)
         {
             var data = await getDanhSachDangVien(req);
-            //string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Ngày Vào Đảng", "Ngày Vào Đảng Chính Thức", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú", "Trạng Thái" };
-            return await ExportToExcel("E:/BaoCao_DanhSachDangVien.xlsx", data, "BaoCao_DanhSachDangVien.xlsx");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachDangVien.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDangVien.xlsx");
         }
         //dang vien pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToPdf(DanhSachDangVienRequest req)
         {
             var list = await getDanhSachDangVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Ngày Vào Đảng", "Ngày Vào Đảng Chính Thức", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú", "Trạng Thái" };
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Ngày Vào Đảng", "Ngày Vào Đảng Chính Thức", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú"};
             return await ExportToPdf("Báo Cáo Danh Sách Đảng Viên", list, "BaoCao_DanhSachDangVien.pdf", headers);
         }
         //nguoi than
@@ -263,8 +265,9 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToExcel(DanhSachNguoiThanRequest req)
         {
             var data = await getDanhSachNguoiThan(req);
-            //string[] headers = { "Tên", "Giới Tính", "Ngày Sinh", "Nghề Nghiệp", "Quan Hệ Với Nhân Viên", "Địa Chỉ", "Điện Thoại", "Mã Nhân Viên Tham Chiếu", "Tên Nhân Viên Tham Chiếu", "Khác" };
-            return await ExportToExcel("E:/BaoCao_DanhSachNguoiThan.xlsx", data, "BaoCao_DanhSachNguoiThan.xlsx");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNguoiThan.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNguoiThan.xlsx");
         }
         //nguoi than pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToPdf(DanhSachNguoiThanRequest req)
@@ -318,8 +321,9 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoSinhNhatToExcel(DanhSachSinhNhatRequest req)
         {
             var data = await getDanhSachSinhNhat(req);
-            //string[] headers = { "Tên", "Giới Tính", "Ngày Sinh", "Nghề Nghiệp", "Quan Hệ Với Nhân Viên", "Địa Chỉ", "Điện Thoại", "Mã Nhân Viên Tham Chiếu", "Tên Nhân Viên Tham Chiếu", "Khác" };
-            return await ExportToExcel("E:/BaoCao_DanhSachSinhNhat.xlsx", data, "BaoCao_DanhSachSinhNhat.xlsx");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachSinhNhat.xlsx");
         }
         
         //sinh nhat pdf
@@ -366,7 +370,9 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
         {
             var data = await getDanhSachDienChinhSach(req);
-            return await ExportToExcel("E:/BaoCao_DanhSachDienChinhSach.xlsx", data, "BaoCao_DanhSachDienChinhSach");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDienChinhSach.xlsx");
         }
         //dien chinh sach pdf
         public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToPdf(DanhSachDienChinhSachRequest req)
@@ -407,7 +413,9 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToExcel(DanhSachNhomLuongRequest req)
         {
             var data = await getDanhSachNhomLuong(req);
-            return await ExportToExcel("E:/BaoCao_DanhSachNhomLuong.xlsx", data, "BaoCao_DanhSachNhomLuong");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhomLuong.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhomLuong");
         }
         //nhom luong pdf
         public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToPdf(DanhSachNhomLuongRequest req)
@@ -448,7 +456,9 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToExcel(DanhSachBaoHiemRequest req)
         {
             var data = await getDanhSachBaoHiem(req);
-            return await ExportToExcel("E:/BaoCao_DanhSachBaoHiem.xlsx", data, "BaoCao_DanhSachBaoHiem");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachBaoHiem.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachBaoHiem");
         }
         //bao hiem pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToPdf(DanhSachBaoHiemRequest req)
@@ -457,38 +467,6 @@ namespace HumanResourcesManagement.Service
             string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "BHYT", "BHXH", "Giới Tính", "Phòng Ban" };
             return await ExportToPdf("Báo Cáo Danh Sách Bảo Hiểm", list, "BaoCao_DanhSachBaoHiem.pdf", headers);
         }
-
-
-
-        //ho so luong
-
-
-        //ho so luong excel
-
-
-        //ho so luong pdf
-
-
-
-
-        //nang luong 
-
-
-        //nang luong excel
-
-
-        //nang luong pdf
-
-
-        //len luong
-
-
-        //len luong excel
-
-
-        //len luong pdf
-
-
 
         //pdf
         private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
