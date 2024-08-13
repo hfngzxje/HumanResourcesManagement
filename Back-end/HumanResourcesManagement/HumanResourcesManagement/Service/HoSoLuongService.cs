@@ -92,6 +92,8 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Không có mã hợp đồng hợp lệ.");
             }
 
+            int thoihanLenLuong = int.TryParse(request.Thoihanlenluong, out int parsedValue) ? parsedValue : 0;
+
             hoSoLuong.Mahopdong = request.Mahopdong;
             hoSoLuong.Nhomluong = request.Nhomluong;
             hoSoLuong.Phucaptrachnhiem = request.Phucaptrachnhiem;
@@ -99,6 +101,9 @@ namespace HumanResourcesManagement.Service
             hoSoLuong.Tongluong = request.Tongluong;
             hoSoLuong.Thoihanlenluong = request.Thoihanlenluong;
             hoSoLuong.Ghichu = request.Ghichu;
+
+            hoSoLuong.Ngayketthuc = request.NgayBatDau.Value.AddYears(thoihanLenLuong);
+
 
             _context.TblLuongs.Update(hoSoLuong);
             _context.SaveChanges();
