@@ -21,12 +21,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpGet("getDanhSachLenLuong")]
-        public async Task<IActionResult> GetDanhSachLenLuong()
+        [HttpPost("getDanhSachLenLuong")]
+        public async Task<IActionResult> GetDanhSachLenLuong([FromForm]DanhSachLenLuongRequest req)
         {
             try
             {
-                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong();
+                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong(req);
 
                 return Ok(listNhanVien);
             }
@@ -65,6 +65,18 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-
+        [HttpPost("ExportDanhSachLenLuongToExcel")]
+        public async Task<IActionResult> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportLenLuongToExcel(req);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
+            }
+        }
     }
 }
