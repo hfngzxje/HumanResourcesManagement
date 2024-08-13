@@ -5,7 +5,7 @@ namespace HumanResourcesManagement.DTOS.Response
         public string Ma { get; set; }
         public string Ten { get; set; }
         public string? Ngaysinh { get; set; }
-        public bool? Gioitinh { get; set; }
+        public string? Gioitinh { get; set; }
         public string? Didong { get; set; }
         public string? TenPhong { get; set; }
         public string? QueQuan { get; set; }

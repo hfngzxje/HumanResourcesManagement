@@ -25,11 +25,6 @@ namespace HumanResourcesManagement.Service
             var exists = await _context.TblNgoaiNgus.AnyAsync(nv => nv.Ma == maNV);
             if (!exists)
             {
-                throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {maNV}");
-            }
-
-            if (_context.TblNgoaiNgus == null)
-            {
                 return null;
             }
 
@@ -37,7 +32,8 @@ namespace HumanResourcesManagement.Service
                 .Select(nn => new NgoaiNguDto
                 {
                     Id = nn.Id,
-                    Ngoaingu = nn.NgoainguNavigation.Ten,
+                    Ngoaingu = nn.Ngoaingu,
+                    tenNgoaiNgu = _context.TblDanhMucNgoaiNgus.FirstOrDefault( n => n.Id == nn.Ngoaingu).Ten,
                     Ngaycap = nn.Ngaycap,
                     Trinhdo = nn.Trinhdo,
                     Noicap = nn.Noicap,
@@ -58,8 +54,8 @@ namespace HumanResourcesManagement.Service
             var resp = new NgoaiNguDto
             {
                 Id = nn.Id,
-                Ngoaingu = nn.NgoainguNavigation.Ten,
-                idNgoaiNgu = nn.Ngoaingu,
+                Ngoaingu = nn.Ngoaingu,
+                tenNgoaiNgu = _context.TblDanhMucNgoaiNgus.Find(nn.Ngoaingu).Ten,
                 Ngaycap = nn.Ngaycap,
                 Trinhdo = nn.Trinhdo,
                 Noicap = nn.Noicap,
@@ -67,7 +63,7 @@ namespace HumanResourcesManagement.Service
             };
             if (resp == null)
             {
-                throw new Exception("không có id này.");
+                return null;
             }
             return resp;
         }
@@ -78,7 +74,7 @@ namespace HumanResourcesManagement.Service
             var nv = await _context.TblNhanViens.FirstOrDefaultAsync(nv => nv.Ma.Trim() == req.Ma);
             if (nv == null)
             {
-                throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {req.Ma}");
+                return null;
             }
 
             var dateDate = req.Ngaycap;
@@ -122,7 +118,7 @@ namespace HumanResourcesManagement.Service
                 var ngoaiNgu = await _context.TblNgoaiNgus.FindAsync(req.Id);
                 if (ngoaiNgu == null)
                 {
-                    throw new KeyNotFoundException($"Không tìm thấy ngoại ngữ với id {req.Id}");
+                    return null;
                 }
 
                 var dateDate = req.Ngaycap;

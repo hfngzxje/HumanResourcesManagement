@@ -16,6 +16,9 @@ namespace HumanResourcesManagement.Service
         {
             _context = context;
         }
+
+
+        //nhan vien
         public async Task<IEnumerable<DanhSachNhanVienResponse>> getDanhSachNhanVien(DanhSachNhanVienRequest req)
         {
             var all = await _context.TblNhanViens.ToListAsync();
@@ -84,7 +87,7 @@ namespace HumanResourcesManagement.Service
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 Didong = item.Didong,
-                Gioitinh = item.Gioitinh,
+                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
                 TamTru = item.Tamtru,
@@ -94,13 +97,24 @@ namespace HumanResourcesManagement.Service
 
             return responseList;
         }
-
+        //nhan vien excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNhanVienToExcel(DanhSachNhanVienRequest req)
         {
             var data = await getDanhSachNhanVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
-            return await ExportToExcel("DANH SÁCH BÁO CÁO NHÂN VIÊN", data, "BaoCao_DanhSachNhanVien.xlsx", headers);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhanVien.xlsx");
         }
+        //nhan vien pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
+        {
+            var list = await getDanhSachNhanVien(req);
+            //string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.pdf");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, list, "BaoCao_DanhSachNhanVien.pdf");
+        }
+        //dang vien
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
         {
             var query = _context.TblNhanViens.Where(nv => nv.Ngayvaodangchinhthuc.HasValue).AsQueryable();
@@ -144,7 +158,7 @@ namespace HumanResourcesManagement.Service
                 Ma = item.Ma,
                 Ten = item.Ten,
                 Ngaysinh = item.Ngaysinh.HasValue ? item.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
-                Gioitinh = item.Gioitinh,
+                Gioitinh = item.Gioitinh ? "Nam" : "Nữ",
                 Didong = item.Didong,
                 QueQuan = item.Quequan,
                 NoiSinh = item.Noisinh,
@@ -157,14 +171,22 @@ namespace HumanResourcesManagement.Service
 
             return responseList;
         }
-
+        //dang vien excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToExcel(DanhSachDangVienRequest req)
         {
             var data = await getDanhSachDangVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Ngày Vào Đảng", "Ngày Vào Đảng Chính Thức", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú", "Trạng Thái" };
-            return await ExportToExcel("DANH SÁCH BÁO CÁO ĐẢNG VIÊN", data, "BaoCao_DanhSachDangVien.xlsx", headers);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachDangVien.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDangVien.xlsx");
         }
-
+        //dang vien pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToPdf(DanhSachDangVienRequest req)
+        {
+            var list = await getDanhSachDangVien(req);
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Ngày Vào Đảng", "Ngày Vào Đảng Chính Thức", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú"};
+            return await ExportToPdf("Báo Cáo Danh Sách Đảng Viên", list, "BaoCao_DanhSachDangVien.pdf", headers);
+        }
+        //nguoi than
         public async Task<IEnumerable<DanhSachNguoiThanResponse>> getDanhSachNguoiThan(DanhSachNguoiThanRequest req)
         {
             var allNguoiThan = await _context.TblNguoiThans.ToListAsync();
@@ -222,7 +244,7 @@ namespace HumanResourcesManagement.Service
             var resp = allNguoiThan.Select(r => new DanhSachNguoiThanResponse
             {
                 Ten = r.Ten,
-                GioiTinh = (bool)r.Gioitinh,
+                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
                 NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 QuanHe = _context.TblDanhMucNguoiThans.Find(r.Quanhe).Ten,
                 NgheNghiep = r.Nghenghiep,
@@ -239,48 +261,22 @@ namespace HumanResourcesManagement.Service
             }
             return resp;
         }
-
+        //nguoi than excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToExcel(DanhSachNguoiThanRequest req)
         {
             var data = await getDanhSachNguoiThan(req);
-            string[] headers = { "Tên", "Giới Tính", "Ngày Sinh", "Nghề Nghiệp", "Quan Hệ Với Nhân Viên", "Địa Chỉ", "Điện Thoại", "Mã Nhân Viên Tham Chiếu", "Tên Nhân Viên Tham Chiếu", "Khác" };
-            return await ExportToExcel("DANH SÁCH BÁO CÁO NGƯỜI THÂN", data, "BaoCao_DanhSachNguoiThan.xlsx", headers);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNguoiThan.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNguoiThan.xlsx");
         }
-
-        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
+        //nguoi than pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToPdf(DanhSachNguoiThanRequest req)
         {
-            using (var package = new ExcelPackage())
-            {
-                var worksheet = package.Workbook.Worksheets.Add($"{title}");
-                worksheet.Cells[1, 1].Value = title;
-                worksheet.Cells[1, 1, 1, headers.Length].Merge = true;
-                worksheet.Cells[1, 1].Style.Font.Bold = true;
-                worksheet.Cells[1, 1].Style.Font.Size = 16;
-                worksheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                for (int i = 0; i < headers.Length; i++)
-                {
-                    worksheet.Cells[2, i + 1].Value = headers[i];
-                    worksheet.Cells[2, i + 1].Style.Font.Bold = true;
-                }
-
-                int row = 3;
-                foreach (var item in data)
-                {
-                    var properties = item.GetType().GetProperties();
-                    for (int col = 0; col < properties.Length; col++)
-                    {
-                        worksheet.Cells[row, col + 1].Value = properties[col].GetValue(item, null);
-                    }
-                    row++;
-                }
-
-                worksheet.Cells.AutoFitColumns();
-
-                var content = package.GetAsByteArray();
-                return (content, fileName);
-            }
+            var data = await getDanhSachNguoiThan(req);
+            string[] headers = { "Tên", "Giới Tính", "Ngày Sinh", "Nghề Nghiệp", "Quan Hệ Với Nhân Viên", "Địa Chỉ", "Điện Thoại", "Mã Nhân Viên Tham Chiếu", "Tên Nhân Viên Tham Chiếu", "Khác" };
+            return await ExportToPdf("Báo Cáo Danh Sách Người Thân", data, "BaoCao_DanhSachNguoiThan.pdf", headers);
         }
-
+        //sinh nhat
         public async Task<IEnumerable<DanhSachSinhNhatResponse>> getDanhSachSinhNhat(DanhSachSinhNhatRequest req)
         {
             var query = _context.TblNhanViens.AsQueryable();
@@ -311,7 +307,7 @@ namespace HumanResourcesManagement.Service
             {
                 MaNV = x.Ma,
                 TenNV = x.Ten,
-                PhongId = x.PhongNavigation.Id,
+                //PhongId = x.PhongNavigation.Id,
                 TenPhong = x.PhongNavigation.Ten,
                 NgaySinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.ToString("dd/MM/yyyy") : null,
                 ThangSinh = x.Ngaysinh.HasValue ? x.Ngaysinh.Value.Month : (int?)null,
@@ -321,36 +317,24 @@ namespace HumanResourcesManagement.Service
 
             return result;
         }
-
-        public static string GetTinhTrang(DateTime ngaySinh, DateTime today)
+        //sinh nhat excel
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoSinhNhatToExcel(DanhSachSinhNhatRequest req)
         {
-            var currentYearBirthday = new DateTime(today.Year, ngaySinh.Month, ngaySinh.Day);
-            var dayDifference = (currentYearBirthday - today).Days;
-
-            if (dayDifference == 0)
-            {
-                return "Hôm nay";
-            }
-            else if (dayDifference > 0 && dayDifference <= 7)
-            {
-                return "Sắp đến";
-            }
-            else if (dayDifference < 0)
-            {
-                return "Đã qua";
-            }
-            else if (currentYearBirthday.Month == today.Month)
-            {
-                return "Trong tháng";
-            }
-            else if (currentYearBirthday > today)
-            {
-                return "Chưa đến";
-            }
-
-            return "Không có";
+            var data = await getDanhSachSinhNhat(req);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachSinhNhat.xlsx");
         }
-
+        
+        //sinh nhat pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoSinhNhatToPdf(DanhSachSinhNhatRequest req)
+        {
+            var data = await getDanhSachSinhNhat(req);
+            string[] headers = { "Mã NV", "Họ Tên", "Phòng", "Ngày Sinh", "Tháng Sinh", "Sinh Nhật", "Tình Trạng"};
+            return await ExportToPdf("Báo Cáo Danh Sách Sinh Nhật", data, "BaoCao_DanhSachSinhNhat.pdf", headers);
+        }
+        
+        //dien chinh sach
         public async Task<IEnumerable<DanhSachDienChinhSachResponse>> getDanhSachDienChinhSach(DanhSachDienChinhSachRequest req)
         {
             var all = await _context.TblNhanViens.Where(n => n.Laconchinhsach == true).ToListAsync();
@@ -369,7 +353,7 @@ namespace HumanResourcesManagement.Service
             {
                 MaNV = r.Ma,
                 TenNV = r.Ten,
-                GioiTinh = (bool)r.Gioitinh,
+                GioiTinh = (bool)r.Gioitinh ? "Nam" : "Nữ",
                 NgaySinh = r.Ngaysinh.Value.ToString("dd/MM/yyyy"),
                 DienThoai = r.Didong,
                 PhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(p => p.Id == r.Phong)?.Ten,
@@ -382,14 +366,22 @@ namespace HumanResourcesManagement.Service
             }
             return resp;
         }
-
-        public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
+        //dien chinh sach excel
+        public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
         {
             var data = await getDanhSachDienChinhSach(req);
-            string[] headers = { "Mã Nhân Viên", "Tên Nhân Viên" };
-            return await ExportToExcel("DANH SÁCH BÁO CÁO DIỆN CHÍNH SÁCH", data, "BaoCao_DanhSachDienChinhSach", headers);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDienChinhSach.xlsx");
         }
-
+        //dien chinh sach pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToPdf(DanhSachDienChinhSachRequest req)
+        {
+            var data = await getDanhSachDienChinhSach(req);
+            string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "Giới Tính", "Điện Thoại", "Phòng Ban", "Diện Chính Sách", "Trạng Thái"};
+            return await ExportToPdf("Báo Cáo Danh Sách Diện Chính Sách", data, "BaoCao_DanhSachDienChinhSach.pdf", headers);
+        }
+        //nhom luong
         public async Task<IEnumerable<DanhSachNhomLuongResponse>> getDanhSachNhomLuong(DanhSachNhomLuongRequest req)
         {
             var all = await _context.TblDanhMucNhomLuongs.ToListAsync();
@@ -417,7 +409,23 @@ namespace HumanResourcesManagement.Service
             }
             return resp;
         }
+        //nhom luong excel
+        public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToExcel(DanhSachNhomLuongRequest req)
+        {
+            var data = await getDanhSachNhomLuong(req);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhomLuong.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhomLuong");
+        }
+        //nhom luong pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToPdf(DanhSachNhomLuongRequest req)
+        {
+            var list = await getDanhSachNhomLuong(req);
+            string[] headers = { "Chức Danh", "Bậc Lương", "Hệ Số Lương", "Lương Cơ Bản", "Phụ Cấp", "Khác" };
+            return await ExportToPdf("Báo Cáo Danh Sách Nhóm Lương", list, "BaoCao_DanhSachNhomLuong.pdf", headers);
+        }
 
+        //bao hiem
         public async Task<IEnumerable<DanhSachBaoHiemResponse>> getDanhSachBaoHiem(DanhSachBaoHiemRequest req)
         {
             var all = await _context.TblNhanViens.Where(nv => nv.Bhxh != null || nv.Bhyt != null).ToListAsync();
@@ -431,11 +439,10 @@ namespace HumanResourcesManagement.Service
             {
                 MaNV = r.Ma,
                 TenNV = r.Ten,
-                GioiTinh = r.Gioitinh,
+                GioiTinh = r.Gioitinh ? "Nam" : "Nữ",
                 BHXH = r.Bhxh,
                 BHYT = r.Bhyt,
                 NgaySinh = r.Ngaysinh,
-                PhongBan = r.Phong,
                 TenPhongBan = _context.TblDanhMucPhongBans.Find(r.Phong).Ten,
             }).ToList();
 
@@ -445,7 +452,23 @@ namespace HumanResourcesManagement.Service
             }
             return resp;
         }
+        //bao hiem excel
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToExcel(DanhSachBaoHiemRequest req)
+        {
+            var data = await getDanhSachBaoHiem(req);
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachBaoHiem.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachBaoHiem");
+        }
+        //bao hiem pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToPdf(DanhSachBaoHiemRequest req)
+        {
+            var list = await getDanhSachBaoHiem(req);
+            string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "BHYT", "BHXH", "Giới Tính", "Phòng Ban" };
+            return await ExportToPdf("Báo Cáo Danh Sách Bảo Hiểm", list, "BaoCao_DanhSachBaoHiem.pdf", headers);
+        }
 
+        //pdf
         private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
         {
             using (var memoryStream = new MemoryStream())
@@ -496,21 +519,102 @@ namespace HumanResourcesManagement.Service
                 return (memoryStream.ToArray(), fileName);
             }
         }
-
-
-
-        public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
+        //excel
+        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(string templatePath, IEnumerable<T> data, string fileName)
         {
-            var list = await getDanhSachNhanVien(req);
-            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
-            return await ExportToPdf("Báo Cáo Danh Sách Nhân Viên", list, "BaoCao_DanhSachNhanVien.pdf", headers);
+            // Load the existing Excel template
+            using (var package = new ExcelPackage(new FileInfo(templatePath)))
+            {
+                var worksheet = package.Workbook.Worksheets[0]; // Assumes you are using the first worksheet
+
+                // Calculate start row. If worksheet is empty, start at row 2 (assuming row 1 is for headers)
+                int startRow = worksheet.Dimension?.End.Row + 1 ?? 2;
+
+                foreach (var item in data)
+                {
+                    var properties = item.GetType().GetProperties();
+                    for (int col = 0; col < properties.Length; col++)
+                    {
+                        worksheet.Cells[startRow, col + 1].Value = properties[col].GetValue(item, null);
+                    }
+                    startRow++;
+                }
+                //worksheet.Cells.AutoFitColumns();
+
+                var content = package.GetAsByteArray();
+                return (content, fileName);
+            }
         }
-
-        public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToPdf(DanhSachNhomLuongRequest req)
+        //pdf 2
+        private async Task<(byte[] fileContent, string fileName)> ExportToPdf2<T>(string templatePath, IEnumerable<T> data, string fileName)
         {
-            var list = await getDanhSachNhomLuong(req);
-            string[] headers = { "Chức Danh", "Bậc Lương", "Hệ Số Lương", "Lương Cơ Bản", "Phụ Cấp", "Khác" };
-            return await ExportToPdf("Báo Cáo Danh Sách Nhóm Lương", list, "BaoCao_DanhSachNhomLuong.pdf", headers);
+            using (var memoryStream = new MemoryStream())
+            {
+                // Load the existing PDF template
+                PdfReader reader = new PdfReader(templatePath);
+                PdfStamper stamper = new PdfStamper(reader, memoryStream);
+                AcroFields form = stamper.AcroFields;
+                PdfContentByte pdfContent = stamper.GetOverContent(1); // Assuming data is on the first page
+
+                // Load font
+                string arialFontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "Arial.ttf");
+                BaseFont baseFont = BaseFont.CreateFont(arialFontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                Font dataFont = new Font(baseFont, 10, Font.NORMAL);
+
+                // Start from a specific Y position for the data (modify as per your template design)
+                float yPosition = 500;  // Adjust based on your existing template
+                float leading = 12f;    // Line spacing
+
+                foreach (var item in data)
+                {
+                    var properties = item.GetType().GetProperties();
+                    string rowData = string.Join(" | ", properties.Select(p => p.GetValue(item)?.ToString() ?? string.Empty));
+
+                    // Add the row data to the existing table
+                    ColumnText.ShowTextAligned(pdfContent, Element.ALIGN_LEFT, new Phrase(rowData, dataFont), 50, yPosition, 0);
+                    yPosition -= leading;
+
+                    if (yPosition < 50) // Move to a new page if needed
+                    {
+                        pdfContent = stamper.GetOverContent(stamper.Writer.PageNumber + 1);
+                        yPosition = 500;
+                    }
+                }
+
+                stamper.Close();
+                reader.Close();
+
+                return (memoryStream.ToArray(), fileName);
+            }
+
+        }
+        public static string GetTinhTrang(DateTime ngaySinh, DateTime today)
+        {
+            var currentYearBirthday = new DateTime(today.Year, ngaySinh.Month, ngaySinh.Day);
+            var dayDifference = (currentYearBirthday - today).Days;
+
+            if (dayDifference == 0)
+            {
+                return "Hôm nay";
+            }
+            else if (dayDifference > 0 && dayDifference <= 7)
+            {
+                return "Sắp đến";
+            }
+            else if (dayDifference < 0)
+            {
+                return "Đã qua";
+            }
+            else if (currentYearBirthday.Month == today.Month)
+            {
+                return "Trong tháng";
+            }
+            else if (currentYearBirthday > today)
+            {
+                return "Chưa đến";
+            }
+
+            return "Không có";
         }
     }
 }

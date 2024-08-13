@@ -50,7 +50,7 @@ namespace HumanResourcesManagement.Controllers
         {
             try
             {
-                var resp = _ngoaiNguService.GetNgoaiNguById(id);
+                var resp = await _ngoaiNguService.GetNgoaiNguById(id);
                 return Ok(resp);
             }
             catch (Exception ex)
