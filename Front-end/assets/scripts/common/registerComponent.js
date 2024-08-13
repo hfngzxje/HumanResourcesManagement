@@ -758,6 +758,11 @@ class BaseTable extends HTMLElement {
                 thEl.style.color = "black";
               }
             }
+            if (col.formatGiaTri) {
+              const formatted = col.formatGiaTri(value);
+              value = formatted.text; // Lấy giá trị đã định dạng
+              thEl.style.color = formatted.color; 
+          }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
             if (col.key === "action") {
               //

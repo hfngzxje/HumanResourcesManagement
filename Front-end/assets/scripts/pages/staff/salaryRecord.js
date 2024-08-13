@@ -75,7 +75,15 @@ var TableColumns = [
     },
     {
         label: 'Trạng thái',
-        key: 'trangthai'
+        key: 'trangthai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     },
     {
         label: 'Hành động',
@@ -83,15 +91,28 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: async (row) => {
-                    isPopupEdit = true
-                    await fetchSalaryToEdit(row.id)
-                    showPopup()
+                     if(row.ngaybatdau === null && row.ngayketthuc === null && row.thoihanlenluong === null || row.trangthai === 1){
+                        isPopupEdit = true
+                        await fetchSalaryToEdit(row.id)
+                        showPopup()
+                    }
+                   else if (row.trangthai === 2) {
+                        alert('Hồ sơ lương đã hết hiệu lực, không thể sửa');
+                        return;
+                    }
                 }
             }
         ]
     }
 ]
-
+function formatGiaTri(value, label1, label2) {
+    if (value === 1) {
+        return label1; // Ví dụ: 'Hết hạn'
+    } else if (value === 2) {
+        return label2; // Ví dụ: 'Còn hạn' hoặc giá trị ngược lại của 'Hết hạn'
+    }
+    return value; // Nếu không phải 1 hoặc 2, trả lại giá trị gốc
+}
 
 function backToList() {
     const url = new URL("/pages/staff/laborcontract.html", window.location.origin);

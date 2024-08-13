@@ -5,33 +5,33 @@ var maDetail = null
 var TableColumns = [
     {
         label: 'Mã nhân viên',
-        key: 'ma',
+        key: 'maNV',
     },
     {
         label: 'Họ tên',
-        key: 'ten',
+        key: 'tenNV',
     },
     {
         label: 'Chức vụ hiện tại',
-        key: 'chucvuhientai'
+        key: 'tenChucVu'
     },
     {
         label: 'Phòng',
-        key: 'phong'
+        key: 'tenPhongBan'
     },
     {
         label: 'Tổ',
-        key: 'to'
+        key: 'tenTo'
     },
     {
         label: 'Hành động',
         key: 'action',
         actions: [
             {
-                type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
+                type: 'plain', icon: 'bx bx-save', label: 'Nâng lương', onClick: (row) => {
                     isPopupEdit = true
                     console.log('row click ', row);
-                    fetchSalaryToEdit(row.ma);
+                    fetchSalaryToEdit(row.maNV);
                     showPopup("showPopUp")
                 }
             }

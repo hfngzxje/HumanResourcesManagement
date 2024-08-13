@@ -35,7 +35,15 @@ var TableColumns = [
     },
     {
         label: 'Trạng thái',
-        key: 'trangThai'
+        key: 'trangThai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     },
     {
         label: 'Ghi chú',

@@ -31,14 +31,6 @@ var TableColumns = [
         key: 'chucdanh',
     },
     {
-        label: 'Phòng ban',
-        key: 'phong'
-    },
-    {
-        label: 'Tổ',
-        key: 'to'
-    },
-    {
         label: 'Trạng thái',
         key: 'trangThai'
     },

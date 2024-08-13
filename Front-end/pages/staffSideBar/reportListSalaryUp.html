@@ -66,11 +66,11 @@
         <div class="col-md-12">
           <div class="tile">
             <h3 class="tile-title">Danh sách nâng lương</h3>
-            <div>
-            </div>
-          </div>
-          <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4">
+          
+          <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" method="POST"
+            pageSize="4">
         </div>
+      </div>
       </div>
 
     </div>
@@ -155,14 +155,13 @@
             <div class="p-4">
               <div class="grid gap-4 grid-cols-3">
                 <div class="col-span-2 sm:col-span-1">
-                    <base-input id="maHopDong" label="Mã hợp đồng" name="mahopdong" readonly>
+                  <base-input id="maHopDong" label="Mã hợp đồng" name="mahopdong" readonly>
                   </base-input>
                 </div>
                 <div class="col-span-2 sm:col-span-1">
-                  <base-select id="ngachNhanVien" api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
-                      keyvalue="id" keylabel="ten" label="Chức danh" name="nhomluong"
-                      disabled></base-select>
-              </div>
+                  <base-select id="ngachNhanVien" api="https://localhost:7141/api/ChucDanh/getAllChucDanh" keyvalue="id"
+                    keylabel="ten" label="Chức danh" name="nhomluong" disabled></base-select>
+                </div>
                 <div class="col-span-2 sm:col-span-1">
                   <base-select id="ngachCongChuc" api="https://localhost:7141/api/NhanVien/ngachCongChuc" keyvalue="id"
                     keylabel="ten" label="Ngạch công chức" name="ngachcongchuc"></base-select>
@@ -217,7 +216,8 @@
 
 
       <div class="flex gap-x-5  justify-end">
-        <base-button id="updateBtn" onclick="handleCreate()" label="Cập nhật" icon="bx bx-save" type="green"></base-button>
+        <base-button id="updateBtn" onclick="handleCreate()" label="Cập nhật" icon="bx bx-save"
+          type="green"></base-button>
       </div>
     </div>
   </div>
