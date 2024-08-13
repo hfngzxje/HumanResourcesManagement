@@ -79,10 +79,6 @@ function renderActionByStatus() {
     const pdfBtn = buildButton('PDF', 'red', 'bx bx-file-blank')
     const excelBtn = buildButton('Excel', '', 'bx bx-spreadsheet')
 
-    // removeBtn.addEventListener('click', handleRemove)
-    // saveBtn.addEventListener('click', handleSave)
-    // createBtn.addEventListener('click', handleCreate)
-
     actionEl.append(DisplayBtn,pdfBtn, excelBtn)
 }
 

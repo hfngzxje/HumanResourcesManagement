@@ -24,6 +24,10 @@ let thongTinNgachCongChucPop = null
 
 var TableColumns = [
     {
+        label: 'ID',
+        key: 'id'
+    },
+    {
         label: 'Mã Hợp Đồng',
         key: 'mahopdong'
     },
@@ -314,7 +318,7 @@ function renderActionByStatus() {
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail;
+    return 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail;
 }
 async function buildApiHopDongA(id) {
     return 'https://localhost:7141/api/HopDong/id?id=' + id;
@@ -330,7 +334,7 @@ function buidApiBacLuong() {
 async function apiDanhSachHopDong() {
     try {
         const hopDong = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });

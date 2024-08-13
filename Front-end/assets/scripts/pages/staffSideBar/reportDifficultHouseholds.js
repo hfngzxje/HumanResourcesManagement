@@ -50,7 +50,7 @@ async function handleExportExcel() {
   params.append('QueQuan', formValue.QueQuan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToExecl', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDienChinhSachToExecl', {
       method: 'POST',
       body: params,
       headers: {
@@ -73,7 +73,7 @@ function createDownloadLinkExcel(blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'BaoCao_DanhSachNhanVien.xlsx';
+  link.download = 'BaoCao_DanhSachDienChinhSach.xlsx';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -94,7 +94,7 @@ async function handleExportPDF() {
   params.append('QueQuan', formValue.QueQuan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDienChinhSachToPDF', {
       method: 'POST',
       body: params,
       headers: {
@@ -117,7 +117,7 @@ function createDownloadLinkPDF(blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'BaoCao_DanhSachNhanVien.pdf';
+  link.download = 'BaoCao_DanhSachDienChinhSach.pdf';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

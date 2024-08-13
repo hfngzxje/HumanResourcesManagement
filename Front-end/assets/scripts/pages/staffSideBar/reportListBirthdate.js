@@ -55,6 +55,92 @@ var Quy = [
   { label: "Quý 4", value: 4 },
 ];
 
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('MaNV', formValue.MaNV || '');
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('PhongBan', formValue.PhongBan || '');
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoSinhNhatToExcel', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachSinhNhat.xlsx';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('MaNV', formValue.MaNV || '');
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('PhongBan', formValue.PhongBan || '');
+
+  try {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoSinhNhatToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachSinhNhat.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
   const buildButton = (label, type, icon) => {
@@ -66,6 +152,13 @@ function renderActionByStatus() {
   };
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
+
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
+  });
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
 
   actionEl.append(pdfBtn, excelBtn);
 }

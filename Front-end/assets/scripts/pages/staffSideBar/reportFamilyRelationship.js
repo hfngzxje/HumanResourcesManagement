@@ -66,6 +66,9 @@ function renderActionByStatus() {
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
   });
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
   actionEl.append(pdfBtn, excelBtn);
 }
 
@@ -124,7 +127,7 @@ async function handleExportPDF() {
   params.append('PhongBan', formValue.PhongBan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToPDF', {
       method: 'POST',
       body: params,
       headers: {

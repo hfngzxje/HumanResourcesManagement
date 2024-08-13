@@ -48,7 +48,7 @@ async function handleExportExcel() {
   params.append('BacLuong', formValue.BacLuong || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhomLuongToExcel', {
       method: 'POST',
       body: params,
       headers: {

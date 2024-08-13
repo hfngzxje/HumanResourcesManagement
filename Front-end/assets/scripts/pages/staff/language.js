@@ -11,8 +11,12 @@ const popupUpdateNgoaiNgubtn = document.getElementById("updateNgoaiNguBtn")
 
 var TableColumns2 = [
     {
+        label: 'Mã nhân viên',
+        key: 'ma'
+    },
+    {
         label: 'Ngoại ngữ',
-        key: 'ngoaingu'
+        key: 'tenNgoaiNgu'
     },
     {
         label: 'Ngày cấp',
@@ -41,12 +45,6 @@ var TableColumns2 = [
         ]
     }
 ]
-var tableEventLanguage = { // global: ở đau cũng truy cập được
-    rowClick: (row) => {
-        console.log('row click ', row);
-        fetchNgoaiNgu(row.idNgoaiNgu)
-    }
-}
 function clearFormValues(formId) {
     const form = document.getElementById(formId);
     const inputs = form.querySelectorAll('input, textarea');
@@ -104,7 +102,7 @@ function fetchNgoaiNgu(id) {
     idNgoaiNgu = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + id,
+        url: 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data, 'fetch');
@@ -173,19 +171,21 @@ function handleRemoveNgoaiNgu(id) {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NgoaiNgu/deleteNgoaiNgu/' + id,
+            url: 'https://localhost:7141/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
+                // recordActivityAdmin(maNhanVien, `Xóa ngoại ngữ ${maDetail} : ${oldng}`);
                 closePopup("editNgoaiNgu")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
                     }
                 });
+
             },
             error: (err) => {
-                console.log('fetchNgoaiNgu err :: ', err);
+                console.log('fetchTrinhDo err :: ', err);
                 alert("Xóa thất bại!")
             },
             complete: () => {
@@ -199,6 +199,7 @@ function handleSaveNgoaiNgu() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa ngoại ngữ?')
     if (!isConfirm) return
     const formValue = getFormValues('editNgoaiNgu')
+    formValue['id'] = idNgoaiNgu
     const payload = buildPayload1(formValue)
     setLoading(true)
     setTimeout(() => {

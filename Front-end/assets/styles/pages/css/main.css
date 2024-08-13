@@ -6194,7 +6194,7 @@ button.close {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 2;
   display: none;
   overflow: hidden;
   outline: 0;
@@ -14939,7 +14939,7 @@ be a descendant of the grid when it is being dragged.
   padding-left: 10px;
   padding-right: 10px;
   overflow: auto;
-  z-index: 10;
+  z-index: 1;
   background: rgb(0, 28, 64);
   /* box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); */
   /* border-bottom-right-radius: 50px; */

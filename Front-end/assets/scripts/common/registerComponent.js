@@ -777,7 +777,13 @@ class BaseTable extends HTMLElement {
             } else {
               // nếu type được khai báo thì định dạng lại giá trị tương ứng
               if (col.type === "datetime") {
-                value = formatDateTime(value);
+                if(value === null){
+                  value =" "
+                }
+                else{
+                  value = formatDateTime(value);
+
+                }
               } 
               else if(col.type === "time"){
                 value = formatTime(value)
@@ -796,8 +802,13 @@ class BaseTable extends HTMLElement {
 
               // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
               if (col.formatter) {
-                console.log(value);
-                value = col.formatter(value); // value
+                if(value === null){
+                  value = null
+                }
+                else{
+                  console.log(value);
+                  value = col.formatter(value); // value
+                }
               }
 
               // <th> nội dung đã được định dạng lại /th>

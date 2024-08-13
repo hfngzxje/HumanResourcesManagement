@@ -55,9 +55,9 @@ function renderActionByStatus() {
     handleExportExcel();
   });
 
-  // pdfBtn.addEventListener("click", () => {
-  //   handleExportPDF();
-  // });
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
+  });
 
   actionEl.append(pdfBtn, excelBtn);
 
@@ -118,7 +118,7 @@ async function handleExportPDF() {
   params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToPDF', {
       method: 'POST',
       body: params,
       headers: {

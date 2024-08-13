@@ -1,5 +1,5 @@
 
-  let idTrinhDo = null
+let idTrinhDo = null
 let isPopupEdit = false
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
@@ -9,20 +9,26 @@ const popupUpdateTrinhDobtn = document.getElementById("updateBtn")
 let oldTruong = null;
 let oldChuyenNganh = null;
 
-
 var TableColumns1 = [
+    // {
+    //     label: 'ID',
+    //     key: 'id'
+    // },
+    {
+        label: 'Mã nhân viên',
+        key: 'ma'
+    },
     {
         label: 'Tên trường',
         key: 'tentruong'
     },
     {
         label: 'Chuyên ngành',
-        key: 'chuyennganh',
-        type: 'currency'
+        key: 'tenChuyenNganh',
     },
     {
         label: 'Trình độ',
-        key: 'trinhdo'
+        key: 'tenTrinhDo'
     },
     {
         label: 'Từ',
@@ -36,7 +42,7 @@ var TableColumns1 = [
     },
     {
         label: 'Hình thức đào tạo',
-        key: 'hinhthucdaotao'
+        key: 'tenHinhThuc'
     },
     {
         label: 'Hành động',
@@ -45,6 +51,7 @@ var TableColumns1 = [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
+                    console.log('row click ', row);
                     fetchTrinhDo(row.id);
                     showPopup("editTrinhDo")
                 }
@@ -52,12 +59,7 @@ var TableColumns1 = [
         ]
     }
 ]
-var tableEventQualification = { 
-    rowClick: (row) => {
-        console.log('row click ', row);
-        fetchTrinhDo(row.idTrinhDo)
-    }
-}
+
 
 function clearFormValues(formId) {
     const form = document.getElementById(formId);
@@ -183,7 +185,7 @@ function handleRemoveTrinhDo() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + id,
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
@@ -211,6 +213,8 @@ function handleSaveTrinhDo() {
     const isConfirm = confirm('Bạn chắc chắn muốn sửa trình độ văn hóa?')
     if (!isConfirm) return
     const formValue = getFormValues('editTrinhDo')
+    alert(idTrinhDo)
+    formValue['id'] = idTrinhDo
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
