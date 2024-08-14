@@ -70,18 +70,39 @@ namespace HumanResourcesManagement.Service
             return hopDongs;
         }
 
-        public List<TblHopDong> GetAllHopDongByMaNV(string id)
+        public List<HopDongResponse> GetAllHopDongByMaNV(string id)
         {
             var hopDongs = _context.TblHopDongs
                 .Where(hd => hd.Ma == id)
                 .ToList();
 
-            if (!hopDongs.Any())
+            var resp = hopDongs.Select(hd => new HopDongResponse
+            {
+                
+                    Mahopdong = hd.Mahopdong,
+                    LoaihopdongId = hd.Loaihopdong,
+                    ChucDanhId = hd.Chucdanh,
+                    Hopdongtungay = hd.Hopdongtungay,
+                    Hopdongdenngay = hd.Hopdongdenngay,
+                    Ghichu = hd.Ghichu,
+                    Ma = hd.Ma,
+                    Loaihopdong = _context.TblDanhMucLoaiHopDongs
+                        .Where(ld => ld.Id == hd.Loaihopdong)
+                        .Select(ld => ld.Ten)
+                        .FirstOrDefault(),
+                    Chucdanh = _context.TblDanhMucChucDanhs
+                        .Where(cd => cd.Id == hd.Chucdanh)
+                        .Select(cd => cd.Ten)
+                        .FirstOrDefault()
+             
+            }).ToList();
+
+            if (!resp.Any())
             {
                 return null;
             }
 
-            return hopDongs;
+            return resp;
         }
 
 
