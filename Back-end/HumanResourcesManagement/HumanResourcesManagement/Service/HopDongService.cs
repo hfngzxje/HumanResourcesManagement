@@ -26,6 +26,7 @@ namespace HumanResourcesManagement.Service
                     hd.Hopdongtungay,
                     hd.Hopdongdenngay,
                     hd.Ghichu,
+                    hd.TrangThai,
                     hd.Ma
                 })
                 .ToList();
@@ -40,6 +41,7 @@ namespace HumanResourcesManagement.Service
                     Hopdongdenngay = hd.Hopdongdenngay,
                     Ghichu = hd.Ghichu,
                     Ma = hd.Ma,
+                    TrangThai= hd.TrangThai,
                     Loaihopdong = _context.TblDanhMucLoaiHopDongs
                         .Where(ld => ld.Id == hd.Loaihopdong)
                         .Select(ld => ld.Ten)
@@ -85,6 +87,7 @@ namespace HumanResourcesManagement.Service
                     Hopdongtungay = hd.Hopdongtungay,
                     Hopdongdenngay = hd.Hopdongdenngay,
                     Ghichu = hd.Ghichu,
+                    TrangThai=hd.TrangThai,
                     Ma = hd.Ma,
                     Loaihopdong = _context.TblDanhMucLoaiHopDongs
                         .Where(ld => ld.Id == hd.Loaihopdong)

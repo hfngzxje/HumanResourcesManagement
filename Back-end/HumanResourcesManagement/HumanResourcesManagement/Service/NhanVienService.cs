@@ -25,7 +25,7 @@ namespace HumanResourcesManagement.Service
 
         public List<NhanVienResponse> GetAllNhanVien()
         {
-            var nhanViens = _context.TblNhanViens.Include(nv => nv.ToNavigation).Include(nv => nv.PhongNavigation).Include(nv => nv.ChucvuhientaiNavigation).ToList();
+            var nhanViens = _context.TblNhanViens.Include(nv => nv.ToNavigation).Include(nv => nv.PhongNavigation).Include(nv => nv.ChucvuhientaiNavigation).Include(nv=>nv.DantocNavigation).Include(nv=>nv.TongiaoNavigation).ToList();
             
             if (!nhanViens.Any())
             {
@@ -37,6 +37,8 @@ namespace HumanResourcesManagement.Service
                 var temp = nhanViens.FirstOrDefault(nv => nv.Ma == item.Ma);
                 if(temp != null)
                 {
+                    item.tenDantoc = temp.DantocNavigation.Ten;
+                    item.tenTongiao = temp.TongiaoNavigation.Ten;
                     item.tenTo = temp.ToNavigation.Ten;
                     item.tenChucVu = temp.ChucvuhientaiNavigation.Ten;
                     item.tenPhongBan = temp.PhongNavigation.Ten;
@@ -425,6 +427,7 @@ namespace HumanResourcesManagement.Service
                     .Include(nv => nv.ChucvuhientaiNavigation)
                     .Include(nv => nv.PhongNavigation)
                     .Include(nv=>nv.ToNavigation)
+                    .Include(nv => nv.DantocNavigation).Include(nv => nv.TongiaoNavigation)
                     .FirstOrDefaultAsync(nv => nv.Ma == id);
 
             if (nhanVien == null)
@@ -437,6 +440,8 @@ namespace HumanResourcesManagement.Service
             response.tenTo = nhanVien.ToNavigation.Ten;
             response.tenChucVu = nhanVien.ChucvuhientaiNavigation.Ten; 
             response.tenPhongBan = nhanVien.PhongNavigation?.Ten;
+            response.tenDantoc = nhanVien.DantocNavigation.Ten;
+            response.tenTongiao = nhanVien.TongiaoNavigation.Ten;
             return response;
         }
     }

@@ -12,6 +12,7 @@ namespace HumanResourcesManagement.DTOS.Response
         public DateTime? Hopdongtungay { get; set; }
         public DateTime? Hopdongdenngay { get; set; }
         public string? Ghichu { get; set; }
+        public int? TrangThai { get; set; }
         public string? Ma { get; set; }
     }
 }

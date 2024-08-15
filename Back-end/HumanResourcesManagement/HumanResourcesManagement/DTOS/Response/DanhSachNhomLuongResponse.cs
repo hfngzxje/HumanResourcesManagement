@@ -2,7 +2,7 @@
 {
     public class DanhSachNhomLuongResponse
     {
-        public string ChucDanh { get; set; }
+        public string NgachCongChuc { get; set; }
         public double BacLuong { get; set; }
         public double HeSoLuong { get; set; }
         public double LuongCoBan { get; set; }
