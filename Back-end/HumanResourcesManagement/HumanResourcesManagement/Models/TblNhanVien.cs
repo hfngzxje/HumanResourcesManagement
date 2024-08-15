@@ -8,6 +8,7 @@ namespace HumanResourcesManagement.Models
         public TblNhanVien()
         {
             EmailHistories = new HashSet<EmailHistory>();
+            TblDanhSachNangLuongs = new HashSet<TblDanhSachNangLuong>();
             TblDieuChuyens = new HashSet<TblDieuChuyen>();
             TblHopDongs = new HashSet<TblHopDong>();
             TblKhenThuongKyLuats = new HashSet<TblKhenThuongKyLuat>();
@@ -74,6 +75,7 @@ namespace HumanResourcesManagement.Models
         public virtual TblDanhMucTonGiao? TongiaoNavigation { get; set; }
         public virtual TblVaiTro? VaiTro { get; set; }
         public virtual ICollection<EmailHistory> EmailHistories { get; set; }
+        public virtual ICollection<TblDanhSachNangLuong> TblDanhSachNangLuongs { get; set; }
         public virtual ICollection<TblDieuChuyen> TblDieuChuyens { get; set; }
         public virtual ICollection<TblHopDong> TblHopDongs { get; set; }
         public virtual ICollection<TblKhenThuongKyLuat> TblKhenThuongKyLuats { get; set; }

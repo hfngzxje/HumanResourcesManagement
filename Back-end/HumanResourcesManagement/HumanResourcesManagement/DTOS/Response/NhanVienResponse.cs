@@ -17,6 +17,8 @@
         public string? Quequan { get; set; }
         public string? Thuongtru { get; set; }
         public string? Tamtru { get; set; }
+        public int? Dantoc { get; set; }
+        public int? Tongiao { get; set; }
         public string? tenDantoc { get; set; }
         public string? tenTongiao { get; set; }
         public string? Nghenghiep { get; set; }

@@ -7,6 +7,7 @@ namespace HumanResourcesManagement.Models
     {
         public TblHopDong()
         {
+            TblDanhSachNangLuongs = new HashSet<TblDanhSachNangLuong>();
             TblLuongs = new HashSet<TblLuong>();
         }
 
@@ -22,6 +23,7 @@ namespace HumanResourcesManagement.Models
         public virtual TblDanhMucChucDanh? ChucdanhNavigation { get; set; }
         public virtual TblDanhMucLoaiHopDong? LoaihopdongNavigation { get; set; }
         public virtual TblNhanVien? MaNavigation { get; set; }
+        public virtual ICollection<TblDanhSachNangLuong> TblDanhSachNangLuongs { get; set; }
         public virtual ICollection<TblLuong> TblLuongs { get; set; }
     }
 }

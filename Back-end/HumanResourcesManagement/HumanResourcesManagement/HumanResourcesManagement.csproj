@@ -7,6 +7,48 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\BaoCao_DanhSachBaoHiem.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachDangVien.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachDienChinhSach.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachHoSoLuong.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachLenLuong.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachNguoiThan.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachNhanVien.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachNhomLuong.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachSinhNhat.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachBaoHiem.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachDangVien.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachDienChinhSach.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachHoSoLuong.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachLenLuong.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachNguoiThan.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachNhanVien.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachNhomLuong.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachSinhNhat.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="EPPlus" Version="7.2.1" />

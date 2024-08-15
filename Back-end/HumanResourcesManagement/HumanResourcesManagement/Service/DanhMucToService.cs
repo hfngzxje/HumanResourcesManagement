@@ -4,6 +4,7 @@ using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Ocsp;
 
 namespace HumanResourcesManagement.Service
 {
@@ -140,6 +141,26 @@ namespace HumanResourcesManagement.Service
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<IEnumerable<DanhMucToResponse>> GetDanhMucToByPhong(int phongId)
+        {
+            var danhMucToResponse = await _context.TblDanhMucTos
+            .Where(nv => nv.Id == phongId)
+            .Select(cm => new DanhMucToResponse
+            {
+                Id = cm.Id,
+                Ten = cm.Ten,
+                TenPhong = cm.IdphongNavigation.Ten,
+                Idphong = cm.Idphong,
+                Ma = cm.Ma.Trim()
+            }).ToListAsync();
+
+            if (danhMucToResponse == null||!danhMucToResponse.Any())
+            {
+                return null;
+            }
+            return danhMucToResponse;
         }
     }
 }

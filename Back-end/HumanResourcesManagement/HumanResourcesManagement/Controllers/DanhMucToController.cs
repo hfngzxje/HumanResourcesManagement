@@ -120,5 +120,19 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("GetDanhMucToByPhong/{idPhong}")]
+        public async Task<IActionResult> GetDanhMucToByPhong(int idPhong)
+        {
+            try
+            {
+                var data = await _danhMucToService.GetDanhMucToByPhong(idPhong);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
