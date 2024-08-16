@@ -9,6 +9,9 @@ var oldValue = null;
 
 let idToHienTai = null
 
+var oldTen = null
+var oldPhong = null
+
 var TableColumns = [
     {
         label: 'ID',
@@ -72,7 +75,8 @@ function fetchTo(id) {
             // setFormValue('editTeam', data, 'fetch');
             setFormValue('editTeam', data)
             oldValue = data.ten
-
+            oldTen = data.ten
+            oldPhong = data.idphong
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -236,7 +240,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Tổ"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        // popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -246,18 +250,22 @@ function showPopup() {
         popupCreateBtn.classList.remove('hidden')
     }
 }
-// function checkValues() {
-//     const formValue = getFormValues('editTeam');
-//     const newValue = formValue.ten;
-//     console.log("oldValue: ", oldValue, "newValue: ", newValue);
-//     if (oldValue === newValue) {
-//         popupSaveBtn.setAttribute('disabled','');
-//         console.log(popupSaveBtn)
-//     } else {
-//         popupSaveBtn.removeAttribute('disabled') ; 
-//         console.log(popupSaveBtn)
-//     }
-// }
+function checkValues() {
+    const formValue = getFormValues('editTeam');
+    const newTen = formValue.ten;
+    const newPhong = formValue.idphong
+    
+    // console.log('Type of oldTen:',  oldTen);
+    // console.log('Type of oldPhong:',  oldPhong);
+    // console.log('Type of newTen:',  newTen);
+    // console.log('Type of newPhong:',  newPhong);
+
+    if (oldTen === newTen && oldPhong === parseInt(newPhong)) {
+        popupSaveBtn.setAttribute('disabled', '');
+    } else {
+        popupSaveBtn.removeAttribute('disabled');
+    }
+}
 function closePopup() {
     var modal = document.getElementById("editTeam");
     modal.style.display = "none"
@@ -270,9 +278,14 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
 
-    // const inputTenTo = document.querySelector('base-input[name="ten"]');
-    // if (inputTenTo) {
-    //     inputTenTo.addEventListener('input', checkValues);
-    // }
+    const inputTen = document.querySelector('base-input[name="ten"]');
+    const inputPhong = document.querySelector('base-select[name="idphong"]');
+
+    if (inputTen) {
+        inputTen.addEventListener('input', checkValues);
+    }
+    if (inputPhong) {
+        inputPhong.addEventListener('change', checkValues);
+    }
 })
 

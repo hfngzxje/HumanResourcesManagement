@@ -9,6 +9,9 @@ const maNhanVien = localStorage.getItem('maNhanVien')
 let idChucDanh = null
 var oldValue = null;
 
+var oldTen = null
+var oldPhuCap = null
+
 var TableColumns = [
     {
         label: 'ID',
@@ -74,6 +77,8 @@ function fetchNgachCongChuc(id) {
             // setFormValue('editTeam', data, 'fetch');
             setFormValue('editCivilServantRank', data)
             oldValue = data.ten
+            oldTen = data.ten
+            oldPhuCap = data.phucap
         },
         error: (err) => {
             console.log('fetchDepartments err :: ', err);
@@ -235,6 +240,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Chức Danh"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -249,6 +255,18 @@ function closePopup() {
     modal.style.display = "none"
 }
 
+function checkValues() {
+    const formValue = getFormValues('editCivilServantRank');
+    const newTen = formValue.ten;
+    const newPhuCap = formValue.phucap
+    
+    if (oldTen === newTen && oldPhuCap === parseInt(newPhuCap)) {
+        popupSaveBtn.setAttribute('disabled', '');
+    } else {
+        popupSaveBtn.removeAttribute('disabled');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
@@ -256,5 +274,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
+    const inputTen = document.querySelector('base-input[name="ten"]');
+    const inputPhuCap = document.querySelector('base-input-number[name="phucap"]');
+
+    if (inputTen) {
+        inputTen.addEventListener('input', checkValues);
+    }
+    if (inputPhuCap) {
+        inputPhuCap.addEventListener('input', checkValues);
+    }
 })
 
