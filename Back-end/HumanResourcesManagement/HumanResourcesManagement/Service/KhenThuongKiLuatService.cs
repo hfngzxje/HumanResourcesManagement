@@ -62,7 +62,7 @@ namespace HumanResourcesManagement.Service
 
             if (_context.TblKhenThuongKyLuats == null)
             {
-                throw new InvalidOperationException("Không có dữ liệu");
+                return null;
             }
 
             var query = _context.TblKhenThuongKyLuats.Where(nv => nv.Ma == maNV);
@@ -97,7 +97,7 @@ namespace HumanResourcesManagement.Service
 
             if (!listKhenThuongKiLuat.Any())
             {
-                throw new KeyNotFoundException($"Danh sách trống cho mã nhân viên {maNV}");
+                return null;
             }
 
             return listKhenThuongKiLuat;

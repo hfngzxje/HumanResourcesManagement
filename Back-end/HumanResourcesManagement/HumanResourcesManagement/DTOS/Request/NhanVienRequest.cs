@@ -5,22 +5,18 @@ namespace HumanResourcesManagement.Models
 {
     public class NhanVienRequest
     {
-        [Required(ErrorMessage = "Ten is required")]
         public string? Ten { get; set; }
 
         public short Honnhan { get; set; }
 
-        [Required(ErrorMessage = "Ngaysinh is required")]
         [DataType(DataType.Date)]
         public DateTime? Ngaysinh { get; set; }
 
         public bool Gioitinh { get; set; }
 
-        [Required(ErrorMessage = "Didong is required")]
         [Phone(ErrorMessage = "Invalid phone number format")]
         public string? Didong { get; set; }
 
-        [Required(ErrorMessage = "Cmnd is required")]
         public string? Cmnd { get; set; }
 
         [DataType(DataType.Date)]
@@ -37,7 +33,6 @@ namespace HumanResourcesManagement.Models
 
         public int? Dantoc { get; set; }
         
-        [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string? Email { get; set; }
 
