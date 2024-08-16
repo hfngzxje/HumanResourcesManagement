@@ -66,7 +66,7 @@ namespace HumanResourcesManagement.Controllers
                 {
                     return Ok("Phê duyệt quyết định lương thành công.");
                 }
-                else if (trangThai == 2)
+                else if (trangThai == 3)
                 {
                     return Ok("Hủy quyết định lương thành công.");
                 }

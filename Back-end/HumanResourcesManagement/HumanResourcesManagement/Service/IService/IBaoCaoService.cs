@@ -35,7 +35,9 @@ namespace HumanResourcesManagement.Service.IService
         Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToPdf(DanhSachDangVienRequest req);
 
         //8.ho so luong
-
+        Task<IEnumerable<DanhSachHoSoLuongResponse>> getDanhSachHoSoLuong(DanhSachHoSoLuongRequest req);
+        Task<(byte[] fileContent, string fileName)> ExportDanhSachHoSoLuongToExcel(DanhSachHoSoLuongRequest req);
+        Task<(byte[] fileContent, string fileName)> ExportDanhSachHoSoLuongToPdf(DanhSachHoSoLuongRequest req);
 
 
 

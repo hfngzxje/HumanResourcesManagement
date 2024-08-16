@@ -303,7 +303,7 @@ namespace HumanResourcesManagement.Controllers
             try
             {
                 var (fileContent, fileName) = await _baoCaoService.ExportBaoCaoSinhNhatToExcel(req);
-                return File(fileContent, "application/pdf", fileName);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
             catch (Exception ex)
             {
@@ -325,5 +325,49 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        //ho so luong
+        [HttpPost("getBaoCaoHoSoLuong")]
+        public async Task<IActionResult> GetBaoCaoHoSoLuong([FromForm] DanhSachHoSoLuongRequest req)
+        {
+            try
+            {
+                var list = await _baoCaoService.getDanhSachHoSoLuong(req);
+                return StatusCode(200, list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+            }
+        }
+
+        //ho so luong excel
+        [HttpPost("ExportBaoCaoHoSoLuongToExcel")]
+        public async Task<IActionResult> ExportBaoCaoHoSoLuongExcel([FromForm] DanhSachHoSoLuongRequest req)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _baoCaoService.ExportDanhSachHoSoLuongToExcel(req);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file Excel.");
+            }
+        }
+
+        //ho so luong pdf
+        [HttpPost("ExportBaoCaoHoSoLuongToPDF")]
+        public async Task<IActionResult> ExportBaoCaoHoSoLuongToPDF([FromForm] DanhSachHoSoLuongRequest req)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _baoCaoService.ExportDanhSachHoSoLuongToPdf(req);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+        }
     }
 }
