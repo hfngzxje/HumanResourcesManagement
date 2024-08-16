@@ -4,7 +4,6 @@ namespace HumanResourcesManagement.DTOS.Request
 {
     public class InsertHoSoLuongKhongActive
     {
-        [Required(ErrorMessage = "Ma hop dong khong duoc de trong")]
         public string? Mahopdong { get; set; }
         public double? Phucaptrachnhiem { get; set; }
         public double? Phucapkhac { get; set; }

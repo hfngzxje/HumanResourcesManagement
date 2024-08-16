@@ -7,6 +7,7 @@ using OfficeOpenXml;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System.Reflection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HumanResourcesManagement.Service
 {
@@ -433,7 +434,7 @@ namespace HumanResourcesManagement.Service
 
             var resp = all.Select(r => new DanhSachNhomLuongResponse
             {
-                NgachCongChuc = _context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Ten,
+                NgachCongChuc = _context.TblDanhMucNgachCongChucs.Find(r.Ngachcongchuc).Ten,
                 BacLuong = (double)r.Bacluong,
                 HeSoLuong = (double)r.Hesoluong,
                 LuongCoBan = (double)r.Luongcoban,
@@ -516,6 +517,75 @@ namespace HumanResourcesManagement.Service
             var list = await getDanhSachBaoHiem(req);
             string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "BHYT", "BHXH", "Giới Tính", "Phòng Ban" };
             return await ExportToPdf("Báo Cáo Danh Sách Bảo Hiểm", list, "BaoCao_DanhSachBaoHiem.pdf", headers);
+        }
+        //ho so luong
+        public async Task<IEnumerable<DanhSachHoSoLuongResponse>> getDanhSachHoSoLuong(DanhSachHoSoLuongRequest req)
+        {
+            var all = await _context.TblLuongs.ToListAsync();
+            if (req.TongLuongTu.HasValue)
+            {
+                all = all.Where(l => l.Tongluong >= req.TongLuongTu.Value).ToList();
+            }
+
+            if (req.TongLuongDen.HasValue)
+            {
+                all = all.Where(l => l.Tongluong <= req.TongLuongDen.Value).ToList();
+            }
+
+            if (req.NgayBatDau.HasValue)
+            {
+                all = all.Where(l => l.Ngaybatdau.Value.Date >= req.NgayBatDau.Value.Date).ToList();
+            }
+
+            if (req.NgayKetThuc.HasValue)
+            {
+                all = all.Where(l => l.Ngayketthuc.Value.Date <= req.NgayKetThuc.Value.Date).ToList();
+            }
+            if (req.TrangThai.HasValue)
+            {
+                all = all.Where(l => l.Trangthai == req.TrangThai).ToList();
+            }
+            var resp = all.Select(r => new DanhSachHoSoLuongResponse
+            {
+                Id = r.Id,
+                Mahopdong = r.Mahopdong,
+                Phucaptrachnhiem = r.Phucaptrachnhiem,
+                Phucapkhac = r.Phucapkhac,
+                Tongluong = r.Tongluong,
+                Thoihanlenluong = r.Thoihanlenluong,
+                Ghichu = r.Ghichu,
+                Nhomluong = r.Nhomluong,
+                Trangthai = r.Trangthai,
+                Ngaybatdau = r.Ngaybatdau,
+                Ngayketthuc = r.Ngayketthuc
+            }).ToList();
+            if(!resp.Any() || resp == null)
+            {
+                return null;
+            }
+            return resp;
+        }
+        //ho so luong excel
+        public async Task<(byte[] fileContent, string fileName)> ExportDanhSachHoSoLuongToExcel(DanhSachHoSoLuongRequest req)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachHoSoLuong.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachHoSoLuong(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachHoSoLuong.xlsx");
+            }
+        }
+        //ho so luong pdf
+        public async Task<(byte[] fileContent, string fileName)> ExportDanhSachHoSoLuongToPdf(DanhSachHoSoLuongRequest req)
+        {
+            var list = await getDanhSachHoSoLuong(req);
+            string[] headers = { "ID", "Mã Hợp Đồng", "Phụ Cấp Trách Nhiệm", "Phụ Cấp Khác", "Tổng Lương", "Thời Hạn Lên Lương", "Ghi Chú", "Nhóm Lương", "Trạng Thái", "Ngày Bắt Đầu", "Ngày Kết Thúc" };
+            return await ExportToPdf("Báo Cáo Danh Sách Hồ Sơ Lương", list, "BaoCao_DanhSachHoSoLuong.pdf", headers);
         }
         //pdf
         private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HumanResourcesManagement.Config.Converter;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace HumanResourcesManagement.Models
@@ -14,5 +16,18 @@ namespace HumanResourcesManagement.Models
 
         public virtual TblHopDong MahopdongNavigation { get; set; } = null!;
         public virtual TblNhanVien ManvNavigation { get; set; } = null!;
+
+        protected void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TblDanhSachNangLuong>(entity =>
+            {
+                entity.Property(e => e.Hosoluongcu)
+                    .HasConversion(new HoSoLuongRequestConverter());
+
+                entity.Property(e => e.Hosoluongmoi)
+                    .HasConversion(new HoSoLuongRequestConverter());
+            });
+        }
     }
+
 }
