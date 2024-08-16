@@ -68,8 +68,14 @@ namespace HumanResourcesManagement.Service
                         return true;
                     }
 
-                    var allRecordsHaveStatusTwo = nangLuongRecords.All(nl => nl.Trangthai == 2);
-                    return allRecordsHaveStatusTwo;
+                    var hasStatusOneOrThree = nangLuongRecords.Any(nl => nl.Trangthai == 1);
+                    if (hasStatusOneOrThree)
+                    {
+                        return false;
+                    }
+
+                    var hasStatusTwo = nangLuongRecords.Any(nl => nl.Trangthai == 2 || nl.Trangthai == 3);
+                    return hasStatusTwo;
                 })
                 .Select(r => new DanhSachLenLuongResponse
                 {
@@ -88,6 +94,7 @@ namespace HumanResourcesManagement.Service
 
             return resp;
         }
+
 
 
         public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
@@ -178,21 +185,27 @@ namespace HumanResourcesManagement.Service
                 .Where(l => l.Mahopdong == maHopDong && l.Trangthai == 1)
                 .ToListAsync();
 
-            if (trangThai == 1) 
+            if (trangThai == 1)
             {
                 foreach (var oldLuong in oldLuongs)
                 {
                     oldLuong.Trangthai = 2;
                     _context.TblLuongs.Update(oldLuong);
+                    _context.Entry(oldLuong).State = EntityState.Modified;
                 }
                 await _context.SaveChangesAsync();
-
                 var newLuongs = await _context.TblLuongs
                     .Where(l => l.Mahopdong == maHopDong)
                     .OrderByDescending(l => l.Ngaybatdau)
-                    .FirstOrDefaultAsync();
+                    .LastAsync();
+
+                int thoihanLenLuongs = int.TryParse(newLuong.Thoihanlenluong, out int parsedValues) ? parsedValues : 0;
+
                 newLuongs.Trangthai = 1;
+                newLuongs.Ngaybatdau = DateTime.Now;
+                newLuongs.Ngayketthuc = today.AddYears(thoihanLenLuongs);
                 _context.TblLuongs.Update(newLuongs);
+                _context.Entry(newLuongs).State = EntityState.Modified;
 
 
 
@@ -213,13 +226,21 @@ namespace HumanResourcesManagement.Service
                 danhSachNangLuong.Hosoluongmoi = JsonConvert.SerializeObject(newLuong);
                 danhSachNangLuong.Trangthai = 1;
                 _context.TblDanhSachNangLuongs.Update(danhSachNangLuong);
+                _context.Entry(danhSachNangLuong).State = EntityState.Modified;
+
             }
-            else if (trangThai == 2) 
+            else if (trangThai == 3)
             {
-                _context.TblLuongs.Remove(newLuong);
+                var newLuongs = await _context.TblLuongs
+                    .Where(l => l.Mahopdong == maHopDong)
+                    .OrderByDescending(l => l.Ngaybatdau)
+                    .LastAsync();
+                _context.TblLuongs.Remove(newLuongs);
 
                 danhSachNangLuong.Trangthai = 3;
                 _context.TblDanhSachNangLuongs.Update(danhSachNangLuong);
+                _context.Entry(danhSachNangLuong).State = EntityState.Modified;
+
             }
             else
             {
@@ -245,7 +266,7 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req)
         {
             var data = await getDanhSachNhanVienLenLuong(req);
-            string[] headers = { "Mã NV","Tên NV","Chức vụ","Phòng","Tổ" };
+            string[] headers = { "Mã NV", "Tên NV", "Chức vụ", "Phòng", "Tổ" };
             return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_DanhSachLenLuong.pdf", headers);
 
         }
