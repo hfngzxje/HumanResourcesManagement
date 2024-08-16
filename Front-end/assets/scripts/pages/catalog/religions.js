@@ -62,7 +62,7 @@ function fetchTonGiao(id) {
     setLoading(true)
     idTonGiao = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTonGiao', data, 'fetch');
@@ -79,9 +79,8 @@ function fetchTonGiao(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn tạo danh mục tôn giáo?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục tôn giáo ?")
     const valid = validateForm('editTonGiao')
     if (!valid) return
     const formValue = getFormValues('editTonGiao')
@@ -90,13 +89,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTonGiao/addDanhMucTonGiao',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/addDanhMucTonGiao',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTonGiao res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục tôn giáo: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -106,16 +105,16 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         // $('.error-message').text(err.responseText).show();
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -125,17 +124,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục tôn giáo?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục tôn giáo ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchTonGiao res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục tôn giáo: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -143,7 +141,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchTonGiao err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -151,9 +149,8 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục tôn giáo?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục tôn giáo ?")
     const valid = validateForm('editTonGiao')
     if (!valid) return
     const formValue = getFormValues('editTonGiao')
@@ -162,13 +159,13 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/updateTonGiao',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTonGiao res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục tôn giáo: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -178,15 +175,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -212,7 +209,7 @@ function clearFormValues() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiao'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiao'
 }
 
 function showPopup() {
@@ -226,7 +223,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

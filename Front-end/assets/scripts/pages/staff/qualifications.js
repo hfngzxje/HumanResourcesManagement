@@ -87,6 +87,10 @@ function showPopup(formId) {
             clearFormValues("editTrinhDo");
         }
     }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
 }
 function closePopup(formId) {
     var modal = document.getElementById(formId);
@@ -113,7 +117,7 @@ function fetchTrinhDo(id) {
     idTrinhDo = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data, 'fetch');
@@ -130,9 +134,8 @@ function fetchTrinhDo(id) {
     });
 }
 
-function handleCreateTrinhDo() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm trình độ văn hóa?')
-    if (!isConfirm) return
+async function handleCreateTrinhDo() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới trình độ ?")
     const valid = validateForm('trinhDo_form')
     if (!valid) return
     const formValue = getFormValues('trinhDo_form')
@@ -144,12 +147,12 @@ function handleCreateTrinhDo() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://localhost:7141/api/TrinhDoVanHoa/addTrinhDoVanHoa',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/addTrinhDoVanHoa',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Tạo Thành Công!');
+                showSuccess('Tạo Thành Công!');
                 recordActivityAdmin(maNhanVien, `Thêm mới trình độ nhân viên ${maDetail}: Trường_${formValue.tentruong}`);
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
@@ -161,15 +164,15 @@ function handleCreateTrinhDo() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -179,16 +182,15 @@ function handleCreateTrinhDo() {
     }, 1000);
 }
 
-function handleRemoveTrinhDo() {
-    const isConfirm = confirm('Bạn chắc chắn muốn Xóa trình độ văn hóa?')
-    if (!isConfirm) return
+async function handleRemoveTrinhDo() {
+    await showConfirm("Bạn có chắc chắn muốn xóa trình độ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
-                alert('Xóa Thành Công!');
+                showSuccess('Xóa Thành Công!');
                 recordActivityAdmin(maNhanVien, `Xóa trình độ nhân viên ${maDetail} : ${oldTruong}`);
                 closePopup("editTrinhDo")
                 table.forEach(table => {
@@ -200,7 +202,7 @@ function handleRemoveTrinhDo() {
             },
             error: (err) => {
                 console.log('fetchTrinhDo err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -209,23 +211,21 @@ function handleRemoveTrinhDo() {
     }, 1000);
 }
 
-function handleSaveTrinhDo() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa trình độ văn hóa?')
-    if (!isConfirm) return
+async function handleSaveTrinhDo() {
+    await showConfirm("Bạn có chắc chắn muốn sửa trình độ ?")
     const formValue = getFormValues('editTrinhDo')
-    alert(idTrinhDo)
     formValue['id'] = idTrinhDo
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa trình độ nhân viên ${maDetail}: ${payload.tentruong}`);
                 closePopup("editTrinhDo")
                 table.forEach(table => {
@@ -238,15 +238,15 @@ function handleSaveTrinhDo() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -276,7 +276,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl1() {
-    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

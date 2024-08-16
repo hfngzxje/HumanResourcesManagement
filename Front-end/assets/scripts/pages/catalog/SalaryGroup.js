@@ -19,7 +19,9 @@ var MaritalOptions = [
     { label: '4', value: 4 },
     { label: '5', value: 5 },
     { label: '6', value: 6 },
-    { label: '7', value: 7 }
+    { label: '7', value: 7 },
+    { label: '8', value: 8 },
+    { label: '9', value: 9 }
 ]
 
 var TableColumns = [
@@ -31,7 +33,7 @@ var TableColumns = [
     ,
     {
         label: 'Nhóm ngạch công chức',
-        key: 'ngachcongchuc'
+        key: 'tenNgachCongChuc'
     }
     ,
     {
@@ -85,7 +87,7 @@ function buildPayload(formValue) {
 async function getChucDanhByID(idChucDanh) {
     try {
         const chucDanh = await $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + idChucDanh,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getChucDanhById/' + idChucDanh,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -103,14 +105,13 @@ async function fetchNhomLuong(id) {
 
     try {
         const data = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + id,
             method: 'GET',
             contentType: 'application/json'
         });
         oldBacLuong = data.bacluong
         idChucDanh = data.chucdanh;
-        oldChucDanh = await  getChucDanhByID(idChucDanh); // Chờ đợi kết quả từ getChucDanhByID
-        // alert(oldChucDanh);
+        oldChucDanh = await  getChucDanhByID(idChucDanh); // 
         setFormValue('editNhomLuong', data);
     } catch (err) {
         console.log('fetchDepartments err :: ', err);
@@ -120,9 +121,8 @@ async function fetchNhomLuong(id) {
 }
    
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn tạo nhóm lương?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục nhóm lương ?")
     const valid = validateForm('editNhomLuong')
     if (!valid) return
     const formValue = getFormValues('editNhomLuong')
@@ -131,13 +131,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/add',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/add',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetch Nhóm Lương res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Chức danh=${formValue.chucdanh}, Bậc lương=${formValue.bacluong}`)
                 closePopup()
                 clearFormValues()
@@ -147,16 +147,16 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         // $('.error-message').text(err.responseText).show();
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -166,23 +166,22 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục nhóm lương?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục nhóm lương ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/delete/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/delete/' + idNhomLuong,
             method: 'DELETE',
             success: function (data) {
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -190,9 +189,8 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục nhóm lương?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục nhóm lương ?")
     const valid = validateForm('editNhomLuong')
     if (!valid) return
     const formValue = getFormValues('editNhomLuong')
@@ -200,12 +198,12 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/update/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/update/' + idNhomLuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
@@ -215,15 +213,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -243,7 +241,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
@@ -300,7 +302,7 @@ function closePopup(){
 // }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucNhomLuong/all'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
     // renderActionByStatus()

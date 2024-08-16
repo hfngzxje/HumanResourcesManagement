@@ -67,7 +67,7 @@ function fetchNgachCongChuc(id) {
     setLoading(true)
     idChucDanh = id
     $.ajax({
-        url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getChucDanhById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -84,19 +84,8 @@ function fetchNgachCongChuc(id) {
     });
 }
 
-function recordActivity(action, details) {
-    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
-    const activityEntry = {
-        action: action,
-        details: details,
-        timestamp: new Date().toLocaleString()
-    };
-    activityHistory.push(activityEntry);
-    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
-}
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục ngạch công chức?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục chức danh ?")
     const valid = validateForm('editCivilServantRank')
     if (!valid) return
     const formValue = getFormValues('editCivilServantRank')
@@ -106,13 +95,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/addChucDanh',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/addChucDanh',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetch ngạch công chức res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục chức danh: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -122,15 +111,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -140,17 +129,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục chức danh?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục chức danh ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục chức danh: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -158,7 +146,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchPhongBan err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -166,22 +154,21 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục chức danh?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục chức danh ?")
     const formValue = getFormValues('editCivilServantRank')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchLanguage res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục chức danh: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -191,15 +178,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -224,7 +211,7 @@ function clearFormValues() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChucDanh/getAllChucDanh'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh'
 }
 
 function showPopup() {
@@ -237,7 +224,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

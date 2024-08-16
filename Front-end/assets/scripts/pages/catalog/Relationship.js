@@ -61,7 +61,7 @@ function fetchNguoiThan(id) {
     setLoading(true)
     idQuanhe = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -79,9 +79,8 @@ function fetchNguoiThan(id) {
 }
 
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục người thân?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục quan hệ ?")
     const valid = validateForm('editRelationship')
     if (!valid) return
     const formValue = getFormValues('editRelationship')
@@ -91,13 +90,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/addDanhMucQuanHe',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchEmployee res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục người thân: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -107,15 +106,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -125,17 +124,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh người thân?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục quan hệ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục người than: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -143,7 +141,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchPhongBan err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -151,22 +149,21 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục quan hệ?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục quan hệ ?")
     const formValue = getFormValues('editRelationship')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchLanguage res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục người thân: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -176,15 +173,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -208,7 +205,7 @@ function clearFormValues() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanToc'
 }
 
 function showPopup() {
@@ -221,7 +218,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

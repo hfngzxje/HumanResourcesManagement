@@ -43,9 +43,8 @@ function buildPayload(formValue) {
     return formClone
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm khen thưởng?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới khen thưởng ?")
     const valid = validateForm('award_form')
     if (!valid) return
     const formValue = getFormValues('award_form')
@@ -55,12 +54,12 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
-            alert('Tạo Thành Công!');
+            showSuccess('Tạo Thành Công!');
             table.forEach(table => {
                 if (table.handleCallFetchData) {
                     table.handleCallFetchData();
@@ -72,15 +71,15 @@ function handleCreate() {
             console.log('err ', err);
             try {
                 if (!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
             } catch (error) {
-                alert("Tạo mới không thành công!")
+                showError("Tạo mới không thành công!")
             }
 
 
@@ -103,16 +102,15 @@ function clearFormValues(formId) {
         }
     });
 }
-function handleRemoveRow(id) {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa  khen thưởng ?')
-    if (!isConfirm) return
+async function handleRemoveRow(id) {
+    await showConfirm("Bạn có chắc chắn muốn xóa khen thưởng ?")
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
         method: 'DELETE',
         success: function (data) {
-            alert('Xóa Thành Công!');
+            showSuccess('Xóa Thành Công!');
             table.forEach(table => {
                 if (table.handleCallFetchData) {
                     table.handleCallFetchData();
@@ -121,7 +119,7 @@ function handleRemoveRow(id) {
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
+            showError("Xóa thất bại!")
         },
         complete: () => {
             setLoading(false)
@@ -149,7 +147,7 @@ function renderActionByStatus() {
 
 function buildApiUrlKhenThuong() {
     
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Khen thưởng'
     return string1 + string2;
 }

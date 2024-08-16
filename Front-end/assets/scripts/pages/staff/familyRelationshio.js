@@ -53,7 +53,6 @@ var TableColumns = [
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
                     fetchRelationship(row.id);
-                    alert(row.id)
                     showPopup()
                 }
             }
@@ -77,6 +76,10 @@ function showPopup() {
             clearFormValues("editFamily");
         }
     }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
 }
 function closePopup() {
     var modal = document.getElementById("editFamily");
@@ -96,7 +99,7 @@ function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editFamily', data)
@@ -110,9 +113,8 @@ function fetchRelationship(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm quan hệ gia đình?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới quan hệ ?")
     const valid = validateForm('relationship_form')
     if (!valid) return
     const formValue = getFormValues('relationship_form')
@@ -124,13 +126,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/addNguoiThan',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 if (table) {
-                    alert("Thêm thành công!");
+                    showSuccess("Thêm thành công!");
                     table.handleCallFetchData();
                     clearFormValues("relationship_form")
                 }
@@ -142,15 +144,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText);
+                        showError(err.responseText);
                         return;
                     }
                     const errObj = err.responseJSON.errors;
                     const firtErrKey = Object.keys(errObj)[0];
                     const message = errObj[firtErrKey][0];
-                    alert(message);
+                    showError(message);
                 } catch (error) {
-                    alert("Tạo mới thất bại!");
+                    showError("Tạo mới thất bại!");
                 }
             },
             complete: () => {
@@ -160,22 +162,21 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa quan hệ gia đình?')
-    if (!isConfirm) return
+async function handleRemove() {
+    await showConfirm("Bạn có chắc chắn muốn xóa quan hệ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
             method: 'DELETE',
             success: function (data) {
-                alert("Xóa thành công!")
+                showSuccess("Xóa thành công!")
                 closePopup()
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('fetchEmployee err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -183,9 +184,8 @@ function handleRemove() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa quan hệ gia đình?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa quan hệ ?")
     const valid = validateForm('editFamily')
     if (!valid) return
 
@@ -195,12 +195,12 @@ function handleSave() {
     setTimeout(() => {
         setLoading(true)
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/updateNguoiThan',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert("Sửa thành công!")
+                showSuccess("Sửa thành công!")
                 closePopup()
                 table.handleCallFetchData();
             },
@@ -208,15 +208,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -258,7 +258,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus();

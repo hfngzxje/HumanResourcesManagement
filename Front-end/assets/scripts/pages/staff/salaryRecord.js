@@ -24,10 +24,6 @@ let thongTinNgachCongChucPop = null
 
 var TableColumns = [
     {
-        label: 'ID',
-        key: 'id'
-    },
-    {
         label: 'Mã Hợp Đồng',
         key: 'mahopdong'
     },
@@ -97,7 +93,7 @@ var TableColumns = [
                         showPopup()
                     }
                    else if (row.trangthai === 2) {
-                        alert('Hồ sơ lương đã hết hiệu lực, không thể sửa');
+                    showError('Hồ sơ lương đã hết hiệu lực, không thể sửa');
                         return;
                     }
                 }
@@ -139,6 +135,10 @@ async function showPopup() {
             clearFormValues("editSalaryRecord");
         }
     }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
 }
 function closePopup() {
     var modal = document.getElementById("editSalaryRecord");
@@ -149,7 +149,7 @@ async function fetchSalaryToEdit(id) {
     idLuongHienTai = id
     await $.ajax({
 
-        url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editSalaryRecord', data)
@@ -171,8 +171,7 @@ async function fetchSalaryToEdit(id) {
 }
 
 async function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
-    if (!isConfirm) return
+    await showConfirm("Bạn có chắc chắn muốn thêm mới hồ sơ lương ?")
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
@@ -185,12 +184,12 @@ async function handleCreate() {
         const contractCodeStatus = await fetchContractCodeStatus(formValue.mahopdong);
         // Kiểm tra trạng thái mã hợp đồng
         if (contractCodeStatus === 2) {
-            alert('Đây là hợp đồng chưa chính thức, không thể tạo bảng lương.');
+            showError('Đây là hợp đồng chưa chính thức, không thể tạo bảng lương.');
             return;
         }
     } catch (error) {
         console.error('Error fetching contract code status:', error);
-        alert('Xảy ra lỗi khi lấy trạng thái mã hợp đồng. Vui lòng thử lại.');
+        showError('Xảy ra lỗi khi lấy trạng thái mã hợp đồng. Vui lòng thử lại.');
         return;
     }
 
@@ -198,27 +197,27 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/TaoMoiHoSoLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Tạo Thành Công!');
+                showSuccess('Tạo Thành Công!');
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -230,28 +229,27 @@ async function handleCreate() {
 
 async function fetchContractCodeStatus(mahopdong) {
     const response = await $.ajax({
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
     });
     return response.trangThai; // Giả sử API trả về trạng thái của mã hợp đồng trong phản hồi
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa bảng lương?')
-    if (!isConfirm) return
+async function handleRemove() {
+    await showConfirm("Bạn có chắc chắn muốn xóa hồ sơ lương?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
             method: 'DELETE',
             success: function (data) {
-                alert('Xóa Thành Công!');
+                showSuccess('Xóa Thành Công!');
                 closePopup();
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('fetchContract err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -260,9 +258,8 @@ function handleRemove() {
     }, 1000);
 }
 
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa bảng lương?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa hồ sơ lương ?")
     const formValue = getFormValues('editSalaryRecord')
     formValue['tongluong'] = parseCurrency(formValue['tongluong'])
     formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
@@ -272,13 +269,13 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchContract res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!');
                 closePopup();
                 table.handleCallFetchData();
             },
@@ -286,15 +283,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -339,23 +336,23 @@ function renderActionByStatus() {
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail;
 }
 async function buildApiHopDongA(id) {
-    return 'https://localhost:7141/api/HopDong/id?id=' + id;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 function buidApiBacLuong() {
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 
 async function apiDanhSachHopDong() {
     try {
         const hopDong = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -386,7 +383,7 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -417,7 +414,7 @@ function layThongTinBacLuong() {
 async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/ngachCongChuc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -457,7 +454,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
 
@@ -521,10 +518,15 @@ function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
 }
 
 function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    if(val){
+        return val.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    else{
+        return null
+    }
 }
 function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
@@ -555,13 +557,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function buidApiBacLuongPop() {
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
 }
 
 async function apiDanhSachHopDongPop() {
     try {
         const hopDong = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -578,13 +580,13 @@ async function apiDanhSachHopDongPop() {
 
 function datGiaTriMacDinhNgachNVPopUp(mahopdong) {
     const thongTinHopDong = danhSachHopDongPop.find(item => item.mahopdong === mahopdong)
-    const ngachNhanVien = document.querySelector('#ngachNhanVienPop select')
+    const ngachNhanVien = document.querySelector('#ngachNhanVienPop input')
     ngachNhanVien.value = thongTinHopDong.chucdanh
 }
 async function fetchNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -631,7 +633,7 @@ async function getBacLuongTheoNgachDauTienPopUp() {
     try {
         ngachCongChucPop = null;
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -660,7 +662,7 @@ function handleNgachCongChucChange(event) {
 async function apiLuongHeSoPopUp() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -676,7 +678,7 @@ async function apiLuongHeSoPopUp() {
 async function apiLuongHeSoPopChangeNgach() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
             method: 'GET',
             contentType: 'application/json',
 
@@ -720,7 +722,7 @@ async function handleBacLuongPopUp() {
 async function getDanhSachluongCoBanHeSoPop() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
             method: 'GET',
             contentType: 'application/json',
 

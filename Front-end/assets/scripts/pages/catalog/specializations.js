@@ -61,7 +61,7 @@ function fetchChuyenMon(id) {
     setLoading(true)
     idChuyenMon = id
     $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
         success: function (data) {
             // setFormValue('editChuyenMon', data, 'fetch');
@@ -77,9 +77,8 @@ function fetchChuyenMon(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục chuyên môn?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục chuyên môn ?")
     const valid = validateForm('editChuyenMon')
     if (!valid) return
     const formValue = getFormValues('editChuyenMon')
@@ -89,13 +88,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/addChuyenMon',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/addChuyenMon',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchChuyenMon res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục chuyên môn: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -105,15 +104,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -123,17 +122,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục chuyên môn?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục chuyên môn ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchChuyenMon res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục chuyên môn: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -141,7 +139,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchChuyenMon err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -149,10 +147,8 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-
-    const isConfirm = confirm('Bạn chắc chắn muốn lưu danh mục chuyên môn?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục chuyên môn ?")
     const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
     console.log("Ten Truong: " + payload["ten"])
@@ -160,13 +156,13 @@ function handleSave() {
     console.log('maTo: ', idChuyenMon)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchChuyenMon res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục chuyên môn: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -176,15 +172,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -208,7 +204,7 @@ function clearFormValues() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChuyenMon/getChuyenMon'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMon'
 }
 
 function showPopup() {
@@ -220,7 +216,11 @@ function showPopup() {
             setFormValue('editChuyenMon', { ma: "", ten: "" })
         }
     }
-
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Chuyên Môn"

@@ -11,21 +11,21 @@ var TableColumns = [
     },
     {
         label: 'Hệ Số Lương',
-        key: 'hesoluong'
+        key: 'heSoLuong'
     },
     {
         label: 'Bậc Lương',
-        key: 'bacluong'
+        key: 'bacLuong'
     },
     {
-        label: 'Phụ cấp chức vụ',
+        label: 'Phụ Cấp trách nhiệm',
         key: 'phucaptrachnhiem',
-         type: 'currency'
+        type: 'currency'
     },
     {
         label: 'Phụ Cấp Khác',
         key: 'phucapkhac',
-         type: 'currency'
+        type: 'currency'
     },
     {
         label: 'Tổng Lương',
@@ -38,20 +38,28 @@ var TableColumns = [
         formatter: (giatri) => giatri + ' năm'
     },
     {
-        label: 'Ngày Hiệu Lực',
-        key: 'ngayhieuluc',
+        label: 'Ngày bắt đầu',
+        key: 'ngaybatdau',
         type: 'datetime'
     },
     {
-        label: 'Ngày Kết Thúc',
+        label: 'Ngày kết thúc',
         key: 'ngayketthuc',
         type: 'datetime'
     },
     {
-        label: 'Ghi chú',
-        key: 'ghichu'
+        label: 'Trạng thái',
+        key: 'trangthai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     }
 ]
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma;
 }

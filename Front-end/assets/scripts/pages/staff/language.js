@@ -72,6 +72,10 @@ function showPopup(formId) {
             clearFormValues("editNgoaiNgu")
         }
     }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
 }
 function closePopup(formId) {
     var modal = document.getElementById(formId);
@@ -102,7 +106,7 @@ function fetchNgoaiNgu(id) {
     idNgoaiNgu = id
     $.ajax({
 
-        url: 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data, 'fetch');
@@ -117,9 +121,8 @@ function fetchNgoaiNgu(id) {
     });
 }
 
-function handleCreateNgoaiNgu() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm ngoại ngữ?')
-    if (!isConfirm) return
+async function handleCreateNgoaiNgu() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới ngoại ngữ ?")
     const valid = validateForm('ngoaiNgu_form')
     if (!valid) return
     const formValue = getFormValues('ngoaiNgu_form')
@@ -130,12 +133,12 @@ function handleCreateNgoaiNgu() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://localhost:7141/api/NgoaiNgu/addNgoaiNgu',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/addNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Tạo Thành Công!');
+                showSuccess('Tạo Thành Công!');
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
@@ -146,15 +149,15 @@ function handleCreateNgoaiNgu() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -164,17 +167,15 @@ function handleCreateNgoaiNgu() {
     }, 1000);
 }
 
-function handleRemoveNgoaiNgu(id) {
-
-    const isConfirm = confirm('Bạn chắc chắn muốn Xóa ngoại ngữ?')
-    if (!isConfirm) return
+async function handleRemoveNgoaiNgu(id) {
+    await showConfirm("Bạn có chắc chắn muốn xóa ngoại ngữ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
-                alert('Xóa Thành Công!');
+                showSuccess('Xóa Thành Công!');
                 // recordActivityAdmin(maNhanVien, `Xóa ngoại ngữ ${maDetail} : ${oldng}`);
                 closePopup("editNgoaiNgu")
                 table.forEach(table => {
@@ -186,7 +187,7 @@ function handleRemoveNgoaiNgu(id) {
             },
             error: (err) => {
                 console.log('fetchTrinhDo err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -195,22 +196,21 @@ function handleRemoveNgoaiNgu(id) {
     }, 1000);
 }
 
-function handleSaveNgoaiNgu() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa ngoại ngữ?')
-    if (!isConfirm) return
+async function handleSaveNgoaiNgu() {
+    await showConfirm("Bạn có chắc chắn muốn sửa ngoại ngữ ?")
     const formValue = getFormValues('editNgoaiNgu')
     formValue['id'] = idNgoaiNgu
     const payload = buildPayload1(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NgoaiNgu/updateNgoaiNgu',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/updateNgoaiNgu',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchNgoaiNgu res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!');
                 closePopup("editNgoaiNgu")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
@@ -222,15 +222,15 @@ function handleSaveNgoaiNgu() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -262,7 +262,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl2() {
-    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()

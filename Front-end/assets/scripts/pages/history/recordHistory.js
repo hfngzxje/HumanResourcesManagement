@@ -8,7 +8,7 @@ function recordActivityAdmin(actor, action){
     };
   
         $.ajax({
-            url: 'https://localhost:7141/api/LichSuHoatDong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LichSuHoatDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),

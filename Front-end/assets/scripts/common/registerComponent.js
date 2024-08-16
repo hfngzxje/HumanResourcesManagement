@@ -3,6 +3,7 @@ class CustomHeader extends HTMLElement {
     this.innerHTML = `
      <header class="app-header">
     <!-- Sidebar toggle button-->
+    
           <span id="hrmLink" class="ml-3 text-xl font-bold">
             <a href="/pages/staff/list.html"><b style="color:white;">HRM  </b><a/>
           </span>
@@ -18,9 +19,9 @@ class CustomHeader extends HTMLElement {
   </header>
       `;
 
-      const hrmLink = this.querySelector("#hrmLink");
-      hrmLink.style.setProperty('margin-left', '250px', 'important');
-      hrmLink.style.setProperty('margin-top', '12px', 'important');
+    const hrmLink = this.querySelector("#hrmLink");
+    hrmLink.style.setProperty('margin-left', '250px', 'important');
+    hrmLink.style.setProperty('margin-top', '12px', 'important');
 
     // Thêm sự kiện click vào span HRM
     hrmLink.addEventListener("click", () => {
@@ -30,6 +31,32 @@ class CustomHeader extends HTMLElement {
   }
 }
 
+
+class CustomFooter extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+     
+        <div class="text-center" style="font-size: 13px">
+            <p><b>Copyright
+                    <script type="text/javascript">
+                        document.write(new Date().getFullYear());
+                    </script> Phần mềm quản lý nhân sự | HRM
+                </b></p>
+        </div>
+
+      `;
+
+  //     <footer class="footer">
+  //     <div class="text-center" style="font-size: 13px">
+  //         <p><b>Copyright
+  //             <script type="text/javascript">
+  //                 document.write(new Date().getFullYear());
+  //             </script> Phần mềm quản lý nhân sự | HRM
+  //         </b></p>
+  //     </div>
+  // </footer>
+  }
+}
 class CustomSidebar extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
@@ -71,7 +98,7 @@ class CustomSidebar extends HTMLElement {
     </ul>
   </aside>
 
-   <div id="myModal" class="modal" style="z-index: 100;">
+   <div id="myModal" class="modal">
             <div class="change-container">
               <form id="change_form">
               <span class="close">&times;</span>
@@ -102,7 +129,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -120,7 +147,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -141,12 +168,12 @@ class CustomSidebar extends HTMLElement {
     try {
       if (maNhanVien) {
         const maNhanVienElement = this.querySelector('p#role');
-       if(maNhanVien === '1'){
-        maNhanVienElement.textContent = 'Admin'
-       }
-       else{
-        maNhanVienElement.textContent = "Employee"
-       }
+        if (maNhanVien === '1') {
+          maNhanVienElement.textContent = 'Admin'
+        }
+        else {
+          maNhanVienElement.textContent = "Employee"
+        }
       }
     } catch (error) {
       console.error('Error fetching role:', error);
@@ -155,7 +182,7 @@ class CustomSidebar extends HTMLElement {
   updateActiveLink() {
     const currentPath = window.location.pathname;
     const menuItems = this.querySelectorAll('.app-menu__item');
-    
+
     menuItems.forEach(item => {
       item.classList.remove('active');
       const linkPath = item.getAttribute('href');
@@ -167,7 +194,7 @@ class CustomSidebar extends HTMLElement {
 
   addEventListeners() {
     const menuItems = this.querySelectorAll('.app-menu__item');
-    
+
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(el => el.classList.remove('active'));
@@ -175,7 +202,7 @@ class CustomSidebar extends HTMLElement {
       });
     });
   }
-}   
+}
 class BaseInput extends HTMLElement {
   static observedAttributes = [
     "label",
@@ -196,15 +223,13 @@ class BaseInput extends HTMLElement {
     const type = this.getAttribute("type") || "text";
     const disabled = this.getAttribute("disabled") !== null;
     this._readonly = this.hasAttribute("readonly");
-    
+
 
     this.innerHTML = `
     <div>
-      <label for="base-input" class="block  text-sm  text-gray-900 ${
-        hideLabel ? "mt-" : "hidden"
+      <label for="base-input" class="block  text-sm  text-gray-900 ${hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-      <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
-        this._readonly ? "readonly" : ""
+      <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
       }>
     </div>
     `;
@@ -228,9 +253,8 @@ class BaseTextArea extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex flex-col h-full w-full">
-    <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${
-      hideLabel ? "" : "hidden"
-    }">${label}</label>
+    <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${hideLabel ? "" : "hidden"
+      }">${label}</label>
       <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-ffffff border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
     </div>
     `;
@@ -305,9 +329,8 @@ class BaseInputNumber extends HTMLElement {
     this.innerHTML = `
     <div class="">
       <label for="base-input" class="block  text-sm  text-gray-900" style="${style}">${label}</label>
-      <input type="text" name="${name}" required="${required}"  value="${value}" style="font-weight: normal;" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
-      this._readonly ? "readonly" : ""
-    }>
+      <input type="text" name="${name}" required="${required}"  value="${value}" style="font-weight: normal;" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
+      }>
     </div>
     `;
 
@@ -354,9 +377,8 @@ class BaseRadio extends HTMLElement {
 
     this.innerHTML = `
     <div class="flex items-center mb-4">
-      <input type="radio" value="${value}" name="${name}" ${
-      checked !== null ? "checked" : ""
-    } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
+      <input type="radio" value="${value}" name="${name}" ${checked !== null ? "checked" : ""
+      } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
       <label for="default-radio-1" class="ms-2 text-sm  text-gray-900 ">${label}</label>
     </div>
     `;
@@ -407,49 +429,49 @@ class BaseSelect extends HTMLElement {
     const renderOption = () => {
       const selectElement = this.querySelector('select');
       selectElement.innerHTML = "";
-  
+
       if (includeAll) {
-          const allOption = document.createElement("option");
-          allOption.value = '';
-          allOption.innerText = 'Tất Cả';
-          selectElement.append(allOption);
+        const allOption = document.createElement("option");
+        allOption.value = '';
+        allOption.innerText = 'Tất Cả';
+        selectElement.append(allOption);
       }
-  
+
       if (api) {
-          $.ajax({
-              url: getApiUrl(),
-              method: "GET",
-              success: (data) => {
-                  data.forEach((item) => {
-                      const option = document.createElement("option");
-                      option.value = item[keyValue];
-                      option.innerText = item[keyLabel];
-                      selectElement.append(option);
-                  });
-              },
-              error: (err) => {
-                  console.log("Base select api err :: ", err);
-              },
-          });
-          return;
+        $.ajax({
+          url: getApiUrl(),
+          method: "GET",
+          success: (data) => {
+            data.forEach((item) => {
+              const option = document.createElement("option");
+              option.value = item[keyValue];
+              option.innerText = item[keyLabel];
+              selectElement.append(option);
+            });
+          },
+          error: (err) => {
+            console.log("Base select api err :: ", err);
+          },
+        });
+        return;
       }
-  
+
       // Ensure options is an array
       const options = Array.isArray(window[optionsKey]) ? window[optionsKey] : [];
       options.forEach(({ value, label }) => {
-          const option = document.createElement("option");
-          option.value = value;
-          option.innerText = label;
-          selectElement.append(option);
+        const option = document.createElement("option");
+        option.value = value;
+        option.innerText = label;
+        selectElement.append(option);
       });
-  };
-  
-  this.renderOption = renderOption;
-  
-  document.addEventListener("DOMContentLoaded", () => {
+    };
+
+    this.renderOption = renderOption;
+
+    document.addEventListener("DOMContentLoaded", () => {
       renderOption();
-  });
-  
+    });
+
 
     this.innerHTML = `
     <div class="max-w-sm" style="margin: 0;">
@@ -619,9 +641,9 @@ class BaseTable extends HTMLElement {
       const hours = String(dateTime.getHours()).padStart(2, "0");
       const minutes = String(dateTime.getMinutes()).padStart(2, "0");
       const seconds = String(dateTime.getSeconds()).padStart(2, "0");
-  
+
       return `${hours}:${minutes}:${seconds}`;
-  }
+    }
 
     function getMonth(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
@@ -659,7 +681,7 @@ class BaseTable extends HTMLElement {
         const thEl = document.createElement("th");
         // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
         thEl.setAttribute("class", "px-6 py-3");
-        
+
         // <th class="px-6 py-3">Mã hợp đồng</th>
         thEl.innerText = col.label;
         // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
@@ -733,7 +755,7 @@ class BaseTable extends HTMLElement {
             if (col.type === "disabled") {
               return; // Skip adding cell for disabled columns
             }
-            
+
             //  Mã hợp đồng, Lương cơ bả, ...
             // tạo thẻ th
             const thEl = document.createElement("th");
@@ -745,24 +767,24 @@ class BaseTable extends HTMLElement {
               if (value === "Đã qua") {
                 thEl.style.color = "blue";
               }
-              else if(value === "Hôm nay"){
+              else if (value === "Hôm nay") {
                 thEl.style.color = "green";
               }
-              else if(value === "Sắp đến"){
+              else if (value === "Sắp đến") {
                 thEl.style.color = "Teal";
               }
-              else if(value === "Trong tháng"){
+              else if (value === "Trong tháng") {
                 thEl.style.color = "red";
               }
-              else if(value === "Chưa đến"){
+              else if (value === "Chưa đến") {
                 thEl.style.color = "black";
               }
             }
             if (col.formatGiaTri) {
               const formatted = col.formatGiaTri(value);
               value = formatted.text; // Lấy giá trị đã định dạng
-              thEl.style.color = formatted.color; 
-          }
+              thEl.style.color = formatted.color;
+            }
             // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
             if (col.key === "action") {
               //
@@ -782,22 +804,28 @@ class BaseTable extends HTMLElement {
             } else {
               // nếu type được khai báo thì định dạng lại giá trị tương ứng
               if (col.type === "datetime") {
-                if(value === null){
-                  value =" "
+                if (value === null) {
+                  value = " "
                 }
-                else{
+                else {
                   value = formatDateTime(value);
 
                 }
-              } 
-              else if(col.type === "time"){
+              }
+              else if (col.type === "time") {
                 value = formatTime(value)
               }
               else if (col.type == "month") {
                 value = getMonth(value);
-              } 
-               else if (col.type === "currency") {
-                value = formatCurrency(value);
+              }
+              else if (col.type === "currency") {
+                if(value === 0 || value === null){
+                  value = value
+                }
+                else{
+                  value = formatCurrency(value);
+
+                }
               } else if (col.type === "gender") {
                 value = getGenderIcon(value); // Sử dụng icon thay vì text
                 thEl.innerHTML = value;
@@ -807,10 +835,10 @@ class BaseTable extends HTMLElement {
 
               // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
               if (col.formatter) {
-                if(value === null){
+                if (value === null) {
                   value = null
                 }
-                else{
+                else {
                   console.log(value);
                   value = col.formatter(value); // value
                 }
@@ -920,7 +948,7 @@ class BaseTable extends HTMLElement {
         });
         paginationEl.appendChild(nextButton);
       }
-      
+
       function createEllipsis() {
         const ellipsis = document.createElement("span");
         ellipsis.setAttribute(
@@ -932,80 +960,80 @@ class BaseTable extends HTMLElement {
       }
       const handleCallFetchData = (payload) => {
         $.ajax({
-            url: getApiUrl(), // lấy ra url api của bảng = http://...
-            type: method, // phương thức
-            data: payload,
-            success: (tableData) => {
-                // Kiểm tra xem tableData có phải là một mảng không
-                if (Array.isArray(tableData)) {
-                    // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
-                    if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
-                        // Sắp xếp theo thuộc tính 'id'
-                        const sortedData = tableData.sort((a, b) => b.id - a.id);
-                        setTableData(sortedData);
-                    } else {
-                        // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
-                        setTableData(tableData);
-                    }
-    
-                    renderTable();
-                    renderPagination();
-                } else {
-                  setTableData([]);
-                  renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
-                }
-            },
-            error: (xhr, status, error) => {
-                const hasEmptyEl = document.querySelector("#empty-data");
-                if (hasEmptyEl) return;
-                
-                // Trường hợp thất bại
-                const wrapperTable = document.querySelector("#wrapper-table");
-                
-                const divEl = document.createElement("div");
-                divEl.setAttribute("id", "empty-data");
-                divEl.setAttribute(
-                    "class",
-                    "text-center text-gray-400 mt-5 mb-5 text-sm"
-                );
-                // divEl.innerText = "Không có dữ liệu!";
-                wrapperTable.append(divEl);
-            },
+          url: getApiUrl(), // lấy ra url api của bảng = http://...
+          type: method, // phương thức
+          data: payload,
+          success: (tableData) => {
+            // Kiểm tra xem tableData có phải là một mảng không
+            if (Array.isArray(tableData)) {
+              // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
+              if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
+                // Sắp xếp theo thuộc tính 'id'
+                const sortedData = tableData.sort((a, b) => b.id - a.id);
+                setTableData(sortedData);
+              } else {
+                // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
+                setTableData(tableData);
+              }
+
+              renderTable();
+              renderPagination();
+            } else {
+              setTableData([]);
+              renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
+            }
+          },
+          error: (xhr, status, error) => {
+            const hasEmptyEl = document.querySelector("#empty-data");
+            if (hasEmptyEl) return;
+
+            // Trường hợp thất bại
+            const wrapperTable = document.querySelector("#wrapper-table");
+
+            const divEl = document.createElement("div");
+            divEl.setAttribute("id", "empty-data");
+            divEl.setAttribute(
+              "class",
+              "text-center text-gray-400 mt-5 mb-5 text-sm"
+            );
+            // divEl.innerText = "Không có dữ liệu!";
+            wrapperTable.append(divEl);
+          },
         });
-    };
-    
+      };
 
-    // const handleCallFetchData = (payload) => {
-    //   $.ajax({
-    //     url: getApiUrl(), // lấy ra url api của bảng = http://...
-    //     type: method, // phương thức
-    //     data: payload,
-    //     success: (tableData) => {
-    //       // tableData : dữ liệu Api bảng trả về
 
-    //       setTableData(tableData);
-    //       renderTable();
-    //       renderPagination();
-    //     },
-    //     error: (xhr, status, error) => {
-    //       const hasEmptyEl = this.querySelector("#empty-data");
-    //       console.log("hasEmptyEl ", hasEmptyEl);
-    //       if (hasEmptyEl) return;
-    //       // Trường hợp thất bại
-    //       const wrapperTable = this.querySelector("#wrapper-table");
+      // const handleCallFetchData = (payload) => {
+      //   $.ajax({
+      //     url: getApiUrl(), // lấy ra url api của bảng = http://...
+      //     type: method, // phương thức
+      //     data: payload,
+      //     success: (tableData) => {
+      //       // tableData : dữ liệu Api bảng trả về
 
-    //       const divEl = document.createElement("div");
-    //       divEl.setAttribute("id", "empty-data");
-    //       divEl.setAttribute(
-    //         "class",
-    //         "text-center text-gray-400 mt-5 mb-5 text-sm"
-    //       );
-    //       divEl.innerText = "Không có dữ liệu!";
-    //       wrapperTable.append(divEl);
-    //     },
-    //   });
-    // };
-    
+      //       setTableData(tableData);
+      //       renderTable();
+      //       renderPagination();
+      //     },
+      //     error: (xhr, status, error) => {
+      //       const hasEmptyEl = this.querySelector("#empty-data");
+      //       console.log("hasEmptyEl ", hasEmptyEl);
+      //       if (hasEmptyEl) return;
+      //       // Trường hợp thất bại
+      //       const wrapperTable = this.querySelector("#wrapper-table");
+
+      //       const divEl = document.createElement("div");
+      //       divEl.setAttribute("id", "empty-data");
+      //       divEl.setAttribute(
+      //         "class",
+      //         "text-center text-gray-400 mt-5 mb-5 text-sm"
+      //       );
+      //       divEl.innerText = "Không có dữ liệu!";
+      //       wrapperTable.append(divEl);
+      //     },
+      //   });
+      // };
+
       handleCallFetchData();
 
       this.handleCallFetchData = handleCallFetchData;
@@ -1023,8 +1051,140 @@ class BaseTable extends HTMLElement {
   }
 }
 
+class CustomAlert extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <div class="modal" id="popupAlert">
+    <div class="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
+      <!-- overlay -->
+      <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50 cursor-pointer">
+      </div>
+      <!-- Modal -->
+      <div class="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
+        <div
+          class="w-full py-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto max-w-sm">
+          <div class="space-y-2 p-2">
+            <div class="p-4 space-y-2 text-center dark:text-white">
+              <h2 class="text-xl font-bold tracking-tight" id="page-action.heading">
+                Thông báo
+              </h2>
+              <p id="alertMessage" class="text-gray-500">
+                Nội dung thông báo
+              </p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div aria-hidden="true" class="border-t dark:border-gray-700 px-2"></div>
+            <div class="px-6 py-2">
+              <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                <!-- Nút Xác Nhận -->
+                <button type="submit" id="confirmButton"
+                  class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-[rgb(0,28,64)] hover:bg-[rgb(0,28,64)] focus:ring-offset-[rgb(0,28,64)]">
+                  <span class="flex items-center gap-1">
+                    <span>
+                      Xác nhận
+                    </span>
+                  </span>
+                </button>
+                <!-- Nút Hủy -->
+                <button type="button" id="cancelButton"
+                  class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-4 text-sm text-white bg-[rgb(245,157,57)] border-transparent hover:bg-[rgb(245,157,57)] focus:ring-offset-[rgb(245,157,57)]">
+                  <span class="flex items-center gap-1">
+                    <span>
+                      Hủy
+                    </span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
+
+class CustomAlertEror extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupAlertError" style="display: none;">
+  <div class="change-container" style="padding:0px">
+
+    <div class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+      <div class="flex items-center justify-center mb-4">
+        <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+          <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="text-center">
+        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+          Lỗi
+        </h3>
+        <div class="mt-2">
+          <p class="text-sm text-gray-500" id="errorMessage">
+            There was an error processing your request.
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm" id="okButton">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    `;
+  }
+}
+
+class CustomAlertSuccess extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupConfirmSuccess">
+    <div class="change-container" style="padding:0px">
+      <div
+        class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full"
+        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="flex items-center justify-center mb-4">
+          <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="successMessage">
+            Xác Nhận Thành Công
+          </h3>
+        </div>
+        <div class="mt-4">
+          <button
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm"
+            id="okSuccessButton">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
+
+customElements.define('custom-alert', CustomAlert);
+customElements.define('custom-error', CustomAlertEror);
+customElements.define('custom-success', CustomAlertSuccess);
 //  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
 customElements.define(/** 1*/ "layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
+customElements.define(/** 1*/ "layout-footer", /** 2*/ CustomFooter);
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);
 customElements.define("base-textarea", BaseTextArea);

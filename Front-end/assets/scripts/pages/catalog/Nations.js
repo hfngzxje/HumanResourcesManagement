@@ -64,7 +64,7 @@ function fetchDanToc(id) {
     setLoading(true)
     idDanToc = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -81,22 +81,20 @@ function fetchDanToc(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục dân tộc?')
-    if (!isConfirm) return
-    const valid = validateForm('editNation')
-    if (!valid) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới danh mục dân tộc ?")
+   
     const formValue = getFormValues('editNation')
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/addDanhMucDanToc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/addDanhMucDanToc',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục dân tộc: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -106,15 +104,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -124,16 +122,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục dân tộc?')
-    if (!isConfirm) return
+
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục dân tộc ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
             method: 'DELETE',
             success: function (data) {
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục dân tộc: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -141,7 +139,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchPhongBan err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -149,21 +147,20 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục dân tộc?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục dân tộc ?")
     const formValue = getFormValues('editNation')
     formValue['id'] = idDanToc
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/updateDanToc',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục dân tộc: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -173,15 +170,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -206,7 +203,7 @@ function clearFormValues() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanToc'
 }
 
 function showPopup() {
@@ -218,7 +215,11 @@ function showPopup() {
             clearFormValues()
         }
     }
-
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Dân Tộc"

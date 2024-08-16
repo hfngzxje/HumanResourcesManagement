@@ -105,6 +105,10 @@ function showPopup() {
       clearFormValues();
     }
   }
+  var closeButton = modal.querySelector('.close');
+  closeButton.onclick = function () {
+      modal.style.display = "none";
+  }
   const popupTitle = modal.querySelector('h2')
   popupTitle.textContent = "Thêm mới nhân viên"
 }
@@ -122,57 +126,21 @@ function clearFormValues(formId) {
     }
   });
 }
-function recordActivityAdmin(actor, action){
-  setLoading(true)
-  setLoading(true);
 
-  const payload = {
-      createdBy: actor,
-      action: action,
-  };
-      $.ajax({
-          url: 'https://localhost:7141/api/LichSuHoatDong',
-          method: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify(payload),
-          success: function (data) {
-              console.log('Lịch sử hoạt động đã được lưu:');
-          },
-          error: (err) => {
-              console.log('Lỗi khi lưu lịch sử hoạt động:', err);
-              try {
-                  if (!err.responseJSON) {
-                      alert(err.responseText)
-                      return
-                  }
-                  const errObj = err.responseJSON.errors
-                  const firtErrKey = Object.keys(errObj)[0]
-                  const message = errObj[firtErrKey][0]
-                  alert(message)
-              } catch (error) {
-                  alert("Lưu lịch sử hoạt động không thành công!");
-              }
-          },
-          complete: () => {
-              setLoading(false)
-          }
-      });
-}
-function handleCreate() {
-  const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
-  if (!isConfirm) return
+async function handleCreate() {
+  await showConfirm("Bạn có chắc chắn muốn thêm mới nhân viên ?")
   const valid = validateForm('createNhanVien')
   if (!valid) return
   const { anh, ...rest } = getFormValues('createNhanVien')
   const payload = buildPayload(rest)
   setLoading(true)
   $.ajax({
-    url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+    url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/TaoMoiNhanVien',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(payload),
     success: function (data) {
-      alert("Thêm mới thành công !")
+      showSuccess("Thêm mới thành công !")
       recordActivityAdmin(maNhanVien, `Thêm mới nhân viên: ${payload.ten}`)
       backToListAfterCreate()
     },
@@ -181,15 +149,15 @@ function handleCreate() {
       console.log('err ', err);
       try {
         if (!err.responseJSON) {
-          alert(err.responseText)
+          showError(err.responseText)
           return
         }
         const errObj = err.responseJSON.errors
         const firtErrKey = Object.keys(errObj)[0]
         const message = errObj[firtErrKey][0]
-        alert(message)
+        showError(message)
       } catch (error) {
-        alert("Tạo thất bại!")
+        showError("Tạo thất bại!")
       }
     },
     complete: () => {

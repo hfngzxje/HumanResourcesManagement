@@ -32,7 +32,15 @@ var TableColumns = [
     },
     {
         label: 'Trạng thái',
-        key: 'trangThai'
+        key: 'trangThai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     },
     ,
     {
@@ -93,7 +101,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editHopDong', data)
@@ -118,7 +126,7 @@ function handleCreate() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -158,7 +166,7 @@ function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
@@ -184,7 +192,7 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -246,7 +254,7 @@ function clearFormValues(formId) {
     });
 }
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong'
 }
 function showPopup() {
     var modal = document.getElementById("editHopDong");
@@ -256,6 +264,10 @@ function showPopup() {
             modal.style.display = "none";
             clearFormValues();
         }
+    }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
     }
 
     console.log('isPopupEdit ', isPopupEdit);

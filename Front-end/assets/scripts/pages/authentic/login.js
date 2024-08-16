@@ -27,7 +27,7 @@ function Login() {
     const payload = buildPayload(formValue)
     // setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DangNhap/Login',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/Login',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -44,8 +44,6 @@ function Login() {
                 localStorage.setItem("tenNhanVien", tenNhanVien)
                 localStorage.setItem("userAvatar", anh)
                 handleLoginSuccess(vaitroID)
-                alert("Đăng Nhập Thành Công")
-
             }
             else {
                 alert("Không tìm thấy vai trò người dùng")
@@ -108,7 +106,7 @@ function Login() {
 //     console.log("Email value: " + email)
 //     setLoading(true)
 //     $.ajax({
-//         url: 'https://localhost:7141/api/DangNhap/forgot-password?email=' + email ,
+//         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/forgot-password?email=' + email ,
 //         method: 'POST',
 //         contentType: 'application/json',
 //         data: JSON.stringify(payload),

@@ -65,7 +65,7 @@ function fetchTo(id) {
     setLoading(true)
     idToHienTai = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/getDanhMucToById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucToById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -84,9 +84,8 @@ function fetchTo(id) {
 }
 
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục tổ?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục tổ ?")
     const valid = validateForm('editTeam')
     if (!valid) return
     const formValue = getFormValues('editTeam')
@@ -96,13 +95,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/addDanhMucTo',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/addDanhMucTo',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchEmployee res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục tổ: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -112,15 +111,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -130,17 +129,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục tổ?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục tổ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục tổ: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -148,7 +146,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchPhongBan err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -156,22 +154,21 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục tổ?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục tổ ?")
     const formValue = getFormValues('editTeam')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchLanguage res :: ', data);
-                alert('Lưu Thành Công!')
+                showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục tổ: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -181,15 +178,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -215,7 +212,7 @@ function clearFormValues() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo'
 }
 
 function showPopup() {
@@ -228,7 +225,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

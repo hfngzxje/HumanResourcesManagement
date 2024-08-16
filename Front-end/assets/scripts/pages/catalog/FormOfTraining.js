@@ -59,7 +59,7 @@ function fetchDaoTao(id) {
     setLoading(true)
     idDaoTao = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTaoById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTaoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editDaoTao', data)
@@ -74,9 +74,8 @@ function fetchDaoTao(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục hình thức đào tạo?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục hình thức đào tạo ?")
     const valid = validateForm('editDaoTao')
     if (!valid) return
     const formValue = getFormValues('editDaoTao')
@@ -86,13 +85,13 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục hình thức đào tạo: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
@@ -102,15 +101,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -120,17 +119,16 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục hình thức đào tạo?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục hình thức đào tạo ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục hình thức đào tạo: ${oldValue}`);
                 closePopup()
                 clearFormValues()
@@ -138,7 +136,7 @@ function handleRemoveRow() {
             },
             error: (err) => {
                 console.log('fetchKhenThuong err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -146,9 +144,8 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục hình thức đào tạo?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục hình thức đào tạo ?")
     const valid = validateForm('editDaoTao')
     if (!valid) return
     const formValue = getFormValues('editDaoTao')
@@ -157,13 +154,13 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục đào tạo: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
@@ -173,15 +170,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -206,7 +203,7 @@ function clearFormValues() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTao'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTao'
 }
 
 function showPopup() {
@@ -219,7 +216,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

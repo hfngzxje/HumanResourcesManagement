@@ -51,6 +51,10 @@
         </div>
       </div>
     </div>
+    <layout-footer></layout-footer>
+    <custom-alert></custom-alert>
+    <custom-error></custom-error>
+    <custom-success></custom-success>
   </main>
 
   <div class="modal" id="editTeam">
@@ -69,7 +73,7 @@
             </div>
             <div class="col-span-2 sm:col-span-1">
               <base-select label="Tên phòng(*)" required="true" name="idphong" keyValue="id" keyLabel="ten"
-                api="https://localhost:7141/api/NhanVien/phong"></base-select>
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"></base-select>
             </div>
           </div>
         </div>
@@ -90,6 +94,7 @@
   <script src="../../assets/scripts/pages/catalog/teams.js"></script>
   <script src="../../assets/scripts/pages/history/recordHistory.js"></script>
   <script src="/assets/scripts/common/registerComponent.js"></script>
+  <script src="/assets/scripts/common/popupConfirm.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
   <script src="/assets/scripts/common/dateTime.js"></script>
