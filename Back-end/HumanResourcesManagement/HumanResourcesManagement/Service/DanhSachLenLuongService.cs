@@ -146,9 +146,10 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
         {
             var data = await getDanhSachNhanVienLenLuong(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachLenLuong.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachLenLuong.xlsx");
+            var rootPath = Directory.GetCurrentDirectory();
+            var templateFolderPath = Path.Combine(rootPath, "Templates");
+            var filePath = Path.Combine(templateFolderPath, "BaoCao_DanhSachLenLuong.xlsx");
+            return await ExportToExcel(filePath, data, "BaoCao_DanhSachLenLuong.xlsx");
         }
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req)
         {

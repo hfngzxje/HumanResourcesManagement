@@ -31,6 +31,7 @@ namespace HumanResourcesManagement.Models
         public virtual DbSet<TblDanhMucTo> TblDanhMucTos { get; set; } = null!;
         public virtual DbSet<TblDanhMucTonGiao> TblDanhMucTonGiaos { get; set; } = null!;
         public virtual DbSet<TblDanhMucTrinhDo> TblDanhMucTrinhDos { get; set; } = null!;
+        public virtual DbSet<TblDanhSachNangLuong> TblDanhSachNangLuongs { get; set; } = null!;
         public virtual DbSet<TblDieuChuyen> TblDieuChuyens { get; set; } = null!;
         public virtual DbSet<TblHinhThucDaoTao> TblHinhThucDaoTaos { get; set; } = null!;
         public virtual DbSet<TblHopDong> TblHopDongs { get; set; } = null!;
@@ -322,6 +323,47 @@ namespace HumanResourcesManagement.Models
                 entity.Property(e => e.Ten)
                     .HasMaxLength(50)
                     .HasColumnName("ten");
+            });
+
+            modelBuilder.Entity<TblDanhSachNangLuong>(entity =>
+            {
+                entity.ToTable("tblDanhSachNangLuong");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Hosoluongcu)
+                    .HasColumnType("text")
+                    .HasColumnName("hosoluongcu");
+
+                entity.Property(e => e.Hosoluongmoi)
+                    .HasColumnType("text")
+                    .HasColumnName("hosoluongmoi");
+
+                entity.Property(e => e.Mahopdong)
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasColumnName("mahopdong")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Manv)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("manv")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Trangthai).HasColumnName("trangthai");
+
+                entity.HasOne(d => d.MahopdongNavigation)
+                    .WithMany(p => p.TblDanhSachNangLuongs)
+                    .HasForeignKey(d => d.Mahopdong)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__tblDanhSa__mahop__41B8C09B");
+
+                entity.HasOne(d => d.ManvNavigation)
+                    .WithMany(p => p.TblDanhSachNangLuongs)
+                    .HasForeignKey(d => d.Manv)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__tblDanhSac__manv__42ACE4D4");
             });
 
             modelBuilder.Entity<TblDieuChuyen>(entity =>

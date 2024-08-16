@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.Reflection;
 
 namespace HumanResourcesManagement.Service
 {
@@ -100,19 +101,27 @@ namespace HumanResourcesManagement.Service
         //nhan vien excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNhanVienToExcel(DanhSachNhanVienRequest req)
         {
-            var data = await getDanhSachNhanVien(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhanVien.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachNhanVien.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachNhanVien(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachNhanVien.xlsx");
+            }
         }
         //nhan vien pdf
         public async Task<(byte[] fileContent, string fileName)> ExportNhanVienToPdf(DanhSachNhanVienRequest req)
         {
             var list = await getDanhSachNhanVien(req);
-            //string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhanVien.pdf");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, list, "BaoCao_DanhSachNhanVien.pdf");
+            string[] headers = { "Mã", "Họ và Tên", "Ngày Sinh", "Giới Tính", "Số Điện Thoại", "Phòng Ban", "Quê Quán", "Nơi Sinh", "Thường Trú", "Tạm Trú" };
+            //var rootPath = Directory.GetCurrentDirectory();
+            //var templateFolderPath = Path.Combine(rootPath, "Templates");
+            //var filePath = Path.Combine(templateFolderPath, "BaoCao_DanhSachNhanVien.pdf");
+            return await ExportToPdf("Báo Cáo Danh Sách Nhân Viên", list, "BaoCao_DanhSachNhanVien.pdf", headers);
         }
         //dang vien
         public async Task<IEnumerable<DanhSachDangVienResponse>> getDanhSachDangVien(DanhSachDangVienRequest req)
@@ -174,10 +183,17 @@ namespace HumanResourcesManagement.Service
         //dang vien excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToExcel(DanhSachDangVienRequest req)
         {
-            var data = await getDanhSachDangVien(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachDangVien.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDangVien.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachDangVien.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachDangVien(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachDangVien.xlsx");
+            }
         }
         //dang vien pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoDangVienToPdf(DanhSachDangVienRequest req)
@@ -264,10 +280,17 @@ namespace HumanResourcesManagement.Service
         //nguoi than excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToExcel(DanhSachNguoiThanRequest req)
         {
-            var data = await getDanhSachNguoiThan(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNguoiThan.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNguoiThan.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachNguoiThan.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachNguoiThan(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachNguoiThan.xlsx");
+            }
         }
         //nguoi than pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoNguoiThanToPdf(DanhSachNguoiThanRequest req)
@@ -320,12 +343,19 @@ namespace HumanResourcesManagement.Service
         //sinh nhat excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoSinhNhatToExcel(DanhSachSinhNhatRequest req)
         {
-            var data = await getDanhSachSinhNhat(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachSinhNhat.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachSinhNhat.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachSinhNhat(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachSinhNhat.xlsx");
+            }
         }
-        
+
         //sinh nhat pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoCaoSinhNhatToPdf(DanhSachSinhNhatRequest req)
         {
@@ -369,10 +399,17 @@ namespace HumanResourcesManagement.Service
         //dien chinh sach excel
         public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToExcel(DanhSachDienChinhSachRequest req)
         {
-            var data = await getDanhSachDienChinhSach(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachSinhNhat.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachDienChinhSach.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachDienChinhSach.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachDienChinhSach(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachDienChinhSach.xlsx");
+            }
         }
         //dien chinh sach pdf
         public async Task<(byte[] fileContent, string fileName)> ExportDienChinhSachToPdf(DanhSachDienChinhSachRequest req)
@@ -385,9 +422,9 @@ namespace HumanResourcesManagement.Service
         public async Task<IEnumerable<DanhSachNhomLuongResponse>> getDanhSachNhomLuong(DanhSachNhomLuongRequest req)
         {
             var all = await _context.TblDanhMucNhomLuongs.ToListAsync();
-            if (req.ChucDanh.HasValue)
+            if (req.NgachCongChuc.HasValue)
             {
-                all = all.Where(l => l.Ngachcongchuc == req.ChucDanh).ToList();
+                all = all.Where(l => l.Ngachcongchuc == req.NgachCongChuc).ToList();
             }
             if (req.BacLuong.HasValue)
             {
@@ -396,7 +433,7 @@ namespace HumanResourcesManagement.Service
 
             var resp = all.Select(r => new DanhSachNhomLuongResponse
             {
-                ChucDanh = _context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Ten,
+                NgachCongChuc = _context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Ten,
                 BacLuong = (double)r.Bacluong,
                 HeSoLuong = (double)r.Hesoluong,
                 LuongCoBan = (double)r.Luongcoban,
@@ -412,10 +449,17 @@ namespace HumanResourcesManagement.Service
         //nhom luong excel
         public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToExcel(DanhSachNhomLuongRequest req)
         {
-            var data = await getDanhSachNhomLuong(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachNhomLuong.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachNhomLuong");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachNhomLuong.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachNhomLuong(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachNhomLuong.xlsx");
+            }
         }
         //nhom luong pdf
         public async Task<(byte[] fileContent, string fileName)> ExportNhomLuongToPdf(DanhSachNhomLuongRequest req)
@@ -424,7 +468,6 @@ namespace HumanResourcesManagement.Service
             string[] headers = { "Chức Danh", "Bậc Lương", "Hệ Số Lương", "Lương Cơ Bản", "Phụ Cấp", "Khác" };
             return await ExportToPdf("Báo Cáo Danh Sách Nhóm Lương", list, "BaoCao_DanhSachNhomLuong.pdf", headers);
         }
-
         //bao hiem
         public async Task<IEnumerable<DanhSachBaoHiemResponse>> getDanhSachBaoHiem(DanhSachBaoHiemRequest req)
         {
@@ -455,10 +498,17 @@ namespace HumanResourcesManagement.Service
         //bao hiem excel
         public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToExcel(DanhSachBaoHiemRequest req)
         {
-            var data = await getDanhSachBaoHiem(req);
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachBaoHiem.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachBaoHiem");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachBaoHiem.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachBaoHiem(req);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachBaoHiem.xlsx");
+            }
         }
         //bao hiem pdf
         public async Task<(byte[] fileContent, string fileName)> ExportBaoHiemToPdf(DanhSachBaoHiemRequest req)
@@ -467,7 +517,6 @@ namespace HumanResourcesManagement.Service
             string[] headers = { "Mã NV", "Họ Tên", "Ngày Sinh", "BHYT", "BHXH", "Giới Tính", "Phòng Ban" };
             return await ExportToPdf("Báo Cáo Danh Sách Bảo Hiểm", list, "BaoCao_DanhSachBaoHiem.pdf", headers);
         }
-
         //pdf
         private async Task<(byte[] fileContent, string fileName)> ExportToPdf<T>(string title, IEnumerable<T> data, string fileName, string[] headers)
         {
@@ -520,27 +569,24 @@ namespace HumanResourcesManagement.Service
             }
         }
         //excel
-        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(string templatePath, IEnumerable<T> data, string fileName)
+        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(Stream templateStream, IEnumerable<T> data, string fileName)
         {
-            // Load the existing Excel template
-            using (var package = new ExcelPackage(new FileInfo(templatePath)))
+            using (var package = new ExcelPackage(templateStream))
             {
-                var worksheet = package.Workbook.Worksheets[0]; // Assumes you are using the first worksheet
-
-                // Calculate start row. If worksheet is empty, start at row 2 (assuming row 1 is for headers)
+                var worksheet = package.Workbook.Worksheets[0];
                 int startRow = worksheet.Dimension?.End.Row + 1 ?? 2;
-
-                foreach (var item in data)
+                if (data != null && data.Any())
                 {
-                    var properties = item.GetType().GetProperties();
-                    for (int col = 0; col < properties.Length; col++)
+                    foreach (var item in data)
                     {
-                        worksheet.Cells[startRow, col + 1].Value = properties[col].GetValue(item, null);
+                        var properties = item.GetType().GetProperties();
+                        for (int col = 0; col < properties.Length; col++)
+                        {
+                            worksheet.Cells[startRow, col + 1].Value = properties[col].GetValue(item, null);
+                        }
+                        startRow++;
                     }
-                    startRow++;
                 }
-                //worksheet.Cells.AutoFitColumns();
-
                 var content = package.GetAsByteArray();
                 return (content, fileName);
             }
