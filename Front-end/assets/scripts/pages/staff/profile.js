@@ -1,5 +1,4 @@
 
-const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
 
@@ -33,7 +32,7 @@ function backToListUpdate() {
 }
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -52,7 +51,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
            
@@ -78,7 +77,7 @@ function uploadImage(anh) {
     payloadUploadImage.append('file', anh)
 
     $.ajax({
-        url: 'https://localhost:7141/api/Image/uploadImage',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/uploadImage',
         method: 'POST',
         contentType: false,
         processData: false,
@@ -91,16 +90,16 @@ function uploadImage(anh) {
             console.log('err ', err);
             try {
                 if(!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     setLoading(false)
                     return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
                 setLoading(false)            } catch (error) {
-                alert("Cập nhật thất bại!")
+                showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
@@ -110,45 +109,47 @@ function uploadImage(anh) {
     });
 }
 
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa hồ sơ ?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa thông tin nhân viên ?")
     const valid = validateForm('profile_form')
     if(!valid) return
-    
     const {anh, ...rest} = getFormValues('profile_form')
 
     const formValue = getFormValues('profile_form')
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
             if (anh) {
                 uploadImage(anh);
+                showSuccess("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
             } else {
                 setLoading(false);
-                backToListUpdate();
+                showSuccess("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
+                // backToListUpdate();
             }
         },
         error: (err) => {
             console.log('err ', err);
             try {
                 if(!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     setLoading(false)
                     return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
                 setLoading(false)
             } catch (error) {
-                alert("Cập nhật thất bại!")
+                showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
@@ -179,16 +180,6 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
-        // createBtn.addEventListener('click', handleCreate)
-        clear.addEventListener('click', function() {
-            clearFormValues('resume_form');
-        });
-        actionEl.append(createBtn,clear)
-        return
-    }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
@@ -209,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchEmployee()
         getImage()
         
-    // const apiUrl = 'https://localhost:7141/api/NhanVien/id?id=' + maDetail;
+    // const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/id?id=' + maDetail;
 
     // // Thực hiện yêu cầu API
     // fetch(apiUrl)

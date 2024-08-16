@@ -1,4 +1,3 @@
-const isEdit = !!id
 const vaiTroID = localStorage.getItem("vaiTroID")
 let maHopDongHienTai = null
 let isPopupEdit = false
@@ -11,10 +10,9 @@ const table = document.querySelector('base-table')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 0 },
+    { label: 'Hợp đồng quá hạn', value: 2 },
 ];
 
-// Khai báo giá trị định nghĩa columns biến "var" là biến toàn cục
 var TableColumns = [
     {
         label: 'Mã nhân viên',
@@ -33,18 +31,16 @@ var TableColumns = [
         key: 'chucdanh',
     },
     {
-        label: 'Từ ngày',
-        key: 'hopdongtungay',
-        type: 'datetime'
-    },
-    {
-        label: 'Đến ngày',
-        key: 'hopdongdenngay',
-        type: 'datetime'
-    },
-    {
         label: 'Trạng thái',
-        key: 'trangThai'
+        key: 'trangThai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     },
     ,
     {
@@ -105,7 +101,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editHopDong', data)
@@ -130,7 +126,7 @@ function handleCreate() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -170,7 +166,7 @@ function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
@@ -196,7 +192,7 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -242,24 +238,7 @@ function clearFormValues() {
 }
 
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('listContract_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
 
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-
-    actionEl.append(createBtn)
-}
 function clearFormValues(formId) {
     const form = document.getElementById('editHopDong');
     const inputs = form.querySelectorAll('input, textarea, select');
@@ -275,7 +254,7 @@ function clearFormValues(formId) {
     });
 }
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong'
 }
 function showPopup() {
     var modal = document.getElementById("editHopDong");
@@ -285,6 +264,10 @@ function showPopup() {
             modal.style.display = "none";
             clearFormValues();
         }
+    }
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
     }
 
     console.log('isPopupEdit ', isPopupEdit);
@@ -314,7 +297,6 @@ function closePopup() {
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()

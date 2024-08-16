@@ -93,7 +93,7 @@ function getFormValues(formId) {
   elements.forEach(function (element) {
     const name = element.name;
     const value = getElValue(element)
-    console.log('name ', name , value);
+    // console.log('name ', name , value);
     // Thêm vào object formData
     if (!name || value === undefined ) return
     

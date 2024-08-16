@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Lịch sử hoạt động | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- Font-icon css-->
+  <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+  <!-- Navbar-->
+  <layout-header></layout-header>
+  <!-- Sidebar menu-->
+  <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+  <layout-sidebar></layout-sidebar>
+  <main class="app-content">
+    <div class="app-title mt-3">
+      <ul class="app-breadcrumb breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><b>Lịch sử hoạt động</b></a></li>
+      </ul>
+      <div id="clock"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <div class="tile-body">
+            <div class="row element-button">
+            </div>
+            <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LichSuHoatDong" columns="TableColumns"  >
+            </base-table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <layout-footer></layout-footer>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+  <script src="/assets/scripts/pages/history/history.js"></script>
+  <script src="/assets/scripts/common/registerComponent.js"></script>
+  <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+  <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+  <script src="/assets/scripts/common/dateTime.js"></script>
+
+</body>
+
+</html>

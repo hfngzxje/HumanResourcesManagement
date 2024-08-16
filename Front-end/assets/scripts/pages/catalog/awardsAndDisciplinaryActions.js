@@ -2,8 +2,8 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idKhenThuong = null
 var oldValue = null;
@@ -11,7 +11,12 @@ var oldValue = null;
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
+    },
+    {
+        label: 'Mã',
+        key: 'ma'
     },
     {
         label: 'Tên ',
@@ -39,7 +44,6 @@ var tableEvent = {
 
         fetchKhenThuong(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 function backToList() {
@@ -55,7 +59,7 @@ function fetchKhenThuong(id) {
     setLoading(true)
     idKhenThuong = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editKhenThuong', data, 'fetch');
@@ -71,25 +75,23 @@ function fetchKhenThuong(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục khen thưởng - kỷ luật?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục khen thưởng - kỷ luật ?")
     const valid = validateForm('editKhenThuong')
     if (!valid) return
     const formValue = getFormValues('editKhenThuong')
 
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm danh mục khen thưởng: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -98,15 +100,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -116,24 +118,22 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục khen thưởng - kỷ luật?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục khen thưởng kỷ luật ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục khen thưởng: ${oldValue}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
-                console.log('fetchKhenThuong err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -141,9 +141,8 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục khen thưởng - kỷ luật?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục dân tộc ?")
     const valid = validateForm('editKhenThuong')
     if (!valid) return
     const formValue = getFormValues('editKhenThuong')
@@ -152,13 +151,13 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa danh mục khen thưởng: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -167,15 +166,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -198,26 +197,8 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('award_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
-
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-    actionEl.append(createBtn)
-}
-
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
 }
 
 function showPopup() {
@@ -229,9 +210,11 @@ function showPopup() {
             setFormValue('editKhenThuong', { ten: "" })
         }
     }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Khen Thưởng - Kỷ Luật"
@@ -239,26 +222,23 @@ function showPopup() {
         popupSaveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
+        // popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Khen Thưởng - Kỷ Luật"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
+        // popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
     const formValue = getFormValues('editKhenThuong');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
         popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
     } else {
         popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
     }
 }
 function closePopup() {
@@ -266,14 +246,13 @@ function closePopup() {
     modal.style.display = "none"
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
+    // renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    // popupClearBtn.addEventListener("click", clearFormValues)
     const inputTenKhenThuong = document.querySelector('base-input[name="ten"]');
     if (inputTenKhenThuong) {
         inputTenKhenThuong.addEventListener('input', checkValues);

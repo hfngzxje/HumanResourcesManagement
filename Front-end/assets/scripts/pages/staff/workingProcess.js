@@ -9,30 +9,65 @@ var maDetail = localStorage.getItem('maDetail')
 
 var TableColumnsChuyenDen = [
     {
-        label: 'id',
-        key: 'id',
+        label: 'ID',
+        key: 'id'
+    },
+    {
+        label: 'Mã nhân viên',
+        key: 'ma'
     },
     {
         label: 'Ngày Điều Chuyển',
-        key: 'ngayDieuChuyen',
-        type: 'datetime'
+        key: 'ngayDieuChuyen'
     },
     {
-        label: 'Phòng Ban',
-        key: 'phong',
+        label: 'từ phòng',
+        key: 'tuPhong',
     },
     {
-        label: 'Chức vụ',
-        key: 'chucVu',
+        label: 'Đến phòng',
+        key: 'denPhong',
     },
     {
-        label: 'Tổ',
-        key: 'to',
+        label: 'Từ tổ',
+        key: 'tuTo',
 
     },
     {
-        label: 'Chi Tiết',
+        label: 'Đến tổ',
+        key: 'denTo',
+
+    },
+    {
+        label: 'Từ Chức vụ',
+        key: 'tuChucVu',
+
+    },
+    {
+        label: 'Đến chức vụ',
+        key: 'denChucVu',
+
+    },
+    {
+        label: 'Chi tiết',
         key: 'chiTiet',
+
+    },
+    {
+        label: 'Trạng thái',
+        key: 'trangThai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Đang chờ', color: 'green' };
+        if (value === 1) {
+            result.text = 'Đã điều chuyển';
+            result.color = 'blue';
+        }
+        else if(value === -1){
+            result.text = 'Đã hủy';
+            result.color = 'red';
+        }
+        return result;
+        }
 
     },
     {
@@ -40,8 +75,8 @@ var TableColumnsChuyenDen = [
         key: 'action',
         actions: [
             {
-                type: 'plain', icon: 'bx bx-eraser', label: 'Xóa', onClick: (row) => {
-                    handleRemove(row.id)
+                type: 'red', icon: 'bx bx-x-circle', label: 'Hủy', onClick: (row) => {
+                    handleHuyDieuChuyen(row.idDieuChuyen)
                 }
             }
         ]
@@ -66,11 +101,10 @@ function fetchDieuChuyen() {
     setLoading(true)
     $.ajax({
 
-        url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/CongViecHienTai/' + maDetail,
         method: 'GET',
         success: function (data) {
             setFormValue('workingProcessHienTai_form', data)
-            console.log(data.chucvuhientai)
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -85,7 +119,7 @@ function fetchDieuChuyen() {
 async function apiGetDuLieu() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -99,8 +133,7 @@ async function apiGetDuLieu() {
 }
 
 async function handleLuuLichSuDieuChuyen() {
-    const isConfirm = confirm('Bạn chắc chắn muốn tạo điều chuyển?');
-    if (!isConfirm) return;
+    await showConfirm("Bạn có chắc chắn muốn tạo lịch điều chuyển ?")
     const valid = validateForm('workingProcessChuyenDen_form');
     if (!valid) return;
     const formValue = getFormValues('workingProcessChuyenDen_form');
@@ -110,33 +143,30 @@ async function handleLuuLichSuDieuChuyen() {
 
     console.log(payload);
     setLoading(true);
-    setTimeout(async () => {  // Thêm từ khóa async vào hàm này
+    setTimeout(async () => { 
         $.ajax({
-            url: 'https://localhost:7141/api/DieuChuyen/LuuLichSuDieuChuyen',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/LuuLichSuDieuChuyen',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: async function (data) {  // Thêm từ khóa async vào hàm này
-                alert('Tạo Thành Công!');
+            success: async function (data) { 
+                showSuccess('Tạo Thành Công!');
                 console.log("Data", data);
-                const dulieu = await apiGetDuLieu();  // Sử dụng await để đợi giá trị trả về
-                alert(dulieu);
-                handleDieuChuyen(id);
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText);
+                        showError(err.responseText);
                         return;
                     }
                     const errObj = err.responseJSON.errors;
                     const firtErrKey = Object.keys(errObj)[0];
                     const message = errObj[firtErrKey][0];
-                    alert(message);
+                    showError(message);
                 } catch (error) {
-                    alert("Tạo điều chuyển không thành công!");
+                    showError("Tạo điều chuyển không thành công!");
                 }
             },
             complete: () => {
@@ -146,61 +176,31 @@ async function handleLuuLichSuDieuChuyen() {
     }, 1000);
 }
 
-function handleDieuChuyen(id) {
-    const valid = validateForm('workingProcessChuyenDen_form')
-    if (!valid) return
-    const formValue = getFormValues('workingProcessChuyenDen_form')
-    formValue['maNV'] = maDetail;
-    formValue['id'] = id
-    const payload = buildPayload(formValue)
-    const apiUrl = `https://localhost:7141/api/DieuChuyen/DieuChuyen?maNV=${encodeURIComponent(formValue['maNV'])}&id=${encodeURIComponent(formValue['id'])}`;
+async function handleHuyDieuChuyen(id) {
+    await showConfirm("Bạn có chắc chắn muốn hủy lịch điều chuyển ?")
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        
-        url: apiUrl, 
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
+        method: 'PUT',
         success: function (data) {
+            showSuccess('Hủy Thành Công!');
             table.handleCallFetchData();
         },
         error: (err) => {
             console.log('err ', err);
             try {
                 if (!err.responseJSON) {
-                    alert(err.responseText)
-                    return
+                    showError(err.responseText);
+                    return;
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
+                const errObj = err.responseJSON.errors;
+                const firtErrKey = Object.keys(errObj)[0];
+                const message = errObj[firtErrKey][0];
+                showError(message);
             } catch (error) {
-                alert("điều chuyển không thành công!")
+                showError("Hủy điều chuyển không thành công!");
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
-}
-function handleRemove(id) {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa điều chuyển?')
-    if (!isConfirm) return
-    setLoading(true)
-    setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/DieuChuyen/RemoveDieuChuyen?id=' + id,
-        method: 'DELETE',
-        success: function (data) {
-            alert('Xóa Thành Công!');
-            table.handleCallFetchData();
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
         },
         complete: () => {
             setLoading(false)
@@ -226,15 +226,11 @@ function renderActionByStatus() {
     actionEl.append(createBtn)
 }
 
-
 function buildApiUrlChuyenDen() {
-    return 'https://localhost:7141/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     fetchDieuChuyen()
     renderActionByStatus()
-    // popupRemoveBtn.addEventListener("click", handleRemove)
-    // popupSaveBtn.addEventListener("click", handleSave)
 })
 

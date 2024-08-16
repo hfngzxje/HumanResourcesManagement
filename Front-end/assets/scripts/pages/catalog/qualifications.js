@@ -2,8 +2,8 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idTrinhDo = null
 var oldValue = null;
@@ -12,7 +12,12 @@ var oldValue = null;
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
+    },
+    {
+        label: 'Mã',
+        key: 'ma'
     },
     {
         label: 'Tên Trình Độ',
@@ -58,7 +63,7 @@ function fetchTrinhDo(id) {
     setLoading(true)
     idTrinhDo = id
     $.ajax({
-        url: 'https://localhost:7141/api/TrinhDo/getTrinhDoById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/getTrinhDoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data)
@@ -73,9 +78,8 @@ function fetchTrinhDo(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục trình độ?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm danh mục trình độ ?")
     const valid = validateForm('editTrinhDo')
     if (!valid) return
     const formValue = getFormValues('editTrinhDo')
@@ -85,13 +89,14 @@ function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDo/addTrinhDo',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/addTrinhDo',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
-                alert("Thêm thành công !")
+                showSuccess("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm danh mục trình độ: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -100,15 +105,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -118,24 +123,24 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục trình độ?')
-    if (!isConfirm) return
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục trình độ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDo/deleteTrinhDo/' + idTrinhDo,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/deleteTrinhDo/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục trình độ: ${oldValue}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('fetchTrinhDo err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -143,21 +148,21 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục trình độ?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục trình độ ?")
     const formValue = getFormValues('editTrinhDo')
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/TrinhDo/updateTrinhDo/' + idTrinhDo,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/updateTrinhDo/' + idTrinhDo,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa danh mục trình độ: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -166,15 +171,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -197,31 +202,10 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('qualifications_form_action')
 
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
-
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-
-
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-
-    actionEl.append(createBtn)
-
-}
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/TrinhDo/getTrinhDo'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/getTrinhDo'
 }
 
 function showPopup() {
@@ -234,7 +218,11 @@ function showPopup() {
         }
     }
 
-    console.log('isPopupEdit ', isPopupEdit);
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
 
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
@@ -243,14 +231,12 @@ function showPopup() {
         popupSaveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled','');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Trình Độ"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
@@ -270,14 +256,12 @@ function closePopup() {
     modal.style.display = "none"
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
 
     const inputTenTrinhDo = document.querySelector('base-input[name="ten"]');
     if (inputTenTrinhDo) {

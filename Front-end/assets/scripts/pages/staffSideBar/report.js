@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNhanVien";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNhanVien";
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -10,8 +10,7 @@ var TableColumns = [
   },
   {
     label: "Ngày sinh",
-    key: "ngaysinh",
-    type: "datetime",
+    key: "ngaysinh"
   },
   {
     label: "Giới tính",
@@ -24,7 +23,7 @@ var TableColumns = [
   },
   {
     label: "Phòng ban",
-    key: "phong",
+    key: "tenPhong",
   },
   {
     label: "Quê quán",
@@ -39,58 +38,200 @@ var TableColumns = [
     key: "tamTru",
   },
 ];
-var locTheo = [
-  { label: 'Tất cả', value: 'Tất cả' },
-  { label: 'Quê quán', value: 'Quê quán' },
-  { label: "Phòng ban", value: 'Phòng ban' },
-  { label: "Ngày tháng", value: 'Ngày tháng' },
-  { label: "Giới tính", value: 'Giới tính' },
-];
 var QueQuan = [
   { label: "Quê quán", value: "Quê quán" },
   { label: "Thường trú", value: "Thường trú" },
   { label: "Tạm trú", value: "Tạm trú" },
 ];
+var NgayThang = [
+  { label: "Năm sinh", value: "Năm sinh" },
+  { label: "Tháng sinh", value: "Tháng sinh" }
+];
 var gioiTinh = [
-  { label: "Tất cả", value: 'Tất cả' },
+  { label: "Tất cả", value: '' },
   { label: "Nam", value: 'true' },
   { label: "Nữ", value: 'false' },
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filterSelect = document.querySelector(
-    'base-select[description="Lọc theo"]'
-  );
-  const fromDate = document.querySelector(
-    'base-datepicker[description="Từ ngày"]'
-  );
-  const toDate = document.querySelector(
-    'base-datepicker[description="Đến ngày"]'
-  );
-  const queQuanSelect = document.querySelector(
-    'base-select[description="Địa chỉ"]'
-  );
-  const queQuan = document.querySelector(
-    'base-input[description="Quê quán"]'
-  );
-  const departmentSelect = document.querySelector(
-    'base-select[description="Phòng ban"]'
-  );
-  const genderSelect = document.querySelector(
-    'base-select[description="Giới tính"]'
-  );
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi );
+  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang );
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
 
-  // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
-  function toggleInputs(enabled) {
-    queQuanSelect.disabled = !enabled
-    fromDate.disabled = !enabled;
-    toDate.disabled = !enabled;
-    queQuan.disabled = !enabled;
-    departmentSelect.disabled = !enabled;
-    genderSelect.disabled = !enabled;
+  try {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhanVienToExcel', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
   }
-  toggleInputs(filterSelect.value === "Tất cả");
-});
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhanVien.xlsx';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi || 'Quê quán');
+  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang || 'Năm sinh');
+  params.append('FromDate', formValue.FromDate || '');
+  params.append('ToDate', formValue.ToDate || '');
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('PhongBan', formValue.PhongBan || '');
+  params.append('QueQuan', formValue.QueQuan || '');
+
+  try {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhanVienToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhanVien.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+async function handleSearch() {
+  try {
+    const formValue = getFormValues("report_form");    
+    const tableReport = document.getElementById("tableReport");
+    
+    // Khởi tạo đối tượng params
+    const params = {
+      GioiTinh: formValue.GioiTinh || "Tất cả",
+      searchRulesNgayThang: formValue.searchRulesNgayThang,
+      ToDate: formValue.ToDate || "",
+      FromDate: formValue.FromDate || "",
+      PhongBan: formValue.PhongBan || "",
+      searchRulesDiaChi: formValue.searchRulesDiaChi,
+      QueQuan: formValue.QueQuan || ""
+    };
+   
+    // Giả sử handleCallFetchData là một hàm không đồng bộ
+    await tableReport.handleCallFetchData(params);
+     
+  } catch (error) {
+    console.error("Error in handleSearch:", error);
+  }
+  
+}
+
+function phongBanChange() {
+  const phongban = document.querySelector('#phongban select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function gioiTinhChange() {
+  const gioitinh = document.querySelector('#gioitinh select')
+  gioitinh.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function queQuanSelectChange() {
+  const queQuanSelect = document.querySelector('#selectquequan select')
+  queQuanSelect.addEventListener("change", (event) => {
+      document.querySelector('#quequan input').value =""
+  });
+}
+function queQuanChange() {
+  const quequan = document.querySelector('#quequan input')
+  quequan.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+let fromDateChanged = false;
+let toDateChanged = false;
+
+function selectDateChange(){
+  const selectDate = document.querySelector('#selectngaythang select')
+  selectDate.addEventListener("change", (event) => {
+    document.querySelector('#tungay input').value = ""
+    document.querySelector('#denngay input').value = ""
+  });
+}
+function fromChange() {
+  const fromDatePicker = document.querySelector('#tungay input');
+  fromDatePicker.addEventListener("change", (event) => {
+    fromDateChanged = true;
+    dateChange();
+  });
+}
+
+function toChange() {
+  const toDatePicker = document.querySelector('#denngay input');
+  toDatePicker.addEventListener("change", (event) => {
+    toDateChanged = true;
+    dateChange();
+  });
+}
+function dateChange(){
+  if(fromDateChanged && toDateChanged){
+    handleSearch();
+  }
+}
+function buildApiUrl() {
+  return apiTable;
+}
+function inits(){
+  phongBanChange()
+  gioiTinhChange()
+  queQuanSelectChange()
+  queQuanChange()
+  selectDateChange()
+  fromChange()
+  toChange()
+}
+
 
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
@@ -101,121 +242,22 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const DisplayBtn = buildButton("Tìm báo cáo", "green", "bx bx-search");
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
 
-  DisplayBtn.addEventListener("click", () => {
-    handleSearch();
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
   });
 
-  // removeBtn.addEventListener('click', handleRemove)
-  // saveBtn.addEventListener('click', handleSave)
-  // createBtn.addEventListener('click', handleCreate)
-
-  actionEl.append(DisplayBtn, pdfBtn, excelBtn);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    DisplayBtn.click();
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
   });
-}
-
-function handleSearch() {
-  
-  const formValue = getFormValues("report_form");
-  console.log("Form: " , formValue)
-  const tableReport = document.getElementById("tableReport");
-  if (formValue.searchRules === "Tất cả") {
-    tableReport.handleCallFetchData(formValue);
-    return;
-  }
-  const params = {
-    searchRules: formValue.searchRules,
-    GioiTinh: "Tất cả",
-    ToDate: "",
-    FromDate:"",
-    PhongBan: "",
-    DiaChi:"",
-    QueQuan:""
-  };
-  if (formValue.searchRules === "Quê quán") {
-    params.searchRules = formValue.DiaChi
-    params.QueQuan = formValue.QueQuan;
-  }
-  if (formValue.searchRules === "Phòng ban") {
-    params.PhongBan = formValue.PhongBan;
-  }
-  if (formValue.searchRules === "Ngày tháng") {
-    params.FromDate = formValue.FromDate;
-    params.ToDate = formValue.ToDate;
-  }
-  if (formValue.searchRules === "Giới tính") {
-    params.GioiTinh = formValue.GioiTinh;
-  }
-
-
-  tableReport.handleCallFetchData(params);
-
-  console.log("params: ", params)
-}
-
-function buildApiUrl() {
-  return apiTable;
-}
-
-function handleSelectFilterBy() {
-  const locTheoEl = document.querySelector("#loctheo select");
-  const DiaChiEl = document.querySelector("#selectquequan select");
-  const queQuanEl = document.querySelector("#quequan input");
-  const phongBanEl = document.querySelector("#phongban select");
-  const tuNgayEl = document.querySelector("#tungay input");
-  const denNgayEl = document.querySelector("#denngay input");
-  const gioiTinhEl = document.querySelector("#gioitinh select");
-  locTheoEl.addEventListener("input", () => {
-    const locTheoValue = locTheoEl.value;
-    console.log("locTheoValue ", locTheoValue);
-
-    if (locTheoValue === "Tất cả") {
-      DiaChiEl.disabled = false;
-      queQuanEl.disabled = false;
-      phongBanEl.disabled = false;
-      tuNgayEl.disabled = false;
-      denNgayEl.disabled = false;
-      gioiTinhEl.disabled = false;
-      return;
-    }
-    DiaChiEl.disabled = false;
-    queQuanEl.disabled = true;
-    phongBanEl.disabled = true;
-    tuNgayEl.disabled = true;
-    denNgayEl.disabled = true;
-    gioiTinhEl.disabled = true;
-    if (locTheoValue === "Quê quán") {
-      DiaChiEl.disabled = false;
-      queQuanEl.disabled = false;
-      phongBanEl.value ="";
-      gioiTinhEl.value= "Tất cả"
-    }
-    if (locTheoValue === "Phòng ban") {
-      phongBanEl.disabled = false;
-      gioiTinhEl.value= "Tất cả"
-    }
-    if (locTheoValue === "Ngày tháng") {
-      tuNgayEl.disabled = false;
-      denNgayEl.disabled = false;
-      phongBanEl.value ="";
-      gioiTinhEl.value= "Tất cả"
-    }
-    if (locTheoValue === "Giới tính") {
-      gioiTinhEl.disabled = false;
-      phongBanEl.value ="";
-    }
-  });
+  actionEl.append(pdfBtn, excelBtn);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log(123);
-  renderActionByStatus();
-  handleSelectFilterBy();
-  handleSearch();
+  renderActionByStatus()
+  handleSearch()
+  inits()
+
 });

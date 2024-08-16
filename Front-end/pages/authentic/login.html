@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
     <script>
-        // Đặt đoạn mã kiểm tra vào đây
         (function() {
             if (localStorage.getItem('maNhanVien')) {
-                window.location.href = '/pages/error.html';
-                return; // Chuyển hướng nếu không có mã nhân viên
+                // alert(localStorage.getItem('maNhanVien'))
+                window.location.href = '/pages/staff/list.html';
+                return;
             }
         })();
     </script>

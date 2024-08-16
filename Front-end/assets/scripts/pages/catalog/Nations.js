@@ -2,8 +2,8 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
+const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idDanToc = null
 
@@ -13,7 +13,8 @@ var oldValue = null;
 var TableColumns = [
     {
         label: 'ID',
-        key: 'id'
+        key: 'id',
+        type: 'disabled'
     },
     {
         label: 'Mã',
@@ -45,20 +46,9 @@ var tableEvent = {
 
         fetchDanToc(row.id)
         showPopup()
-        console.log('row double click ', row);
     }
 };
 
-function recordActivity(action, details) {
-    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
-    const activityEntry = {
-        action: action,
-        details: details,
-        timestamp: new Date().toLocaleString()
-    };
-    activityHistory.push(activityEntry);
-    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
-}
 
 function backToList() {
     window.location.replace("/pages/catalog/Nations.html");
@@ -69,12 +59,12 @@ function buildPayload(formValue) {
     return formClone
 }
 
+let tenDanToc = null
 function fetchDanToc(id) {
-    console.log("Name:", id);
     setLoading(true)
     idDanToc = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -91,25 +81,21 @@ function fetchDanToc(id) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm danh mục dân tộc?')
-    if (!isConfirm) return
-    const valid = validateForm('editNation')
-    if (!valid) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới danh mục dân tộc ?")
+   
     const formValue = getFormValues('editNation')
-    console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/addDanhMucDanToc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/addDanhMucDanToc',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetch ngạch công chức res :: ', data);
-                alert("Thêm thành công !")
-                recordActivity('Add', `Thêm danh mục dân tộc: ${formValue.ten}`);
+                showSuccess("Thêm thành công !")
+                recordActivityAdmin(maNhanVien, `Thêm danh mục dân tộc: ${formValue.ten}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -118,15 +104,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -136,24 +122,24 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemoveRow() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa danh mục dân tộc?')
-    if (!isConfirm) return
+
+async function handleRemoveRow() {
+    await showConfirm("Bạn có chắc chắn muốn xóa danh mục dân tộc ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
             method: 'DELETE',
             success: function (data) {
-                console.log('fetchPhongBan res :: ', data);
-                alert("Xóa thành công !")
+                showSuccess("Xóa thành công !")
+                recordActivityAdmin(maNhanVien, `Xóa danh mục dân tộc: ${oldValue}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('fetchPhongBan err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -161,22 +147,21 @@ function handleRemoveRow() {
         });
     }, 1000);
 }
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa danh mục dân tộc?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa danh mục dân tộc ?")
     const formValue = getFormValues('editNation')
     formValue['id'] = idDanToc
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/updateDanToc',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchLanguage res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa danh mục dân tộc: ${oldValue} => ${payload.ten} `);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -185,15 +170,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {
@@ -216,30 +201,9 @@ function clearFormValues() {
     });
 }
 
-function renderActionByStatus() {
-    const actionEl = document.getElementById('Nation_form_action')
-    const buildButton = (label, type, icon) => {
-        const btnEl = document.createElement('base-button')
-        btnEl.setAttribute('label', label)
-        btnEl.setAttribute('type', type)
-        btnEl.setAttribute('icon', icon)
-
-        return btnEl
-    }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-
-
-    createBtn.addEventListener('click', function () {
-        isPopupEdit = false
-        showPopup()
-    });
-
-    actionEl.append(createBtn)
-
-}
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanToc'
 }
 
 function showPopup() {
@@ -251,36 +215,33 @@ function showPopup() {
             clearFormValues()
         }
     }
-
-    console.log('isPopupEdit ', isPopupEdit);
-
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+        clearFormValues();
+    }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa Tiêu Đề Dân Tộc"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới Tiêu Đề Dân Tộc"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
     }
 }
 function checkValues() {
     const formValue = getFormValues('editNation');
     const newValue = formValue.ten;
-    console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
-        console.log(popupSaveBtn)
+        popupSaveBtn.setAttribute('disabled', '');
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
-        console.log(popupSaveBtn)
+        popupSaveBtn.removeAttribute('disabled');
     }
 }
 function closePopup() {
@@ -288,14 +249,11 @@ function closePopup() {
     modal.style.display = "none"
 }
 document.addEventListener('DOMContentLoaded', () => {
-    renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
-        console.log('save click');
         handleSave()
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
 
     const inputTenDanToc = document.querySelector('base-input[name="ten"]');
     if (inputTenDanToc) {

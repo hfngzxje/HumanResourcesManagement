@@ -79,15 +79,11 @@ function renderActionByStatus() {
     const pdfBtn = buildButton('PDF', 'red', 'bx bx-file-blank')
     const excelBtn = buildButton('Excel', '', 'bx bx-spreadsheet')
 
-    // removeBtn.addEventListener('click', handleRemove)
-    // saveBtn.addEventListener('click', handleSave)
-    // createBtn.addEventListener('click', handleCreate)
-
     actionEl.append(DisplayBtn,pdfBtn, excelBtn)
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NhanVien'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien'
 }
 
 document.addEventListener('DOMContentLoaded', () => {

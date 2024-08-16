@@ -5,7 +5,6 @@ const vaitro = localStorage.getItem("vaiTroID");
 const TAB = {
   RESUME: 1,
   PROFILE: 2,
-  PERSON_HISTORY: 3,
   CULTURAL_PROFICIENCY: 4,
   FAMILY_RELATIONSHIP: 5,
   EMPLOYMENT_CONTRACT: 6,
@@ -29,11 +28,6 @@ const TAB_LIST = [
     key: TAB.RESUME,
     label: "Hồ sơ",
     activeByPath: "/pages/staff/profile.html",
-  },
-  {
-    key: TAB.PERSON_HISTORY,
-    label: "Lịch sử bản thân",
-    activeByPath: "",
   },
   {
     key: TAB.CULTURAL_PROFICIENCY,

@@ -7,7 +7,7 @@ var maDetail = localStorage.getItem('maDetail')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 0 },
+    { label: 'Hợp đồng quá hạn', value: 2 },
 ];
 
 var TableColumns = [
@@ -35,7 +35,15 @@ var TableColumns = [
     },
     {
         label: 'Trạng thái',
-        key: 'trangThai'
+        key: 'trangThai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Hết hạn', color: 'red' };
+        if (value === 1) {
+            result.text = 'Còn hạn';
+            result.color = 'blue';
+        }
+        return result;
+        }
     },
     {
         label: 'Ghi chú',
@@ -55,13 +63,6 @@ var TableColumns = [
       ]
     }
 ]
-
-// var tableEvent = { 
-//     rowClick: (row) => {
-//         console.log('row click ', row);
-//         fetchContract(row.mahopdong)
-//     }
-// }
 
 
 function backToList() {
@@ -86,6 +87,10 @@ function showPopup() {
             clearFormValues("editLaborContract");
         }
     } 
+    var closeButton = modal.querySelector('.close');
+    closeButton.onclick = function () {
+        modal.style.display = "none";
+    }
 }
 
 function closePopup(){
@@ -99,7 +104,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editLaborContract', data, 'fetch');
@@ -114,9 +119,8 @@ function fetchContract(mahopdong) {
     });
 }
 
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm hợp đồng lao động?')
-    if (!isConfirm) return
+async function handleCreate() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới hợp đồng ?")
     const valid = validateForm('laborContract_form')
     if (!valid) return
     const formValue = getFormValues('laborContract_form')
@@ -129,12 +133,12 @@ function handleCreate() {
     setTimeout(() => {
     $.ajax({
         
-        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
-            alert('Tạo Thành Công!');
+            showSuccess('Tạo Thành Công!');
             table.handleCallFetchData();
             clearFormValues("laborContract_form")
         },
@@ -142,15 +146,15 @@ function handleCreate() {
             console.log('err ', err);
             try {
                 if (!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
             } catch (error) {
-                alert("Tạo mới không thành công!")
+                showError("Tạo mới không thành công!")
             }
 
 
@@ -162,22 +166,21 @@ function handleCreate() {
 }, 1000); 
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Bạn chắc chắn muốn xóa hợp đồng lao động?')
-    if (!isConfirm) return
+async function handleRemove() {
+    await showConfirm("Bạn có chắc chắn muốn xóa hợp đồng ?")
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
         method: 'DELETE',
         success: function (data) {
-            alert('Xóa Thành Công!');
+            showSuccess('Xóa Thành Công!');
             closePopup();
             table.handleCallFetchData();
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
-            alert("Xóa thất bại!")
+            showError("Xóa thất bại!")
         },
         complete: () => {
             setLoading(false)
@@ -186,9 +189,8 @@ function handleRemove() {
 }, 1000); 
 }
 
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa hợp đồng lao động?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa hợp đồng ?")
     const formValue = getFormValues('editLaborContract')
 
     formValue['ma'] = maDetail;
@@ -197,13 +199,13 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
             console.log('fetchContract res :: ', data);
-            alert('Lưu Thành Công!');
+            showSuccess('Lưu Thành Công!');
             closePopup();
             table.handleCallFetchData();
         },
@@ -211,15 +213,15 @@ function handleSave() {
             console.log('err ', err);
             try {
                 if (!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
             } catch (error) {
-                alert("Cập nhật thất bại!")
+                showError("Cập nhật thất bại!")
             }
         },
         complete: () => {
@@ -262,7 +264,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

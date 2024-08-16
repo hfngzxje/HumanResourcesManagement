@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNhomLuong";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNhomLuong";
 var TableColumns = [
   {
     label: "Chức danh",
@@ -28,11 +28,6 @@ var TableColumns = [
   }
 ];
 
-var locTheo = [
-  { label: "Tất cả", value: 'Tất cả' },
-  { label: "Chức danh", value: 'Chức danh' },
-  { label: "Bậc lương", value: 'Bậc lương' }
-];
 var bacLuong = [
   { label: "Tất cả", value: "" },
   { label: "Bậc 1", value: 1 },
@@ -44,24 +39,121 @@ var bacLuong = [
   { label: "Bậc 7", value: 7 }
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const filterSelect = document.querySelector(
-    'base-select[description="Lọc theo"]'
-  );
-  const ChucDanh = document.querySelector(
-    'base-datepicker[description="Chức danh"]'
-  );
-  const BacLuong = document.querySelector(
-    'base-datepicker[description="Bậc lương"]'
-  );
 
-  // Hàm để bật hoặc tắt trạng thái của các thẻ input và select
-  function toggleInputs(enabled) {
-    ChucDanh.disabled = !enabled;
-    BacLuong.disabled = !enabled;
+// _____________________________________excel_________________________________________________________
+async function handleExportExcel() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('BacLuong', formValue.BacLuong || '');
+
+  try {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhomLuongToExcel', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkExcel(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
   }
-//   toggleInputs(filterSelect.value === "Tất cả");
-});
+}
+
+function createDownloadLinkExcel(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhomLuong.xlsx';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _________________________________________________________________________________________________
+
+// ____________________________________________PDF____________________________________________________
+async function handleExportPDF() {
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('BacLuong', formValue.BacLuong || '');
+
+  try {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhomLuongToPDF', {
+      method: 'POST',
+      body: params,
+      headers: {
+        'accept': '*/*',
+      }
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      createDownloadLinkPDF(blob);
+    } else {
+      console.error('Export failed:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+function createDownloadLinkPDF(blob) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'BaoCao_DanhSachNhomLuong.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+// _______________________________________________________________________________________________________
+
+
+async function handleSearch() {
+  try {
+    const formValue = getFormValues("report_form");
+    const tableReport = document.getElementById("tableReport");
+    const params = {
+      ChucDanh: formValue.ChucDanh || "",
+      BacLuong: formValue.BacLuong || ""
+    };
+    await tableReport.handleCallFetchData(params);
+  }
+  catch (error) {
+    console.error("Error in handleSearch:", error);
+  }
+}
+function chucDanhChange() {
+  const phongban = document.querySelector('#chucdanh select')
+  phongban.addEventListener("change", (event) => {
+    handleSearch()
+  });
+}
+
+function bacLuongChange() {
+  const phongban = document.querySelector('#bacluong select')
+  phongban.addEventListener("change", (event) => {
+    handleSearch()
+  });
+}
+
+function buildApiUrl() {
+  return apiTable;
+}
+function inits() {
+  chucDanhChange()
+  bacLuongChange()
+}
 
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
@@ -72,81 +164,22 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const DisplayBtn = buildButton("Tìm báo cáo", "green", "bx bx-search");
   const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
 
-  DisplayBtn.addEventListener("click", () => {
-    handleSearch();
+  excelBtn.addEventListener("click", () => {
+    handleExportExcel();
   });
 
-  actionEl.append(DisplayBtn, pdfBtn, excelBtn);
-
-  document.addEventListener("DOMContentLoaded", () => {
-    DisplayBtn.click();
+  pdfBtn.addEventListener("click", () => {
+    handleExportPDF();
   });
+  actionEl.append(pdfBtn, excelBtn);
 }
 
-function handleSearch() {
-  
-  const formValue = getFormValues("report_form");
-  console.log("Form: " , formValue)
-  const tableReport = document.getElementById("tableReport");
-  if (formValue.searchRules === "Tất cả") {
-    tableReport.handleCallFetchData(formValue);
-    return;
-  }
-  const params = {
-    ChucDanh: "",
-    BacLuong: ""
-  };
-  if (formValue.searchRules === "Chức danh") {
-    params.ChucDanh = formValue.ChucDanh
-  }
-  if (formValue.searchRules === "Bậc lương") {
-    params.BacLuong = formValue.BacLuong;
-  }
-  tableReport.handleCallFetchData(params);
-}
-
-function buildApiUrl() {
-  return apiTable;
-}
-
-function handleSelectFilterBy() {
-  const locTheoEl = document.querySelector("#loctheo select");
-  const chucDanhE1 = document.querySelector("#chucdanh select");
-  const bacLuongE1 = document.querySelector("#bacluong select");
-
-  locTheoEl.addEventListener("input", () => {
-    const locTheoValue = locTheoEl.value;
-    console.log("locTheoValue ", locTheoValue);
-
-    if (locTheoValue === "Tất cả") {
-      chucDanhE1.disabled = false;
-      bacLuongE1.disabled = false;
-
-      chucDanhE1.value ="";
-      return;
-    }
-
-    chucDanhE1.disabled = true;
-    bacLuongE1.disabled = true;
-
-    if (locTheoValue === "Chức danh") {
-        chucDanhE1.disabled = false;
-      }
-    if (locTheoValue === "Bậc lương") {
-      bacLuongE1.disabled = false;
-      chucDanhE1.value=""
-    }
-  });
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   renderActionByStatus();
-  handleSelectFilterBy();
   handleSearch();
-
- 
+  inits();
 });

@@ -11,7 +11,6 @@ const TAB = {
   EMPLOYMENT_HISTORY: 7,
   REWARDS_DISCIPLINE: 8,
 };
-const tabList = document.querySelector("#tabList");
 let currentPath = window.location.pathname; // text-white bg-blue-600 active
 const tabListEl = [];
 
@@ -80,7 +79,6 @@ function renderTab() {
     aElement.textContent = tab.label;
 
     liElement.appendChild(aElement);
-    tabList.appendChild(liElement);
     tabListEl.push(liElement);
   });
 }

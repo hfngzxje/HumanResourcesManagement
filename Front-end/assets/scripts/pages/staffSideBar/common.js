@@ -64,7 +64,7 @@ const TAB_LIST = [
   {
     key: TAB.BHYT_BHXH,
     label: "Danh sách sổ bảo hiểm",
-    activeByPath: "/pages/staff/award.html",
+    activeByPath: "/pages/staffSideBar/reportBhytBhxh.html",
   }
   
 ];

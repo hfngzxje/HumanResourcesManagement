@@ -1,4 +1,3 @@
-const isEdit = !!maNhanVien
 const vaiTroID = localStorage.getItem("vaiTroID")
 const maDetail = localStorage.getItem("maDetail")
 
@@ -46,7 +45,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -65,7 +64,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -79,49 +78,8 @@ function fetchEmployee() {
     });
 }
 
-
-function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm Lý lịch tư pháp ?')
-    if (!isConfirm) return
-    const valid = validateForm('resume_form')
-    if(!valid) return
-    const {anh, ...rest} = getFormValues('resume_form')
-    const payload = buildPayload(rest)
-    setLoading(true)
-    $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function(data) {
-            console.log('fetchEmployee res :: ', data);
-            // backToList()
-        },
-      
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if(!err.responseJSON) {
-                    alert(err.responseText)
-                    return 
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                alert(message)
-            } catch (error) {
-                alert("Tạo thất bại!")
-            }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}
-
-function handleSave() {
-    const isConfirm = confirm('Bạn chắc chắn muốn sửa Lý lịch tư pháp ?')
-    if (!isConfirm) return
+async function handleSave() {
+    await showConfirm("Bạn có chắc chắn muốn sửa lý lịch tư pháp ?")
     const valid = validateForm('resume_form')
     if(!valid) return
     
@@ -132,33 +90,37 @@ function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function(data) {
             if (anh) {
                 uploadImage(anh);
+                showSuccess("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
             } else {
                 setLoading(false);
-                backToListUpdate();
+                showSuccess("Cập nhật thành công !")
+                recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
+                // backToListUpdate();
             }
         },
         error: (err) => {
             console.log('err ', err);
             try {
                 if(!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     setLoading(false)
                     return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
                 setLoading(false)
             } catch (error) {
-                alert("Cập nhật thất bại!")
+                showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
@@ -174,7 +136,7 @@ function uploadImage(anh) {
     payloadUploadImage.append('file', anh)
 
     $.ajax({
-        url: 'https://localhost:7141/api/Image/uploadImage',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/uploadImage',
         method: 'POST',
         contentType: false,
         processData: false,
@@ -187,16 +149,16 @@ function uploadImage(anh) {
             console.log('err ', err);
             try {
                 if(!err.responseJSON) {
-                    alert(err.responseText)
+                    showError(err.responseText)
                     setLoading(false)
                     return 
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
-                alert(message)
+                showError(message)
                 setLoading(false)            } catch (error) {
-                alert("Cập nhật thất bại!")
+                showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
@@ -227,16 +189,6 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    if (!isEdit) {
-        const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-        const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
-        createBtn.addEventListener('click', handleCreate)
-        clear.addEventListener('click', function() {
-            clearFormValues('resume_form');
-        });
-        actionEl.append(createBtn,clear)
-        return
-    }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
@@ -247,13 +199,22 @@ function renderActionByStatus() {
 
     actionEl.append(saveBtn, clear)
 }
+function formatDateTime(dateTimeStr) {
+    const dateTime = new Date(dateTimeStr);
+    const year = dateTime.getFullYear();
+    const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+    const day = String(dateTime.getDate()).padStart(2, "0");
+    const hours = String(dateTime.getHours()).padStart(2, "0");
+    const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
+    return `${day}-${month}-${year} `;
+  }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     if (maDetail) {
         fetchEmployee()
         getImage()
-        const apiUrl = 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail;
+        const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail;
 
         // Thực hiện yêu cầu API
         fetch(apiUrl)
@@ -265,15 +226,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const name = document.getElementById('name');
                 name.textContent = data.ten; 
                 const phong = document.getElementById('phong');
-                phong.textContent = data.phong; 
+                phong.textContent = data.tenPhongBan; 
                 const chucDanh = document.getElementById('chucdanh');
-                chucDanh.textContent = data.chucvuhientai; 
+                chucDanh.textContent = data.tenChucVu; 
                 const sdt = document.getElementById('sdt');
                 sdt.textContent = data.didong; 
                 const email = document.getElementById('email');
                 email.textContent = data.email; 
                 const ngaysinh = document.getElementById('ngaysinh');
-                ngaysinh.textContent = data.ngaysinh; 
+                ngaysinh.textContent = formatDateTime(data.ngaysinh); 
                 const gioitinh = document.getElementById('gioitinh');
                 if(data.gioitinh === true){
                     gioitinh.textContent = "Nam";
@@ -282,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gioitinh.textContent = "Nữ"
                 }
                 const ngayvaolam = document.getElementById('ngayvaolam');
-                ngayvaolam.textContent = data.ngaychinhthuc;
+                ngayvaolam.textContent = formatDateTime(data.ngaychinhthuc);
                 
             })
             .catch(error => {

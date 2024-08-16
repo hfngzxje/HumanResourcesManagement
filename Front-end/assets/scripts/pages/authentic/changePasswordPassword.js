@@ -1,10 +1,9 @@
 var modal = document.getElementById("myModal");
 var btn = document.getElementById("btn");
 var span = document.getElementsByClassName("close")[0];
-const ma = localStorage.getItem('maNhanVien');
+const maNV = localStorage.getItem('maNhanVien');
 btn.onclick = function () {
   modal.style.display = "block";
-  modal.style.zIndex ="2000";
   console.log("fdf")
 }
 
@@ -29,33 +28,33 @@ function handleChangePassword() {
   const valid = validateForm('change_form')
   if (!valid) return
   const formValue = getFormValues('change_form')
-  formValue['maNhanVien'] = ma
+  formValue['maNhanVien'] = maNV
 
   const payload = buildPayload(formValue)
   setLoading(true)
   $.ajax({
-      url: 'https://localhost:7141/api/DangNhap/ChangePassword',
+      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/ChangePassword',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(payload),
       success: function (data) {
           // ChangeSuccess();
-          alert("Đổi Mật Khẩu Thành Công")
+          showSuccess("Đổi Mật Khẩu Thành Công")
           modal.style.display = "none";
       },
       error: (err) => {
           console.log('err ', err);
           try {
               if (!err.responseJSON) {
-                  alert(err.responseText)
+                  showError(err.responseText)
                   return
               }
               const errObj = err.responseJSON.errors
               const firtErrKey = Object.keys(errObj)[0]
               const message = errObj[firtErrKey][0]
-              alert(message)
+              showError(message)
           } catch (error) {
-              alert("Lỗi Đăng Nhập")
+            showError("Lỗi Đổi mật khẩu")
           }
       },
       complete: () => {

@@ -14,7 +14,7 @@ function handleSendEmail() {
         console.log('Payload:', payload); 
         console.log("Email value: " + email)
         $.ajax({
-            url: 'https://localhost:7141/api/DangNhap/forgot-password?email=' + email ,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/forgot-password?email=' + email ,
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),

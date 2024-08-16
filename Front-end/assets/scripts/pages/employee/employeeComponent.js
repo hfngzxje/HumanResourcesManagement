@@ -3,7 +3,7 @@ class CustomHeader extends HTMLElement {
     this.innerHTML = `
      <header class="app-header">
     <!-- Sidebar toggle button-->
-          <span id="hrmLink" class="ml-3 text-xl font-bold">
+          <span id="hrmLink" class="ml-10 text-xl font-bold">
             <a href="overview.html"><b style="color:white;">HRM  </b><a/>
           </span>
     <!-- Navbar Right Menu-->
@@ -18,21 +18,41 @@ class CustomHeader extends HTMLElement {
   </header>
       `;
 
-      const hrmLink = this.querySelector("#hrmLink");
-      hrmLink.style.setProperty('margin-left', '250px', 'important');
-      hrmLink.style.setProperty('margin-top', '12px', 'important');
-
-    // Thêm sự kiện click vào span HRM
-    hrmLink.addEventListener("click", () => {
-      // Xóa localStorage
-      localStorage.removeItem("maDetail");
-    });
+    const hrmLink = this.querySelector("#hrmLink");
+    hrmLink.style.setProperty('margin-left', '250px', 'important');
+    hrmLink.style.setProperty('margin-top', '12px', 'important');
   }
 }
-  
-  class CustomSidebar extends HTMLElement {
-    connectedCallback() {
-      this.innerHTML = `
+class CustomFooter extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+     <footer class="footer" style="position: fixed; bottom: 0; left: 0; width: 100%; 
+              background-color: #f1f1f1; text-align: center; padding: 10px 0; font-size: 13px;">
+       <div class="text-center">
+          <p><b>Copyright
+            <script type="text/javascript">
+                document.write(new Date().getFullYear());
+            </script> Phần mềm quản lý nhân sự | HRM
+          </b></p>
+       </div>
+     </footer>
+
+      `;
+
+    //     <footer class="footer">
+    //     <div class="text-center" style="font-size: 13px">
+    //         <p><b>Copyright
+    //             <script type="text/javascript">
+    //                 document.write(new Date().getFullYear());
+    //             </script> Phần mềm quản lý nhân sự | HRM
+    //         </b></p>
+    //     </div>
+    // </footer>
+  }
+}
+class CustomSidebar extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
           <aside class="app-sidebar">
         <div class="app-sidebar__user" style="display: flex; align-items: center; flex-direction: column;"><img
                 id="userAvatar" class="app-sidebar__user-avatar" src="" width="50px" alt="User Image">
@@ -48,9 +68,9 @@ class CustomHeader extends HTMLElement {
         <ul class="app-menu">
             <li><a class="app-menu__item" href="overview.html"><i class='app-menu__icon bx bx-bar-chart-alt'></i><span
                         class="app-menu__label">Tổng quan</span></a></li>
-            <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-group text-lg'></i>
+            <li><a class="app-menu__item" href="profile.html"><i class='app-menu__icon bx bx-group text-lg'></i>
                     <span class="app-menu__label">Hồ sơ</span></a></li>
-            <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i
+            <li><a class="app-menu__item" href="resume.html"><i
                         class='app-menu__icon bx bx-file'></i><span class="app-menu__label">Sơ yếu lý lịch</span></a>
             </li>
             <li><a class="app-menu__item" href="laborContract.html"><i
@@ -62,17 +82,10 @@ class CustomHeader extends HTMLElement {
                         class="app-menu__label">Quan hệ gia đình</span></a></li>
             <li><a class="app-menu__item" href="award.html"><i
                         class='app-menu__icon bx bx-trophy'></i><span class="app-menu__label">Khen
-                        thưởng</span></a>
-            </li>
-            <li><a class="app-menu__item" href="discipline.html"><i
-                        class='app-menu__icon bx bx bx-shield'></i><span class="app-menu__label">Kỷ luật
-                    </span></a>
+                        thưởng-Kỷ luật</span></a>
             </li>
             <li><a class="app-menu__item" href="#"><i
                         class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Thuyên chuyển </span></a>
-            </li>
-            <li><a class="app-menu__item" href="#"><i
-                        class='app-menu__icon bx bx-exit'></i><span class="app-menu__label">Lịch sử nghỉ </span></a>
             </li>
             <li><a class="app-menu__item" href="#"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
@@ -85,182 +98,187 @@ class CustomHeader extends HTMLElement {
         </ul>
     </aside>
 
-    <div id="myModal" class="modal" style="z-index: 100;">
-        <div class="change-container">
-            <form id="change_form">
-                <div class="form-header">
-                    <h2>Đổi Mật Khẩu</h2>
-                </div>
-
+   <div id="myModal" class="modal">
+            <div class="change-container">
+              <form id="change_form">
+              <span class="close">&times;</span>
+                  <div class="form-header">
+                     <h2>Đổi Mật Khẩu</h2>
+                  </div>
+                
                 <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
                 <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi"
-                    required="true"></base-input>
-            </form>
+                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+             </form>
             <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-        </div>
-    </div>
+           </div>
+          </div>
           `;
-      this.fetchAvatar();
-      this.fetchTen();
-      this.fetchRole();
-      this.updateActiveLink();
-      this.addEventListeners();
-      this.checkAdminRole()
+    this.fetchAvatar();
+    this.fetchTen();
+    this.fetchRole();
+    this.updateActiveLink();
+    this.addEventListeners();
+    this.checkAdminRole()
+  }
+
+  async fetchAvatar() {
+    const maNhanVien = localStorage.getItem('maNhanVien');
+    if (!maNhanVien) {
+      console.error('maNhanVien không tồn tại trong localStorage');
+      return;
     }
-  
-    async fetchAvatar() {
-      const maNhanVien = localStorage.getItem('maNhanVien');
-      if (!maNhanVien) {
-        console.error('maNhanVien không tồn tại trong localStorage');
-        return;
+
+    try {
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const data = await response.json();
+      const avatarUrl = data.anh;
+      if (avatarUrl) {
+        this.querySelector('#userAvatar').src = 'data:image/png;base64,' + avatarUrl;
       }
-  
-      try {
-        const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
-        const data = await response.json();
-        const avatarUrl = data.anh;
-        if (avatarUrl) {
-          this.querySelector('#userAvatar').src = 'data:image/png;base64,' + avatarUrl;
-        }
-      } catch (error) {
-        console.error('Error fetching avatar:', error);
-      }
-    }
-    async fetchTen() {
-      const maNhanVien = localStorage.getItem('maNhanVien');
-      if (!maNhanVien) {
-        console.error('maNhanVien không tồn tại trong localStorage');
-        return;
-      }
-  
-      try {
-        const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
-        const data = await response.json();
-        const dataTen = data.ten;
-        if (dataTen) {
-          const tenNhanVienElement = this.querySelector('p#tenNhanVien');
-          tenNhanVienElement.textContent = data.ten;
-        }
-      } catch (error) {
-        console.error('Error fetching ten:', error);
-      }
-    }
-    async fetchRole() {
-      const maNhanVien = localStorage.getItem('vaiTroId');
-      if (!maNhanVien) {
-        console.error('vaiTroId không tồn tại trong localStorage');
-        return;
-      }
-      try {
-        if (maNhanVien) {
-          const maNhanVienElement = this.querySelector('p#role');
-         if(maNhanVien === '1'){
-          maNhanVienElement.textContent = 'Admin'
-         }
-         else{
-          maNhanVienElement.textContent = "Employee"
-         }
-        }
-      } catch (error) {
-        console.error('Error fetching role:', error);
-      }
-    }
-    async checkAdminRole(){
-      const vaiTroId = localStorage.getItem('vaiTroId')
-      const adminLink =  this.querySelector('#adminLink')
-      if(vaiTroId !== '1'){
-        adminLink.style.display =  'none'
-      }
-    }
-    updateActiveLink() {
-      const currentPath = window.location.pathname;
-      const menuItems = this.querySelectorAll('.app-menu__item');
-      
-      menuItems.forEach(item => {
-        item.classList.remove('active');
-        const linkPath = item.getAttribute('href');
-        if (currentPath.includes(linkPath)) {
-          item.classList.add('active');
-        }
-      });
-    }
-  
-    addEventListeners() {
-      const menuItems = this.querySelectorAll('.app-menu__item');
-      
-      menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-          menuItems.forEach(el => el.classList.remove('active'));
-          item.classList.add('active');
-        });
-      });
-    }
-  }   
-  class BaseInput extends HTMLElement {
-    static observedAttributes = [
-      "label",
-      "hide-label",
-      "name",
-      "required",
-      "type",
-      "value",
-    ];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const hideLabel = !this.getAttribute("hide-label");
-      const name = this.getAttribute("name");
-      const required = this.getAttribute("required");
-      const type = this.getAttribute("type") || "text";
-  
-      this.innerHTML = `
-      <div>
-        <label for="base-input" class="block  text-sm  text-gray-900 ${
-          hideLabel ? "mt-" : "hidden"
-        }">${label}</label>
-        <input type="${type}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-      </div>
-      `;
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
     }
   }
-  class BaseTextArea extends HTMLElement {
-    static observedAttributes = [
-      "label",
-      "hide-label",
-      "name",
-      "required",
-      "row",
-    ];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const hideLabel = !this.getAttribute("hide-label");
-      const name = this.getAttribute("name");
-      const required = this.getAttribute("required");
-      const row = this.getAttribute("row") || "3";
-  
-      this.innerHTML = `
+  async fetchTen() {
+    const maNhanVien = localStorage.getItem('maNhanVien');
+    if (!maNhanVien) {
+      console.error('maNhanVien không tồn tại trong localStorage');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const data = await response.json();
+      const dataTen = data.ten;
+      if (dataTen) {
+        const tenNhanVienElement = this.querySelector('p#tenNhanVien');
+        tenNhanVienElement.textContent = data.ten;
+      }
+    } catch (error) {
+      console.error('Error fetching ten:', error);
+    }
+  }
+  async fetchRole() {
+    const maNhanVien = localStorage.getItem('vaiTroId');
+    if (!maNhanVien) {
+      console.error('vaiTroId không tồn tại trong localStorage');
+      return;
+    }
+    try {
+      if (maNhanVien) {
+        const maNhanVienElement = this.querySelector('p#role');
+        if (maNhanVien === '1') {
+          maNhanVienElement.textContent = 'Admin'
+        }
+        else {
+          maNhanVienElement.textContent = "Employee"
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching role:', error);
+    }
+  }
+  async checkAdminRole() {
+    const vaiTroId = localStorage.getItem('vaiTroId')
+    const adminLink = this.querySelector('#adminLink')
+    if (vaiTroId !== '1') {
+      adminLink.style.display = 'none'
+    }
+  }
+  updateActiveLink() {
+    const currentPath = window.location.pathname;
+    const menuItems = this.querySelectorAll('.app-menu__item');
+
+    menuItems.forEach(item => {
+      item.classList.remove('active');
+      const linkPath = item.getAttribute('href');
+      if (currentPath.includes(linkPath)) {
+        item.classList.add('active');
+      }
+      if ( currentPath.includes('discipline') && linkPath.includes('award.html')) {
+        item.classList.add('active');
+    }
+      
+    });
+  }
+
+  addEventListeners() {
+    const menuItems = this.querySelectorAll('.app-menu__item');
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  }
+}
+class BaseInput extends HTMLElement {
+  static observedAttributes = [
+    "label",
+    "hide-label",
+    "name",
+    "required",
+    "type",
+    "value",
+    "disabled"
+  ];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const hideLabel = !this.getAttribute("hide-label");
+    const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
+    const type = this.getAttribute("type") || "text";
+    const disabled = this.getAttribute("disabled") !== null;
+
+    this.innerHTML = `
+      <div>
+        <label for="base-input" class="block  text-sm  text-gray-900 ${hideLabel ? "mt-" : "hidden"
+      }">${label}</label>
+        <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      </div>
+      `;
+  }
+}
+class BaseTextArea extends HTMLElement {
+  static observedAttributes = [
+    "label",
+    "hide-label",
+    "name",
+    "required",
+    "row",
+  ];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const hideLabel = !this.getAttribute("hide-label");
+    const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
+    const row = this.getAttribute("row") || "3";
+
+    this.innerHTML = `
       <div class="flex flex-col h-full w-full">
-      <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${
-        hideLabel ? "" : "hidden"
+      <label for="base-textarea" class="block mb-2 text-sm  text-gray-900 ${hideLabel ? "" : "hidden"
       }">${label}</label>
         <textarea rows="${row}" cols="50" name="${name}" required="${required}" class="bg-ffffff border border-gray-300" placeholder="Nhập thông tin..." > </textarea>
       </div>
       `;
-    }
   }
-  
-  
-  class BaseDatePicker extends HTMLElement {
-    static observedAttributes = ["label", "name", "required"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const name = this.getAttribute("name");
-      const required = this.getAttribute("required");
-  
-      this.innerHTML = `
+}
+
+
+class BaseDatePicker extends HTMLElement {
+  static observedAttributes = ["label", "name", "required", "disabled"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
+
+    this.innerHTML = `
       <div class="flex flex-col h-full w-full">
         <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
         <div class="relative max-w-sm">
@@ -269,221 +287,219 @@ class CustomHeader extends HTMLElement {
               <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
             </svg>
           </div>
-          <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date">
+          <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date" ${disabled ? 'disabled' : ''}>
         </div>
       </div>
       `;
-    }
   }
-  
-  class BaseInputPhone extends HTMLElement {
-    static observedAttributes = ["label", "name", "required"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const name = this.getAttribute("name");
-      const required = this.getAttribute("required");
-  
-      this.innerHTML = `
+}
+
+class BaseInputPhone extends HTMLElement {
+  static observedAttributes = ["label", "name", "required"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
+
+    this.innerHTML = `
       <div class="">
         <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
         <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
       </div>
       `;
-    }
   }
-  class BaseInputNumber extends HTMLElement {
-    static observedAttributes = [
-      "label",
-      "name",
-      "required",
-      "value",
-      "readonly",
-    ];
-  
-    constructor() {
-      super();
-      this._value = "";
-      this._readonly = false;
-    }
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const name = this.getAttribute("name");
-      const required = this.getAttribute("required");
-      const value = this.getAttribute("value") || "";
-      this._readonly = this.hasAttribute("readonly");
-  
-      this.innerHTML = `
+}
+class BaseInputNumber extends HTMLElement {
+  static observedAttributes = [
+    "label",
+    "name",
+    "required",
+    "value",
+    "readonly",
+  ];
+
+  constructor() {
+    super();
+    this._value = "";
+    this._readonly = false;
+  }
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
+    const required = this.getAttribute("required");
+    const value = this.getAttribute("value") || "";
+    this._readonly = this.hasAttribute("readonly");
+
+    this.innerHTML = `
       <div class="">
         <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
-        <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${
-        this._readonly ? "readonly" : ""
+        <input type="text" name="${name}" required="${required}" value="${value}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
       }>
       </div>
       `;
-  
-      this.inputElement = this.querySelector("input");
-      this.inputElement.addEventListener(
-        "input",
-        this.handleInputChange.bind(this)
-      );
-    }
-  
-    set value(newValue) {
-      this._value = newValue;
-      this.inputElement.value = newValue;
-    }
-  
-    get value() {
-      return this._value;
-    }
-  
-    set readonly(newValue) {
-      this._readonly = newValue;
-      this.inputElement.readOnly = newValue;
-    }
-  
-    get readonly() {
-      return this._readonly;
-    }
-  
-    handleInputChange(event) {
-      if (!this._readonly) {
-        this._value = event.target.value;
-        this.dispatchEvent(new Event("value-changed"));
-      }
+
+    this.inputElement = this.querySelector("input");
+    this.inputElement.addEventListener(
+      "input",
+      this.handleInputChange.bind(this)
+    );
+  }
+
+  set value(newValue) {
+    this._value = newValue;
+    this.inputElement.value = newValue;
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set readonly(newValue) {
+    this._readonly = newValue;
+    this.inputElement.readOnly = newValue;
+  }
+
+  get readonly() {
+    return this._readonly;
+  }
+
+  handleInputChange(event) {
+    if (!this._readonly) {
+      this._value = event.target.value;
+      this.dispatchEvent(new Event("value-changed"));
     }
   }
-  class BaseRadio extends HTMLElement {
-    static observedAttributes = ["label", "name", "value", "checked"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label");
-      const name = this.getAttribute("name");
-      const value = this.getAttribute("value");
-      const checked = this.getAttribute("checked");
-  
-      this.innerHTML = `
+}
+class BaseRadio extends HTMLElement {
+  static observedAttributes = ["label", "name", "value", "checked"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label");
+    const name = this.getAttribute("name");
+    const value = this.getAttribute("value");
+    const checked = this.getAttribute("checked");
+
+    this.innerHTML = `
       <div class="flex items-center mb-4">
-        <input type="radio" value="${value}" name="${name}" ${
-        checked !== null ? "checked" : ""
+        <input type="radio" value="${value}" name="${name}" ${checked !== null ? "checked" : ""
       } class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600">
         <label for="default-radio-1" class="ms-2 text-sm  text-gray-900 ">${label}</label>
       </div>
       `;
-    }
   }
-  
-  class LabelFormItem extends HTMLElement {
-    static observedAttributes = ["name"];
-  
-    connectedCallback() {
-      const name = this.getAttribute("name") || "Base input";
-  
-      this.innerHTML = `
+}
+
+class LabelFormItem extends HTMLElement {
+  static observedAttributes = ["name"];
+
+  connectedCallback() {
+    const name = this.getAttribute("name") || "Base input";
+
+    this.innerHTML = `
         <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900">${name}</label>
       `;
-    }
   }
-  
-  class BaseSelect extends HTMLElement {
-    static observedAttributes = [
-      "label",
-      "name",
-      "options",
-      "api",
-      "keyValue",
-      "keyLabel",
-      "required",
-      "disabled"
-    ];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const name = this.getAttribute("name");
-      const optionsKey = this.getAttribute("options");
-      const api = this.getAttribute("api");
-      const keyValue = this.getAttribute("keyValue") || "value";
-      const keyLabel = this.getAttribute("keyLabel") || "label";
-      const required = this.getAttribute("required");
-      const disabled = this.getAttribute("disabled") !== null;
-  
-      function getApiUrl() {
-        if (!window[api]) return api;
-        return window[api]();
-      }
-      const renderOption = () =>{
-        this.querySelector('select').innerHTML = ""
-        if (!!api) {
-          $.ajax({
-            url: getApiUrl(),
-            method: "GET",
-            success: (data) => {
-              data.forEach((item) => {
-                const option = document.createElement("option");
-                option.value = item[keyValue];
-                option.innerText = item[keyLabel];
-                this.querySelector("select").append(option);
-              });
-            },
-            error: (err) => {
-              console.log("Base select api err :: ", err);
-            },
-          });
-          return;
-        }
-        const options = window[optionsKey] || [];
-        options.forEach(({ value, label }) => {
-          const option = document.createElement("option");
-          option.value = value;
-          option.innerText = label;
-          this.querySelector("select").append(option);
+}
+
+class BaseSelect extends HTMLElement {
+  static observedAttributes = [
+    "label",
+    "name",
+    "options",
+    "api",
+    "keyValue",
+    "keyLabel",
+    "required",
+    "disabled"
+  ];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const name = this.getAttribute("name");
+    const optionsKey = this.getAttribute("options");
+    const api = this.getAttribute("api");
+    const keyValue = this.getAttribute("keyValue") || "value";
+    const keyLabel = this.getAttribute("keyLabel") || "label";
+    const required = this.getAttribute("required");
+    const disabled = this.getAttribute("disabled") !== null;
+
+    function getApiUrl() {
+      if (!window[api]) return api;
+      return window[api]();
+    }
+    const renderOption = () => {
+      this.querySelector('select').innerHTML = ""
+      if (!!api) {
+        $.ajax({
+          url: getApiUrl(),
+          method: "GET",
+          success: (data) => {
+            data.forEach((item) => {
+              const option = document.createElement("option");
+              option.value = item[keyValue];
+              option.innerText = item[keyLabel];
+              this.querySelector("select").append(option);
+            });
+          },
+          error: (err) => {
+            console.log("Base select api err :: ", err);
+          },
         });
+        return;
       }
-      this.renderOption = renderOption
-  
-      document.addEventListener("DOMContentLoaded", () => {
-        renderOption()
+      const options = window[optionsKey] || [];
+      options.forEach(({ value, label }) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.innerText = label;
+        this.querySelector("select").append(option);
       });
-  
-      this.innerHTML = `
+    }
+    this.renderOption = renderOption
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderOption()
+    });
+
+    this.innerHTML = `
       <div class="max-w-sm" style="margin: 0;">
         <label class="block mb-2 text-sm  text-gray-900">${label}</label>
         <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
         </select>
       </div>
       `;
-    }
   }
-  class BaseCheckbox extends HTMLElement {
-    static observedAttributes = ["label", "class", "value", "name"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const contentClass = this.getAttribute("class") || "";
-      const name = this.getAttribute("name") || "";
-      const value = this.getAttribute("value") || "";
-  
-      this.innerHTML = `
+}
+class BaseCheckbox extends HTMLElement {
+  static observedAttributes = ["label", "class", "value", "name"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const contentClass = this.getAttribute("class") || "";
+    const name = this.getAttribute("name") || "";
+    const value = this.getAttribute("value") || "";
+
+    this.innerHTML = `
       <div class="flex items-center mb-4 ${contentClass}">
           <input type="checkbox" value="${value}" name="${name}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
           <label for="default-checkbox" class="ms-2 text-sm  text-gray-900">${label}</label>
       </div>
       `;
-    }
   }
-  
-  class BaseUpload extends HTMLElement {
-    static observedAttributes = ["label", "class", "name", "idImage"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const contentClass = this.getAttribute("class") || "";
-      const name = this.getAttribute("name");
-      const idImage = this.getAttribute("idImage");
-  
-      this.innerHTML = `
+}
+
+class BaseUpload extends HTMLElement {
+  static observedAttributes = ["label", "class", "name", "idImage"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const contentClass = this.getAttribute("class") || "";
+    const name = this.getAttribute("name");
+    const idImage = this.getAttribute("idImage");
+
+    this.innerHTML = `
        <div class="flex items-center justify-center w-full h-full">
       <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-ffffff relative overflow-hidden">
           <img 
@@ -502,419 +518,527 @@ class CustomHeader extends HTMLElement {
       </label>
   </div>
       `;
-  
-      document.addEventListener("DOMContentLoaded", () => {
-        const inputEl = this.querySelector("input");
-        const imageEl = this.querySelector("img");
-        inputEl.addEventListener("change", (e) => {
-          const file = e.target.files[0];
-          const path = URL.createObjectURL(file);
-          imageEl.setAttribute("src", path);
-          imageEl.classList.remove("opacity-0");
-        });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const inputEl = this.querySelector("input");
+      const imageEl = this.querySelector("img");
+      inputEl.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const path = URL.createObjectURL(file);
+        imageEl.setAttribute("src", path);
+        imageEl.classList.remove("opacity-0");
       });
-    }
+    });
   }
-  
-  class BaseButton extends HTMLElement {
-    static observedAttributes = ["label", "type", "icon", "mini", "id"];
-  
-    connectedCallback() {
-      const label = this.getAttribute("label") || "Base input";
-      const type = this.getAttribute("type") || "primary";
-      const icon = this.getAttribute("icon");
-      const mini = this.getAttribute("mini") === "true";
-      const id = this.getAttribute("id");
-  
-      // Các class chung
-      let commonClasses = "focus:outline-none font-medium rounded-lg text-sm";
-  
-      if (mini) {
-        commonClasses += " py-1 px-2";
-      } else {
-        commonClasses += " py-2.5 px-5";
-      }
-  
-      // Các class riêng cho từng button
-      const BtnClass = {
-        primary:
-          "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300",
-        green:
-          "text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300",
-        red: "text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300",
-        plain:
-          "text-sm font-medium text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
-      };
-  
-      const contentClass = BtnClass[type] || BtnClass.primary;
-  
-      this.innerHTML = `
+}
+
+class BaseButton extends HTMLElement {
+  static observedAttributes = ["label", "type", "icon", "mini", "id"];
+
+  connectedCallback() {
+    const label = this.getAttribute("label") || "Base input";
+    const type = this.getAttribute("type") || "primary";
+    const icon = this.getAttribute("icon");
+    const mini = this.getAttribute("mini") === "true";
+    const id = this.getAttribute("id");
+
+    // Các class chung
+    let commonClasses = "focus:outline-none font-medium rounded-lg text-sm";
+
+    if (mini) {
+      commonClasses += " py-1 px-2";
+    } else {
+      commonClasses += " py-2.5 px-5";
+    }
+
+    // Các class riêng cho từng button
+    const BtnClass = {
+      primary:
+        "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300",
+      green:
+        "text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300",
+      red: "text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300",
+      plain:
+        "text-sm font-medium text-blue-900 focus:outline-none bg-blue-50 rounded-lg border border-blue-500 hover:bg-blue-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-blue-100",
+    };
+
+    const contentClass = BtnClass[type] || BtnClass.primary;
+
+    this.innerHTML = `
       <button id="${id}" type="button" class="${commonClasses} ${contentClass}">
         ${icon ? `<i class='${icon} mr-1'></i>` : ""} <span class="button-label">${label}</span>
        
       </button>
     `;
 
-    }
-  
-
   }
-  
-  class BaseTable extends HTMLElement {
-    // khai báo các thuộc tính sẽ nhận vào từ bên file html
-    static observedAttributes = ["api", "columns", "event", "pageSize", "method"];
-  
-    connectedCallback() {
-      // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
-      const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
-      const columnsKey = this.getAttribute("columns"); // ... columns
-      const eventKey = this.getAttribute("event"); // ... event
-      const method = this.getAttribute("method") || "GET";
-  
-      // api = 'buildApiUrl'
-  
-      // Xử lý lấy thông tin api từ giá trị của thuộc tính api
-      function getApiUrl() {
-        // window là biến toàn cục đại diện cho trang web
-  
-        // const user = { name: "Duy" }
-        // const userKey = "name"
-        // user[userKey] <=> user.name
-  
-        window["buildApiUrl"];
-  
-        // không tồn tại biến khai báo thông tin api bên file js
-        if (window[api] === undefined) return api; // hoạt động với chế động url http:...
-  
-        return window[api](); // http://.../123
-      } // http://...
-  
-      // định dạng lại kiểu datetime
-      function formatDateTime(dateTimeStr) {
-        const dateTime = new Date(dateTimeStr);
-        const year = dateTime.getFullYear();
-        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-        const day = String(dateTime.getDate()).padStart(2, "0");
-        const hours = String(dateTime.getHours()).padStart(2, "0");
-        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
-  
-        return `${day}-${month}-${year} `;
-      }
-  
-      function getMonth(dateTimeStr) {
-        const dateTime = new Date(dateTimeStr);
-        const year = dateTime.getFullYear();
-        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-        const day = String(dateTime.getDate()).padStart(2, "0");
-        const hours = String(dateTime.getHours()).padStart(2, "0");
-        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
-  
-        return `${month} `;
-      }
-      // định dạg lại kiểu tiền tệ
-      function formatCurrency(val) {
-        return val.toLocaleString("it-IT", {
-          style: "currency",
-          currency: "VND",
-        });
-      }
-  
-      // addEventListener('DOMContentLoaded' : sự kiện sau khi nội dung trang wen đã hiện thị xong
-      document.addEventListener("DOMContentLoaded", () => {
-        const columns = window[columnsKey] || []; // lấy giá trị tương ứng của colums hoặc mặc định []
-        const event = window[eventKey] || {}; // ... event hoặc ... {}
-  
-        // this chính là phần html của class BaseTable
-        const headEl = this.querySelector("thead");
-        // tạo ra 1 thẻ tr mới <tr></tr>
-        const headTrEl = document.createElement("tr");
-        columns.forEach((col) => {
-          // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
-          // tạo 1 thẻ th đại hiện cho cột
-          const thEl = document.createElement("th");
-          // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
-          thEl.setAttribute("class", "px-6 py-3");
-          // <th class="px-6 py-3">Mã hợp đồng</th>
-          thEl.innerText = col.label;
-          // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
-          headTrEl.appendChild(thEl);
-        });
-        // <thead><tr><th class="px-6 py-3">Mã hợp đồng</th></tr></thead>
-        headEl.appendChild(headTrEl);
-  
-        headEl.style.backgroundColor = "#444444	"; // Màu nền đen cho phần thead
-        headEl.style.color = "#fff"; // màu chữ của thead
-  
-        // Danh sách các biến liên quan đến element BaseTable
-        const bodyEl = this.querySelector("tbody");
-        const paginationEl = this.querySelector(".pagination");
-        // Các biến lưu trữ thôn tin liên quan đến hiện thỉ bảng
-        let sourceTableData = []; // Dữ liệu gốc của bảng chưa qua phâ trang
-        let currentPage = 1; // Trang hiện tại dữ liệu hiển thị
-        let totalPage = 0; // Tổng số trang bảng sẽ có
-        const pageSize = Number(this.getAttribute("pageSize")) || 5; // Số lượng hàng sẽ hiển thị ở 1 trang của bảng lấy theo từ bên trang html truyền vào hoặc 5
-        // Xử lý các giá trị của biến liên quan đên hiện thị bảng
-        function setTableData(data = []) {
-          sourceTableData = data;
-          currentPage = 1;
-          totalPage = Math.ceil(sourceTableData.length / pageSize);
+
+
+}
+
+class BaseTable extends HTMLElement {
+  // khai báo các thuộc tính sẽ nhận vào từ bên file html
+  static observedAttributes = ["api", "columns", "event", "pageSize", "method"];
+
+  connectedCallback() {
+    // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
+    const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
+    const columnsKey = this.getAttribute("columns"); // ... columns
+    const eventKey = this.getAttribute("event"); // ... event
+    const method = this.getAttribute("method") || "GET";
+
+    // api = 'buildApiUrl'
+
+    // Xử lý lấy thông tin api từ giá trị của thuộc tính api
+    function getApiUrl() {
+      // window là biến toàn cục đại diện cho trang web
+
+      // const user = { name: "Duy" }
+      // const userKey = "name"
+      // user[userKey] <=> user.name
+
+      window["buildApiUrl"];
+
+      // không tồn tại biến khai báo thông tin api bên file js
+      if (window[api] === undefined) return api; // hoạt động với chế động url http:...
+
+      return window[api](); // http://.../123
+    } // http://...
+
+    // định dạng lại kiểu datetime
+    function formatDateTime(dateTimeStr) {
+      const dateTime = new Date(dateTimeStr);
+      const year = dateTime.getFullYear();
+      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const day = String(dateTime.getDate()).padStart(2, "0");
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+      return `${day}-${month}-${year} `;
+    }
+
+    function formatTime(dateTimeStr) {
+      const dateTime = new Date(dateTimeStr);
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+      const seconds = String(dateTime.getSeconds()).padStart(2, "0");
+
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    function getMonth(dateTimeStr) {
+      const dateTime = new Date(dateTimeStr);
+      const year = dateTime.getFullYear();
+      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const day = String(dateTime.getDate()).padStart(2, "0");
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+      return `${month} `;
+    }
+    // định dạg lại kiểu tiền tệ
+    function formatCurrency(val) {
+      return val.toLocaleString("it-IT", {
+        style: "currency",
+        currency: "VND",
+      });
+    }
+
+    // addEventListener('DOMContentLoaded' : sự kiện sau khi nội dung trang wen đã hiện thị xong
+    document.addEventListener("DOMContentLoaded", () => {
+      const columns = window[columnsKey] || []; // lấy giá trị tương ứng của colums hoặc mặc định []
+      const event = window[eventKey] || {}; // ... event hoặc ... {}
+
+      // this chính là phần html của class BaseTable
+      const headEl = this.querySelector("thead");
+      // tạo ra 1 thẻ tr mới <tr></tr>
+      const headTrEl = document.createElement("tr");
+      columns.forEach((col) => {
+        if (col.type === "disabled") {
+          return; // Skip adding header for disabled columns
         }
-        // Lấy ra các mục dữ liệu để hiện thị cho trang hiện tại
-        function getItemsForPage() {
-          const startItem = (currentPage - 1) * pageSize; // Mục bắt đầu của trang hiển tại
-          const endItem = startItem + pageSize; // Mục két thúc của trang hiện tại
-          return sourceTableData.slice(startItem, endItem); // Các mục dữ liệu cho trang hiện tại
+        // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
+        // tạo 1 thẻ th đại hiện cho cột
+        const thEl = document.createElement("th");
+        // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
+        thEl.setAttribute("class", "px-6 py-3");
+
+        // <th class="px-6 py-3">Mã hợp đồng</th>
+        thEl.innerText = col.label;
+        // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
+        headTrEl.appendChild(thEl);
+      });
+      // <thead><tr><th class="px-6 py-3">Mã hợp đồng</th></tr></thead>
+      headEl.appendChild(headTrEl);
+
+      headEl.style.backgroundColor = "#444444	"; // Màu nền đen cho phần thead
+      headEl.style.color = "#fff"; // màu chữ của thead
+
+      // Danh sách các biến liên quan đến element BaseTable
+      const bodyEl = this.querySelector("tbody");
+      const paginationEl = this.querySelector(".pagination");
+      // Các biến lưu trữ thôn tin liên quan đến hiện thỉ bảng
+      let sourceTableData = []; // Dữ liệu gốc của bảng chưa qua phâ trang
+      let currentPage = 1; // Trang hiện tại dữ liệu hiển thị
+      let totalPage = 0; // Tổng số trang bảng sẽ có
+      const pageSize = Number(this.getAttribute("pageSize")) || 5; // Số lượng hàng sẽ hiển thị ở 1 trang của bảng lấy theo từ bên trang html truyền vào hoặc 5
+      // Xử lý các giá trị của biến liên quan đên hiện thị bảng
+      function setTableData(data = []) {
+        sourceTableData = data;
+        currentPage = 1;
+        totalPage = Math.ceil(sourceTableData.length / pageSize);
+      }
+      // Lấy ra các mục dữ liệu để hiện thị cho trang hiện tại
+      function getItemsForPage() {
+        const startItem = (currentPage - 1) * pageSize; // Mục bắt đầu của trang hiển tại
+        const endItem = startItem + pageSize; // Mục két thúc của trang hiện tại
+        return sourceTableData.slice(startItem, endItem); // Các mục dữ liệu cho trang hiện tại
+      }
+      function getGenderIcon(value) {
+        if (value) {
+          return '<i class="bx bx-male-sign male-icon"></i>'; // Icon nam
+        } else {
+          return '<i class="bx bx-female-sign female-icon"></i>'; // Icon nữ
         }
-        // Xử lý phần hiển thị bảng
-        function renderTable() {
-          bodyEl.innerHTML = "";
-          const itemsForPage = getItemsForPage(); // Các mục dữ liệu để hiện thị cho trang hiện tại
-          console.log("itemsForPage ", itemsForPage);
-          // lặp lần lượt dữ liệu bảng từ api
-          itemsForPage.forEach((row) => {
-            // row = { mahopdong: 123123, luongcoban: 12323 }
-  
-            // mỗi hàng sẽ tạo 1 thẻ tr tương ứng
-            const trEl = document.createElement("tr");
-  
-            // set class cho thẻ tr đc tạo
-            trEl.setAttribute(
-              "class",
-              "bg-white border-bottom hover:bg-gray-100 border-b"
-            );
-  
-            if (event.rowClick !== undefined) {
-              // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
-              trEl.addEventListener("click", () => {
-                event.rowClick(row); // gọi đến function rowClick đã được khai báo trước đó
-              });
+      }
+      // Xử lý phần hiển thị bảng
+      function renderTable() {
+        bodyEl.innerHTML = "";
+        const itemsForPage = getItemsForPage(); // Các mục dữ liệu để hiện thị cho trang hiện tại
+        // console.log("itemsForPage ", itemsForPage);
+        // lặp lần lượt dữ liệu bảng từ api
+        itemsForPage.forEach((row) => {
+          // row = { mahopdong: 123123, luongcoban: 12323 }
+
+          // mỗi hàng sẽ tạo 1 thẻ tr tương ứng
+          const trEl = document.createElement("tr");
+
+          // set class cho thẻ tr đc tạo
+          trEl.setAttribute(
+            "class",
+            "bg-white border-bottom hover:bg-gray-100 border-b"
+          );
+
+          if (event.rowClick !== undefined) {
+            // Nếu đã được khai báo lắng nghe sự kiện click của thẻ tr
+            trEl.addEventListener("click", () => {
+              event.rowClick(row); // gọi đến function rowClick đã được khai báo trước đó
+            });
+          }
+          if (event.rowDoubleClick != undefined) {
+            // Thêm sự kiện double click
+            trEl.addEventListener("dblclick", () => {
+              event.rowDoubleClick(row); // gọi đến function rowDoubleClick đã được khai báo trước đó
+            });
+          }
+          // Lặp lần lượt các thông tin cột
+          columns.forEach((col) => {
+            if (col.type === "disabled") {
+              return; // Skip adding cell for disabled columns
             }
-            if (event.rowDoubleClick != undefined) {
-              // Thêm sự kiện double click
-              trEl.addEventListener("dblclick", () => {
-                event.rowDoubleClick(row); // gọi đến function rowDoubleClick đã được khai báo trước đó
-              });
+
+            //  Mã hợp đồng, Lương cơ bả, ...
+            // tạo thẻ th
+            const thEl = document.createElement("th");
+            thEl.setAttribute("class", "px-6 py-3 font-normal text-gray-700");
+            // Lấy ra giá trị của cột tương ứng với key được khai báo
+            let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
+
+            if (col.type === "noticeBirthdate") {
+              if (value === "Đã qua") {
+                thEl.style.color = "blue";
+              }
+              else if (value === "Hôm nay") {
+                thEl.style.color = "green";
+              }
+              else if (value === "Sắp đến") {
+                thEl.style.color = "Teal";
+              }
+              else if (value === "Trong tháng") {
+                thEl.style.color = "red";
+              }
+              else if (value === "Chưa đến") {
+                thEl.style.color = "black";
+              }
             }
-            // Lặp lần lượt các thông tin cột
-            columns.forEach((col) => {
-              //  Mã hợp đồng, Lương cơ bả, ...
-              // tạo thẻ th
-              const thEl = document.createElement("th");
-              thEl.setAttribute("class", "px-6 py-3 font-normal text-gray-700");
-              // Lấy ra giá trị của cột tương ứng với key được khai báo
-              let value = row[col.key]; //mahopdong, luongcoban <=> row['mahopdong'] <=> row.mahopdong
-  
-              if (col.type === "noticeBirthdate") {
-                if (value === "Đã qua") {
-                  thEl.style.color = "blue";
+            if (col.formatGiaTri) {
+              const formatted = col.formatGiaTri(value);
+              value = formatted.text; // Lấy giá trị đã định dạng
+              thEl.style.color = formatted.color;
+            }
+            // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
+            if (col.key === "action") {
+              //
+              col.actions.forEach(
+                ({ label, type, icon, onClick, doubleClick }) => {
+                  const btnEl = document.createElement("base-button");
+                  btnEl.setAttribute("label", label);
+                  btnEl.setAttribute("type", type);
+                  btnEl.setAttribute("icon", icon);
+                  btnEl.setAttribute("mini", "true");
+                  btnEl.addEventListener("click", () => onClick(row));
+                  btnEl.addEventListener("dblclick", () => doubleClick(row));
+
+                  thEl.appendChild(btnEl);
                 }
-                else{
-                  thEl.style.color = "red"
+              );
+            } else {
+              // nếu type được khai báo thì định dạng lại giá trị tương ứng
+              if (col.type === "datetime") {
+                if (value === null) {
+                  value = " "
+                }
+                else {
+                  value = formatDateTime(value);
+
                 }
               }
-              // truờng hợp key bằng action sẽ hiện thị cột hành đọng với button tương ứng
-              if (col.key === "action") {
-                //
-                col.actions.forEach(
-                  ({ label, type, icon, onClick, doubleClick }) => {
-                    const btnEl = document.createElement("base-button");
-                    btnEl.setAttribute("label", label);
-                    btnEl.setAttribute("type", type);
-                    btnEl.setAttribute("icon", icon);
-                    btnEl.setAttribute("mini", "true");
-                    btnEl.addEventListener("click", () => onClick(row));
-                    btnEl.addEventListener("dblclick", () => doubleClick(row));
-  
-                    thEl.appendChild(btnEl);
-                  }
-                );
-              } else {
-                // nếu type được khai báo thì định dạng lại giá trị tương ứng
-                if (col.type === "datetime") {
-                  value = formatDateTime(value);
-                } else if (col.type == "month") {
-                  value = getMonth(value);
-                } 
-                 else if (col.type === "currency") {
-                  value = formatCurrency(value);
-                } else if (col.type === "gender") {
-                  value = value ? "Nam" : "Nữ";
+              else if (col.type === "time") {
+                value = formatTime(value)
+              }
+              else if (col.type == "month") {
+                value = getMonth(value);
+              }
+              else if (col.type === "currency") {
+                if(value === 0 || value === null){
+                  value = value
                 }
-  
-                // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
-                if (col.formatter) {
+                else{
+                  value = formatCurrency(value);
+
+                }
+              } else if (col.type === "gender") {
+                value = getGenderIcon(value); // Sử dụng icon thay vì text
+                thEl.innerHTML = value;
+                trEl.appendChild(thEl);
+                return; // Kết thúc xử lý cho cột này
+              }
+
+              // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
+              if (col.formatter) {
+                if (value === null) {
+                  value = null
+                }
+                else {
                   console.log(value);
                   value = col.formatter(value); // value
                 }
-  
-                // <th> nội dung đã được định dạng lại /th>
-                thEl.innerText = value;
               }
-  
-              trEl.appendChild(thEl);
-            });
-            // thêm các thẻ tr và body
-            bodyEl.appendChild(trEl);
-          });
-        }
-        // xử lý phần hiển thị phân trang
-        function renderPagination() {
-          paginationEl.innerHTML = "";
-          // Nút "Previous"
-          // Nút "Previous"
-          const prevButton = document.createElement("button");
-          prevButton.setAttribute(
-            "class",
-            "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l hover:bg-gray-100 hover:text-gray-700"
-          );
-          prevButton.textContent = "Previous";
-          prevButton.disabled = currentPage === 1; // Vô hiệu hóa nếu đang ở trang đầu tiên
-          prevButton.classList.add(
-            currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-          );
-          prevButton.addEventListener("click", () => {
-            if (currentPage > 1) {
-              currentPage--;
-              renderTable();
-              renderPagination();
+
+              // <th> nội dung đã được định dạng lại /th>
+              thEl.innerText = value;
             }
+
+            trEl.appendChild(thEl);
           });
-          paginationEl.appendChild(prevButton);
-  
-          // Nút phân trang số
-          const addPageButton = (page) => {
-            const button = document.createElement("button");
+          // thêm các thẻ tr và body
+          bodyEl.appendChild(trEl);
+        });
+      }
+      // xử lý phần hiển thị phân trang
+      function renderPagination() {
+        paginationEl.innerHTML = "";
+        // Nút "Previous"
+        // Nút "Previous"
+        const prevButton = document.createElement("button");
+        prevButton.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l hover:bg-gray-100 hover:text-gray-700"
+        );
+        prevButton.textContent = "Previous";
+        prevButton.disabled = currentPage === 1; // Vô hiệu hóa nếu đang ở trang đầu tiên
+        prevButton.classList.add(
+          currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
+        );
+        prevButton.addEventListener("click", () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderTable();
+            renderPagination();
+          }
+        });
+        paginationEl.appendChild(prevButton);
+
+        // Nút phân trang số
+        const addPageButton = (page) => {
+          const button = document.createElement("button");
+          button.setAttribute(
+            "class",
+            "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+          );
+          button.textContent = page;
+          if (page === currentPage) {
             button.setAttribute(
               "class",
-              "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+              " flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
             );
-            button.textContent = page;
-            if (page === currentPage) {
-              button.setAttribute(
-                "class",
-                " flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700"
-              );
+          }
+          button.addEventListener("click", () => {
+            currentPage = page;
+            renderTable();
+            renderPagination();
+          });
+          paginationEl.appendChild(button);
+        };
+
+        if (totalPage <= 6) {
+          for (let i = 1; i <= totalPage; i++) {
+            addPageButton(i);
+          }
+        } else {
+          if (currentPage <= 3) {
+            for (let i = 1; i <= 4; i++) {
+              addPageButton(i);
             }
-            button.addEventListener("click", () => {
-              currentPage = page;
-              renderTable();
-              renderPagination();
-            });
-            paginationEl.appendChild(button);
-          };
-  
-          if (totalPage <= 6) {
-            for (let i = 1; i <= totalPage; i++) {
+            paginationEl.appendChild(createEllipsis());
+            addPageButton(totalPage);
+          } else if (currentPage >= totalPage - 2) {
+            addPageButton(1);
+            paginationEl.appendChild(createEllipsis());
+            for (let i = totalPage - 3; i <= totalPage; i++) {
               addPageButton(i);
             }
           } else {
-            if (currentPage <= 3) {
-              for (let i = 1; i <= 4; i++) {
-                addPageButton(i);
-              }
-              paginationEl.appendChild(createEllipsis());
-              addPageButton(totalPage);
-            } else if (currentPage >= totalPage - 2) {
-              addPageButton(1);
-              paginationEl.appendChild(createEllipsis());
-              for (let i = totalPage - 3; i <= totalPage; i++) {
-                addPageButton(i);
-              }
-            } else {
-              addPageButton(1);
-              paginationEl.appendChild(createEllipsis());
-              for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-                addPageButton(i);
-              }
-              paginationEl.appendChild(createEllipsis());
-              addPageButton(totalPage);
+            addPageButton(1);
+            paginationEl.appendChild(createEllipsis());
+            for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+              addPageButton(i);
             }
+            paginationEl.appendChild(createEllipsis());
+            addPageButton(totalPage);
           }
-  
-          // Nút "Next"
-          const nextButton = document.createElement("button");
-          nextButton.setAttribute(
-            "class",
-            "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r hover:bg-gray-100 hover:text-gray-700"
-          );
-          nextButton.textContent = "Next";
-          nextButton.disabled = currentPage === totalPage; // Vô hiệu hóa nếu đang ở trang cuối
-          nextButton.classList.add(
-            currentPage === totalPage ? "cursor-not-allowed" : "cursor-pointer"
-          );
-          nextButton.addEventListener("click", () => {
-            if (currentPage < totalPage) {
-              currentPage++;
+        }
+
+        // Nút "Next"
+        const nextButton = document.createElement("button");
+        nextButton.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r hover:bg-gray-100 hover:text-gray-700"
+        );
+        nextButton.textContent = "Next";
+        nextButton.disabled = currentPage === totalPage; // Vô hiệu hóa nếu đang ở trang cuối
+        nextButton.classList.add(
+          currentPage === totalPage ? "cursor-not-allowed" : "cursor-pointer"
+        );
+        nextButton.addEventListener("click", () => {
+          if (currentPage < totalPage) {
+            currentPage++;
+            renderTable();
+            renderPagination();
+          }
+        });
+        paginationEl.appendChild(nextButton);
+      }
+
+      function createEllipsis() {
+        const ellipsis = document.createElement("span");
+        ellipsis.setAttribute(
+          "class",
+          "flex items-center justify-center px-3 h-8 leading-tight text-gray-500"
+        );
+        ellipsis.textContent = "...";
+        return ellipsis;
+      }
+      const handleCallFetchData = (payload) => {
+        $.ajax({
+          url: getApiUrl(), // lấy ra url api của bảng = http://...
+          type: method, // phương thức
+          data: payload,
+          success: (tableData) => {
+            // Kiểm tra xem tableData có phải là một mảng không
+            if (Array.isArray(tableData)) {
+              // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
+              if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
+                // Sắp xếp theo thuộc tính 'id'
+                const sortedData = tableData.sort((a, b) => b.id - a.id);
+                setTableData(sortedData);
+              } else {
+                // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
+                setTableData(tableData);
+              }
+
               renderTable();
               renderPagination();
+            } else {
+              setTableData([]);
+              renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
             }
-          });
-          paginationEl.appendChild(nextButton);
-        }
-        
-        function createEllipsis() {
-          const ellipsis = document.createElement("span");
-          ellipsis.setAttribute(
-            "class",
-            "flex items-center justify-center px-3 h-8 leading-tight text-gray-500"
-          );
-          ellipsis.textContent = "...";
-          return ellipsis;
-        }
-        const handleCallFetchData = (payload) => {
-          $.ajax({
-            url: getApiUrl(), // lấy ra url api của bảng = http://...
-            type: method, // phương thức
-            data: payload,
-            success: (tableData) => {
-              // tableData : dữ liệu Api bảng trả về
-  
-              setTableData(tableData);
-              renderTable();
-              renderPagination();
-            },
-            error: (xhr, status, error) => {
-              const hasEmptyEl = this.querySelector("#empty-data");
-              console.log("hasEmptyEl ", hasEmptyEl);
-              if (hasEmptyEl) return;
-              // Trường hợp thất bại
-              const wrapperTable = this.querySelector("#wrapper-table");
-  
-              const divEl = document.createElement("div");
-              divEl.setAttribute("id", "empty-data");
-              divEl.setAttribute(
-                "class",
-                "text-center text-gray-400 mt-5 mb-5 text-sm"
-              );
-              divEl.innerText = "Không có dữ liệu!";
-              wrapperTable.append(divEl);
-            },
-          });
-        };
-        handleCallFetchData();
-  
-        this.handleCallFetchData = handleCallFetchData;
-      });
-  
-      this.innerHTML = `
-      <div id="wrapper-table" class="relative overflow-x-auto bg-gray-100">
-        <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray">
-          <thead class=" text-gray-700 uppercase bg-ffffff"></thead>
-          <tbody></tbody>
-        </table>
-        <div class="pagination flex items-center justify-center -space-x-px h-8 mt-3 gap-2"></div>
-      </div>
-      `;
-    }
+          },
+          error: (xhr, status, error) => {
+            const hasEmptyEl = document.querySelector("#empty-data");
+            if (hasEmptyEl) return;
+
+            // Trường hợp thất bại
+            const wrapperTable = document.querySelector("#wrapper-table");
+
+            const divEl = document.createElement("div");
+            divEl.setAttribute("id", "empty-data");
+            divEl.setAttribute(
+              "class",
+              "text-center text-gray-400 mt-5 mb-5 text-sm"
+            );
+            // divEl.innerText = "Không có dữ liệu!";
+            wrapperTable.append(divEl);
+          },
+        });
+      };
+
+
+      // const handleCallFetchData = (payload) => {
+      //   $.ajax({
+      //     url: getApiUrl(), // lấy ra url api của bảng = http://...
+      //     type: method, // phương thức
+      //     data: payload,
+      //     success: (tableData) => {
+      //       // tableData : dữ liệu Api bảng trả về
+
+      //       setTableData(tableData);
+      //       renderTable();
+      //       renderPagination();
+      //     },
+      //     error: (xhr, status, error) => {
+      //       const hasEmptyEl = this.querySelector("#empty-data");
+      //       console.log("hasEmptyEl ", hasEmptyEl);
+      //       if (hasEmptyEl) return;
+      //       // Trường hợp thất bại
+      //       const wrapperTable = this.querySelector("#wrapper-table");
+
+      //       const divEl = document.createElement("div");
+      //       divEl.setAttribute("id", "empty-data");
+      //       divEl.setAttribute(
+      //         "class",
+      //         "text-center text-gray-400 mt-5 mb-5 text-sm"
+      //       );
+      //       divEl.innerText = "Không có dữ liệu!";
+      //       wrapperTable.append(divEl);
+      //     },
+      //   });
+      // };
+
+      handleCallFetchData();
+
+      this.handleCallFetchData = handleCallFetchData;
+    });
+
+    this.innerHTML = `
+    <div id="wrapper-table" class="relative overflow-x-auto bg-gray-100">
+      <table id="employee-table" class="w-full text-sm text-left rtl:text-right text-gray">
+        <thead class=" text-gray-700 uppercase bg-ffffff"></thead>
+        <tbody></tbody>
+      </table>
+      <div class="pagination flex items-center justify-center -space-x-px h-8 mt-3 gap-2"></div>
+    </div>
+    `;
   }
+}
 
 //   class BaseImage extends HTMLElement {
 //     static observedAttributes = ["src", "alt"];
-  
+
 //     connectedCallback() {
 //       const src = this.getAttribute("src");
 //       const alt = this.getAttribute("alt") || "Image";
-      
+
 //       this.innerHTML = `
 //       <div class="bg-gray-300 p-3 rounded-lg flex items-center justify-center" style="background-image: url('${src}'); background-size: cover; background-position: center; width: 300px; height: 300px;">
 //         <div class="ml-4">
@@ -926,16 +1050,16 @@ class CustomHeader extends HTMLElement {
 //     }
 // }
 class BaseImage extends HTMLElement {
-  static observedAttributes = ["icon","color","description","title","titleLink","href"];
+  static observedAttributes = ["icon", "color", "description", "title", "titleLink", "href"];
 
   connectedCallback() {
     const icon = this.getAttribute("icon");
     const color = this.getAttribute("color");
     const description = this.getAttribute("description");
-    const title = this.getAttribute("title")||"";
+    const title = this.getAttribute("title") || "";
     const titleLink = this.getAttribute("titleLink");
     const href = this.getAttribute("href");
-    
+
     this.innerHTML = `
   <div class="p-3 rounded-lg flex items-center justify-center relative" style="width: 90%; height: 200px; background-color: ${color};">
     <div class="absolute top-0 right-0 m-4 text-8xl">${icon}</div>
@@ -954,24 +1078,152 @@ class BaseImage extends HTMLElement {
   }
 }
 
+class CustomAlert extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+      <div class="modal" id="popupAlert">
+    <div class="fixed inset-0 z-40 min-h-full overflow-y-auto overflow-x-hidden transition flex items-center">
+      <!-- overlay -->
+      <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50 cursor-pointer">
+      </div>
+      <!-- Modal -->
+      <div class="relative w-full cursor-pointer pointer-events-none transition my-auto p-4">
+        <div
+          class="w-full py-2 bg-white cursor-default pointer-events-auto dark:bg-gray-800 relative rounded-xl mx-auto max-w-sm">
+          <div class="space-y-2 p-2">
+            <div class="p-4 space-y-2 text-center dark:text-white">
+              <h2 class="text-xl font-bold tracking-tight" id="page-action.heading">
+                Thông báo
+              </h2>
+              <p id="alertMessage" class="text-gray-500">
+                Nội dung thông báo
+              </p>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div aria-hidden="true" class="border-t dark:border-gray-700 px-2"></div>
+            <div class="px-6 py-2">
+              <div class="grid gap-2 grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+                <!-- Nút Xác Nhận -->
+                <button type="submit" id="confirmButton"
+                  class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-4 text-sm text-white shadow focus:ring-white border-transparent bg-[rgb(0,28,64)] hover:bg-[rgb(0,28,64)] focus:ring-offset-[rgb(0,28,64)]">
+                  <span class="flex items-center gap-1">
+                    <span>
+                      Xác nhận
+                    </span>
+                  </span>
+                </button>
+                <!-- Nút Hủy -->
+                <button type="button" id="cancelButton"
+                  class="inline-flex items-center justify-center py-1 gap-1 font-medium rounded-lg border transition-colors outline-none focus:ring-offset-2 focus:ring-2 focus:ring-inset min-h-[2.25rem] px-4 text-sm text-white bg-[rgb(245,157,57)] border-transparent hover:bg-[rgb(245,157,57)] focus:ring-offset-[rgb(245,157,57)]">
+                  <span class="flex items-center gap-1">
+                    <span>
+                      Hủy
+                    </span>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
+
+class CustomAlertEror extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupAlertError" style="display: none;">
+  <div class="change-container" style="padding:0px">
+
+    <div class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+      <div class="flex items-center justify-center mb-4">
+        <div class="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+          <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+      </div>
+      <div class="text-center">
+        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-headline">
+          Lỗi
+        </h3>
+        <div class="mt-2">
+          <p class="text-sm text-gray-500" id="errorMessage">
+            There was an error processing your request.
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <button class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:text-sm" id="okButton">
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
+    `;
+  }
+}
 
+class CustomAlertSuccess extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupConfirmSuccess">
+    <div class="change-container" style="padding:0px">
+      <div
+        class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full"
+        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="flex items-center justify-center mb-4">
+          <div class="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="successMessage">
+            Xác Nhận Thành Công
+          </h3>
+        </div>
+        <div class="mt-4">
+          <button
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm"
+            id="okSuccessButton">
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
 
-  
-  //  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
-  customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
-  customElements.define("layout-sidebar", CustomSidebar);
-  customElements.define("base-input", BaseInput);
-  customElements.define("base-textarea", BaseTextArea);
-  customElements.define("base-datepicker", BaseDatePicker);
-  customElements.define("base-input-phone", BaseInputPhone);
-  customElements.define("base-radio", BaseRadio);
-  customElements.define("label-form-item", LabelFormItem);
-  customElements.define("base-input-number", BaseInputNumber);
-  customElements.define("base-select", BaseSelect);
-  customElements.define("base-checkbox", BaseCheckbox);
-  customElements.define("base-upload", BaseUpload);
-  customElements.define("base-button", BaseButton);
-  customElements.define("base-table", BaseTable);
-  customElements.define("base-image", BaseImage);
+customElements.define('custom-error', CustomAlertEror);
+customElements.define('custom-success', CustomAlertSuccess);
+
+customElements.define('custom-alert', CustomAlert);
+customElements.define(/** 1*/ "layout-footer", /** 2*/ CustomFooter);
+//  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
+customElements.define(/** 1*/"layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
+customElements.define("layout-sidebar", CustomSidebar);
+customElements.define("base-input", BaseInput);
+customElements.define("base-textarea", BaseTextArea);
+customElements.define("base-datepicker", BaseDatePicker);
+customElements.define("base-input-phone", BaseInputPhone);
+customElements.define("base-radio", BaseRadio);
+customElements.define("label-form-item", LabelFormItem);
+customElements.define("base-input-number", BaseInputNumber);
+customElements.define("base-select", BaseSelect);
+customElements.define("base-checkbox", BaseCheckbox);
+customElements.define("base-upload", BaseUpload);
+customElements.define("base-button", BaseButton);
+customElements.define("base-table", BaseTable);
+customElements.define("base-image", BaseImage);

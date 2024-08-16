@@ -13,7 +13,6 @@
   <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- Font-icon css-->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
   <script src="/assets/scripts/common/registerComponent.js"></script>
   <style>
@@ -72,11 +71,11 @@
                 <div class="">
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
-                      <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
-                          name="searchRules"></base-select>
-                      </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
+                        <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan" includeAll></base-select>
+                      </div>
+                      <div class="col-span-2 sm:col-span-1">
                         <base-datepicker id="tungay" style="margin: 0;  margin-top: -10px;" label="Từ ngày"
                           name="StartDate" required="true"></base-datepicker>
                       </div>
@@ -84,10 +83,7 @@
                         <base-datepicker id="denngay" style="margin: 0;  margin-top: -10px;" label="Đến ngày"
                           name="EndDate" required="true"></base-datepicker>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
-                          api="https://localhost:7141/api/PhongBan/getAllPhongBan"></base-select>
-                      </div>
+                      <div class="col-span-2 sm:col-span-1 "></div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select id="thangsinh" label="Tháng sinh" name="Thang" options="thangSinh">
                         </base-select>
@@ -99,7 +95,7 @@
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center"></div>
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
                     </div>
                   </div>
                 </div>
