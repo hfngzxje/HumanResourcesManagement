@@ -30,7 +30,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getById/{id}")]
-        public async Task<IActionResult> GetNgachCongChucById([FromHeader]int id)
+        public async Task<IActionResult> GetNgachCongChucById(int id)
         {
             try
             {
