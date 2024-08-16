@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-    <title>Danh mục phòng ban | Quản trị Admin</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Main CSS-->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <!-- Font-icon css-->
-    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
-  
+  <title>Danh mục phòng ban | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+  <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- Font-icon css-->
+  <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -39,13 +39,14 @@
             <div class="row element-button">
               <div class="col-sm-2">
 
-                <a class="btn btn-add btn-sm" onclick="isPopupEdit =false; showPopup()" title="Thêm"><i class="fas fa-plus"></i>
+                <a class="btn btn-add btn-sm" onclick="isPopupEdit =false; showPopup()" title="Thêm"><i
+                    class="fas fa-plus"></i>
                   Tạo mới danh mục</a>
               </div>
               <!-- <div id="award_form_action" class="flex gap-x-5 mt-5 justify-left"></div> -->
             </div>
             <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-        </base-table>
+            </base-table>
           </div>
         </div>
       </div>
@@ -67,31 +68,31 @@
         <div class="p-4">
           <div class="grid gap-4 mb-4 grid-cols-1 mt-2">
             <div class="col-span-2 sm:col-span-1">
-              <base-input label="Tên Phòng Ban" required="true" name="ten"></base-input>
+              <base-input label="Tên Phòng Ban" validateBy="required" name="ten"></base-input>
             </div>
           </div>
         </div>
       </form>
       <div class="flex gap-x-5 mt-1 justify-center">
-        <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green" ></base-button>
-        <base-button id="saveBtn" label="Lưu" icon="bx bx-save" ></base-button>
-        <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type = "red"></base-button>
+        <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
+        <base-button id="saveBtn" label="Lưu" icon="bx bx-save"></base-button>
+        <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
       </div>
     </div>
   </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-<script src="../../assets/scripts/common/transform.js"></script>
-<script src="../../assets/scripts/common/loading.js"></script>
-<script src="../../assets/scripts/common/formHanlde.js"></script>
-<script src="../../assets/scripts/pages/catalog/departments.js"></script>
-<script src="../../assets/scripts/pages/history/recordHistory.js"></script>
-<script src="/assets/scripts/common/registerComponent.js"></script>
-<script src="/assets/scripts/common/popupConfirm.js"></script>
-<script src="../../assets/scripts/pages/authentic/logOut.js"></script>
-<script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
-<script src="/assets/scripts/common/dateTime.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+  <script src="../../assets/scripts/common/transform.js"></script>
+  <script src="../../assets/scripts/common/loading.js"></script>
+  <script src="../../assets/scripts/common/formHanlde.js"></script>
+  <script src="../../assets/scripts/pages/catalog/departments.js"></script>
+  <script src="../../assets/scripts/pages/history/recordHistory.js"></script>
+  <script src="/assets/scripts/common/registerComponent.js"></script>
+  <script src="/assets/scripts/common/popupConfirm.js"></script>
+  <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+  <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+  <script src="/assets/scripts/common/dateTime.js"></script>
 
 </body>
 

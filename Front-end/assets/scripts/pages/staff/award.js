@@ -146,6 +146,9 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKhenThuong() {
+    if(!maDetail){
+        return false
+    }
     
     let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Khen thưởng'

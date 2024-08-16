@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- Font-icon css-->
   <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
-  
+
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -39,7 +39,8 @@
             <div class="row element-button">
               <div class="col-sm-2">
 
-                <a class="btn btn-add btn-sm" onclick="isPopupEdit = false;showPopup()" title="Thêm"><i class="fas fa-plus"></i>
+                <a class="btn btn-add btn-sm" onclick="isPopupEdit = false;showPopup()" title="Thêm"><i
+                    class="fas fa-plus"></i>
                   Tạo mới hợp đồng</a>
               </div>
 
@@ -54,55 +55,55 @@
 
   <div class="modal" id="editHopDong">
     <div class="change-container"
-        style="max-width: 900px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
-        <span class="close">&times;</span>
-        <form>
-            <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Sửa hợp đồng
-                </h2>
-            </div>
-            <div class="p-4">
-                <div class="grid gap-4 mb-4 grid-cols-2">
-                    <div class="col-span-2 sm:col-span-1">
-                        <base-select label="Chức danh " required="true" name="chucdanh" keyValue="id"
-                        keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/chucDanh"></base-select>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1 ">
-                        <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
-                        required="true"></base-select>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1">
-                        <base-select label="Tổ" required="true" name="to" keyValue="id"
-                        keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo"></base-select>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1 mt-2 ">
-                        <base-select label="Loại hợp đồng" required="true" name="loaihopdong" keyValue="id"
-                        keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/loaiHopDong"></base-select>
-                    </div>
-                    <div class="col-span-2 sm:col-span-1">
-                        <base-select label="Phòng ban(*)" required="true" name="phong" keyValue="id"
-                        keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
-                    </div>
-                    <div id="maNhanVien" class="col-span-2 sm:col-span-1">
-                        <base-select label="Mã Nhân Viên(*)" required="true" name="ma" keyValue="ma" keyLabel="ma"
-                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien" style="width: 22%; max-width: 500px;">
-                        </base-select>
-                    </div>
-                    <div class="col-span-2 ">
-                      <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
-                  </div>
-                </div>
-            </div>
-        </form>
-        <div class="flex gap-x-5 mt-5 justify-center">
-            <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
-            <base-button id="saveBtn" label="Lưu" icon="bx bx-save"></base-button>
-            <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
-            <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
+      style="max-width: 900px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
+      <span class="close">&times;</span>
+      <form>
+        <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Sửa hợp đồng
+          </h2>
         </div>
+        <div class="p-4">
+          <div class="grid gap-4 mb-4 grid-cols-2">
+            <div class="col-span-2 sm:col-span-1">
+              <base-select label="Chức danh " name="chucdanh" keyValue="id" keyLabel="ten"
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/chucDanh"></base-select>
+            </div>
+            <div class="col-span-2 sm:col-span-1 ">
+              <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"></base-select>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <base-select label="Tổ" name="to" keyValue="id" keyLabel="ten"
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo"></base-select>
+            </div>
+            <div class="col-span-2 sm:col-span-1 mt-2 ">
+              <base-select label="Loại hợp đồng" name="loaihopdong" keyValue="id" keyLabel="ten"
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/loaiHopDong"></base-select>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <base-select label="Phòng ban(*)" name="phong" keyValue="id" keyLabel="ten"
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
+            </div>
+            <div id="maNhanVien" class="col-span-2 sm:col-span-1">
+              <base-select label="Mã Nhân Viên(*)" name="ma" keyValue="ma" keyLabel="ma"
+                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
+                style="width: 22%; max-width: 500px;">
+              </base-select>
+            </div>
+            <div class="col-span-2 ">
+              <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="flex gap-x-5 mt-5 justify-center">
+        <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
+        <base-button id="saveBtn" label="Lưu" icon="bx bx-save"></base-button>
+        <base-button id="removeBtn" label="Xóa" icon="bx bx-trash" type="red"></base-button>
+        <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
+      </div>
     </div>
-</div>
+  </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>

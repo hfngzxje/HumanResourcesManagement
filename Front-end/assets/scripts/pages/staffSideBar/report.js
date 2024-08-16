@@ -235,15 +235,16 @@ function inits(){
 
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
-  const buildButton = (label, type, icon) => {
+  const buildButton = (id, label, type, icon) => {
     const btnEl = document.createElement("base-button");
+    btnEl.setAttribute('id', id)
     btnEl.setAttribute("label", label);
     btnEl.setAttribute("type", type);
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();

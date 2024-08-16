@@ -55,6 +55,7 @@ function getCookie(name) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    localStorage.removeItem('maNhanVien')
    layMatKhauBtn.addEventListener("click", handleReset)
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);

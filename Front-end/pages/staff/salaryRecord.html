@@ -73,7 +73,7 @@
                                         <div class="grid grid-cols-4 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
                                                 <base-select id="maHopDong" label="Mã hợp đồng" name="mahopdong"
-                                                    keyValue="mahopdong" required="true" keyLabel="mahopdong"
+                                                    keyValue="mahopdong" validateBy="required" keyLabel="mahopdong"
                                                     api="buildApiHopDong"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -91,7 +91,7 @@
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="bacLuong" label="Bậc Lương" name="bacluong"
                                                     api="buidApiBacLuong" keyvalue="bacluong" keylabel="bacluong"
-                                                    required="true"></base-select>
+                                                    validateBy="required"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input-number id="hesoluong" label="Hệ số lương" name="hesoluong"
@@ -102,7 +102,7 @@
                                                     name="luongcoban" readonly></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number id="phuCap" label="Phụ cấp chúc vụ" required="true"
+                                                <base-input-number id="phuCap" label="Phụ cấp chúc vụ" validateBy="required"
                                                     name="phucaptrachnhiem" readonly></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -110,16 +110,16 @@
                                                     name="phucapkhac"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number id="tongLuong" label="Tiền lương" required="true"
+                                                <base-input-number id="tongLuong" label="Tiền lương" validateBy="required"
                                                     name="tongluong" readonly
                                                     style="color: red; font-weight: bold;"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number label="Thời hạn lên lương" required="true"
+                                                <base-input-number label="Thời hạn lên lương" validateBy="required"
                                                     name="thoihanlenluong"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker class="ml-auto" style="margin: 0;"
+                                                <base-datepicker class="ml-auto" style="margin: 0;" validateBy="required"
                                                     label="Ngày hiệu lực" name="ngayBatDau"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -168,7 +168,7 @@
                     <div class="grid gap-4 mb-4 grid-cols-4">
                         <div class="col-span-2 sm:col-span-1">
                             <!-- <base-select id="maHopDongPop" label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong"
-                                required="true" keyLabel="mahopdong" api="buildApiHopDong" disabled></base-select> -->
+                                validateBy="required" keyLabel="mahopdong" api="buildApiHopDong" disabled></base-select> -->
                             <base-input id="maHopDongPop" label="Mã hợp đồng" name="mahopdong" readonly></base-input>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
@@ -186,7 +186,7 @@
                         </div>
                         <div class="col-span-2  sm:col-span-1 mt-2">
                             <base-select id="bacLuongPop" label="Bậc Lương" name="bacLuong" api="buidApiBacLuongPop"
-                                keyvalue="bacluong" keylabel="bacluong" required="true"></base-select>
+                                keyvalue="bacluong" keylabel="bacluong" validateBy="required"></base-select>
                         </div>
 
                         <div class="col-span-2 sm:col-span-1">
@@ -198,7 +198,7 @@
                                 readonly></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-input-number id="phuCapPop" label="Phụ cấp chúc vụ" required="true"
+                            <base-input-number id="phuCapPop" label="Phụ cấp chúc vụ" validateBy="required"
                                 name="phucaptrachnhiem" readonly></base-input-number>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
@@ -206,11 +206,11 @@
                                 name="phucapkhac"></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-input-number id="tongLuongPop" label="Tiền lương" required="true" name="tongluong"
+                            <base-input-number id="tongLuongPop" label="Tiền lương" validateBy="required" name="tongluong"
                                 style="color: red; font-weight: bold;" readonly></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-input-number label="Thời hạn lên lương" required="true"
+                            <base-input-number label="Thời hạn lên lương" validateBy="required"
                                 name="thoihanlenluong"></base-input-number>
                         </div>
                         <div class="col-span-2 sm:col-span-1">

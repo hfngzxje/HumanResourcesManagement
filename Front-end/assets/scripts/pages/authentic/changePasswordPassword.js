@@ -4,7 +4,6 @@ var span = document.getElementsByClassName("close")[0];
 const maNV = localStorage.getItem('maNhanVien');
 btn.onclick = function () {
   modal.style.display = "block";
-  console.log("fdf")
 }
 
 span.onclick = function () {

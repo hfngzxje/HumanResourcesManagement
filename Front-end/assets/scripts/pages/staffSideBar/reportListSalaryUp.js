@@ -87,6 +87,9 @@ var phuCapInput = null
 var thongTinNgachCongChuc = null
 var phuCapKhacInput = null
 function buidApiBacLuong() {
+    if(!thongTinNgachCongChuc){
+        return false
+    }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
