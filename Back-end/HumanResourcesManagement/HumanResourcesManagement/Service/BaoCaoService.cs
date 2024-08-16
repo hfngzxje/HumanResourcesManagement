@@ -433,7 +433,7 @@ namespace HumanResourcesManagement.Service
 
             var resp = all.Select(r => new DanhSachNhomLuongResponse
             {
-                NgachCongChuc = _context.TblDanhMucChucDanhs.Find(r.Ngachcongchuc).Ten,
+                NgachCongChuc = _context.TblDanhMucNgachCongChucs.Find(r.Ngachcongchuc).Ten,
                 BacLuong = (double)r.Bacluong,
                 HeSoLuong = (double)r.Hesoluong,
                 LuongCoBan = (double)r.Luongcoban,
