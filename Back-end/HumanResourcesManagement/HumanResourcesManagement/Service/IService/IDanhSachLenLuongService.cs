@@ -9,9 +9,9 @@ namespace HumanResourcesManagement.Service.IService
     {
         Task<IEnumerable<DanhSachLenLuongResponse>> getDanhSachNhanVienLenLuong(DanhSachLenLuongRequest req);
 
-        void TaoMoiHoSoLuongKhongActivce(InsertHoSoLuongKhongActive request);
+        Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request);
 
-        void PheDuyetQuyetDinhLenLuong(int id);
+        Task PheDuyetQuyetDinhLenLuong(int id, int trangThai);
 
         Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel(DanhSachLenLuongRequest req);
         Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req);

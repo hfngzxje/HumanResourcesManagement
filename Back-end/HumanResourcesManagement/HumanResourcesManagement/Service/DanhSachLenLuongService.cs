@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace HumanResourcesManagement.Service
 {
@@ -35,14 +36,13 @@ namespace HumanResourcesManagement.Service
                 .Distinct()
                 .ToListAsync();
 
-            
-
             var result = await _context.TblNhanViens
                 .Where(nv => _context.TblHopDongs
                     .Where(hd => maHopDongs.Contains(hd.Mahopdong))
                     .Select(hd => hd.Ma)
                     .Contains(nv.Ma))
                 .ToListAsync();
+
             if (req.PhongBan.HasValue)
             {
                 result = result.Where(nv => nv.Phong == req.PhongBan).ToList();
@@ -56,27 +56,49 @@ namespace HumanResourcesManagement.Service
                 result = result.Where(nv => nv.To == req.To).ToList();
             }
 
-            var resp = result.Select(r => new DanhSachLenLuongResponse
-            {
-                MaNV = r.Ma,
-                TenNV = r.Ten,
-                TenChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(c => c.Id == r.Phong).Ten,
-                TenPhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(c => c.Id == r.Phong).Ten,
-                TenTo = _context.TblDanhMucTos.FirstOrDefault(c => c.Id == r.Phong).Ten
-            });
-            if(!resp.Any() || resp == null)
+            var resp = result
+                .Where(nv =>
+                {
+                    var nangLuongRecords = _context.TblDanhSachNangLuongs
+                        .Where(nl => nl.Manv == nv.Ma)
+                        .ToList();
+
+                    if (!nangLuongRecords.Any())
+                    {
+                        return true;
+                    }
+
+                    var allRecordsHaveStatusTwo = nangLuongRecords.All(nl => nl.Trangthai == 2);
+                    return allRecordsHaveStatusTwo;
+                })
+                .Select(r => new DanhSachLenLuongResponse
+                {
+                    MaNV = r.Ma,
+                    TenNV = r.Ten,
+                    TenChucVu = _context.TblDanhMucChucDanhs.FirstOrDefault(c => c.Id == r.Chucvuhientai)?.Ten,
+                    TenPhongBan = _context.TblDanhMucPhongBans.FirstOrDefault(c => c.Id == r.Phong)?.Ten,
+                    TenTo = _context.TblDanhMucTos.FirstOrDefault(c => c.Id == r.To)?.Ten
+                })
+                .ToList();
+
+            if (!resp.Any())
             {
                 return null;
             }
+
             return resp;
         }
 
-        public void TaoMoiHoSoLuongKhongActivce(InsertHoSoLuongKhongActive request)
+
+        public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
         {
-            var hopDong = _context.TblHopDongs.FirstOrDefault(x => x.Mahopdong == request.Mahopdong);
+            var hopDong = await _context.TblHopDongs
+                .Where(hd => hd.Mahopdong == request.Mahopdong)
+                .FirstOrDefaultAsync();
+
             if (hopDong == null)
             {
-                throw new Exception("Không có mã hợp đồng hợp lệ.");
+                throw new Exception("Không tìm thấy hợp đồng với mã đã cung cấp.");
             }
 
             if (request.Nhomluong == null)
@@ -84,7 +106,7 @@ namespace HumanResourcesManagement.Service
                 throw new Exception("Nhóm lương không được để trống.");
             }
 
-            var hsl = new TblLuong
+            var hslMoi = new TblLuong
             {
                 Mahopdong = request.Mahopdong,
                 Nhomluong = request.Nhomluong,
@@ -96,60 +118,129 @@ namespace HumanResourcesManagement.Service
                 Trangthai = 2
             };
 
-            _context.TblLuongs.Add(hsl);
-            _context.SaveChanges();
+            _context.TblLuongs.Add(hslMoi);
+            await _context.SaveChangesAsync();
+
+            var hoSoLuongCu = await _context.TblLuongs
+                .Where(l => l.Mahopdong == request.Mahopdong && l.Trangthai == 1)
+                .OrderByDescending(l => l.Ngaybatdau)
+                .FirstOrDefaultAsync();
+
+            if (hoSoLuongCu == null)
+            {
+                throw new Exception("Không tìm thấy hồ sơ lương hiện tại cho nhân viên với mã hợp đồng đã cung cấp.");
+            }
+
+            var danhSachNangLuong = new TblDanhSachNangLuong
+            {
+                Mahopdong = request.Mahopdong,
+                Manv = hopDong.Ma,
+                Hosoluongcu = JsonConvert.SerializeObject(hoSoLuongCu, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }),
+                Hosoluongmoi = JsonConvert.SerializeObject(hslMoi, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                }),
+                Trangthai = 2
+            };
+
+            _context.TblDanhSachNangLuongs.Add(danhSachNangLuong);
+            await _context.SaveChangesAsync();
+
+            return danhSachNangLuong.Id;
         }
 
-        public void PheDuyetQuyetDinhLenLuong(int id)
+
+
+        public async Task PheDuyetQuyetDinhLenLuong(int id, int trangThai)
         {
             var today = DateTime.Today;
 
-            var newLuong = _context.TblLuongs
-                .FirstOrDefault(l => l.Id == id); 
+            var danhSachNangLuong = await _context.TblDanhSachNangLuongs
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (danhSachNangLuong == null)
+            {
+                throw new Exception("Danh sách nâng lương không tồn tại.");
+            }
+            var newLuong = JsonConvert.DeserializeObject<TblLuong>(danhSachNangLuong.Hosoluongmoi);
 
             if (newLuong == null)
             {
-                throw new Exception("Hồ sơ lương không tồn tại.");
+                throw new Exception("Hồ sơ lương mới không hợp lệ.");
             }
 
-            var maHopDong = newLuong.Mahopdong;
+            var maHopDong = danhSachNangLuong.Mahopdong;
 
-            var oldLuongs = _context.TblLuongs
-                .Where(l => l.Mahopdong == maHopDong && l.Trangthai == 1) 
-                .ToList();
+            var oldLuongs = await _context.TblLuongs
+                .Where(l => l.Mahopdong == maHopDong && l.Trangthai == 1)
+                .ToListAsync();
 
-            foreach (var oldLuong in oldLuongs)
+            if (trangThai == 1) 
             {
-                oldLuong.Trangthai = 2;
-                _context.TblLuongs.Update(oldLuong);
+                foreach (var oldLuong in oldLuongs)
+                {
+                    oldLuong.Trangthai = 2;
+                    _context.TblLuongs.Update(oldLuong);
+                }
+                await _context.SaveChangesAsync();
+
+                var newLuongs = await _context.TblLuongs
+                    .Where(l => l.Mahopdong == maHopDong)
+                    .OrderByDescending(l => l.Ngaybatdau)
+                    .FirstOrDefaultAsync();
+                newLuongs.Trangthai = 1;
+                _context.TblLuongs.Update(newLuongs);
+
+
+
+                newLuong.Trangthai = 1;
+                newLuong.Ngaybatdau = today;
+
+                int thoihanLenLuong = int.TryParse(newLuong.Thoihanlenluong, out int parsedValue) ? parsedValue : 0;
+
+                if (thoihanLenLuong > 0)
+                {
+                    newLuong.Ngayketthuc = today.AddYears(thoihanLenLuong);
+                }
+                else
+                {
+                    throw new Exception("Thời hạn lên lương không hợp lệ.");
+                }
+
+                danhSachNangLuong.Hosoluongmoi = JsonConvert.SerializeObject(newLuong);
+                danhSachNangLuong.Trangthai = 1;
+                _context.TblDanhSachNangLuongs.Update(danhSachNangLuong);
             }
-
-            newLuong.Trangthai = 1;
-            newLuong.Ngaybatdau = today; 
-
-            int thoihanLenLuong = int.TryParse(newLuong.Thoihanlenluong, out int parsedValue) ? parsedValue : 0;
-
-            if (newLuong.Ngaybatdau.HasValue)
+            else if (trangThai == 2) 
             {
-                newLuong.Ngayketthuc = newLuong.Ngaybatdau.Value.AddYears(thoihanLenLuong); 
+                _context.TblLuongs.Remove(newLuong);
+
+                danhSachNangLuong.Trangthai = 3;
+                _context.TblDanhSachNangLuongs.Update(danhSachNangLuong);
             }
             else
             {
-                throw new Exception("Ngày bắt đầu không được đặt.");
+                throw new ArgumentException("Trạng thái không hợp lệ.");
             }
 
-            _context.TblLuongs.Update(newLuong);
-
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
+
+
+
+
+
+
 
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
         {
             var data = await getDanhSachNhanVienLenLuong(req);
-            var rootPath = Directory.GetCurrentDirectory();
-            var templateFolderPath = Path.Combine(rootPath, "Templates");
-            var filePath = Path.Combine(templateFolderPath, "BaoCao_DanhSachLenLuong.xlsx");
-            return await ExportToExcel(filePath, data, "BaoCao_DanhSachLenLuong.xlsx");
+            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachLenLuong.xlsx");
+            var fullPath = Path.GetFullPath(templatePath);
+            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachLenLuong.xlsx");
         }
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req)
         {
@@ -235,7 +326,6 @@ namespace HumanResourcesManagement.Service
                 return (memoryStream.ToArray(), fileName);
             }
         }
-
 
     }
 }

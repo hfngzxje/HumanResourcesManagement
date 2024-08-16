@@ -36,34 +36,51 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
-        [HttpPost("taoMoiHoSoLuongKhongActive")]
-        public async Task<IActionResult> TaoMoiHoSoLuongKhongActive([FromBody] InsertHoSoLuongKhongActive request)
+        [HttpPost("taoVaThemDanhSachNangLuong")]
+        public async Task<IActionResult> TaoVaThemDanhSachNangLuong([FromBody] InsertHoSoLuongKhongActive request)
         {
+            if (request == null)
+            {
+                return BadRequest("Yêu cầu không hợp lệ.");
+            }
             try
             {
-                _danhSachLenLuongService.TaoMoiHoSoLuongKhongActivce(request);
-                return Ok("Tạo mới hồ sơ lương thành công.");
+                var id = await _danhSachLenLuongService.TaoVaThemDanhSachNangLuong(request);
+                return Ok(new { Id = id });
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(500, $"Có lỗi xảy ra: {ex.Message}");
             }
         }
 
 
-        [HttpPut("pheDuyetQuyetDinhLenLuong/{id}")]
-        public IActionResult PheDuyetQuyetDinhLenLuong(int id)
+        [HttpPut("pheDuyetQuyetDinhLenLuong")]
+        public async Task<IActionResult> PheDuyetQuyetDinhLenLuong(int id, [FromQuery] int trangThai)
         {
             try
             {
-                _danhSachLenLuongService.PheDuyetQuyetDinhLenLuong(id);
-                return Ok("Phê duyệt quyết định lương thành công.");
+                await _danhSachLenLuongService.PheDuyetQuyetDinhLenLuong(id, trangThai);
+
+                if (trangThai == 1)
+                {
+                    return Ok("Phê duyệt quyết định lương thành công.");
+                }
+                else if (trangThai == 2)
+                {
+                    return Ok("Hủy quyết định lương thành công.");
+                }
+                else
+                {
+                    return BadRequest("Trạng thái không hợp lệ.");
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(501, ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
+
 
         [HttpPost("ExportDanhSachLenLuongToExcel")]
         public async Task<IActionResult> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
