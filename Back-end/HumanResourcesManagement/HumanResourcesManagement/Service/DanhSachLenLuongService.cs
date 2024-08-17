@@ -23,7 +23,7 @@ namespace HumanResourcesManagement.Service
             _context = context;
         }
 
-        public async Task<IEnumerable<DanhSachLenLuongResponse>> getDanhSachNhanVienLenLuong(DanhSachLenLuongRequest req)
+        public async Task<IEnumerable<DanhSachLenLuongResponse>> getDanhSachNhanVienLenLuong()
         {
             var today = DateTime.Today;
             var startOfMonth = new DateTime(today.Year, today.Month, 1);
@@ -59,17 +59,31 @@ namespace HumanResourcesManagement.Service
                     }
 
                     // Deserialize Hosoluongcu or Hosoluongmoi to get Ngayketthuc and Trangthai
+                    var hoSoLuongMap = new Dictionary<int, TblLuong>();
+
                     foreach (var nl in nangLuongRecords)
                     {
-                        var hoSoLuongCu = DeserializeHoSoLuong(nl.Hosoluongcu);
-                        var hoSoLuongMoi = DeserializeHoSoLuong(nl.Hosoluongmoi);
+                        TblLuong? hoSoLuongCu, hoSoLuongMoi;
 
-                        // If any of the deserialized records have Ngayketthuc in the past or Trangthai == 2, allow them to be shown again
+                        // Retrieve from map if already deserialized, otherwise deserialize and store in the map
+                        if (!hoSoLuongMap.TryGetValue(nl.Id, out hoSoLuongCu))
+                        {
+                            hoSoLuongCu = DeserializeHoSoLuong(nl.Hosoluongcu);
+                            hoSoLuongMap[nl.Id] = hoSoLuongCu;
+                        }
+
+                        if (!hoSoLuongMap.TryGetValue(nl.Id + 1, out hoSoLuongMoi)) // Using nl.Id + 1 to differentiate from hoSoLuongCu
+                        {
+                            hoSoLuongMoi = DeserializeHoSoLuong(nl.Hosoluongmoi);
+                            hoSoLuongMap[nl.Id + 1] = hoSoLuongMoi;
+                        }
+
                         if ((hoSoLuongCu?.Ngayketthuc < today || hoSoLuongMoi?.Ngayketthuc < today) || nl.Trangthai == 2)
                         {
                             return true;
                         }
                     }
+
 
                     return false;
                 })
@@ -261,16 +275,16 @@ namespace HumanResourcesManagement.Service
 
 
 
-        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
+        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel()
         {
-            var data = await getDanhSachNhanVienLenLuong(req);
+            var data = await getDanhSachNhanVienLenLuong();
             var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachLenLuong.xlsx");
             var fullPath = Path.GetFullPath(templatePath);
             return await ExportToExcel(fullPath, data, "BaoCao_DanhSachLenLuong.xlsx");
         }
-        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req)
+        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf()
         {
-            var data = await getDanhSachNhanVienLenLuong(req);
+            var data = await getDanhSachNhanVienLenLuong();
             string[] headers = { "Mã NV", "Tên NV", "Chức vụ", "Phòng", "Tổ" };
             return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_DanhSachLenLuong.pdf", headers);
 
