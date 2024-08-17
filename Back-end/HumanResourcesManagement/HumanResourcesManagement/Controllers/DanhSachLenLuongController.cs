@@ -101,8 +101,14 @@ namespace HumanResourcesManagement.Controllers
         [HttpGet("getAll")]
         public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll()
         {
-            var nangLuongs = await _danhSachLenLuongService.GetAllAsync();
-            return Ok(nangLuongs);
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllAsync();
+                return Ok(nangLuongs);
+            }catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -125,6 +131,34 @@ namespace HumanResourcesManagement.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [HttpGet("getAllStatus1And3")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3()
+        {
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async();
+                return Ok(nangLuongs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getAllStatus2")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus2()
+        {
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus2Async();
+                return Ok(nangLuongs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
