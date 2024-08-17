@@ -311,7 +311,7 @@ namespace HumanResourcesManagement.Service
 
         public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? chucDanhId)
         {
-            var query = _context.TblDanhSachNangLuongs
+            var query = _context.TblDanhSachNangLuongs.Where(s => s.Trangthai == 1 || s.Trangthai == 2)
                 .Join(_context.TblNhanViens,
                     nl => nl.Manv,
                     nv => nv.Ma,
