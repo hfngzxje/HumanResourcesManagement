@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
@@ -21,12 +22,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpPost("getDanhSachLenLuong")]
-        public async Task<IActionResult> GetDanhSachLenLuong([FromForm]DanhSachLenLuongRequest req)
+        [HttpGet("getDanhSachLenLuong")]
+        public async Task<IActionResult> GetDanhSachLenLuong()
         {
             try
             {
-                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong(req);
+                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong();
 
                 return Ok(listNhanVien);
             }
@@ -83,17 +84,47 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpPost("ExportDanhSachLenLuongToExcel")]
-        public async Task<IActionResult> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
+        public async Task<IActionResult> ExportLenLuongToExcel()
         {
             try
             {
-                var (fileContent, fileName) = await _danhSachLenLuongService.ExportLenLuongToExcel(req);
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportLenLuongToExcel();
                 return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
             catch (Exception ex)
             {
                 return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
             }
+        }
+
+
+        [HttpGet("getAll")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll()
+        {
+            var nangLuongs = await _danhSachLenLuongService.GetAllAsync();
+            return Ok(nangLuongs);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DanhSachNangLuongDetailsResponse>> GetById(int id)
+        {
+            var nangLuong = await _danhSachLenLuongService.GetByIdAsync(id);
+            if (nangLuong == null)
+            {
+                return NotFound();
+            }
+            return Ok(nangLuong);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _danhSachLenLuongService.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

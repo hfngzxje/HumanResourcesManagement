@@ -11,7 +11,7 @@
         public string? Ghichu { get; set; }
         public int? Nhomluong { get; set; }
         public int? Trangthai { get; set; }
-        public DateTime? Ngaybatdau { get; set; }
-        public DateTime? Ngayketthuc { get; set; }
+        public string? Ngaybatdau { get; set; }
+        public string? Ngayketthuc { get; set; }
     }
 }

@@ -23,40 +23,29 @@ namespace HumanResourcesManagement.Service
             _context = context;
         }
 
-        public async Task<IEnumerable<DanhSachLenLuongResponse>> getDanhSachNhanVienLenLuong(DanhSachLenLuongRequest req)
+        public async Task<IEnumerable<DanhSachLenLuongResponse>> getDanhSachNhanVienLenLuong()
         {
             var today = DateTime.Today;
             var startOfMonth = new DateTime(today.Year, today.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var maHopDongs = await _context.TblLuongs
-                .Where(l => (l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth) || l.Ngayketthuc < today)
-                .Where(l => l.Trangthai == 1)
-                .Select(l => l.Mahopdong)
-                .Distinct()
+            // Retrieve all records from TblLuongs with Ngayketthuc in this month and Trangthai = 1
+            var luongRecords = await _context.TblLuongs
+                .Where(l => l.Trangthai == 1 && l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth)
                 .ToListAsync();
 
-            var result = await _context.TblNhanViens
+            var maHopDongs = luongRecords.Select(l => l.Mahopdong).Distinct().ToList();
+
+            // Get corresponding employees from TblNhanViens
+            var nhanVienRecords = await _context.TblNhanViens
                 .Where(nv => _context.TblHopDongs
                     .Where(hd => maHopDongs.Contains(hd.Mahopdong))
                     .Select(hd => hd.Ma)
                     .Contains(nv.Ma))
                 .ToListAsync();
 
-            if (req.PhongBan.HasValue)
-            {
-                result = result.Where(nv => nv.Phong == req.PhongBan).ToList();
-            }
-            if (req.Chucvuhientai.HasValue)
-            {
-                result = result.Where(nv => nv.Chucvuhientai == req.Chucvuhientai).ToList();
-            }
-            if (req.To.HasValue)
-            {
-                result = result.Where(nv => nv.To == req.To).ToList();
-            }
-
-            var resp = result
+            // Filter out records based on approval logic
+            var filteredNhanVienRecords = nhanVienRecords
                 .Where(nv =>
                 {
                     var nangLuongRecords = _context.TblDanhSachNangLuongs
@@ -65,18 +54,43 @@ namespace HumanResourcesManagement.Service
 
                     if (!nangLuongRecords.Any())
                     {
+                        // No prior records, allow the employee to be listed
                         return true;
                     }
 
-                    var hasStatusOneOrThree = nangLuongRecords.Any(nl => nl.Trangthai == 1);
-                    if (hasStatusOneOrThree)
+                    // Deserialize Hosoluongcu or Hosoluongmoi to get Ngayketthuc and Trangthai
+                    var hoSoLuongMap = new Dictionary<int, TblLuong>();
+
+                    foreach (var nl in nangLuongRecords)
                     {
-                        return false;
+                        TblLuong? hoSoLuongCu, hoSoLuongMoi;
+
+                        // Retrieve from map if already deserialized, otherwise deserialize and store in the map
+                        if (!hoSoLuongMap.TryGetValue(nl.Id, out hoSoLuongCu))
+                        {
+                            hoSoLuongCu = DeserializeHoSoLuong(nl.Hosoluongcu);
+                            hoSoLuongMap[nl.Id] = hoSoLuongCu;
+                        }
+
+                        if (!hoSoLuongMap.TryGetValue(nl.Id + 1, out hoSoLuongMoi)) // Using nl.Id + 1 to differentiate from hoSoLuongCu
+                        {
+                            hoSoLuongMoi = DeserializeHoSoLuong(nl.Hosoluongmoi);
+                            hoSoLuongMap[nl.Id + 1] = hoSoLuongMoi;
+                        }
+
+                        if ((hoSoLuongCu?.Ngayketthuc < today || hoSoLuongMoi?.Ngayketthuc < today) || nl.Trangthai == 2)
+                        {
+                            return true;
+                        }
                     }
 
-                    var hasStatusTwo = nangLuongRecords.Any(nl => nl.Trangthai == 2 || nl.Trangthai == 3);
-                    return hasStatusTwo;
+
+                    return false;
                 })
+                .ToList();
+
+            // Map to response
+            var resp = filteredNhanVienRecords
                 .Select(r => new DanhSachLenLuongResponse
                 {
                     MaNV = r.Ma,
@@ -87,15 +101,15 @@ namespace HumanResourcesManagement.Service
                 })
                 .ToList();
 
-            if (!resp.Any())
-            {
-                return null;
-            }
-
             return resp;
         }
 
-
+        // Helper method to deserialize the HoSoLuong JSON
+        private TblLuong? DeserializeHoSoLuong(string? hoSoLuongJson)
+        {
+            if (string.IsNullOrEmpty(hoSoLuongJson)) return null;
+            return JsonConvert.DeserializeObject<TblLuong>(hoSoLuongJson);
+        }
 
         public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
         {
@@ -158,8 +172,6 @@ namespace HumanResourcesManagement.Service
 
             return danhSachNangLuong.Id;
         }
-
-
 
         public async Task PheDuyetQuyetDinhLenLuong(int id, int trangThai)
         {
@@ -250,22 +262,16 @@ namespace HumanResourcesManagement.Service
             await _context.SaveChangesAsync();
         }
 
-
-
-
-
-
-
-        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
+        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel()
         {
-            var data = await getDanhSachNhanVienLenLuong(req);
+            var data = await getDanhSachNhanVienLenLuong();
             var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachLenLuong.xlsx");
             var fullPath = Path.GetFullPath(templatePath);
             return await ExportToExcel(fullPath, data, "BaoCao_DanhSachLenLuong.xlsx");
         }
-        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf(DanhSachLenLuongRequest req)
+        public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf()
         {
-            var data = await getDanhSachNhanVienLenLuong(req);
+            var data = await getDanhSachNhanVienLenLuong();
             string[] headers = { "Mã NV", "Tên NV", "Chức vụ", "Phòng", "Tổ" };
             return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_DanhSachLenLuong.pdf", headers);
 
@@ -347,6 +353,56 @@ namespace HumanResourcesManagement.Service
                 return (memoryStream.ToArray(), fileName);
             }
         }
+
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync()
+        {
+            return await _context.TblDanhSachNangLuongs
+                .Select(nl => new DanhSachNangLuongResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Trangthai = nl.Trangthai
+                })
+                .ToListAsync();
+        }
+
+        public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
+        {
+            var nangLuong = await _context.TblDanhSachNangLuongs
+                .Where(nl => nl.Id == id)
+                .Select(nl => new DanhSachNangLuongDetailsResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Hosoluongcu = string.IsNullOrEmpty(nl.Hosoluongcu)
+                        ? null
+                        : JsonConvert.DeserializeObject<HoSoLuongRequest>(nl.Hosoluongcu!),
+                    Hosoluongmoi = string.IsNullOrEmpty(nl.Hosoluongmoi)
+                        ? null
+                        : JsonConvert.DeserializeObject<HoSoLuongRequest>(nl.Hosoluongmoi!),
+                    Trangthai = nl.Trangthai
+                })
+                .FirstOrDefaultAsync();
+
+            return nangLuong;
+        }
+
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var nangLuong = await _context.TblDanhSachNangLuongs.FindAsync(id);
+            if (nangLuong == null)
+            {
+                return false;
+            }
+
+            _context.TblDanhSachNangLuongs.Remove(nangLuong);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 }
