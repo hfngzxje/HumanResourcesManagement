@@ -1,4 +1,7 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getDanhSachLenLuong";
+const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
+
+
 const table = document.querySelector('base-table')
 var idNhomLuong = null
 var maDetail = null
@@ -38,6 +41,33 @@ var TableColumns = [
         ]
     }
 ]
+var TableColumnsBaoCao = [
+    {
+        label: 'Mã nhân viên',
+        key: 'manv',
+    },
+    {
+        label: 'Mã hợp đồng',
+        key: 'mahopdong',
+    },
+    {
+        label: 'Trạng thái',
+        key: 'trangthai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Đã phê duyệt', color: 'green' };
+        if (value === -1) {
+            result.text = 'Đã hủy';
+            result.color = 'red';
+        }
+        else if(value === 2){
+            result.text = 'Đang chờ';
+            result.color = 'blue'
+        }
+        return result;
+        }
+
+    }
+]
 async function handleCreate() {
     const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
     if (!isConfirm) return
@@ -52,7 +82,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoMoiHoSoLuongKhongActive',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -359,6 +389,9 @@ function clearFormValues(formId) {
 }
 function buildApiUrl() {
     return apiTable;
+}
+function buildApiUrlBaoCao(){
+    return apiTableBaoCao
 }
 function formatCurrency(val) {
     return val.toLocaleString("it-IT", {

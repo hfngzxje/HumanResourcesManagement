@@ -65,9 +65,19 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">Danh sách nâng lương</h3>
+            <h3 class="tile-title">Thao tác nâng lương</h3>
 
-            <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" method="POST"
+            <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" 
+              pageSize="4">
+            </base-table>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="tile">
+            <h3 class="tile-title">Báo cáo danh sách nâng lương</h3>
+
+            <base-table id="tableReport1" api="buildApiUrlBaoCao" columns="TableColumnsBaoCao" event="tableEvent" 
               pageSize="4">
             </base-table>
           </div>
@@ -126,6 +136,10 @@
                 <div class="col-span-2 sm:col-span-1">
                   <base-input-number id="tongLuongPop" label="Tiền lương" name="tongluong"
                     style="color: red; font-weight: bold;" readonly></base-input-number>
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                  <base-input-number label="Hạn lên lương (năm)" 
+                    name="thoihanlenluong"></base-input-number>
                 </div>
                 <div class="col-span-2 sm:col-span-1">
                   <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực" name="ngaybatdau"
@@ -190,18 +204,10 @@
                   <base-input-number id="tongLuong" label="Tiền lương" name="tongluong" readonly
                     style="color: red; font-weight: bold;"></base-input-number>
                 </div>
-                <!-- <div class="col-span-2 sm:col-span-1">
-                  <base-input-number label="Thời hạn lên lương" 
-                    name="thoihanlenluong"></base-input-number>
-                </div> -->
-                <!-- <div class="col-span-2 sm:col-span-1">
-                  <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
-                    name="ngayBatDau"></base-datepicker>
-                </div>
                 <div class="col-span-2 sm:col-span-1">
-                  <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn" name="ngayketthuc"
-                    disabled></base-datepicker>
-                </div> -->
+                  <base-input-number label="Hạn lên lương (năm)" 
+                    name="thoihanlenluong"></base-input-number>
+                </div>
                 <div class="col-span-2 sm:col-span-1 mt-2">
                   <base-input-number id="nhomluong" label="Nhóm lương" name="nhomluong" readonly
                     style="display: none;"></base-input-number>
