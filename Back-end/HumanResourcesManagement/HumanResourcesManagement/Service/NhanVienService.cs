@@ -23,9 +23,9 @@ namespace HumanResourcesManagement.Service
             _mapper = mapper;
         }
 
-        public List<NhanVienResponse> GetAllNhanVien()
+        public async Task<IEnumerable<NhanVienResponse>> GetAllNhanVien()
         {
-            var nhanViens = _context.TblNhanViens.Include(nv => nv.ToNavigation).Include(nv => nv.PhongNavigation).Include(nv => nv.ChucvuhientaiNavigation).Include(nv=>nv.DantocNavigation).Include(nv=>nv.TongiaoNavigation).ToList();
+            var nhanViens = await _context.TblNhanViens.Include(nv => nv.ToNavigation).Include(nv => nv.PhongNavigation).Include(nv => nv.ChucvuhientaiNavigation).Include(nv=>nv.DantocNavigation).Include(nv=>nv.TongiaoNavigation).ToListAsync();
             
             if (!nhanViens.Any())
             {
@@ -37,11 +37,11 @@ namespace HumanResourcesManagement.Service
                 var temp = nhanViens.FirstOrDefault(nv => nv.Ma == item.Ma);
                 if(temp != null)
                 {
-                    item.tenDantoc = temp.DantocNavigation.Ten;
-                    item.tenTongiao = temp.TongiaoNavigation.Ten;
-                    item.tenTo = temp.ToNavigation.Ten;
-                    item.tenChucVu = temp.ChucvuhientaiNavigation.Ten;
-                    item.tenPhongBan = temp.PhongNavigation.Ten;
+                    item.tenDantoc = temp.DantocNavigation?.Ten;
+                    item.tenTongiao = temp.TongiaoNavigation?.Ten;
+                    item.tenTo = temp.ToNavigation?.Ten;
+                    item.tenChucVu = temp.ChucvuhientaiNavigation?.Ten;
+                    item.tenPhongBan = temp.PhongNavigation?.Ten;
                 }
             }
             return resp;
