@@ -111,6 +111,35 @@ namespace HumanResourcesManagement.Controllers
             }
         }
 
+        [HttpPost("ExportDanhSachNhanVienLenLuongToExcel")]
+        public async Task<IActionResult> ExportNhanVienLenLuongToExcel([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportDanhSachLenLuongToExcel(phongId, chucDanhId);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
+            }
+        }
+
+        [HttpPost("ExportDanhSachNhanVienLenLuongToPdf")]
+        public async Task<IActionResult> ExportNhanVienLenLuongPDF([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportDanhSachLenLuongToPdf(phongId, chucDanhId);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<DanhSachNangLuongDetailsResponse>> GetById(int id)
         {
@@ -145,6 +174,35 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpPost("ExportQuyetDinhNhanVienLenLuongToExcel")]
+        public async Task<IActionResult> ExportQuyetDinhLenLuongToExcel([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportQuyetDinhLenLuongToExcel(phongId, chucDanhId);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
+            }
+        }
+
+        [HttpPost("ExportQuyetDinhNhanVienLenLuongToPdf")]
+        public async Task<IActionResult> ExportQuyetDinhLenLuongToPdf([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportQuyetDinhLenLuongToPdf(phongId, chucDanhId);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+
         }
 
         [HttpGet("getAllStatus2")]

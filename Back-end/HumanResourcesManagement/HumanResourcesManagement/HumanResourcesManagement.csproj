@@ -12,10 +12,12 @@
     <None Remove="Templates\BaoCao_DanhSachDienChinhSach.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachHoSoLuong.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachLenLuong.xlsx" />
+    <None Remove="Templates\BaoCao_DanhSachNangLuong.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachNguoiThan.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachNhanVien.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachNhomLuong.xlsx" />
     <None Remove="Templates\BaoCao_DanhSachSinhNhat.xlsx" />
+    <None Remove="Templates\BaoCao_QuyetDinhLenLuong.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,9 @@
     <EmbeddedResource Include="Templates\BaoCao_DanhSachLenLuong.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_DanhSachNangLuong.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Templates\BaoCao_DanhSachNguoiThan.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -44,6 +49,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Templates\BaoCao_DanhSachSinhNhat.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Templates\BaoCao_QuyetDinhLenLuong.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
@@ -61,6 +69,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\BaoCao_DanhSachNhanVien.pdf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
