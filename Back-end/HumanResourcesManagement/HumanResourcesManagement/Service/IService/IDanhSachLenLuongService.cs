@@ -17,13 +17,13 @@ namespace HumanResourcesManagement.Service.IService
         Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel();
         Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf();
 
-        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? toId, string? maNV);
+        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? chucDanhId);
 
         Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id);
 
         Task<bool> DeleteAsync(int id);
 
-        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? toId, string? maNV);
+        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? chucDanhId);
         Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async();
 
     }
