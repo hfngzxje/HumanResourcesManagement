@@ -23,5 +23,8 @@ namespace HumanResourcesManagement.Service.IService
 
         Task<bool> DeleteAsync(int id);
 
+        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async();
+        Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async();
+
     }
 }

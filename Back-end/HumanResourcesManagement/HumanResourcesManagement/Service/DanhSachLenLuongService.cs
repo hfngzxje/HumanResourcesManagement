@@ -316,10 +316,37 @@ namespace HumanResourcesManagement.Service
                     Id = nl.Id,
                     Mahopdong = nl.Mahopdong,
                     Manv = nl.Manv,
-                    Trangthai = nl.Trangthai
+                    Trangthai = nl.Trangthai,
+                    TenNv = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Ten) 
+                        .FirstOrDefault()!,
+                    MaPhong = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Phong) 
+                        .FirstOrDefault(),
+                    Phong = _context.TblDanhMucPhongBans
+                        .Where(p => p.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.Phong)
+                            .FirstOrDefault())
+                        .Select(p => p.Ten)
+                        .FirstOrDefault()!,
+                    MaTo = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.To)
+                        .FirstOrDefault(),
+                    To = _context.TblDanhMucTos
+                        .Where(t => t.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.To)
+                            .FirstOrDefault())
+                        .Select(t => t.Ten) 
+                        .FirstOrDefault()!
                 })
                 .ToListAsync();
         }
+
 
         public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
         {
@@ -358,5 +385,84 @@ namespace HumanResourcesManagement.Service
         }
 
 
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async()
+        {
+            return await _context.TblDanhSachNangLuongs
+                .Where(s => s.Trangthai ==3 || s.Trangthai == 1)
+                .Select(nl => new DanhSachNangLuongResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Trangthai = nl.Trangthai,
+                    TenNv = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Ten)
+                        .FirstOrDefault()!,
+                    MaPhong = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Phong)
+                        .FirstOrDefault(),
+                    Phong = _context.TblDanhMucPhongBans
+                        .Where(p => p.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.Phong)
+                            .FirstOrDefault())
+                        .Select(p => p.Ten)
+                        .FirstOrDefault()!,
+                    MaTo = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.To)
+                        .FirstOrDefault(),
+                    To = _context.TblDanhMucTos
+                        .Where(t => t.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.To)
+                            .FirstOrDefault())
+                        .Select(t => t.Ten)
+                        .FirstOrDefault()!
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async()
+        {
+            return await _context.TblDanhSachNangLuongs
+                .Where(s => s.Trangthai == 2)
+                .Select(nl => new DanhSachNangLuongResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Trangthai = nl.Trangthai,
+                    TenNv = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Ten)
+                        .FirstOrDefault()!,
+                    MaPhong = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Phong)
+                        .FirstOrDefault(),
+                    Phong = _context.TblDanhMucPhongBans
+                        .Where(p => p.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.Phong)
+                            .FirstOrDefault())
+                        .Select(p => p.Ten)
+                        .FirstOrDefault()!,
+                    MaTo = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.To)
+                        .FirstOrDefault(),
+                    To = _context.TblDanhMucTos
+                        .Where(t => t.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.To)
+                            .FirstOrDefault())
+                        .Select(t => t.Ten)
+                        .FirstOrDefault()!
+                })
+                .ToListAsync();
+        }
     }
 }
