@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using OfficeOpenXml.Export.ToDataTable;
+using Org.BouncyCastle.Ocsp;
+using System.Reflection;
 
 namespace HumanResourcesManagement.Service
 {
@@ -219,10 +221,17 @@ namespace HumanResourcesManagement.Service
 
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel()
         {
-            var data = await getDanhSachNhanVienLenLuong();
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "Templates", "BaoCao_DanhSachLenLuong.xlsx");
-            var fullPath = Path.GetFullPath(templatePath);
-            return await ExportToExcel(fullPath, data, "BaoCao_DanhSachLenLuong.xlsx");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachLenLuong.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await getDanhSachNhanVienLenLuong();
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachLenLuong.xlsx");
+            }
         }
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToPdf()
         {
@@ -232,27 +241,24 @@ namespace HumanResourcesManagement.Service
 
         }
 
-        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(string templatePath, IEnumerable<T> data, string fileName)
+        private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(Stream templateStream, IEnumerable<T> data, string fileName)
         {
-            // Load the existing Excel template
-            using (var package = new ExcelPackage(new FileInfo(templatePath)))
+            using (var package = new ExcelPackage(templateStream))
             {
-                var worksheet = package.Workbook.Worksheets[0]; // Assumes you are using the first worksheet
-
-                // Calculate start row. If worksheet is empty, start at row 2 (assuming row 1 is for headers)
+                var worksheet = package.Workbook.Worksheets[0];
                 int startRow = worksheet.Dimension?.End.Row + 1 ?? 2;
-
-                foreach (var item in data)
+                if (data != null && data.Any())
                 {
-                    var properties = item.GetType().GetProperties();
-                    for (int col = 0; col < properties.Length; col++)
+                    foreach (var item in data)
                     {
-                        worksheet.Cells[startRow, col + 1].Value = properties[col].GetValue(item, null);
+                        var properties = item.GetType().GetProperties();
+                        for (int col = 0; col < properties.Length; col++)
+                        {
+                            worksheet.Cells[startRow, col + 1].Value = properties[col].GetValue(item, null);
+                        }
+                        startRow++;
                     }
-                    startRow++;
                 }
-                //worksheet.Cells.AutoFitColumns();
-
                 var content = package.GetAsByteArray();
                 return (content, fileName);
             }
@@ -349,16 +355,35 @@ namespace HumanResourcesManagement.Service
                 Manv = x.nl.Manv,
                 Trangthai = x.nl.Trangthai,
                 TenNv = x.nv.Ten,
-                MaPhong = x.nv.Phong,
+                //MaPhong = x.nv.Phong,
                 Phong = x.pb.Ten,
-                Chucdanhid = x.t.Id,
+                //Chucdanhid = x.t.Id,
                 Chucdanh = x.t.Ten
             }).ToList();
 
             // If no records were found, return an empty list
             return response.Any() ? response : new List<DanhSachNangLuongResponse>();
         }
-
+        public async Task<(byte[] fileContent, string fileName)> ExportDanhSachLenLuongToExcel(int? phongId, int? chucDanhId)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_DanhSachNangLuong.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await GetAllAsync(phongId, chucDanhId);
+                return await ExportToExcel(stream, data, "BaoCao_DanhSachNangLuong.xlsx");
+            }
+        }
+        public async Task<(byte[] fileContent, string fileName)> ExportDanhSachLenLuongToPdf(int? phongId, int? chucDanhId)
+        {
+            var data = await GetAllAsync(phongId, chucDanhId);
+            string[] headers = { "Mã NV", "Tên NV", "Mã Hợp Đồng", "Phòng", "Chức Danh","Trạng Thái" };
+            return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_DanhSachNhanVienLenLuong.pdf", headers);
+        }
 
 
         public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
@@ -440,16 +465,35 @@ namespace HumanResourcesManagement.Service
                 Manv = x.nl.Manv,
                 Trangthai = x.nl.Trangthai,
                 TenNv = x.nv.Ten,
-                MaPhong = x.nv.Phong,
+                //MaPhong = x.nv.Phong,
                 Phong = x.pb.Ten,
-                Chucdanhid = x.t.Id,
+                //Chucdanhid = x.t.Id,
                 Chucdanh = x.t.Ten
             }).ToList();
 
             // Return the results, or an empty list if no records are found
             return response.Any() ? response : new List<DanhSachNangLuongResponse>();
         }
-
+        public async Task<(byte[] fileContent, string fileName)> ExportQuyetDinhLenLuongToExcel(int? phongId, int? chucDanhId)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "HumanResourcesManagement.Templates.BaoCao_QuyetDinhLenLuong.xlsx";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Template not found as an embedded resource.");
+                }
+                var data = await GetAllStatus1And3Async(phongId, chucDanhId);
+                return await ExportToExcel(stream, data, "BaoCao_QuyetDinhLenLuong.xlsx");
+            }
+        }
+        public async Task<(byte[] fileContent, string fileName)> ExportQuyetDinhLenLuongToPdf(int? phongId, int? chucDanhId)
+        {
+            var data = await GetAllStatus1And3Async(phongId, chucDanhId);
+            string[] headers = { "Mã NV", "Tên NV", "Mã Hợp Đồng", "Phòng", "Chức Danh", "Trạng Thái" };
+            return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_QuyetDinhLenLuong.pdf", headers);
+        }
 
         public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async()
         {
@@ -465,10 +509,10 @@ namespace HumanResourcesManagement.Service
                         .Where(nv => nv.Ma == nl.Manv)
                         .Select(nv => nv.Ten)
                         .FirstOrDefault()!,
-                    MaPhong = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Phong)
-                        .FirstOrDefault(),
+                    //MaPhong = _context.TblNhanViens
+                    //    .Where(nv => nv.Ma == nl.Manv)
+                    //    .Select(nv => nv.Phong)
+                    //    .FirstOrDefault(),
                     Phong = _context.TblDanhMucPhongBans
                         .Where(p => p.Id == _context.TblNhanViens
                             .Where(nv => nv.Ma == nl.Manv)
@@ -476,10 +520,10 @@ namespace HumanResourcesManagement.Service
                             .FirstOrDefault())
                         .Select(p => p.Ten)
                         .FirstOrDefault()!,
-                    Chucdanhid = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Chucvuhientai)
-                        .FirstOrDefault(),
+                    //Chucdanhid = _context.TblNhanViens
+                    //    .Where(nv => nv.Ma == nl.Manv)
+                    //    .Select(nv => nv.Chucvuhientai)
+                    //    .FirstOrDefault(),
                     Chucdanh = _context.TblDanhMucChucDanhs
                         .Where(t => t.Id == _context.TblNhanViens
                             .Where(nv => nv.Ma == nl.Manv)
