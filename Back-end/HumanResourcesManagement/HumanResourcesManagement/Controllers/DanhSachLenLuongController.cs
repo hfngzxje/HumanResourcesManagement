@@ -21,12 +21,12 @@ namespace HumanResourcesManagement.Controllers
         }
 
 
-        [HttpPost("getDanhSachLenLuong")]
-        public async Task<IActionResult> GetDanhSachLenLuong([FromForm]DanhSachLenLuongRequest req)
+        [HttpGet("getDanhSachLenLuong")]
+        public async Task<IActionResult> GetDanhSachLenLuong()
         {
             try
             {
-                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong(req);
+                var listNhanVien = await _danhSachLenLuongService.getDanhSachNhanVienLenLuong();
 
                 return Ok(listNhanVien);
             }
@@ -83,11 +83,11 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpPost("ExportDanhSachLenLuongToExcel")]
-        public async Task<IActionResult> ExportLenLuongToExcel(DanhSachLenLuongRequest req)
+        public async Task<IActionResult> ExportLenLuongToExcel()
         {
             try
             {
-                var (fileContent, fileName) = await _danhSachLenLuongService.ExportLenLuongToExcel(req);
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportLenLuongToExcel();
                 return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
             }
             catch (Exception ex)
