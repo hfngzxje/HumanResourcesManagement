@@ -1,4 +1,5 @@
 ﻿using HumanResourcesManagement.DTOS.Request;
+using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service;
 using HumanResourcesManagement.Service.IService;
@@ -94,6 +95,36 @@ namespace HumanResourcesManagement.Controllers
             {
                 return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
             }
+        }
+
+
+        [HttpGet("getAll")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll()
+        {
+            var nangLuongs = await _danhSachLenLuongService.GetAllAsync();
+            return Ok(nangLuongs);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DanhSachNangLuongDetailsResponse>> GetById(int id)
+        {
+            var nangLuong = await _danhSachLenLuongService.GetByIdAsync(id);
+            if (nangLuong == null)
+            {
+                return NotFound();
+            }
+            return Ok(nangLuong);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _danhSachLenLuongService.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

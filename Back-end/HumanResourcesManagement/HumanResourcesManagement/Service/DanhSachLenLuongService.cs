@@ -111,11 +111,6 @@ namespace HumanResourcesManagement.Service
             return JsonConvert.DeserializeObject<TblLuong>(hoSoLuongJson);
         }
 
-
-
-
-
-
         public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
         {
             var hopDong = await _context.TblHopDongs
@@ -177,8 +172,6 @@ namespace HumanResourcesManagement.Service
 
             return danhSachNangLuong.Id;
         }
-
-
 
         public async Task PheDuyetQuyetDinhLenLuong(int id, int trangThai)
         {
@@ -268,12 +261,6 @@ namespace HumanResourcesManagement.Service
 
             await _context.SaveChangesAsync();
         }
-
-
-
-
-
-
 
         public async Task<(byte[] fileContent, string fileName)> ExportLenLuongToExcel()
         {
@@ -366,6 +353,56 @@ namespace HumanResourcesManagement.Service
                 return (memoryStream.ToArray(), fileName);
             }
         }
+
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync()
+        {
+            return await _context.TblDanhSachNangLuongs
+                .Select(nl => new DanhSachNangLuongResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Trangthai = nl.Trangthai
+                })
+                .ToListAsync();
+        }
+
+        public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
+        {
+            var nangLuong = await _context.TblDanhSachNangLuongs
+                .Where(nl => nl.Id == id)
+                .Select(nl => new DanhSachNangLuongDetailsResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Hosoluongcu = string.IsNullOrEmpty(nl.Hosoluongcu)
+                        ? null
+                        : JsonConvert.DeserializeObject<HoSoLuongRequest>(nl.Hosoluongcu!),
+                    Hosoluongmoi = string.IsNullOrEmpty(nl.Hosoluongmoi)
+                        ? null
+                        : JsonConvert.DeserializeObject<HoSoLuongRequest>(nl.Hosoluongmoi!),
+                    Trangthai = nl.Trangthai
+                })
+                .FirstOrDefaultAsync();
+
+            return nangLuong;
+        }
+
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var nangLuong = await _context.TblDanhSachNangLuongs.FindAsync(id);
+            if (nangLuong == null)
+            {
+                return false;
+            }
+
+            _context.TblDanhSachNangLuongs.Remove(nangLuong);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 }
