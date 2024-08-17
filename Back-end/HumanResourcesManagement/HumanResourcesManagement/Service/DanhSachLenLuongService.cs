@@ -29,34 +29,23 @@ namespace HumanResourcesManagement.Service
             var startOfMonth = new DateTime(today.Year, today.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var maHopDongs = await _context.TblLuongs
-                .Where(l => (l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth) || l.Ngayketthuc < today)
-                .Where(l => l.Trangthai == 1)
-                .Select(l => l.Mahopdong)
-                .Distinct()
+            // Retrieve all records from TblLuongs with Ngayketthuc in this month and Trangthai = 1
+            var luongRecords = await _context.TblLuongs
+                .Where(l => l.Trangthai == 1 && l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth)
                 .ToListAsync();
 
-            var result = await _context.TblNhanViens
+            var maHopDongs = luongRecords.Select(l => l.Mahopdong).Distinct().ToList();
+
+            // Get corresponding employees from TblNhanViens
+            var nhanVienRecords = await _context.TblNhanViens
                 .Where(nv => _context.TblHopDongs
                     .Where(hd => maHopDongs.Contains(hd.Mahopdong))
                     .Select(hd => hd.Ma)
                     .Contains(nv.Ma))
                 .ToListAsync();
 
-            if (req.PhongBan.HasValue)
-            {
-                result = result.Where(nv => nv.Phong == req.PhongBan).ToList();
-            }
-            if (req.Chucvuhientai.HasValue)
-            {
-                result = result.Where(nv => nv.Chucvuhientai == req.Chucvuhientai).ToList();
-            }
-            if (req.To.HasValue)
-            {
-                result = result.Where(nv => nv.To == req.To).ToList();
-            }
-
-            var resp = result
+            // Filter out records based on approval logic
+            var filteredNhanVienRecords = nhanVienRecords
                 .Where(nv =>
                 {
                     var nangLuongRecords = _context.TblDanhSachNangLuongs
@@ -65,18 +54,29 @@ namespace HumanResourcesManagement.Service
 
                     if (!nangLuongRecords.Any())
                     {
+                        // No prior records, allow the employee to be listed
                         return true;
                     }
 
-                    var hasStatusOneOrThree = nangLuongRecords.Any(nl => nl.Trangthai == 1);
-                    if (hasStatusOneOrThree)
+                    // Deserialize Hosoluongcu or Hosoluongmoi to get Ngayketthuc and Trangthai
+                    foreach (var nl in nangLuongRecords)
                     {
-                        return false;
+                        var hoSoLuongCu = DeserializeHoSoLuong(nl.Hosoluongcu);
+                        var hoSoLuongMoi = DeserializeHoSoLuong(nl.Hosoluongmoi);
+
+                        // If any of the deserialized records have Ngayketthuc in the past or Trangthai == 2, allow them to be shown again
+                        if ((hoSoLuongCu?.Ngayketthuc < today || hoSoLuongMoi?.Ngayketthuc < today) || nl.Trangthai == 2)
+                        {
+                            return true;
+                        }
                     }
 
-                    var hasStatusTwo = nangLuongRecords.Any(nl => nl.Trangthai == 2 || nl.Trangthai == 3);
-                    return hasStatusTwo;
+                    return false;
                 })
+                .ToList();
+
+            // Map to response
+            var resp = filteredNhanVienRecords
                 .Select(r => new DanhSachLenLuongResponse
                 {
                     MaNV = r.Ma,
@@ -87,13 +87,18 @@ namespace HumanResourcesManagement.Service
                 })
                 .ToList();
 
-            if (!resp.Any())
-            {
-                return null;
-            }
-
             return resp;
         }
+
+        // Helper method to deserialize the HoSoLuong JSON
+        private TblLuong? DeserializeHoSoLuong(string? hoSoLuongJson)
+        {
+            if (string.IsNullOrEmpty(hoSoLuongJson)) return null;
+            return JsonConvert.DeserializeObject<TblLuong>(hoSoLuongJson);
+        }
+
+
+
 
 
 
