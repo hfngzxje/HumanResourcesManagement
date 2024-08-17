@@ -556,8 +556,8 @@ namespace HumanResourcesManagement.Service
                 Ghichu = r.Ghichu,
                 Nhomluong = r.Nhomluong,
                 Trangthai = r.Trangthai,
-                Ngaybatdau = r.Ngaybatdau,
-                Ngayketthuc = r.Ngayketthuc
+                Ngaybatdau = r.Ngaybatdau.Value.ToString("dd/MM/yyyy"),
+                Ngayketthuc = r.Ngayketthuc.Value.ToString("dd/MM/yyyy")
             }).ToList();
             if(!resp.Any() || resp == null)
             {
