@@ -309,7 +309,7 @@ namespace HumanResourcesManagement.Service
             }
         }
 
-        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? toId, string? maNV)
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? chucDanhId)
         {
             var query = _context.TblDanhSachNangLuongs
                 .Join(_context.TblNhanViens,
@@ -320,7 +320,7 @@ namespace HumanResourcesManagement.Service
                     x => x.nv.Phong,
                     pb => pb.Id,
                     (x, pb) => new { x.nl, x.nv, pb })
-                .Join(_context.TblDanhMucTos,
+                .Join(_context.TblDanhMucChucDanhs,
                     x => x.nv.To,
                     t => t.Id,
                     (x, t) => new { x.nl, x.nv, x.pb, t })
@@ -332,15 +332,11 @@ namespace HumanResourcesManagement.Service
                 query = query.Where(x => x.nv.Phong == phongId.Value);
             }
 
-            if (toId.HasValue)
+            if (chucDanhId.HasValue)
             {
-                query = query.Where(x => x.nv.To == toId.Value);
+                query = query.Where(x => x.nv.Chucvuhientai == chucDanhId.Value);
             }
 
-            if (!string.IsNullOrEmpty(maNV))
-            {
-                query = query.Where(x => x.nv.Ma == maNV);
-            }
 
             // Fetch the filtered or full list from the database
             var result = await query.ToListAsync();
@@ -355,8 +351,8 @@ namespace HumanResourcesManagement.Service
                 TenNv = x.nv.Ten,
                 MaPhong = x.nv.Phong,
                 Phong = x.pb.Ten,
-                MaTo = x.nv.To,
-                To = x.t.Ten
+                Chucdanhid = x.t.Id,
+                Chucdanh = x.t.Ten
             }).ToList();
 
             // If no records were found, return an empty list
@@ -402,7 +398,7 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? toId, string? maNV)
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? chucDanhId)
         {
             // Base query with filtering by Trangthai
             var query = _context.TblDanhSachNangLuongs
@@ -415,7 +411,7 @@ namespace HumanResourcesManagement.Service
                     x => x.nv.Phong,
                     pb => pb.Id,
                     (x, pb) => new { x.nl, x.nv, pb })
-                .Join(_context.TblDanhMucTos,
+                .Join(_context.TblDanhMucChucDanhs,
                     x => x.nv.To,
                     t => t.Id,
                     (x, t) => new { x.nl, x.nv, x.pb, t })
@@ -427,15 +423,11 @@ namespace HumanResourcesManagement.Service
                 query = query.Where(x => x.nv.Phong == phongId.Value);
             }
 
-            if (toId.HasValue)
+            if (chucDanhId.HasValue)
             {
-                query = query.Where(x => x.nv.To == toId.Value);
+                query = query.Where(x => x.nv.Chucvuhientai == chucDanhId.Value);
             }
 
-            if (!string.IsNullOrEmpty(maNV))
-            {
-                query = query.Where(x => x.nv.Ma == maNV);
-            }
 
             // Fetch the filtered or full list from the database
             var result = await query.ToListAsync();
@@ -450,8 +442,8 @@ namespace HumanResourcesManagement.Service
                 TenNv = x.nv.Ten,
                 MaPhong = x.nv.Phong,
                 Phong = x.pb.Ten,
-                MaTo = x.nv.To,
-                To = x.t.Ten
+                Chucdanhid = x.t.Id,
+                Chucdanh = x.t.Ten
             }).ToList();
 
             // Return the results, or an empty list if no records are found
@@ -484,14 +476,14 @@ namespace HumanResourcesManagement.Service
                             .FirstOrDefault())
                         .Select(p => p.Ten)
                         .FirstOrDefault()!,
-                    MaTo = _context.TblNhanViens
+                    Chucdanhid = _context.TblNhanViens
                         .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.To)
+                        .Select(nv => nv.Chucvuhientai)
                         .FirstOrDefault(),
-                    To = _context.TblDanhMucTos
+                    Chucdanh = _context.TblDanhMucChucDanhs
                         .Where(t => t.Id == _context.TblNhanViens
                             .Where(nv => nv.Ma == nl.Manv)
-                            .Select(nv => nv.To)
+                            .Select(nv => nv.Chucvuhientai)
                             .FirstOrDefault())
                         .Select(t => t.Ten)
                         .FirstOrDefault()!

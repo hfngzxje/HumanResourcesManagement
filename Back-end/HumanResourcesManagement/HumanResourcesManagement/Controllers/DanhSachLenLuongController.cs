@@ -99,11 +99,11 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll([FromQuery] int? phongId, [FromQuery] int? toId, [FromQuery] string? maNV)
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll([FromQuery]int? phongId, [FromQuery] int? chucDanhId)
         {
             try
             {
-                var nangLuongs = await _danhSachLenLuongService.GetAllAsync(phongId, toId,maNV);
+                var nangLuongs = await _danhSachLenLuongService.GetAllAsync(phongId,chucDanhId);
                 return Ok(nangLuongs);
             }catch (Exception ex)
             {
@@ -134,11 +134,11 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getAllStatus1And3")]
-        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3(int? phongId, int? toId, string? maNV)
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
         {
             try
             {
-                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async(phongId, toId, maNV);
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async(phongId, chucDanhId);
                 return Ok(nangLuongs);
             }
             catch (Exception ex)
