@@ -239,15 +239,16 @@ function clearFormValues(formId) {
 }
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
-    const buildButton = (label, type, icon) => {
+    const buildButton = (id, label, type, icon) => {
         const btnEl = document.createElement('base-button')
+        btnEl.setAttribute('id', id)
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
+    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     clear.addEventListener('click', function () {

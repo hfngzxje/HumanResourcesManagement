@@ -9,8 +9,14 @@ const maNhanVien = localStorage.getItem('maNhanVien')
 
 let idNhomLuong = null
 var oldValue = null
-var oldChucDanh = null
+var oldNgachCongChuc = null
 var oldBacLuong = null
+
+var oldNgach = null
+var oldBac = null
+var oldHeSo = null
+var oldLuong = null
+var oldGhiChu = null
 
 var MaritalOptions = [
     { label: '1', value: 1 },
@@ -84,15 +90,14 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-async function getChucDanhByID(idChucDanh) {
+async function getNgachCongChucByID(idNgachCongChuc) {
     try {
-        const chucDanh = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getChucDanhById/' + idChucDanh,
+        const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json'
         });
-        // oldChucDanh = chucDanh.ten; 
-        return chucDanh.ten;
+        return response.ten;
     } catch (error) {
         console.log("Error");
     }
@@ -101,7 +106,7 @@ async function fetchNhomLuong(id) {
     console.log("Name:", id);
     setLoading(true);
     idNhomLuong = id;
-    let idChucDanh = null;
+    let idNgach = null;
 
     try {
         const data = await $.ajax({
@@ -110,8 +115,15 @@ async function fetchNhomLuong(id) {
             contentType: 'application/json'
         });
         oldBacLuong = data.bacluong
-        idChucDanh = data.chucdanh;
-        oldChucDanh = await  getChucDanhByID(idChucDanh); // 
+        idNgach = data.ngachcongchuc;
+        oldNgachCongChuc = await  getNgachCongChucByID(idNgach); 
+
+        oldNgach = data.ngachcongchuc
+        oldBac = data.bacluong
+        oldHeSo = data.hesoluong
+        oldLuong = data.luongcoban
+        oldGhiChu = data.ghichu
+
         setFormValue('editNhomLuong', data);
     } catch (err) {
         console.log('fetchDepartments err :: ', err);
@@ -138,7 +150,7 @@ async function handleCreate() {
             success: function (data) {
                 console.log('fetch Nhóm Lương res :: ', data);
                 showSuccess("Thêm thành công !")
-                recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Chức danh=${formValue.chucdanh}, Bậc lương=${formValue.bacluong}`)
+                recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Ngạch công chức=${formValue.ngachcongchuc}, Bậc lương=${formValue.bacluong}`)
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -175,7 +187,7 @@ async function handleRemoveRow() {
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
-                recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
+                recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -204,7 +216,7 @@ async function handleSave() {
             data: JSON.stringify(payload),
             success: function (data) {
                 showSuccess('Lưu Thành Công!');
-                recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Chức danh = ${oldChucDanh} , Bậc lương= ${oldBacLuong}`);
+                recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
                 clearFormValues()
                 table.handleCallFetchData();
@@ -251,6 +263,7 @@ function showPopup() {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Sửa nhóm lương"
         popupRemoveBtn.classList.remove('hidden')
+        popupSaveBtn.setAttribute('disabled', '');
         popupSaveBtn.classList.remove('hidden') 
         popupCreateBtn.classList.add('hidden') 
         popupClearBtn.classList.add('hidden')
@@ -279,33 +292,26 @@ function closePopup(){
     var modal = document.getElementById("editNhomLuong");
     modal.style.display="none"
 }
-// function renderActionByStatus() {
-//     const actionEl = document.getElementById('salary_form_action')
-//     const buildButton = (label, type, icon) => {
-//         const btnEl = document.createElement('base-button')
-//         btnEl.setAttribute('label', label)
-//         btnEl.setAttribute('type', type)
-//         btnEl.setAttribute('icon', icon)
 
-//         return btnEl
-//     }
-//     const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
+function checkValues() {
+    const formValue = getFormValues('editNhomLuong');
+    const newNgach = formValue.ngachcongchuc;
+    const newBac = formValue.bacluong
+    const newHeSo = formValue.hesoluong
+    const newLuong = formValue.luongcoban
+    const newGhiChu = formValue.ghichu
 
-
-//     createBtn.addEventListener('click', function () {
-//         isPopupEdit = false
-//         showPopup()
-//     });
-
-//     actionEl.append(createBtn)
-
-// }
+    if (oldNgach === parseInt(newNgach) && oldBac === parseInt(newBac) && oldHeSo === parseFloat(newHeSo) && oldLuong === parseFloat(newLuong) && oldGhiChu === newGhiChu) {
+        popupSaveBtn.setAttribute('disabled', '');
+    } else {
+        popupSaveBtn.removeAttribute('disabled');
+    }
+}
 
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
-    // renderActionByStatus()
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
         handleSave()
@@ -313,4 +319,27 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
     popupClearBtn.addEventListener("click", clearFormValues)
+
+
+    const selectNgach = document.querySelector('base-select[name="ngachcongchuc"]');
+    const selectBac = document.querySelector('base-select[name="bacluong"]');
+    const inputHeSo = document.querySelector('base-input-number[name="hesoluong"]');
+    const inputLuong = document.querySelector('base-input-number[name="luongcoban"]');
+    const inputGhiChu = document.querySelector('base-textarea[name="ghichu"]');
+
+    if (selectNgach) {
+        selectNgach.addEventListener('change', checkValues);
+    }
+    if (selectBac) {
+        selectBac.addEventListener('change', checkValues);
+    }
+    if (inputHeSo) {
+        inputHeSo.addEventListener('input', checkValues);
+    }
+    if (inputLuong) {
+        inputLuong.addEventListener('input', checkValues);
+    }
+    if (inputGhiChu) {
+        inputGhiChu.addEventListener('input', checkValues);
+    }
 })

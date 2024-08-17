@@ -158,56 +158,57 @@
                                         <base-radio label="Nữ" name="gioitinh" value="0"
                                             style="display: none;"></base-radio>
                                         <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh" keyValue="id"
-                                            keyLabel="ten" style="display: none;"></base-select>
+                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh"
+                                            keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                                         <base-select label="Phòng" name="phong"
-                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong" keyValue="id" keyLabel="ten"
-                                            style="display: none;"></base-select>
-                                        <base-select label="Tổ" name="to" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
+                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"
+                                            keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+                                        <base-select label="Tổ" name="to"
+                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                                         <!-- --------------------------------------------- -->
                                         <div class="grid grid-cols-4 gap-x-4">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-input-number label="CMND(*)" name="cmnd"
-                                                    required="true"></base-input-number>
+                                                <base-input-number validateBy="cmndValid" label="CMND(*)"
+                                                    name="cmnd"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
-                                                    required="true"></base-datepicker>
+                                                    validateBy="required"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2">
                                                 <base-input label="Nơi cấp(*)" name="cmndnoicap"
-                                                    required="true"></base-input>
+                                                    validateBy="required"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2">
                                                 <base-input class="col-span-2" label="Nơi sinh(*)" name="noisinh"
-                                                    required="true"></base-input>
+                                                    validateBy="required"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2">
                                                 <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
-                                                    required="true"></base-input>
+                                                    validateBy="required"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2">
                                                 <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)"
-                                                    name="thuongtru" required="true"></base-input>
+                                                    name="thuongtru" validateBy="required"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2 ">
                                                 <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
-                                                    required="true"></base-input>
+                                                    validateBy="required"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Tình trạng hôn nhân(*)" name="honnhan"
-                                                    options="MaritalOptions" required="true"></base-select>
+                                                    options="MaritalOptions" validateBy="required"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Dân tộc(*)" name="dantoc"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/danToc" keyValue="id"
-                                                    keyLabel="ten"></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/danToc"
+                                                    keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Tôn giáo" name="tongiao"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/tonGiao" keyValue="id"
-                                                    keyLabel="ten"></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/tonGiao"
+                                                    keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2"></div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -274,20 +275,22 @@
                                                     name="chinhsach"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Mã số BHXH" name="bhxh"></base-input>
+                                                <base-input validateBy="cardValid" label="Mã số BHXH"
+                                                    name="bhxh"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Mã số BHYT" name="bhyt"></base-input>
+                                                <base-input validateBy="cardValid" label="Mã số BHYT"
+                                                    name="bhyt"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Số thẻ ATM" name="atm"></base-input>
+                                                <base-input validateBy="atmValid" label="Số thẻ ATM"
+                                                    name="atm"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-3">
                                                 <base-select label="Ngân hàng(*)" name="nganhang" options="BankList"
-                                                    required="true" style="margin-top: 20px;"></base-select>
+                                                    validateBy="required" style="margin-top: 20px;"></base-select>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </form>

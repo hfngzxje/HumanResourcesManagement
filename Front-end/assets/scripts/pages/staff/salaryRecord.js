@@ -317,15 +317,16 @@ function clearFormValues(formId) {
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')
-    const buildButton = (label, type, icon) => {
+    const buildButton = (id, label, type, icon) => {
         const btnEl = document.createElement('base-button')
+        btnEl.setAttribute('id', id)
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('Thêm', 'green', 'bx bx-plus')
-    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
+    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     clear.addEventListener('click', function () {
@@ -346,6 +347,9 @@ function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 function buidApiBacLuong() {
+    if(!thongTinNgachCongChuc){
+        return false
+    }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 
@@ -557,6 +561,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function buidApiBacLuongPop() {
+    if(!thongTinNgachCongChucPop){
+        return false
+    }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
 }
 

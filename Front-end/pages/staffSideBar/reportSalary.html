@@ -72,28 +72,27 @@
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" required="true"
-                          name="searchRules"></base-select>
+                        <base-select id="loctheo" label="Lọc theo" options="locTheo" name="searchRules"></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select label="Mã nhân viên" name="ma" keyValue="ma" keyLabel="ma"
-                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"></base-select>
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 ">
                         <base-select label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày hiệu lực" name=""
-                    required="true"></base-datepicker>
+                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày hiệu lực"
+                          name=""></base-datepicker>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày kết thúc" name=""
-                        required="true"></base-datepicker>
+                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày kết thúc"
+                          name=""></base-datepicker>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select label="Chức danh" name="chucdanh" keyValue="id" keyLabel="ten"
-                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"></base-select>
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"></base-select>
                       </div>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
@@ -105,7 +104,7 @@
             </div>
           </div>
           <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-              </base-table>
+          </base-table>
         </div>
       </div>
 
