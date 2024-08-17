@@ -11,6 +11,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using OfficeOpenXml.Export.ToDataTable;
 
 namespace HumanResourcesManagement.Service
 {
@@ -29,68 +30,28 @@ namespace HumanResourcesManagement.Service
             var startOfMonth = new DateTime(today.Year, today.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            // Retrieve all records from TblLuongs with Ngayketthuc in this month and Trangthai = 1
-            var luongRecords = await _context.TblLuongs
-                .Where(l => l.Trangthai == 1 && l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth)
+            // Get Mahopdong for employees with Trangthai = 1 and within the desired date range
+            var maHopDongs = await _context.TblLuongs
+                .Where(l => (l.Ngayketthuc >= startOfMonth && l.Ngayketthuc <= endOfMonth) || l.Ngayketthuc < today)
+                .Where(l => l.Trangthai == 1)
+                .Select(l => l.Mahopdong)
+                .Distinct()
                 .ToListAsync();
 
-            var maHopDongs = luongRecords.Select(l => l.Mahopdong).Distinct().ToList();
-
-            // Get corresponding employees from TblNhanViens
-            var nhanVienRecords = await _context.TblNhanViens
+            // Get NhanVien records linked to the above Mahopdong
+            var result = await _context.TblNhanViens
                 .Where(nv => _context.TblHopDongs
                     .Where(hd => maHopDongs.Contains(hd.Mahopdong))
                     .Select(hd => hd.Ma)
                     .Contains(nv.Ma))
                 .ToListAsync();
 
-            // Filter out records based on approval logic
-            var filteredNhanVienRecords = nhanVienRecords
-                .Where(nv =>
-                {
-                    var nangLuongRecords = _context.TblDanhSachNangLuongs
-                        .Where(nl => nl.Manv == nv.Ma)
-                        .ToList();
+            // Remove NhanVien who already have a temporary Luong with Trangthai = 2
+            result = result.Where(nv => !_context.TblDanhSachNangLuongs
+                .Any(nl => nl.Manv == nv.Ma && nl.Trangthai == 2)).ToList();
 
-                    if (!nangLuongRecords.Any())
-                    {
-                        // No prior records, allow the employee to be listed
-                        return true;
-                    }
-
-                    // Deserialize Hosoluongcu or Hosoluongmoi to get Ngayketthuc and Trangthai
-                    var hoSoLuongMap = new Dictionary<int, TblLuong>();
-
-                    foreach (var nl in nangLuongRecords)
-                    {
-                        TblLuong? hoSoLuongCu, hoSoLuongMoi;
-
-                        // Retrieve from map if already deserialized, otherwise deserialize and store in the map
-                        if (!hoSoLuongMap.TryGetValue(nl.Id, out hoSoLuongCu))
-                        {
-                            hoSoLuongCu = DeserializeHoSoLuong(nl.Hosoluongcu);
-                            hoSoLuongMap[nl.Id] = hoSoLuongCu;
-                        }
-
-                        if (!hoSoLuongMap.TryGetValue(nl.Id + 1, out hoSoLuongMoi)) // Using nl.Id + 1 to differentiate from hoSoLuongCu
-                        {
-                            hoSoLuongMoi = DeserializeHoSoLuong(nl.Hosoluongmoi);
-                            hoSoLuongMap[nl.Id + 1] = hoSoLuongMoi;
-                        }
-
-                        if ((hoSoLuongCu?.Ngayketthuc < today || hoSoLuongMoi?.Ngayketthuc < today) || nl.Trangthai == 2)
-                        {
-                            return true;
-                        }
-                    }
-
-
-                    return false;
-                })
-                .ToList();
-
-            // Map to response
-            var resp = filteredNhanVienRecords
+            // Transform the results into response objects
+            var resp = result
                 .Select(r => new DanhSachLenLuongResponse
                 {
                     MaNV = r.Ma,
@@ -104,12 +65,6 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
-        // Helper method to deserialize the HoSoLuong JSON
-        private TblLuong? DeserializeHoSoLuong(string? hoSoLuongJson)
-        {
-            if (string.IsNullOrEmpty(hoSoLuongJson)) return null;
-            return JsonConvert.DeserializeObject<TblLuong>(hoSoLuongJson);
-        }
 
         public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
         {
@@ -354,18 +309,61 @@ namespace HumanResourcesManagement.Service
             }
         }
 
-        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync()
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? toId, string? maNV)
         {
-            return await _context.TblDanhSachNangLuongs
-                .Select(nl => new DanhSachNangLuongResponse
-                {
-                    Id = nl.Id,
-                    Mahopdong = nl.Mahopdong,
-                    Manv = nl.Manv,
-                    Trangthai = nl.Trangthai
-                })
-                .ToListAsync();
+            var query = _context.TblDanhSachNangLuongs
+                .Join(_context.TblNhanViens,
+                    nl => nl.Manv,
+                    nv => nv.Ma,
+                    (nl, nv) => new { nl, nv })
+                .Join(_context.TblDanhMucPhongBans,
+                    x => x.nv.Phong,
+                    pb => pb.Id,
+                    (x, pb) => new { x.nl, x.nv, pb })
+                .Join(_context.TblDanhMucTos,
+                    x => x.nv.To,
+                    t => t.Id,
+                    (x, t) => new { x.nl, x.nv, x.pb, t })
+                .AsQueryable();
+
+            // Apply filtering conditions only if parameters are provided
+            if (phongId.HasValue)
+            {
+                query = query.Where(x => x.nv.Phong == phongId.Value);
+            }
+
+            if (toId.HasValue)
+            {
+                query = query.Where(x => x.nv.To == toId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(maNV))
+            {
+                query = query.Where(x => x.nv.Ma == maNV);
+            }
+
+            // Fetch the filtered or full list from the database
+            var result = await query.ToListAsync();
+
+            // Map the results to the response model
+            var response = result.Select(x => new DanhSachNangLuongResponse
+            {
+                Id = x.nl.Id,
+                Mahopdong = x.nl.Mahopdong,
+                Manv = x.nl.Manv,
+                Trangthai = x.nl.Trangthai,
+                TenNv = x.nv.Ten,
+                MaPhong = x.nv.Phong,
+                Phong = x.pb.Ten,
+                MaTo = x.nv.To,
+                To = x.t.Ten
+            }).ToList();
+
+            // If no records were found, return an empty list
+            return response.Any() ? response : new List<DanhSachNangLuongResponse>();
         }
+
+
 
         public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
         {
@@ -404,5 +402,101 @@ namespace HumanResourcesManagement.Service
         }
 
 
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? toId, string? maNV)
+        {
+            // Base query with filtering by Trangthai
+            var query = _context.TblDanhSachNangLuongs
+                .Where(s => s.Trangthai == 3 || s.Trangthai == 1)
+                .Join(_context.TblNhanViens,
+                    nl => nl.Manv,
+                    nv => nv.Ma,
+                    (nl, nv) => new { nl, nv })
+                .Join(_context.TblDanhMucPhongBans,
+                    x => x.nv.Phong,
+                    pb => pb.Id,
+                    (x, pb) => new { x.nl, x.nv, pb })
+                .Join(_context.TblDanhMucTos,
+                    x => x.nv.To,
+                    t => t.Id,
+                    (x, t) => new { x.nl, x.nv, x.pb, t })
+                .AsQueryable();
+
+            // Apply filtering conditions only if parameters are provided
+            if (phongId.HasValue)
+            {
+                query = query.Where(x => x.nv.Phong == phongId.Value);
+            }
+
+            if (toId.HasValue)
+            {
+                query = query.Where(x => x.nv.To == toId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(maNV))
+            {
+                query = query.Where(x => x.nv.Ma == maNV);
+            }
+
+            // Fetch the filtered or full list from the database
+            var result = await query.ToListAsync();
+
+            // Map the results to the response model
+            var response = result.Select(x => new DanhSachNangLuongResponse
+            {
+                Id = x.nl.Id,
+                Mahopdong = x.nl.Mahopdong,
+                Manv = x.nl.Manv,
+                Trangthai = x.nl.Trangthai,
+                TenNv = x.nv.Ten,
+                MaPhong = x.nv.Phong,
+                Phong = x.pb.Ten,
+                MaTo = x.nv.To,
+                To = x.t.Ten
+            }).ToList();
+
+            // Return the results, or an empty list if no records are found
+            return response.Any() ? response : new List<DanhSachNangLuongResponse>();
+        }
+
+
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async()
+        {
+            return await _context.TblDanhSachNangLuongs
+                .Where(s => s.Trangthai == 2)
+                .Select(nl => new DanhSachNangLuongResponse
+                {
+                    Id = nl.Id,
+                    Mahopdong = nl.Mahopdong,
+                    Manv = nl.Manv,
+                    Trangthai = nl.Trangthai,
+                    TenNv = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Ten)
+                        .FirstOrDefault()!,
+                    MaPhong = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.Phong)
+                        .FirstOrDefault(),
+                    Phong = _context.TblDanhMucPhongBans
+                        .Where(p => p.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.Phong)
+                            .FirstOrDefault())
+                        .Select(p => p.Ten)
+                        .FirstOrDefault()!,
+                    MaTo = _context.TblNhanViens
+                        .Where(nv => nv.Ma == nl.Manv)
+                        .Select(nv => nv.To)
+                        .FirstOrDefault(),
+                    To = _context.TblDanhMucTos
+                        .Where(t => t.Id == _context.TblNhanViens
+                            .Where(nv => nv.Ma == nl.Manv)
+                            .Select(nv => nv.To)
+                            .FirstOrDefault())
+                        .Select(t => t.Ten)
+                        .FirstOrDefault()!
+                })
+                .ToListAsync();
+        }
     }
 }

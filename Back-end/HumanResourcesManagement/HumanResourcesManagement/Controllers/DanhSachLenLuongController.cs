@@ -99,10 +99,16 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll([FromQuery] int? phongId, [FromQuery] int? toId, [FromQuery] string? maNV)
         {
-            var nangLuongs = await _danhSachLenLuongService.GetAllAsync();
-            return Ok(nangLuongs);
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllAsync(phongId, toId,maNV);
+                return Ok(nangLuongs);
+            }catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -125,6 +131,34 @@ namespace HumanResourcesManagement.Controllers
                 return NotFound();
             }
             return NoContent();
+        }
+
+        [HttpGet("getAllStatus1And3")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3(int? phongId, int? toId, string? maNV)
+        {
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async(phongId, toId, maNV);
+                return Ok(nangLuongs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("getAllStatus2")]
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus2()
+        {
+            try
+            {
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus2Async();
+                return Ok(nangLuongs);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
