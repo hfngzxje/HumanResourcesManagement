@@ -11,6 +11,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using OfficeOpenXml.Export.ToDataTable;
 
 namespace HumanResourcesManagement.Service
 {
@@ -64,7 +65,7 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
-       
+
         public async Task<int> TaoVaThemDanhSachNangLuong(InsertHoSoLuongKhongActive request)
         {
             var hopDong = await _context.TblHopDongs
@@ -308,44 +309,60 @@ namespace HumanResourcesManagement.Service
             }
         }
 
-        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync()
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllAsync(int? phongId, int? toId, string? maNV)
         {
-            return await _context.TblDanhSachNangLuongs
-                .Select(nl => new DanhSachNangLuongResponse
-                {
-                    Id = nl.Id,
-                    Mahopdong = nl.Mahopdong,
-                    Manv = nl.Manv,
-                    Trangthai = nl.Trangthai,
-                    TenNv = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Ten) 
-                        .FirstOrDefault()!,
-                    MaPhong = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Phong) 
-                        .FirstOrDefault(),
-                    Phong = _context.TblDanhMucPhongBans
-                        .Where(p => p.Id == _context.TblNhanViens
-                            .Where(nv => nv.Ma == nl.Manv)
-                            .Select(nv => nv.Phong)
-                            .FirstOrDefault())
-                        .Select(p => p.Ten)
-                        .FirstOrDefault()!,
-                    MaTo = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.To)
-                        .FirstOrDefault(),
-                    To = _context.TblDanhMucTos
-                        .Where(t => t.Id == _context.TblNhanViens
-                            .Where(nv => nv.Ma == nl.Manv)
-                            .Select(nv => nv.To)
-                            .FirstOrDefault())
-                        .Select(t => t.Ten) 
-                        .FirstOrDefault()!
-                })
-                .ToListAsync();
+            var query = _context.TblDanhSachNangLuongs
+                .Join(_context.TblNhanViens,
+                    nl => nl.Manv,
+                    nv => nv.Ma,
+                    (nl, nv) => new { nl, nv })
+                .Join(_context.TblDanhMucPhongBans,
+                    x => x.nv.Phong,
+                    pb => pb.Id,
+                    (x, pb) => new { x.nl, x.nv, pb })
+                .Join(_context.TblDanhMucTos,
+                    x => x.nv.To,
+                    t => t.Id,
+                    (x, t) => new { x.nl, x.nv, x.pb, t })
+                .AsQueryable();
+
+            // Apply filtering conditions only if parameters are provided
+            if (phongId.HasValue)
+            {
+                query = query.Where(x => x.nv.Phong == phongId.Value);
+            }
+
+            if (toId.HasValue)
+            {
+                query = query.Where(x => x.nv.To == toId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(maNV))
+            {
+                query = query.Where(x => x.nv.Ma == maNV);
+            }
+
+            // Fetch the filtered or full list from the database
+            var result = await query.ToListAsync();
+
+            // Map the results to the response model
+            var response = result.Select(x => new DanhSachNangLuongResponse
+            {
+                Id = x.nl.Id,
+                Mahopdong = x.nl.Mahopdong,
+                Manv = x.nl.Manv,
+                Trangthai = x.nl.Trangthai,
+                TenNv = x.nv.Ten,
+                MaPhong = x.nv.Phong,
+                Phong = x.pb.Ten,
+                MaTo = x.nv.To,
+                To = x.t.Ten
+            }).ToList();
+
+            // If no records were found, return an empty list
+            return response.Any() ? response : new List<DanhSachNangLuongResponse>();
         }
+
 
 
         public async Task<DanhSachNangLuongDetailsResponse?> GetByIdAsync(int id)
@@ -385,45 +402,62 @@ namespace HumanResourcesManagement.Service
         }
 
 
-        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async()
+        public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus1And3Async(int? phongId, int? toId, string? maNV)
         {
-            return await _context.TblDanhSachNangLuongs
-                .Where(s => s.Trangthai ==3 || s.Trangthai == 1)
-                .Select(nl => new DanhSachNangLuongResponse
-                {
-                    Id = nl.Id,
-                    Mahopdong = nl.Mahopdong,
-                    Manv = nl.Manv,
-                    Trangthai = nl.Trangthai,
-                    TenNv = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Ten)
-                        .FirstOrDefault()!,
-                    MaPhong = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.Phong)
-                        .FirstOrDefault(),
-                    Phong = _context.TblDanhMucPhongBans
-                        .Where(p => p.Id == _context.TblNhanViens
-                            .Where(nv => nv.Ma == nl.Manv)
-                            .Select(nv => nv.Phong)
-                            .FirstOrDefault())
-                        .Select(p => p.Ten)
-                        .FirstOrDefault()!,
-                    MaTo = _context.TblNhanViens
-                        .Where(nv => nv.Ma == nl.Manv)
-                        .Select(nv => nv.To)
-                        .FirstOrDefault(),
-                    To = _context.TblDanhMucTos
-                        .Where(t => t.Id == _context.TblNhanViens
-                            .Where(nv => nv.Ma == nl.Manv)
-                            .Select(nv => nv.To)
-                            .FirstOrDefault())
-                        .Select(t => t.Ten)
-                        .FirstOrDefault()!
-                })
-                .ToListAsync();
+            // Base query with filtering by Trangthai
+            var query = _context.TblDanhSachNangLuongs
+                .Where(s => s.Trangthai == 3 || s.Trangthai == 1)
+                .Join(_context.TblNhanViens,
+                    nl => nl.Manv,
+                    nv => nv.Ma,
+                    (nl, nv) => new { nl, nv })
+                .Join(_context.TblDanhMucPhongBans,
+                    x => x.nv.Phong,
+                    pb => pb.Id,
+                    (x, pb) => new { x.nl, x.nv, pb })
+                .Join(_context.TblDanhMucTos,
+                    x => x.nv.To,
+                    t => t.Id,
+                    (x, t) => new { x.nl, x.nv, x.pb, t })
+                .AsQueryable();
+
+            // Apply filtering conditions only if parameters are provided
+            if (phongId.HasValue)
+            {
+                query = query.Where(x => x.nv.Phong == phongId.Value);
+            }
+
+            if (toId.HasValue)
+            {
+                query = query.Where(x => x.nv.To == toId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(maNV))
+            {
+                query = query.Where(x => x.nv.Ma == maNV);
+            }
+
+            // Fetch the filtered or full list from the database
+            var result = await query.ToListAsync();
+
+            // Map the results to the response model
+            var response = result.Select(x => new DanhSachNangLuongResponse
+            {
+                Id = x.nl.Id,
+                Mahopdong = x.nl.Mahopdong,
+                Manv = x.nl.Manv,
+                Trangthai = x.nl.Trangthai,
+                TenNv = x.nv.Ten,
+                MaPhong = x.nv.Phong,
+                Phong = x.pb.Ten,
+                MaTo = x.nv.To,
+                To = x.t.Ten
+            }).ToList();
+
+            // Return the results, or an empty list if no records are found
+            return response.Any() ? response : new List<DanhSachNangLuongResponse>();
         }
+
 
         public async Task<IEnumerable<DanhSachNangLuongResponse>> GetAllStatus2Async()
         {
