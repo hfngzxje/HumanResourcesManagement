@@ -83,10 +83,9 @@ var TableColumnsChuyenDen = [
     }
 ]
 
+let thongTinPhongBan = null
 function backToList() {
-    
         const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-  
 }
 
 function buildPayload(formValue) {
@@ -95,6 +94,41 @@ function buildPayload(formValue) {
     formClone['trangThai'] = Number(formClone['trangThai'])
 
     return formClone
+}
+function apiTo(){
+    if(!thongTinPhongBan){
+        return false
+    }
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+}
+function layThongTinTo() {
+    const to = document.getElementById('to')
+    to.renderOption()
+}
+async function getToTheoPhongBanDauTien() {
+    try {
+        const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        const phongBanDauTien = response[0]
+        thongTinPhongBan = phongBanDauTien.id
+        layThongTinTo()
+    } catch (error) {
+        console.log("Error", "ajaj")
+    }
+}
+function handlePhongBan() {
+    const phongBan = document.querySelector('#phong select')
+    phongBan.addEventListener("change", (event) => {
+        thongTinPhongBan = event.target.value
+        layThongTinTo()
+    });
+}
+function inits(){
+    handlePhongBan()
+    getToTheoPhongBanDauTien()
 }
 
 function fetchDieuChuyen() {
@@ -232,5 +266,6 @@ function buildApiUrlChuyenDen() {
 document.addEventListener('DOMContentLoaded', () => {
     fetchDieuChuyen()
     renderActionByStatus()
+    inits()
 })
 

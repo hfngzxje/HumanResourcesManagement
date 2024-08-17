@@ -1,18 +1,39 @@
-const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
-// const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAllStatus2";
+const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAllStatus1And3";
 
 
-const table = document.querySelector('base-table')
+const table = document.querySelectorAll('base-table')
 var idNhomLuong = null
 var maDetail = null
+var idRow = null
 var TableColumns = [
+    {
+        label: 'ID',
+        key: 'id',
+    },
     {
         label: 'Mã nhân viên',
         key: 'manv',
     },
     {
+        label: 'Tên nhân viên',
+        key: 'tenNv',
+    },
+    {
         label: 'Mã hợp đồng',
         key: 'mahopdong',
+    },
+    {
+        label: 'Phòng',
+        key: 'phong',
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh',
+    },
+    {
+        label: 'Trạng thái',
+        key: 'trangthai',
     },
     {
         label: 'Hành động',
@@ -22,6 +43,7 @@ var TableColumns = [
                 type: 'plain', icon: 'bx bx-detail', label: 'Thao tác', onClick: (row) => {
                     isPopupEdit = true
                     console.log('row click ', row)
+                    idRow = row.id
                     fetchSalaryRecent(row.manv)
                     fetchSalaryUp(row.manv)
                     showPopup("showPopUp")
@@ -36,29 +58,167 @@ var TableColumnsBaoCao = [
         key: 'manv',
     },
     {
+        label: 'Tên nhân viên',
+        key: 'tenNv',
+    },
+    {
         label: 'Mã hợp đồng',
         key: 'mahopdong',
+    },
+    {
+        label: 'Phòng',
+        key: 'phong',
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh',
     },
     {
         label: 'Trạng thái',
         key: 'trangthai',
         formatGiaTri: (value) => {
             let result = { text: 'Đã phê duyệt', color: 'green' };
-        if (value === -1) {
-            result.text = 'Đã hủy';
-            result.color = 'red';
-        }
-        else if(value === 2){
-            result.text = 'Đang chờ';
-            result.color = 'blue'
-        }
-        return result;
+            if (value === 3) {
+                result.text = 'Đã hủy';
+                result.color = 'red';
+            }
+            else if (value === 2) {
+                result.text = 'Đang chờ';
+                result.color = 'blue'
+            }
+            return result;
         }
 
     }
 ]
 
+async function handleSearch() {
+    try {
+      const formValue = getFormValues("report_form");    
+      const tableReport = document.getElementById("tableReport1");
+
+      const params = {
+        phongId: formValue.phongId || "",
+        chucDanhId: formValue.chucDanhId || ""
+      };
+      await tableReport.handleCallFetchData(params);
+       
+    } catch (error) {
+      console.error("Error in handleSearch:", error);
+    }
+  }
+  function phongBanChange() {
+    const phongban = document.querySelector('#phongban select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+  function chucDanhChange() {
+    const phongban = document.querySelector('#chucdanh select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+
+//   ---------------------------------------------------------------------------------------
+async function handleAccept() {
+    alert(idRow)
+    await showConfirm("Phê duyệt lên lương nhân viên ?")
+    setLoading(true)
+    const payload = {
+        id: idRow,
+        trangThai: 1
+    };
+    const url1= 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
+    const url2= '&trangThai=1'
+    const urlData = url1 + url2
+    setTimeout(() => {
+        $.ajax({
+            url: urlData,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                showSuccess('Phê duyệt thành công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    showError(message)
+                } catch (error) {
+                    showError("Phê duyệt thất bại!")
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
+}
+
+async function handleReject() {
+    alert(idRow)
+    await showConfirm("Từ chối lên lương nhân viên ?")
+    setLoading(true)
+    const payload = {
+        id: idRow,
+        trangThai: 3
+    };
+    const url1= 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
+    const url2= '&trangThai=3'
+    const urlData = url1 + url2
+    setTimeout(() => {
+        $.ajax({
+            url: urlData,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                showSuccess('Phê duyệt thành công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    showError(message)
+                } catch (error) {
+                    showError("Phê duyệt thất bại!")
+                }
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
+}
+
+
 // ---------- Fetch lương hiện tại---------
+
+
 async function fetchSalaryRecent(ma) {
     setLoading(true);
     maDetail = ma;
@@ -166,7 +326,7 @@ function clearFormValues(formId) {
     inputs.forEach(input => {
         if (input.type === 'checkbox') {
             input.checked = false;
-        } 
+        }
         else if (input.tagName.toLowerCase() === 'select') {
             input.selectedIndex = 0; // Reset select về item đầu tiên
         } else {
@@ -177,8 +337,8 @@ function clearFormValues(formId) {
 function buildApiUrl() {
     return apiTable;
 }
-function buildApiUrlBaoCao(){
-    return null
+function buildApiUrlBaoCao() {
+    return apiTableBaoCao
 }
 function formatCurrency(val) {
     return val.toLocaleString("it-IT", {
@@ -186,6 +346,30 @@ function formatCurrency(val) {
         maximumFractionDigits: 2
     });
 }
+function renderActionByStatus() {
+    const actionEl = document.getElementById("report_form_action");
+    const buildButton = (id, label, type, icon) => {
+      const btnEl = document.createElement("base-button");
+      btnEl.setAttribute('id', id)
+      btnEl.setAttribute("label", label);
+      btnEl.setAttribute("type", type);
+      btnEl.setAttribute("icon", icon);
+      return btnEl;
+    };
+    const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
+    const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  
+    // excelBtn.addEventListener("click", () => {
+    //   handleExportExcel();
+    // });
+  
+    // pdfBtn.addEventListener("click", () => {
+    //   handleExportPDF();
+    // });
+    actionEl.append(pdfBtn, excelBtn);
+  }
 document.addEventListener("DOMContentLoaded", () => {
-
+    renderActionByStatus()
+    phongBanChange()
+    chucDanhChange()
 });

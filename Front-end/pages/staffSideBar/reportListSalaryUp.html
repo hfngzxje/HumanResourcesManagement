@@ -67,8 +67,7 @@
           <div class="tile">
             <h3 class="tile-title">Thao tác nâng lương</h3>
 
-            <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" 
-              pageSize="4">
+            <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4">
             </base-table>
           </div>
         </div>
@@ -76,21 +75,42 @@
         <div class="col-md-12">
           <div class="tile">
             <h3 class="tile-title">Báo cáo danh sách nâng lương</h3>
-
-            <base-table id="tableReport1" api="buildApiUrlBaoCao" columns="TableColumnsBaoCao" event="tableEvent" 
-              pageSize="4">
-            </base-table>
+            <div>
+              <form id="report_form">
+                <div class="">
+                  <div class="input-container">
+                    <div class="grid grid-cols-4 gap-x-5">
+                      <div class="col-span-2 sm:col-span-1 mt-2">
+                        <base-select class="mt-1" id="phongban" label="Phòng ban" name="phongId" keyValue="id"
+                          keyLabel="ten"
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"
+                          includeAll></base-select>
+                      </div>
+                      <div class="col-span-2 sm:col-span-1 mt-2">
+                        <base-select class="mt-1" id="chucdanh" label="Chức danh" name="chucDanhId" keyValue="id"
+                          keyLabel="ten"
+                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"
+                          includeAll></base-select>
+                      </div>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1">
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
+          <base-table id="tableReport1" api="buildApiUrlBaoCao" columns="TableColumnsBaoCao" event="tableEvent"
+          pageSize="4">
+        </base-table>
         </div>
       </div>
     </div>
-    <div class="text-center mt-5" style="font-size: 13px">
-      <p><b>Copyright
-          <script type="text/javascript">
-            document.write(new Date().getFullYear());
-          </script> Phần mềm quản lý nhân sự | HRM
-        </b></p>
-    </div>
+    <layout-footer></layout-footer>
+        <custom-alert></custom-alert>
+        <custom-error></custom-error>
+        <custom-success></custom-success>
   </main>
 
 
@@ -138,8 +158,7 @@
                     style="color: red; font-weight: bold;" readonly></base-input-number>
                 </div>
                 <div class="col-span-2 sm:col-span-1">
-                  <base-input-number label="Hạn lên lương (năm)" 
-                    name="thoihanlenluong"></base-input-number>
+                  <base-input-number label="Hạn lên lương (năm)" name="thoihanlenluong"></base-input-number>
                 </div>
                 <div class="col-span-2 sm:col-span-1">
                   <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực" name="ngaybatdau"
@@ -205,8 +224,7 @@
                     style="color: red; font-weight: bold;"></base-input-number>
                 </div>
                 <div class="col-span-2 sm:col-span-1">
-                  <base-input-number label="Hạn lên lương (năm)" 
-                    name="thoihanlenluong"></base-input-number>
+                  <base-input-number label="Hạn lên lương (năm)" name="thoihanlenluong"></base-input-number>
                 </div>
                 <div class="col-span-2 sm:col-span-1 mt-2">
                   <base-input-number id="nhomluong" label="Nhóm lương" name="nhomluong" readonly

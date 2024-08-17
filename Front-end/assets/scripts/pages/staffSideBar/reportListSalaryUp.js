@@ -47,23 +47,34 @@ var TableColumnsBaoCao = [
         key: 'manv',
     },
     {
+        label: 'Tên nhân viên',
+        key: 'tenNv',
+    },
+    {
         label: 'Mã hợp đồng',
         key: 'mahopdong',
+    },
+    {
+        label: 'Phòng',
+        key: 'phong',
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh',
     },
     {
         label: 'Trạng thái',
         key: 'trangthai',
         formatGiaTri: (value) => {
-            let result = { text: 'Đã phê duyệt', color: 'green' };
-        if (value === -1) {
-            result.text = 'Đã hủy';
-            result.color = 'red';
-        }
-        else if(value === 2){
-            result.text = 'Đang chờ';
-            result.color = 'blue'
-        }
-        return result;
+            let result = { text: 'ddax duyer', color: 'green' };
+            if (value === 3) {
+                result.text = 'Đã hủy';
+                result.color = 'red';
+            }
+            else if (value === 2) {
+                result.text = '';
+            }
+            return result;
         }
 
     }
@@ -111,6 +122,37 @@ async function handleCreate() {
         });
     }, 1000);
 }
+async function handleSearch() {
+    try {
+      const formValue = getFormValues("report_form");    
+      const tableReport = document.getElementById("tableReport1");
+      
+      // Khởi tạo đối tượng params
+      const params = {
+        phongId: formValue.phongId || "",
+        chucDanhId: formValue.chucDanhId || ""
+      };
+     
+      // Giả sử handleCallFetchData là một hàm không đồng bộ
+      await tableReport.handleCallFetchData(params);
+       
+    } catch (error) {
+      console.error("Error in handleSearch:", error);
+    }
+  }
+  function phongBanChange() {
+    const phongban = document.querySelector('#phongban select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+  function chucDanhChange() {
+    const phongban = document.querySelector('#chucdanh select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+  
 // ------------- Add nâng lương --------------------------
 var danhSachMaHopDong = []
 var phuCapInput = null
@@ -403,6 +445,31 @@ function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
     return parseFloat(cleanedValue);
 }
-document.addEventListener("DOMContentLoaded", () => {
 
+function renderActionByStatus() {
+    const actionEl = document.getElementById("report_form_action");
+    const buildButton = (id, label, type, icon) => {
+      const btnEl = document.createElement("base-button");
+      btnEl.setAttribute('id', id)
+      btnEl.setAttribute("label", label);
+      btnEl.setAttribute("type", type);
+      btnEl.setAttribute("icon", icon);
+      return btnEl;
+    };
+    const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
+    const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  
+    // excelBtn.addEventListener("click", () => {
+    //   handleExportExcel();
+    // });
+  
+    // pdfBtn.addEventListener("click", () => {
+    //   handleExportPDF();
+    // });
+    actionEl.append(pdfBtn, excelBtn);
+  }
+document.addEventListener("DOMContentLoaded", () => {
+    renderActionByStatus()
+    phongBanChange()
+    chucDanhChange()
 });
