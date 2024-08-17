@@ -99,16 +99,45 @@ namespace HumanResourcesManagement.Controllers
 
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll([FromQuery] int? phongId, [FromQuery] int? toId, [FromQuery] string? maNV)
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> GetAll([FromQuery]int? phongId, [FromQuery] int? chucDanhId)
         {
             try
             {
-                var nangLuongs = await _danhSachLenLuongService.GetAllAsync(phongId, toId,maNV);
+                var nangLuongs = await _danhSachLenLuongService.GetAllAsync(phongId,chucDanhId);
                 return Ok(nangLuongs);
             }catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpPost("ExportDanhSachNhanVienLenLuongToExcel")]
+        public async Task<IActionResult> ExportNhanVienLenLuongToExcel([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportDanhSachLenLuongToExcel(phongId, chucDanhId);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
+            }
+        }
+
+        [HttpPost("ExportDanhSachNhanVienLenLuongToPdf")]
+        public async Task<IActionResult> ExportNhanVienLenLuongPDF([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportDanhSachLenLuongToPdf(phongId, chucDanhId);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+
         }
 
         [HttpGet("{id}")]
@@ -134,17 +163,46 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getAllStatus1And3")]
-        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3(int? phongId, int? toId, string? maNV)
+        public async Task<ActionResult<IEnumerable<DanhSachNangLuongResponse>>> getAllStatus1And3([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
         {
             try
             {
-                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async(phongId, toId, maNV);
+                var nangLuongs = await _danhSachLenLuongService.GetAllStatus1And3Async(phongId, chucDanhId);
                 return Ok(nangLuongs);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpPost("ExportQuyetDinhNhanVienLenLuongToExcel")]
+        public async Task<IActionResult> ExportQuyetDinhLenLuongToExcel([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportQuyetDinhLenLuongToExcel(phongId, chucDanhId);
+                return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file excel. " + ex.Message);
+            }
+        }
+
+        [HttpPost("ExportQuyetDinhNhanVienLenLuongToPdf")]
+        public async Task<IActionResult> ExportQuyetDinhLenLuongToPdf([FromQuery] int? phongId, [FromQuery] int? chucDanhId)
+        {
+            try
+            {
+                var (fileContent, fileName) = await _danhSachLenLuongService.ExportQuyetDinhLenLuongToPdf(phongId, chucDanhId);
+                return File(fileContent, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(501, "Lỗi khi xuất file PDF.");
+            }
+
         }
 
         [HttpGet("getAllStatus2")]

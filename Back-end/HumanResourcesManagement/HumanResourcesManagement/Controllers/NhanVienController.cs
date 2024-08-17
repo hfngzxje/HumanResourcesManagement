@@ -18,11 +18,11 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllNhanVien()
+        public async Task<IActionResult> GetAllNhanVien()
         {
             try
             {
-                var nhanVien = _nhanVienService.GetAllNhanVien();
+                var nhanVien = await _nhanVienService.GetAllNhanVien();
                 return Ok(nhanVien);
             }
             catch (Exception ex)
