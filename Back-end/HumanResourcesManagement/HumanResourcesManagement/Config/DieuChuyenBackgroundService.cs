@@ -20,9 +20,7 @@ namespace HumanResourcesManagement.Config
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var currentTime = DateTime.Now;
-            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 23, 28, 0);
-
-            if (currentTime > scheduledTime)
+            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 3, 0, 0);
             {
                 scheduledTime = scheduledTime.AddDays(1);
             }
