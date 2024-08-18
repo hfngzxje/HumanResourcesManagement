@@ -83,11 +83,11 @@ namespace HumanResourcesManagement.Service
             string hashedPassword = HashPassword(password);
 
             var nhanVien = _mapper.Map<TblNhanVien>(request);
-            nhanVien.Ma = maNhanVien;
+            nhanVien.Ma = maNhanVien.Trim();
             nhanVien.Anh = default_avatar;
             nhanVien.VaiTroId = 2;
             nhanVien.MatKhau = hashedPassword;
-
+            nhanVien.VaiTroId = request.VaitroId;
             _context.TblNhanViens.Add(nhanVien);
             _context.SaveChanges();
 
@@ -437,11 +437,11 @@ namespace HumanResourcesManagement.Service
 
 
             var response = _mapper.Map<NhanVienResponse>(nhanVien);
-            response.tenTo = nhanVien.ToNavigation.Ten;
-            response.tenChucVu = nhanVien.ChucvuhientaiNavigation.Ten; 
+            response.tenTo = nhanVien.ToNavigation?.Ten;
+            response.tenChucVu = nhanVien.ChucvuhientaiNavigation?.Ten; 
             response.tenPhongBan = nhanVien.PhongNavigation?.Ten;
-            response.tenDantoc = nhanVien.DantocNavigation.Ten;
-            response.tenTongiao = nhanVien.TongiaoNavigation.Ten;
+            response.tenDantoc = nhanVien.DantocNavigation?.Ten;
+            response.tenTongiao = nhanVien.TongiaoNavigation?.Ten;
             return response;
         }
     }
