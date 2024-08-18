@@ -45,18 +45,7 @@ var TableColumns2 = [
         ]
     }
 ]
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function backToList() {
     const url = new URL("/pages/staff/qualifications.html", window.location.origin);
     window.location.replace(url.toString());
@@ -68,7 +57,6 @@ function showPopup(formId) {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues("editTrinhDo");
             clearFormValues("editNgoaiNgu")
         }
     }
@@ -80,7 +68,7 @@ function showPopup(formId) {
 function closePopup(formId) {
     var modal = document.getElementById(formId);
     modal.style.display = "none"
-    clearFormValues(formId)
+    clearFormValues("editNgoaiNgu")
 }
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -198,6 +186,8 @@ async function handleRemoveNgoaiNgu(id) {
 
 async function handleSaveNgoaiNgu() {
     await showConfirm("Bạn có chắc chắn muốn sửa ngoại ngữ ?")
+    const valid = validateForm('editNgoaiNgu')
+    if (!valid) return
     const formValue = getFormValues('editNgoaiNgu')
     formValue['id'] = idNgoaiNgu
     const payload = buildPayload1(formValue)

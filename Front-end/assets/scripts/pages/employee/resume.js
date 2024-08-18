@@ -159,18 +159,6 @@ function uploadImage(anh) {
         }
     });
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('resume_form_action')

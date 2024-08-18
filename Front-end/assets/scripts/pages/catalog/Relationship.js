@@ -99,7 +99,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục người thân: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -136,7 +136,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục người than: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -151,6 +151,8 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục quan hệ ?")
+    const valid = validateForm('editRelationship')
+    if (!valid) return
     const formValue = getFormValues('editRelationship')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
@@ -166,7 +168,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục người thân: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -191,19 +193,6 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editRelationship');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanToc'
 }
@@ -214,14 +203,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues('editRelationship');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editRelationship');
     }
 
     if (isPopupEdit) {

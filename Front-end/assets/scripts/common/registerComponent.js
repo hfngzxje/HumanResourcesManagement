@@ -1158,6 +1158,42 @@ class CustomAlertSuccess extends HTMLElement {
   }
 }
 
+class CustomAlertNagivation extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupNavigation">
+    <div class="change-container" style="padding:0px">
+      <div
+        class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full"
+        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="flex items-center justify-center mb-4">
+          <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5-5-5 5m10-7v6" />
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="navigationMessage">
+            Xác Nhận Điều Hướng
+          </h3>
+        </div>
+        <div class="mt-4">
+          <button
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+            id="navigateButton">
+            Điều Hướng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
+
+customElements.define('custom-navigation', CustomAlertNagivation);
 customElements.define('custom-alert', CustomAlert);
 customElements.define('custom-error', CustomAlertEror);
 customElements.define('custom-success', CustomAlertSuccess);

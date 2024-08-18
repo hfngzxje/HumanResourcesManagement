@@ -143,6 +143,7 @@ async function showPopup() {
 function closePopup() {
     var modal = document.getElementById("editSalaryRecord");
     modal.style.display = "none"
+    clearFormValues("editSalaryRecord");
 }
 async function fetchSalaryToEdit(id) {
     setLoading(true)
@@ -260,6 +261,8 @@ async function handleRemove() {
 
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa hồ sơ lương ?")
+    const valid = validateForm('editSalaryRecord')
+    if (!valid) return
     const formValue = getFormValues('editSalaryRecord')
     formValue['tongluong'] = parseCurrency(formValue['tongluong'])
     formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
@@ -302,18 +305,6 @@ async function handleSave() {
 }
 
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea,select');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('salary_form_action')

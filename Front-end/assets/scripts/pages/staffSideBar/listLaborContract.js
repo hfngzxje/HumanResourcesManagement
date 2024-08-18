@@ -133,7 +133,7 @@ function handleCreate() {
             success: function (data) {
                 alert('Tạo Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -171,7 +171,7 @@ function handleRemove() {
             success: function (data) {
                 alert('Xóa Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -200,7 +200,7 @@ function handleSave() {
                 console.log('fetchContract res :: ', data);
                 alert('Lưu Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -224,35 +224,11 @@ function handleSave() {
         });
     }, 1000);
 }
-function clearFormValues() {
-    const form = document.getElementById('editHopDong');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 
 
-function clearFormValues(formId) {
-    const form = document.getElementById('editHopDong');
-    const inputs = form.querySelectorAll('input, textarea, select');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        }
-        else {
-            input.value = '';
-            input.selectedIndex = 0;
-        }
-    });
-}
+
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong'
 }
@@ -262,7 +238,7 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues("editHopDong");
         }
     }
     var closeButton = modal.querySelector('.close');
@@ -303,6 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemove)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    popupClearBtn.addEventListener("click", clearFormValues("editHopDong"))
 })
 

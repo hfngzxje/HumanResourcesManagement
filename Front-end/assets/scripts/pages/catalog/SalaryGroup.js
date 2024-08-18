@@ -152,7 +152,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Ngạch công chức=${formValue.ngachcongchuc}, Bậc lương=${formValue.bacluong}`)
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -189,7 +189,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -218,7 +218,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -249,14 +249,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editNhomLuong')
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editNhomLuong');
     }
 
     if (isPopupEdit) {
@@ -276,18 +276,7 @@ function showPopup() {
         popupClearBtn.classList.remove('hidden')
     }
 }
-function clearFormValues() {
-    const form = document.getElementById('editNhomLuong');
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function closePopup(){
     var modal = document.getElementById("editNhomLuong");
     modal.style.display="none"
@@ -318,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    popupClearBtn.addEventListener("click", clearFormValues('editNhomLuong'))
 
 
     const selectNgach = document.querySelector('base-select[name="ngachcongchuc"]');

@@ -98,7 +98,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục tôn giáo: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -136,7 +136,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục tôn giáo: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -168,7 +168,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục tôn giáo: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -193,21 +193,6 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editTonGiao');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-            input.checked = false;
-        }
-    });
-}
-
-
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiao'
 }
@@ -219,14 +204,14 @@ function showPopup() {
         if (event.target == modal) {
             modal.style.display = "none";
             // setFormValue('editTonGiao', {ten: "" })
-            clearFormValues();
+            clearFormValues('editTonGiao');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editTonGiao');
     }
 
     if (isPopupEdit) {

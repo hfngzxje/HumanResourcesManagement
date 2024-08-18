@@ -5,11 +5,6 @@ const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupSaveBtn = document.getElementById("updateBtn")
 var maDetail = localStorage.getItem('maDetail')
 
-var MaritalOptions = [
-    { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 2 },
-];
-
 var TableColumns = [
     {
         label: 'Mã hợp đồng',
@@ -63,13 +58,6 @@ var TableColumns = [
       ]
     }
 ]
-
-
-function backToList() {
-    
-        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-  
-}
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -137,10 +125,14 @@ async function handleCreate() {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            showSuccess('Tạo Thành Công!');
+        success:async function (data) {
+           await showSuccess('Tạo Thành Công!');
             table.handleCallFetchData();
             clearFormValues("laborContract_form")
+            await closePopup()
+                await  showNavigation('Tạo mới hồ sơ lương cho hợp đồng !', 'salaryRecord.html')
+                resolve();
+      
         },
         error: (err) => {
             console.log('err ', err);
@@ -191,8 +183,9 @@ async function handleRemove() {
 
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa hợp đồng ?")
+    const valid = validateForm('editLaborContract')
+    if (!valid) return
     const formValue = getFormValues('editLaborContract')
-
     formValue['ma'] = maDetail;
 
     const payload = buildPayload(formValue)
@@ -229,18 +222,6 @@ async function handleSave() {
         }
     });
 }, 1000); 
-}
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
 }
 
 function renderActionByStatus() {

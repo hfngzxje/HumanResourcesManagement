@@ -60,19 +60,6 @@ var TableColumns1 = [
     }
 ]
 
-
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function backToList() {
     const url = new URL("/pages/staff/qualifications.html", window.location.origin);
     window.location.replace(url.toString());
@@ -95,7 +82,7 @@ function showPopup(formId) {
 function closePopup(formId) {
     var modal = document.getElementById(formId);
     modal.style.display = "none"
-    clearFormValues(formId)
+    clearFormValues("editTrinhDo")
 }
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -107,9 +94,7 @@ function buildPayload(formValue) {
 
 function buildPayload1(formValue) {
     const formClone = { ...formValue }
-
     formClone['id'] = idNgoaiNgu
-
     return formClone
 }
 function fetchTrinhDo(id) {
@@ -213,6 +198,8 @@ async function handleRemoveTrinhDo() {
 
 async function handleSaveTrinhDo() {
     await showConfirm("Bạn có chắc chắn muốn sửa trình độ ?")
+    const valid = validateForm('editTrinhDo')
+    if (!valid) return
     const formValue = getFormValues('editTrinhDo')
     formValue['id'] = idTrinhDo
     const payload = buildPayload(formValue)

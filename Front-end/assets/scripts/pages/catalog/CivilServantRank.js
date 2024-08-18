@@ -97,7 +97,7 @@ async function handleCreate() {
                 recordActivityAdmin(maNhanVien, `Thêm danh mục ngạch công chức: ${formValue.ten}`);
 
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -133,7 +133,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngạch công chức: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -147,6 +147,8 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục ngạch công chức ?")
+    const valid = validateForm('editCivilServantRank')
+    if (!valid) return
     const formValue = getFormValues('editCivilServantRank')
     formValue['id'] = idNgachCongChuc
     const payload = buildPayload(formValue)
@@ -161,7 +163,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục ngạch công chức: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -186,18 +188,6 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editCivilServantRank');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/getAllNgachCongChuc'
@@ -209,13 +199,13 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editCivilServantRank')
         }
     }
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editCivilServantRank');
     }
 
 

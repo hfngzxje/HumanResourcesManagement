@@ -3,7 +3,7 @@ let idNguoiThan = null
 const table = document.querySelector('base-table')
 const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupUpdatebtn = document.getElementById("updateBtn")
-
+var maDetail = localStorage.getItem('maDetail')
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
@@ -112,13 +112,20 @@ function fetchRelationship(id) {
         }
     });
 }
+function clearError(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('.error');
 
+    inputs.forEach(input => {
+       input.value = null
+    });
+}
 async function handleCreate() {
     await showConfirm("Bạn có chắc chắn muốn thêm mới quan hệ ?")
     const valid = validateForm('relationship_form')
     if (!valid) return
     const formValue = getFormValues('relationship_form')
-    const employeeId = maNhanVien
+    const employeeId = maDetail
     formValue['ma'] = employeeId;
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -225,18 +232,6 @@ async function handleSave() {
         });
     }, 1000);
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (id, label, type, icon) => {
@@ -259,7 +254,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus();

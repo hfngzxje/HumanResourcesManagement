@@ -2,7 +2,7 @@ const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/a
 const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
 
 
-const table = document.querySelector('base-table')
+const table = document.querySelectorAll('base-table')
 var idNhomLuong = null
 var maDetail = null
 var TableColumns = [
@@ -61,34 +61,16 @@ var TableColumnsBaoCao = [
     {
         label: 'Chức danh',
         key: 'chucdanh',
-    },
-    {
-        label: 'Trạng thái',
-        key: 'trangthai',
-        formatGiaTri: (value) => {
-            let result = { text: 'ddax duyer', color: 'green' };
-            if (value === 3) {
-                result.text = 'Đã hủy';
-                result.color = 'red';
-            }
-            else if (value === 2) {
-                result.text = '';
-            }
-            return result;
-        }
-
     }
 ]
 async function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
-    if (!isConfirm) return
+    await showConfirm('Bạn chắc chắn muốn thêm bảng lương?')
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
     formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
     formValue['phucapkhac'] = parseCurrency(formValue['phucapkhac'])
     formValue['tongluong'] = parseCurrency(formValue['tongluong'])
-    // formValue['mahopdong'] = formValue['mahopdong']
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
@@ -97,23 +79,28 @@ async function handleCreate() {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: function (data) {
-                alert('Tạo Thành Công!');
-                table.handleCallFetchData();
+            success:async function (data) {
+                await showSuccess('Tạo Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+                await closePopup()
             },
             error: (err) => {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -122,18 +109,20 @@ async function handleCreate() {
         });
     }, 1000);
 }
+function closePopup(){
+    var modal = document.getElementById("showPopUp");
+    modal.style.display="none"
+}
 async function handleSearch() {
     try {
       const formValue = getFormValues("report_form");    
       const tableReport = document.getElementById("tableReport1");
       
-      // Khởi tạo đối tượng params
       const params = {
         phongId: formValue.phongId || "",
         chucDanhId: formValue.chucDanhId || ""
       };
      
-      // Giả sử handleCallFetchData là một hàm không đồng bộ
       await tableReport.handleCallFetchData(params);
        
     } catch (error) {
@@ -172,10 +161,18 @@ function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
 }
 
 function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    // Kiểm tra nếu giá trị là một số hợp lệ
+    if (val != null && !isNaN(val)) {
+        // Chuyển đổi giá trị thành số nếu nó không phải là số
+        const num = Number(val);
+        // Định dạng số thành chuỗi tiền tệ
+        return num.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    // Nếu giá trị không hợp lệ, trả về một chuỗi rỗng hoặc giá trị gốc tùy ý
+    return "";
 }
 function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
@@ -362,7 +359,7 @@ async function fetchSalaryToEdit(ma) {
             idNhomLuong = lastItem.nhomluong;
             document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
             document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
-            document.querySelector('#phuCapKhacPop input').value = formatCurrency(lastItem.phucapkhac);
+                document.querySelector('#phuCapKhacPop input').value = lastItem.phucapkhac;
             await getDuLieuNhomLuong();
             await getNgachCongChuc();
 
@@ -415,20 +412,7 @@ function showPopup(formId) {
         }
     }
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea,select');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } 
-        else if (input.tagName.toLowerCase() === 'select') {
-            input.selectedIndex = 0; // Reset select về item đầu tiên
-        } else {
-            input.value = '';
-        }
-    });
-}
+
 function buildApiUrl() {
     return apiTable;
 }
@@ -436,11 +420,16 @@ function buildApiUrlBaoCao(){
     return apiTableBaoCao
 }
 function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    if (val != null && !isNaN(val)) {
+        const num = Number(val);
+        return num.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    return "";
 }
+
 function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
     return parseFloat(cleanedValue);

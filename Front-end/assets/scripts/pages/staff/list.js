@@ -102,30 +102,18 @@ function showPopup() {
   window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
-      clearFormValues();
+      clearFormValues("createNhanVien");
     }
   }
   var closeButton = modal.querySelector('.close');
   closeButton.onclick = function () {
-      modal.style.display = "none";
+    modal.style.display = "none";
+    clearFormValues("createNhanVien");
   }
   const popupTitle = modal.querySelector('h2')
   popupTitle.textContent = "Thêm mới nhân viên"
 }
-function clearFormValues(formId) {
-  const form = document.getElementById('createNhanVien');
-  const inputs = form.querySelectorAll('input, textarea, select');
 
-  inputs.forEach(input => {
-    if (input.type === 'checkbox' || input.type === 'radio') {
-      input.checked = false;
-    }
-    else {
-      input.value = '';
-      input.selectedIndex = 0;
-    }
-  });
-}
 
 async function handleCreate() {
   await showConfirm("Bạn có chắc chắn muốn thêm mới nhân viên ?")
@@ -165,13 +153,63 @@ async function handleCreate() {
     }
   });
 }
-function addNewEmp() {
-  localStorage.removeItem("maNhanVien")
+
+function clearFormValue() {
+  const form = document.getElementById('createNhanVien');
+  const inputs = form.querySelectorAll('input, textarea, select,#error');
+
+  inputs.forEach(input => {
+    if (input.type === 'checkbox') {
+      input.checked = false;
+    }
+    else {
+      input.value = '';
+      input.selectedIndex = 0;
+    }
+  });
 }
+
+var thongTinPhongBan = null
+
+function apiTo() {
+  if (!thongTinPhongBan) {
+    return false
+  }
+  return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+}
+function layThongTinTo() {
+  const to = document.getElementById('to')
+  to.renderOption()
+}
+async function getToTheoPhongBanDauTien() {
+  try {
+    const response = await $.ajax({
+      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
+      method: 'GET',
+      contentType: 'application/json',
+    });
+    const phongBanDauTien = response[0]
+    thongTinPhongBan = phongBanDauTien.id
+    layThongTinTo()
+  } catch (error) {
+    console.log("Error", "ajaj")
+  }
+}
+function handlePhongBan() {
+  const phongBan = document.querySelector('#phong select')
+  phongBan.addEventListener("change", (event) => {
+    thongTinPhongBan = event.target.value
+    layThongTinTo()
+  });
+}
+function inits() {
+  handlePhongBan()
+  getToTheoPhongBanDauTien()
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
   popupCreateBtn.addEventListener("click", handleCreate)
-  popupClearBtn.addEventListener("click", clearFormValues)
-  
-
+  popupClearBtn.addEventListener("click", clearFormValue)
+  inits()
 })

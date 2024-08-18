@@ -34,6 +34,10 @@ var TableColumns = [
     {
         label: 'Trạng thái',
         key: 'trangthai',
+        formatGiaTri: (value) => {
+            let result = { text: 'Đang chờ', color: 'blue' };
+            return result;
+        }
     },
     {
         label: 'Hành động',
@@ -94,43 +98,42 @@ var TableColumnsBaoCao = [
 
 async function handleSearch() {
     try {
-      const formValue = getFormValues("report_form");    
-      const tableReport = document.getElementById("tableReport1");
+        const formValue = getFormValues("report_form");
+        const tableReport = document.getElementById("tableReport1");
 
-      const params = {
-        phongId: formValue.phongId || "",
-        chucDanhId: formValue.chucDanhId || ""
-      };
-      await tableReport.handleCallFetchData(params);
-       
+        const params = {
+            phongId: formValue.phongId || "",
+            chucDanhId: formValue.chucDanhId || ""
+        };
+        await tableReport.handleCallFetchData(params);
+
     } catch (error) {
-      console.error("Error in handleSearch:", error);
+        console.error("Error in handleSearch:", error);
     }
-  }
-  function phongBanChange() {
+}
+function phongBanChange() {
     const phongban = document.querySelector('#phongban select')
     phongban.addEventListener("change", (event) => {
         handleSearch()
     });
-  }
-  function chucDanhChange() {
+}
+function chucDanhChange() {
     const phongban = document.querySelector('#chucdanh select')
     phongban.addEventListener("change", (event) => {
         handleSearch()
     });
-  }
+}
 
 //   ---------------------------------------------------------------------------------------
 async function handleAccept() {
-    alert(idRow)
     await showConfirm("Phê duyệt lên lương nhân viên ?")
     setLoading(true)
     const payload = {
         id: idRow,
         trangThai: 1
     };
-    const url1= 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
-    const url2= '&trangThai=1'
+    const url1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
+    const url2 = '&trangThai=1'
     const urlData = url1 + url2
     setTimeout(() => {
         $.ajax({
@@ -145,6 +148,7 @@ async function handleAccept() {
                         table.handleCallFetchData();
                     }
                 });
+                closePopup()
             },
             error: (err) => {
                 console.log('err ', err);
@@ -169,15 +173,14 @@ async function handleAccept() {
 }
 
 async function handleReject() {
-    alert(idRow)
     await showConfirm("Từ chối lên lương nhân viên ?")
     setLoading(true)
     const payload = {
         id: idRow,
         trangThai: 3
     };
-    const url1= 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
-    const url2= '&trangThai=3'
+    const url1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/pheDuyetQuyetDinhLenLuong?id=' + idRow
+    const url2 = '&trangThai=3'
     const urlData = url1 + url2
     setTimeout(() => {
         $.ajax({
@@ -186,12 +189,13 @@ async function handleReject() {
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                showSuccess('Phê duyệt thành công!');
+                showSuccess('Từ chối thành công!');
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
                     }
                 });
+                closePopup()
             },
             error: (err) => {
                 console.log('err ', err);
@@ -215,7 +219,10 @@ async function handleReject() {
     }, 1000);
 }
 
-
+function closePopup() {
+    var modal = document.getElementById("showPopUp");
+    modal.style.display = "none"
+}
 // ---------- Fetch lương hiện tại---------
 
 
@@ -239,6 +246,7 @@ async function fetchSalaryRecent(ma) {
             document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
             document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
             document.querySelector('#phuCapKhacPop input').value = formatCurrency(lastItem.phucapkhac);
+            document.querySelector('#tongLuongNangLuong input').value = formatCurrency(lastItem.tongluong);
             await getDuLieuNhomLuong('#luongCoBanPop input');
             await getNgachCongChuc('#ngachCongChucPop input');
         } else {
@@ -341,33 +349,41 @@ function buildApiUrlBaoCao() {
     return apiTableBaoCao
 }
 function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    // Kiểm tra nếu giá trị là một số hợp lệ
+    if (val != null && !isNaN(val)) {
+        // Chuyển đổi giá trị thành số nếu nó không phải là số
+        const num = Number(val);
+        // Định dạng số thành chuỗi tiền tệ
+        return num.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    // Nếu giá trị không hợp lệ, trả về một chuỗi rỗng hoặc giá trị gốc tùy ý
+    return "";
 }
 function renderActionByStatus() {
     const actionEl = document.getElementById("report_form_action");
     const buildButton = (id, label, type, icon) => {
-      const btnEl = document.createElement("base-button");
-      btnEl.setAttribute('id', id)
-      btnEl.setAttribute("label", label);
-      btnEl.setAttribute("type", type);
-      btnEl.setAttribute("icon", icon);
-      return btnEl;
+        const btnEl = document.createElement("base-button");
+        btnEl.setAttribute('id', id)
+        btnEl.setAttribute("label", label);
+        btnEl.setAttribute("type", type);
+        btnEl.setAttribute("icon", icon);
+        return btnEl;
     };
-    const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-    const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
-  
+    const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+    const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
+
     // excelBtn.addEventListener("click", () => {
     //   handleExportExcel();
     // });
-  
+
     // pdfBtn.addEventListener("click", () => {
     //   handleExportPDF();
     // });
     actionEl.append(pdfBtn, excelBtn);
-  }
+}
 document.addEventListener("DOMContentLoaded", () => {
     renderActionByStatus()
     phongBanChange()

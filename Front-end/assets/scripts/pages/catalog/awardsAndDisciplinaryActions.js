@@ -93,7 +93,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục khen thưởng: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -129,7 +129,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục khen thưởng: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -159,7 +159,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục khen thưởng: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -184,18 +184,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editKhenThuong');
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
+
 
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
@@ -213,7 +203,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editKhenThuong');
     }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
@@ -252,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    // popupClearBtn.addEventListener("click", clearFormValues)
     const inputTenKhenThuong = document.querySelector('base-input[name="ten"]');
     if (inputTenKhenThuong) {
         inputTenKhenThuong.addEventListener('input', checkValues);

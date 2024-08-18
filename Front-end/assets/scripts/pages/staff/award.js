@@ -90,18 +90,7 @@ async function handleCreate() {
     });
 }, 1000); 
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa khen thưởng ?")
     setLoading(true)

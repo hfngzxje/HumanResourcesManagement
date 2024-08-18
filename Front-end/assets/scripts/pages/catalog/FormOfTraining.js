@@ -94,7 +94,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục hình thức đào tạo: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -131,7 +131,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục hình thức đào tạo: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -163,7 +163,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục đào tạo: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -188,20 +188,6 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editDaoTao');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTao'
 }
@@ -219,7 +205,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editDaoTao');
     }
 
     if (isPopupEdit) {

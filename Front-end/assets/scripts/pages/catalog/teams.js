@@ -108,7 +108,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục tổ: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTeam')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -145,7 +145,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục tổ: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTeam')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -160,6 +160,8 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục tổ ?")
+    const valid = validateForm('editTeam')
+    if (!valid) return
     const formValue = getFormValues('editTeam')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
@@ -175,7 +177,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục tổ: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTeam')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -200,21 +202,6 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editTeam');
-    const inputs = form.querySelectorAll('input, textarea, select');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-            input.selectedIndex = 0;
-        }
-    });
-}
-
-
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo'
 }
@@ -225,14 +212,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues('editTeam');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editTeam');
     }
 
     if (isPopupEdit) {

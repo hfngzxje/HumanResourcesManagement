@@ -153,18 +153,7 @@ async function handleSave() {
     });
 }
 
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function renderActionByStatus() {
     const actionEl = document.getElementById('profile_form_action')
     const buildButton = (label, type, icon) => {

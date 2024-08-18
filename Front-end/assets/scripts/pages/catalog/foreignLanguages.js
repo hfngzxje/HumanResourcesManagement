@@ -94,7 +94,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục ngoại ngữ: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNgoaiNgu')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -131,7 +131,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngoại ngữ: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNgoaiNgu')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -162,7 +162,7 @@ async function handleSave() {
             showSuccess('Lưu Thành Công!')
             recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
             closePopup()
-            clearFormValues()
+            clearFormValues('editNgoaiNgu')
             table.handleCallFetchData();
         },
         error: (err) => {
@@ -187,20 +187,6 @@ async function handleSave() {
 }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editNgoaiNgu');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
 }
@@ -218,7 +204,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editNgoaiNgu');
     }
 
     if (isPopupEdit) {
