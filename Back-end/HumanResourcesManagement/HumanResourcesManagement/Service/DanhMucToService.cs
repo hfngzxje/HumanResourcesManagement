@@ -146,21 +146,23 @@ namespace HumanResourcesManagement.Service
         public async Task<IEnumerable<DanhMucToResponse>> GetDanhMucToByPhong(int phongId)
         {
             var danhMucToResponse = await _context.TblDanhMucTos
-            .Where(nv => nv.Id == phongId)
+            .Where(nv => nv.Idphong == phongId).ToListAsync();
+
+            var resp = danhMucToResponse
             .Select(cm => new DanhMucToResponse
             {
                 Id = cm.Id,
                 Ten = cm.Ten,
-                TenPhong = cm.IdphongNavigation.Ten,
+                TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(nv => nv.Id == cm.Id).Ten,
                 Idphong = cm.Idphong,
                 Ma = cm.Ma.Trim()
-            }).ToListAsync();
+            }).ToList();
 
             if (danhMucToResponse == null||!danhMucToResponse.Any())
             {
                 return null;
             }
-            return danhMucToResponse;
+            return resp;
         }
     }
 }

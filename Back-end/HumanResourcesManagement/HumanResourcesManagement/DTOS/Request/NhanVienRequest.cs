@@ -99,5 +99,6 @@ namespace HumanResourcesManagement.Models
         public int? Phong { get; set; }
 
         public int? To { get; set; }
+        public int? VaitroId { get; set; }
     }
 }

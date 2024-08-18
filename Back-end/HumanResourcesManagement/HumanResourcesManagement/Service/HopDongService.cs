@@ -162,12 +162,18 @@ namespace HumanResourcesManagement.Service
                 }
 
                 var hopDongsCuaNhanVien = await _context.TblHopDongs
-                    .Where(hd => hd.Ma == request.Ma && hd.TrangThai != 2)
+                    .Where(hd => hd.Ma == request.Ma)
                     .ToListAsync();
 
                 foreach (var hopDong in hopDongsCuaNhanVien)
                 {
                     hopDong.TrangThai = 2;
+                    var luongs = await _context.TblLuongs.Where(l => l.Mahopdong == hopDong.Mahopdong && l.Trangthai == 1).ToListAsync();
+                    foreach (var luong in luongs)
+                    {
+                        luong.Trangthai = 2;
+                    }
+                    await _context.SaveChangesAsync();
                 }
 
                 await _context.SaveChangesAsync();
@@ -194,10 +200,13 @@ namespace HumanResourcesManagement.Service
                     Ma = request.Ma,
                     TrangThai = 1
                 };
-
+                
                 nhanVien.Chucvuhientai = newHopDong.Chucdanh;
                 _context.Entry(nhanVien).State = EntityState.Modified;
                 _context.TblHopDongs.Add(newHopDong);
+                
+                
+                
                 await _context.SaveChangesAsync();
                 return newHopDong;
         }
