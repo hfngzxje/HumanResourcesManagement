@@ -42,7 +42,7 @@
                   Tạo mới nhân viên</a>
               </div>
             </div>
-            <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
+            <base-table api="https://localhost:7141/api/NhanVien"
               columns="TableColumns" pagesize="5">
             </base-table>
           </div>
@@ -127,17 +127,17 @@
                   <div class="row">
                     <div class="col-md-4">
                       <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh"
+                        api="https://localhost:7141/api/NhanVien/chucDanh"
                         keyValue="id" keyLabel="ten"></base-select>
                     </div>
                     <div class="col-md-4">
                       <base-select label="Phòng" name="phong"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"
+                        api="https://localhost:7141/api/NhanVien/phong"
                         keyValue="id" keyLabel="ten"></base-select>
                     </div>
                     <div class="col-md-4">
                       <base-select label="Tổ" name="to"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to" keyValue="id"
+                        api="https://localhost:7141/api/NhanVien/to" keyValue="id"
                         keyLabel="ten"></base-select>
                     </div>
                   </div>
@@ -219,12 +219,12 @@
             <div class="tile">
               <div class="col-span-2 sm:col-span-1 mt-1">
                 <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                  api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh" keyValue="id"
+                  api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
                   keyLabel="ten"></base-select>
               </div>
               <div class="col-span-2 sm:col-span-1 mt-3">
                 <base-select id="phong" label="Phòng" name="phong"
-                  api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong" keyValue="id"
+                  api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
                   keyLabel="ten"></base-select>
               </div>
               <div class="col-span-2 sm:col-span-1 mt-3">

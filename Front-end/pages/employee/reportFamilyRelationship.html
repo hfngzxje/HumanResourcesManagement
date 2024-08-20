@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Báo cáo danh sách nhân viên | Quản trị Admin</title>
+  <title>Báo cáo danh sách người thân | Employee</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,8 +13,15 @@
   <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <!-- Font-icon css-->
-  <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
-  <script src="/assets/scripts/common/registerComponent.js"></script>
+  <script>
+    // Đặt đoạn mã kiểm tra vào đây
+    (function () {
+        if (!localStorage.getItem('maNhanVien')) {
+            window.location.href = '/pages/authentic/login.html';
+            return; // Chuyển hướng nếu không có mã nhân viên
+        }
+    })();
+</script>
   <style>
     @media (max-width: 768px) {
       #tabList {
@@ -71,11 +78,6 @@
                 <div class="">
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-select id="manhanvien" label="Mã Nhân Viên" name="MaNV" keyValue="ma" keyLabel="ma"
-                          api="https://localhost:7141/api/NhanVien"
-                          includeAll></base-select>
-                      </div>
                       <div class="col-span-2 sm:col-span-1 mt-2 ">
                         <base-select id="quanhe" label="Quan hệ" name="QuanHe" keyValue="id" keyLabel="ten"
                           api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc"
@@ -90,11 +92,6 @@
                       <div class="col-span-2 sm:col-span-1 mt-3">
                         <base-select id="gioitinh" label="Giới tính" name="GioiTinh" options="gioiTinh"
                           style="margin-top: 9px"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-3">
-                        <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
-                          api="https://localhost:7141/api/PhongBan/getAllPhongBan"
-                          includeAll></base-select>
                       </div>
                     </div>
 
@@ -125,15 +122,17 @@
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+  <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
   <script src="../../assets/scripts/common/transform.js"></script>
   <script src="../../assets/scripts/common/loading.js"></script>
-  <script src="../../assets/scripts/pages/staffSideBar/common.js"></script>
+  <script src="../../assets/scripts/pages/employee/reportCommon.js"></script>
   <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="../../assets/scripts/common/formHanlde.js"></script>
-  <script src="../../assets/scripts/pages/staffSideBar/reportFamilyRelationship.js"></script>
+  <script src="../../assets/scripts/pages/employee/reportFamilyRelationship.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
   <script src="/assets/scripts/common/dateTime.js"></script>
+
 </body>
 
 </html>

@@ -93,7 +93,7 @@ function buildPayload(formValue) {
 async function getNgachCongChucByID(idNgachCongChuc) {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -110,7 +110,7 @@ async function fetchNhomLuong(id) {
 
     try {
         const data = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + id,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -143,7 +143,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/add',
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/add',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -183,7 +183,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/delete/' + idNhomLuong,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/delete/' + idNhomLuong,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
@@ -210,7 +210,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/update/' + idNhomLuong,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/update/' + idNhomLuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -298,7 +298,7 @@ function checkValues() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/all'
+    return 'https://localhost:7141/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {

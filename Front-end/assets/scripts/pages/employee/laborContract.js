@@ -42,5 +42,5 @@ var TableColumns = [
     }
 ]
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id='+ma ;
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id='+ma ;
 }

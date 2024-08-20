@@ -83,7 +83,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien'
+    return 'https://localhost:7141/api/NhanVien'
 }
 
 document.addEventListener('DOMContentLoaded', () => {

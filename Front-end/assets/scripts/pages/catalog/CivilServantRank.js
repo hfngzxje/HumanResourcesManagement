@@ -61,7 +61,7 @@ function fetchNgachCongChuc(id) {
     setLoading(true)
     idNgachCongChuc = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + id,
+        url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/ThemNgachCongChuc',
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/ThemNgachCongChuc',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -127,7 +127,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/XoaNgachCongChuc?id=' + idNgachCongChuc,
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/XoaNgachCongChuc?id=' + idNgachCongChuc,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
@@ -155,7 +155,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/SuaNgachCongChuc',
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/SuaNgachCongChuc',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -190,7 +190,7 @@ async function handleSave() {
 
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/getAllNgachCongChuc'
+    return 'https://localhost:7141/api/DanhMucNgachCongChuc/getAllNgachCongChuc'
 }
 
 function showPopup() {

@@ -62,7 +62,7 @@ function fetchTonGiao(id) {
     setLoading(true)
     idTonGiao = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTonGiao', data, 'fetch');
@@ -89,7 +89,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/addDanhMucTonGiao',
+            url: 'https://localhost:7141/api/DanhMucTonGiao/addDanhMucTonGiao',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -129,7 +129,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
+            url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchTonGiao res :: ', data);
@@ -159,7 +159,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/updateTonGiao',
+            url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -194,7 +194,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiao'
+    return 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiao'
 }
 
 function showPopup() {

@@ -99,7 +99,7 @@ function apiTo(){
     if(!thongTinPhongBan){
         return false
     }
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+    return 'https://localhost:7141/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
 }
 function layThongTinTo() {
     const to = document.getElementById('to')
@@ -108,7 +108,7 @@ function layThongTinTo() {
 async function getToTheoPhongBanDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
+            url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -135,7 +135,7 @@ function fetchDieuChuyen() {
     setLoading(true)
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/CongViecHienTai/' + maDetail,
+        url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + maDetail,
         method: 'GET',
         success: function (data) {
             setFormValue('workingProcessHienTai_form', data)
@@ -153,7 +153,7 @@ function fetchDieuChuyen() {
 async function apiGetDuLieu() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
+            url: 'https://localhost:7141/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -179,7 +179,7 @@ async function handleLuuLichSuDieuChuyen() {
     setLoading(true);
     setTimeout(async () => { 
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/LuuLichSuDieuChuyen',
+            url: 'https://localhost:7141/api/DieuChuyen/LuuLichSuDieuChuyen',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -215,7 +215,7 @@ async function handleHuyDieuChuyen(id) {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
+        url: 'https://localhost:7141/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
         method: 'PUT',
         success: function (data) {
             showSuccess('Hủy Thành Công!');
@@ -261,7 +261,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlChuyenDen() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
+    return 'https://localhost:7141/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     fetchDieuChuyen()

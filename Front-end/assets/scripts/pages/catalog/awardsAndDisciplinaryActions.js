@@ -59,7 +59,7 @@ function fetchKhenThuong(id) {
     setLoading(true)
     idKhenThuong = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
+        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editKhenThuong', data, 'fetch');
@@ -85,7 +85,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -123,7 +123,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
@@ -151,7 +151,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -188,7 +188,7 @@ async function handleSave() {
 
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
+    return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
 }
 
 function showPopup() {

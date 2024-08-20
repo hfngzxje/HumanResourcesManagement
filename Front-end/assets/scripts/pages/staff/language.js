@@ -94,7 +94,7 @@ function fetchNgoaiNgu(id) {
     idNgoaiNgu = id
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguById/' + id,
+        url: 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data, 'fetch');
@@ -121,7 +121,7 @@ async function handleCreateNgoaiNgu() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/addNgoaiNgu',
+            url: 'https://localhost:7141/api/NgoaiNgu/addNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -160,7 +160,7 @@ async function handleRemoveNgoaiNgu(id) {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
+            url: 'https://localhost:7141/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
@@ -194,7 +194,7 @@ async function handleSaveNgoaiNgu() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/updateNgoaiNgu',
+            url: 'https://localhost:7141/api/NgoaiNgu/updateNgoaiNgu',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -252,7 +252,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl2() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
+    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()

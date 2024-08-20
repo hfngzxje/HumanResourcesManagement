@@ -102,7 +102,7 @@ function fetchTrinhDo(id) {
     idTrinhDo = id
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
+        url: 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data, 'fetch');
@@ -132,7 +132,7 @@ async function handleCreateTrinhDo() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/addTrinhDoVanHoa',
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/addTrinhDoVanHoa',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -172,7 +172,7 @@ async function handleRemoveTrinhDo() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
@@ -206,7 +206,7 @@ async function handleSaveTrinhDo() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -263,7 +263,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl1() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
+    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

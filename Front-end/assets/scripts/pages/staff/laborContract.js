@@ -92,7 +92,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
+        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editLaborContract', data, 'fetch');
@@ -121,7 +121,7 @@ async function handleCreate() {
     setTimeout(() => {
     $.ajax({
         
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
+        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -163,7 +163,7 @@ async function handleRemove() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
         method: 'DELETE',
         success: function (data) {
             showSuccess('Xóa Thành Công!');
@@ -192,7 +192,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -246,7 +246,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

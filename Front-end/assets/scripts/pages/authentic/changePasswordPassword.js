@@ -7,9 +7,7 @@ btn.onclick = function () {
   
 }
 
-span.onclick = function () {
-  modal.style.display = "none";
-}
+
 
 window.onclick = function (event) {
   if (event.target == modal) {
@@ -33,7 +31,7 @@ function handleChangePassword() {
   const payload = buildPayload(formValue)
   setLoading(true)
   $.ajax({
-      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/ChangePassword',
+      url: 'https://localhost:7141/api/DangNhap/ChangePassword',
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(payload),

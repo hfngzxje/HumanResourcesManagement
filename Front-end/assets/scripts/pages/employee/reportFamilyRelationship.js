@@ -1,43 +1,58 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachDangVien";
+const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNguoiThan";
+
+// const maNhanVien = localStorage.getItem('maNhanVien')
 var TableColumns = [
   {
-    label: "Mã nhân viên",
-    key: "ma",
+    label: 'Họ tên',
+    key: 'ten',
+
   },
   {
-    label: "Họ tên",
-    key: "ten",
+    label: 'Giới tính',
+    key: 'gioiTinh',
+    type: 'gender'
   },
   {
-    label: "Ngày sinh",
-    key: "ngaysinh"
+    label: 'Ngày sinh',
+    key: 'ngaySinh'
   },
   {
-    label: "Giới tính",
-    key: "gioitinh",
-    type: "gender",
+    label: 'Quan hệ',
+    key: 'quanHe'
   },
   {
-    label: "Điện thoại",
-    key: "didong",
+    label: 'Nghề nghiệp',
+    key: 'ngheNghiep'
   },
   {
-    label: "Ngày vào đảng",
-    key: "ngayVaoDang"
+    label: 'Quan hệ',
+    key: 'quanHe',
   },
   {
-    label: "Ngày chính thức",
-    key: "ngayVaoDangChinhThuc"
+    label: 'Địa chỉ',
+    key: 'diaChi'
   },
   {
-    label: "Phòng ban",
-    key: "tenPhong",
+    label: 'Điện thoại',
+    key: 'dienThoai'
   },
   {
-    label: "Quê quán",
-    key: "queQuan",
+    label: 'Nhân viên tham chiếu',
+    key: 'tenNV'
   }
+  ,
+  {
+    label: 'Ghi chú',
+    key: 'khac'
+  }
+]
+
+var gioiTinh = [
+  { label: "Tất cả", value: '' },
+  { label: "Nam", value: 'true' },
+  { label: "Nữ", value: 'false' },
 ];
+
 
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
@@ -51,32 +66,28 @@ function renderActionByStatus() {
   };
   const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
   const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
-
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
   });
-
   pdfBtn.addEventListener("click", () => {
     handleExportPDF();
   });
-
   actionEl.append(pdfBtn, excelBtn);
-
 }
 
 // _____________________________________excel_________________________________________________________
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('ToDate', formValue.ToDate || '');
-  params.append('FromDate', formValue.FromDate || '');
-  params.append('PhongBan', formValue.PhongBan || '');
-  params.append('QueQuan', formValue.QueQuan || '');
-  params.append('NamTuoiDang', formValue.NamTuoiDang || '');
-  params.append('NamVaoDang', formValue.NamVaoDang || '');
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('MaNV', maNhanVien);
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('PhongBan',  '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToExecl', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
       method: 'POST',
       body: params,
       headers: {
@@ -99,7 +110,7 @@ function createDownloadLinkExcel(blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'BaoCao_DanhSachDangVien.xlsx';
+  link.download = 'BaoCao_DanhSachNguoiThan.xlsx';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -111,15 +122,15 @@ function createDownloadLinkExcel(blob) {
 async function handleExportPDF() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('ToDate', formValue.ToDate || '');
-  params.append('FromDate', formValue.FromDate || '');
-  params.append('PhongBan', formValue.PhongBan || '');
-  params.append('QueQuan', formValue.QueQuan || '');
-  params.append('NamTuoiDang', formValue.NamTuoiDang || '');
-  params.append('NamVaoDang', formValue.NamVaoDang || '');
+  params.append('GioiTinh', formValue.GioiTinh || '');
+  params.append('MaNV', maNhanVien);
+  params.append('QuanHe', formValue.QuanHe || '');
+  params.append('TuoiTu', formValue.TuoiTu || '');
+  params.append('TuoiDen', formValue.TuoiDen || '');
+  params.append('PhongBan',  '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToPDF', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToPDF', {
       method: 'POST',
       body: params,
       headers: {
@@ -142,7 +153,7 @@ function createDownloadLinkPDF(blob) {
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'BaoCao_DanhSachDangVien.pdf';
+  link.download = 'BaoCao_DanhSachNguoiThan.pdf';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -150,88 +161,73 @@ function createDownloadLinkPDF(blob) {
 }
 // _______________________________________________________________________________________________________
 
+function buildApiUrl() {
+  return apiTable;
+}
 
 async function handleSearch() {
   try {
     const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
     const params = {
-      ToDate: formValue.ToDate,
-      FromDate: formValue.FromDate,
-      PhongBan: formValue.PhongBan || "",
-      QueQuan: formValue.QueQuan,
-      NamTuoiDang: formValue.NamTuoiDang,
-      NamVaoDang: formValue.NamVaoDang
+      GioiTinh: formValue.GioiTinh || "",
+      MaNV: maNhanVien ,
+      QuanHe: formValue.QuanHe || "",
+      TuoiTu: formValue.TuoiTu || "",
+      TuoiDen: formValue.TuoiDen || "",
+      PhongBan: ""
     };
     await tableReport.handleCallFetchData(params);
-  }
-  catch (error) {
+
+  } catch (error) {
     console.error("Error in handleSearch:", error);
   }
-
-}
-function queQuanChange() {
-  const phongban = document.querySelector('#quequan input')
-  phongban.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-function phongBanChange() {
-  const phongban = document.querySelector('#phongban select')
-  phongban.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-function namTuoiDangChange() {
-  const phongban = document.querySelector('#namtuoidang input')
-  phongban.addEventListener("change", (event) => {
-      handleSearch()
-  });
-}
-function namVaoDangChange() {
-  const phongban = document.querySelector('#namvaodang input')
-  phongban.addEventListener("change", (event) => {
-      handleSearch()
-  });
 }
 
-let fromDateChanged = false;
-let toDateChanged = false;
+function quanHeChange() {
+  const phongban = document.querySelector('#quanhe select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+function gioiTinhChange() {
+  const phongban = document.querySelector('#gioitinh select')
+  phongban.addEventListener("change", (event) => {
+      handleSearch()
+  });
+}
+let tuoiTuChanged = false;
+let tuoiDenChanged = false;
 
 function fromChange() {
-  const fromDatePicker = document.querySelector('#tungay input');
+  const fromDatePicker = document.querySelector('#tuoitu input');
   fromDatePicker.addEventListener("change", (event) => {
-    fromDateChanged = true;
+    tuoiTuChanged = true;
     dateChange();
   });
 }
 
 function toChange() {
-  const toDatePicker = document.querySelector('#denngay input');
+  const toDatePicker = document.querySelector('#tuoiden input');
   toDatePicker.addEventListener("change", (event) => {
-    toDateChanged = true;
+    tuoiDenChanged = true;
     dateChange();
   });
 }
 function dateChange(){
-  if(fromDateChanged && toDateChanged){
+  if(tuoiDenChanged && tuoiTuChanged){
     handleSearch();
   }
 }
-function inits(){
-  queQuanChange()
-  phongBanChange()
-  namTuoiDangChange()
-  namVaoDangChange()
-  toChange()
-  dateChange()
-}
 
-function buildApiUrl() {
-  return apiTable;
+function inits(){
+  quanHeChange()
+  gioiTinhChange()
+  fromChange()
+  toChange()
 }
 document.addEventListener("DOMContentLoaded", () => {
-  renderActionByStatus();
-  handleSearch();
+  renderActionByStatus()
+  handleSearch()
   inits()
 });

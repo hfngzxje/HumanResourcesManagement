@@ -61,7 +61,7 @@ function fetchNguoiThan(id) {
     setLoading(true)
     idQuanhe = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
+        url: 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -90,7 +90,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/addDanhMucQuanHe',
+            url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -129,7 +129,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
+            url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
@@ -159,7 +159,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
+            url: 'https://localhost:7141/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -194,7 +194,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanToc'
+    return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc'
 }
 
 function showPopup() {
