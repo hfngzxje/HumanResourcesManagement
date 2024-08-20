@@ -205,11 +205,22 @@ function fromChange() {
     fromDateChanged = true;
     dateChange();
   });
+
+  const fromDatePicker1 = document.querySelector('#tungay input');
+  fromDatePicker1.addEventListener("changeDate", (event) => {
+    fromDateChanged = true;
+    dateChange();
+  });
 }
 
 function toChange() {
   const toDatePicker = document.querySelector('#denngay input');
   toDatePicker.addEventListener("change", (event) => {
+    toDateChanged = true;
+    dateChange();
+  });
+  const toDatePicker1 = document.querySelector('#denngay input');
+  toDatePicker1.addEventListener("changeDate", (event) => {
     toDateChanged = true;
     dateChange();
   });

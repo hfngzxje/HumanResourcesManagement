@@ -62,8 +62,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
   });
@@ -159,6 +159,34 @@ function createDownloadLinkPDF(blob) {
 }
 // _______________________________________________________________________________________________________
 
+let thongTinPhongBan = null
+
+function apiMaNV() {
+  if (!thongTinPhongBan) {
+    return false
+  }
+  return 'https://localhost:7141/api/NhanVien/getByPhongBan?idPhong=' + thongTinPhongBan
+}
+function layThongTinMaNV() {
+  const ma = document.getElementById('manhanvien')
+  ma.renderOption()
+}
+async function getMaNVTheoPhongBanDauTien() {
+  try {
+    const response = await $.ajax({
+      url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
+      method: 'GET',
+      contentType: 'application/json',
+    });
+    const phongBanDauTien = response[0]
+    thongTinPhongBan = phongBanDauTien.id
+    layThongTinMaNV()
+  } catch (error) {
+    console.log("Error", "ajaj")
+  }
+}
+
+
 function buildApiUrl() {
   return apiTable;
 }
@@ -184,25 +212,27 @@ async function handleSearch() {
 function maNhanVienChange() {
   const phongban = document.querySelector('#manhanvien select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function quanHeChange() {
   const phongban = document.querySelector('#quanhe select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function gioiTinhChange() {
   const phongban = document.querySelector('#gioitinh select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    thongTinPhongBan = event.target.value
+    layThongTinMaNV()
+    handleSearch()
   });
 }
 let tuoiTuChanged = false;
@@ -214,6 +244,12 @@ function fromChange() {
     tuoiTuChanged = true;
     dateChange();
   });
+
+  const fromDatePicker1 = document.querySelector('#tuoitu input');
+  fromDatePicker1.addEventListener("changeDate", (event) => {
+    tuoiTuChanged = true;
+    dateChange();
+  });
 }
 
 function toChange() {
@@ -222,20 +258,27 @@ function toChange() {
     tuoiDenChanged = true;
     dateChange();
   });
+
+  const toDatePicker1 = document.querySelector('#tuoiden input');
+  toDatePicker1.addEventListener("changeDate", (event) => {
+    tuoiDenChanged = true;
+    dateChange();
+  });
 }
-function dateChange(){
-  if(tuoiDenChanged && tuoiTuChanged){
+function dateChange() {
+  if (tuoiDenChanged && tuoiTuChanged) {
     handleSearch();
   }
 }
 
-function inits(){
+function inits() {
   maNhanVienChange()
   quanHeChange()
   gioiTinhChange()
   phongBanChange()
   fromChange()
   toChange()
+  getMaNVTheoPhongBanDauTien()
 }
 document.addEventListener("DOMContentLoaded", () => {
   renderActionByStatus()

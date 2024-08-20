@@ -68,12 +68,12 @@ class CustomSidebar extends HTMLElement {
             class="app-menu__label">Quản lý nhân viên</span></a></li>
       <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i class='app-menu__icon bx bx-file'></i><span
             class="app-menu__label">Quản lý hợp đồng</span></a></li>
-      <li><a class="app-menu__item" href="table-data-product.html"><i
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listTransfer.html"><i
             class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Quản lý điều chuyển</span></a>
       </li>
-      <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-trophy'></i><span
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listAward.html"><i class='app-menu__icon bx bx-trophy'></i><span
             class="app-menu__label">Quản lý khen thưởng</span></a></li>
-      <li><a class="app-menu__item" href="table-data-banned.html"><i class='app-menu__icon bx bx-shield'></i><span
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listDisciple.html"><i class='app-menu__icon bx bx-shield'></i><span
             class="app-menu__label">Quản lý kỷ luật</span></a></li>
       <li><a class="app-menu__item" href="/pages/catalog/catalog.html"><i class='app-menu__icon bx bx-category-alt'></i><span
             class="app-menu__label">Danh mục</span></a></li>
@@ -95,7 +95,7 @@ class CustomSidebar extends HTMLElement {
             <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Đổi mật khẩu
             </h2>
-            <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+            <form id="change_form" class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
                 <div>
                   <base-input placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
                 </div>
