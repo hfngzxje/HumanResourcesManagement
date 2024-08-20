@@ -12,5 +12,7 @@ namespace HumanResourcesManagement.Service.IService
         //Task<IEnumerable<DieuChuyenResponseDto>> GetAllDieuChuyen(string maNV);
         Task<TblNhanVien> DieuChuyenNhanVien(string maNV, int id); 
         Task<IEnumerable<DieuChuyenResponseDto>> getLichSuDieuChuyen(string maNV);
+        Task<IEnumerable<LichSuDieuChuyenResponse>> GetAllAsync(short? trangThai, DateTime? ngayDieuChuyen);
+
     }
 }

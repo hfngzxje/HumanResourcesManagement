@@ -195,5 +195,48 @@ namespace HumanResourcesManagement.Service
             }
             return all;
         }
+
+
+        public async Task<IEnumerable<LichSuDieuChuyenResponse>> GetAllAsync(short? trangThai, DateTime? ngayDieuChuyen)
+        {
+            var query = _context.TblLichSuDieuChuyens.AsQueryable();
+
+            if (trangThai.HasValue)
+            {
+                query = query.Where(x => x.TrangThai == trangThai.Value);
+            }
+
+            if (ngayDieuChuyen.HasValue)
+            {
+                query = query.Where(x => x.NgayDieuChuyen >= ngayDieuChuyen.Value);
+            }
+
+            var result = await query
+                .Select(x => new LichSuDieuChuyenResponse
+                {
+                    Id = x.Id,
+                    IdDieuChuyen = x.IdDieuChuyen,
+                    Ma = x.Ma,
+                    NgayDieuChuyen = x.NgayDieuChuyen,
+                    IdPhongCu = x.IdPhongCu,
+                    TenPhongCu = _context.TblDanhMucPhongBans.Where(p => p.Id == x.IdPhongCu).Select(p => p.Ten).FirstOrDefault(),
+                    IdPhongMoi = x.IdPhongMoi,
+                    TenPhongMoi = _context.TblDanhMucPhongBans.Where(p => p.Id == x.IdPhongMoi).Select(p => p.Ten).FirstOrDefault(),
+                    IdToCu = x.IdToCu,
+                    TenToCu = _context.TblDanhMucTos.Where(t => t.Id == x.IdToCu).Select(t => t.Ten).FirstOrDefault(),
+                    IdToMoi = x.IdToMoi,
+                    TenToMoi = _context.TblDanhMucTos.Where(t => t.Id == x.IdToMoi).Select(t => t.Ten).FirstOrDefault(),
+                    IdChucVuCu = x.IdChucVuCu,
+                    TenChucVuCu = _context.TblDanhMucChucDanhs.Where(c => c.Id == x.IdChucVuCu).Select(c => c.Ten).FirstOrDefault(),
+                    IdChucVuMoi = x.IdChucVuMoi,
+                    TenChucVuMoi = _context.TblDanhMucChucDanhs.Where(c => c.Id == x.IdChucVuMoi).Select(c => c.Ten).FirstOrDefault(),
+                    GhiChu = x.GhiChu,
+                    TrangThai = x.TrangThai
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
     }
 }

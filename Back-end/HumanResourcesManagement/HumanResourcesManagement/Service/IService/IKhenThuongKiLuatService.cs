@@ -10,5 +10,7 @@ namespace HumanResourcesManagement.Service.IService
         Task<IEnumerable<KhenThuongKyLuatResponse>> GetKhenThuongKyLuatByMaNV(string maNV, string khenThuongOrKiLuat);
         Task AddKhenThuongKyLuat(KhenThuongKyLuatRequest req);
         Task DeleteKhenThuongKyLuat(int id);
+        Task<IEnumerable<KhenThuongKyLuatListResponse>> GetKhenThuongAsync(DateTime? datetime);
+        Task<IEnumerable<KhenThuongKyLuatListResponse>> GetKyLuatAsync(DateTime? datetime);
     }
 }

@@ -93,5 +93,19 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("khen-thuong")]
+        public async Task<IActionResult> GetKhenThuongAsync([FromQuery] DateTime? fromDate)
+        {
+            var results = await _khenThuongKiLuatService.GetKhenThuongAsync(fromDate);
+            return Ok(results);
+        }
+
+        [HttpGet("ky-luat")]
+        public async Task<IActionResult> GetKyLuatAsync([FromQuery] DateTime? fromDate)
+        {
+            var results = await _khenThuongKiLuatService.GetKyLuatAsync(fromDate);
+            return Ok(results);
+        }
     }
 }
