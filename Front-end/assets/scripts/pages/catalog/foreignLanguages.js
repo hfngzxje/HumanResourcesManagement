@@ -216,7 +216,7 @@ function showPopup() {
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+        popupTitle.textContent = "Thêm mới Tiêu Đề Ngoại Ngữ"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')

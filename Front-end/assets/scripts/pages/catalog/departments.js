@@ -15,7 +15,7 @@ var TableColumns = [
     {
         label: 'ID',
         key: 'id',
-        // type: 'disabled'
+        type: 'disabled'
     },
     {
         label: 'Mã',

@@ -25,6 +25,6 @@ var TableColumns = [
 ]
 function buildApiUrl() {
     let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma
-    let string2 = '/2'
+    let string2 = '/Kỷ luật'
     return string1 + string2;
 }

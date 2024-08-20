@@ -35,15 +35,6 @@ class CustomHeader extends HTMLElement {
 class CustomFooter extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-     
-        <div class="text-center" style="font-size: 13px">
-            <p><b>Copyright
-                    <script type="text/javascript">
-                        document.write(new Date().getFullYear());
-                    </script> Phần mềm quản lý nhân sự | HRM
-                </b></p>
-        </div>
-
       `;
 
     //     <footer class="footer">

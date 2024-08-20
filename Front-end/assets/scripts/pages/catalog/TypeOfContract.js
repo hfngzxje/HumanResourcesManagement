@@ -63,7 +63,7 @@ function fetchHopDong(id) {
         method: 'GET',
         success: function (data) {
 
-            // setFormValue('editTeam', data, 'fetch');
+            // setFormValue('editTypeOfContract', data, 'fetch');
             setFormValue('editTypeOfContract', data)
             oldValue = data.ten
         },
@@ -97,7 +97,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục loại hợp đồng: ${formValue.ten}`);
                 closePopup()
-                clearFormValues('editTeam')
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -134,7 +134,7 @@ async function handleRemoveRow() {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục loại hợp đồng: ${oldValue}`);
                 closePopup()
-                clearFormValues('editTeam')
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -166,7 +166,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục loại hợp đồng: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues('editTeam')
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -201,14 +201,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues('editTeam');
+            clearFormValues('editTypeOfContract');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues('editTeam');
+        clearFormValues('editTypeOfContract');
     }
 
     if (isPopupEdit) {
@@ -241,6 +241,7 @@ function checkValues() {
 function closePopup() {
     var modal = document.getElementById("editTypeOfContract");
     modal.style.display = "none"
+    clearFormValues('editTypeOfContract')
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {
