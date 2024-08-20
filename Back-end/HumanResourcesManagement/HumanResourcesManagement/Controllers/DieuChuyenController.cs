@@ -90,5 +90,23 @@ namespace HumanResourcesManagement.Controllers
                 return StatusCode(501, ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<LichSuDieuChuyenResponse>>> GetAll([FromQuery] short? trangThai, [FromQuery] DateTime? ngayDieuChuyen)
+        {
+            try
+            {
+                var result = await _dieuChuyenService.GetAllAsync(trangThai, ngayDieuChuyen);
+                return Ok(result);
+            }catch (Exception ex)
+            {
+                return StatusCode(501, ex.Message);
+
+            }
+
+        }
+
+
+
     }
 }

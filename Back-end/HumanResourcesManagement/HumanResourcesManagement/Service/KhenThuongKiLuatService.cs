@@ -124,5 +124,66 @@ namespace HumanResourcesManagement.Service
             return resp;
         }
 
+        public async Task<IEnumerable<KhenThuongKyLuatListResponse>> GetKhenThuongAsync(DateTime? fromDate)
+        {
+            var query = _context.TblKhenThuongKyLuats
+                .Where(x => x.Khenthuongkiluat == 1);
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(x => x.Ngay >= fromDate.Value);
+            }
+
+            return await query
+                .Select(x => new KhenThuongKyLuatListResponse
+                {
+                    Id = x.Id,
+                    Ma = x.Ma,
+                    TenNV = _context.TblNhanViens
+                        .Where(nv => nv.Ma == x.Ma)
+                        .Select(nv => nv.Ten)
+                        .FirstOrDefault(),
+                    Ngay = x.Ngay,
+                    Noidung = x.Noidung,
+                    Lido = x.Lido,
+                    TenId = x.Ten,
+                    Ten = _context.TblDanhMucKhenThuongKyLuats
+                        .Where(dm => dm.Id == x.Ten)
+                        .Select(dm => dm.Ten)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<KhenThuongKyLuatListResponse>> GetKyLuatAsync(DateTime? fromDate)
+        {
+            var query = _context.TblKhenThuongKyLuats
+                .Where(x => x.Khenthuongkiluat == 2);
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(x => x.Ngay >= fromDate.Value);
+            }
+
+            return await query
+                .Select(x => new KhenThuongKyLuatListResponse
+                {
+                    Id = x.Id,
+                    Ma = x.Ma,
+                    TenNV = _context.TblNhanViens
+                        .Where(nv => nv.Ma == x.Ma)
+                        .Select(nv => nv.Ten)
+                        .FirstOrDefault(),
+                    Ngay = x.Ngay,
+                    Noidung = x.Noidung,
+                    Lido = x.Lido,
+                    TenId = x.Ten,
+                    Ten = _context.TblDanhMucKhenThuongKyLuats
+                        .Where(dm => dm.Id == x.Ten)
+                        .Select(dm => dm.Ten)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+        }
     }
 }
