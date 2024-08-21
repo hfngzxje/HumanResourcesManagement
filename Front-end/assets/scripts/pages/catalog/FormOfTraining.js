@@ -59,7 +59,7 @@ function fetchDaoTao(id) {
     setLoading(true)
     idDaoTao = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTaoById/' + id,
+        url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTaoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editDaoTao', data)
@@ -85,7 +85,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/addDanhMucHinhThucDaoTao',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -94,7 +94,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục hình thức đào tạo: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -124,14 +124,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/deleteDanhMucHinhThucDaoTao?id=' + idDaoTao,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục hình thức đào tạo: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -154,7 +154,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -163,7 +163,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục đào tạo: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editDaoTao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -188,22 +188,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editDaoTao');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTao'
+    return 'https://localhost:7141/api/DanhMucHinhThucDaoTao/getDanhMucHinhThucDaoTao'
 }
 
 function showPopup() {
@@ -219,7 +205,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editDaoTao');
     }
 
     if (isPopupEdit) {

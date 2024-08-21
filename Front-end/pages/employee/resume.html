@@ -12,7 +12,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+    <script>
+        // Đặt đoạn mã kiểm tra vào đây
+        (function () {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; // Chuyển hướng nếu không có mã nhân viên
+            }
+        })();
+    </script>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -133,13 +141,13 @@
                                         <base-radio label="Nữ" name="gioitinh" value="0"
                                             style="display: none;"></base-radio>
                                         <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh"
+                                            api="https://localhost:7141/api/NhanVien/chucDanh"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                                         <base-select label="Phòng" name="phong"
-                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"
+                                            api="https://localhost:7141/api/NhanVien/phong"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                                         <base-select label="Tổ" name="to"
-                                            api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
+                                            api="https://localhost:7141/api/NhanVien/to"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                                         <!-- --------------------------------------------- -->
                                         <div class="grid grid-cols-4 gap-x-4">
@@ -177,12 +185,12 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Dân tộc(*)" name="dantoc"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/danToc"
+                                                    api="https://localhost:7141/api/NhanVien/danToc"
                                                     keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Tôn giáo" name="tongiao"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/tonGiao"
+                                                    api="https://localhost:7141/api/NhanVien/tonGiao"
                                                     keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2"></div>
@@ -204,7 +212,7 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-3 ">
                                                 <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
+                                                    api="https://localhost:7141/api/NhanVien/ngachCongChuc"
                                                     keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -291,6 +299,7 @@
     <script src="../../assets/scripts/common/transform.js"></script>
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
+    <script src="/assets/scripts/common/popupHandle.js"></script>
     <script src="../../assets/scripts/pages/employee/resume.js"></script>
     <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
     <script src="/assets/scripts/common/popupConfirm.js"></script>

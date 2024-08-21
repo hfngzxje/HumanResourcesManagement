@@ -99,7 +99,7 @@ function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanById/' + id,
+        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editFamily', data)
@@ -126,7 +126,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/addNguoiThan',
+            url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -167,7 +167,7 @@ async function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
+            url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công!")
@@ -195,7 +195,7 @@ async function handleSave() {
     setTimeout(() => {
         setLoading(true)
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/updateNguoiThan',
+            url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -225,18 +225,7 @@ async function handleSave() {
         });
     }, 1000);
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (id, label, type, icon) => {
@@ -259,13 +248,13 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
+    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
 }
 
 function getNameQuanHe() {
 
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getDanhMucNguoiThan',
+        url: 'https://localhost:7141/api/NguoiThan/getDanhMucNguoiThan',
         method: 'GET',
         success: function (data) {
             relationshipOptions = data;

@@ -61,7 +61,7 @@ function fetchNguoiThan(id) {
     setLoading(true)
     idQuanhe = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
+        url: 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -90,7 +90,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/addDanhMucQuanHe',
+            url: 'https://localhost:7141/api/DanhMucQuanHe/addDanhMucQuanHe',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -99,7 +99,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục người thân: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -129,14 +129,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
+            url: 'https://localhost:7141/api/DanhMucQuanHe/removeQuanHe?id=' + idQuanhe,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục người than: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -151,13 +151,15 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục quan hệ ?")
+    const valid = validateForm('editRelationship')
+    if (!valid) return
     const formValue = getFormValues('editRelationship')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
+            url: 'https://localhost:7141/api/DanhMucQuanHe/updateQuanHe?id=' + idQuanhe,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -166,7 +168,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục người thân: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editRelationship')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -191,21 +193,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editRelationship');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanToc'
+    return 'https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc'
 }
 
 function showPopup() {
@@ -214,14 +203,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues('editRelationship');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editRelationship');
     }
 
     if (isPopupEdit) {

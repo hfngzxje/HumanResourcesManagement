@@ -45,12 +45,15 @@
               </div>
 
             </div>
-            <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
+            <base-table sortType="DESC" sortBy="trangThai" api="buildApiUrl" columns="TableColumns" event="tableEvent">
             </base-table>
           </div>
         </div>
       </div>
     </div>
+    <custom-alert></custom-alert>
+    <custom-error></custom-error>
+    <custom-success></custom-success>
   </main>
 
   <div class="modal" id="editHopDong">
@@ -65,33 +68,29 @@
         </div>
         <div class="p-4">
           <div class="grid gap-4 mb-4 grid-cols-2">
-            <div class="col-span-2 sm:col-span-1">
+            <div class="col-span-2 sm:col-span-1 mt-2">
               <base-select label="Chức danh " name="chucdanh" keyValue="id" keyLabel="ten"
-                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/chucDanh"></base-select>
-            </div>
-            <div class="col-span-2 sm:col-span-1 ">
-              <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"></base-select>
-            </div>
-            <div class="col-span-2 sm:col-span-1">
-              <base-select label="Tổ" name="to" keyValue="id" keyLabel="ten"
-                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo"></base-select>
+                api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
             </div>
             <div class="col-span-2 sm:col-span-1 mt-2 ">
               <base-select label="Loại hợp đồng" name="loaihopdong" keyValue="id" keyLabel="ten"
-                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/loaiHopDong"></base-select>
+                api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
+            </div>
+            <div class="col-span-2 sm:col-span-1 ">
+              <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực" name="hopdongtungay"
+                validateBy="required"></base-datepicker>
             </div>
             <div class="col-span-2 sm:col-span-1">
-              <base-select label="Phòng ban(*)" name="phong" keyValue="id" keyLabel="ten"
-                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
+              <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn" name="hopdongdenngay"
+                validateBy="required"></base-datepicker>
             </div>
-            <div id="maNhanVien" class="col-span-2 sm:col-span-1">
+            <div id="maNhanVien" class="col-span-2 sm:col-span-1 mt-1">
               <base-select label="Mã Nhân Viên(*)" name="ma" keyValue="ma" keyLabel="ma"
-                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
-                style="width: 22%; max-width: 500px;">
+                api="https://localhost:7141/api/NhanVien" style="width: 22%; max-width: 500px;">
               </base-select>
             </div>
-            <div class="col-span-2 ">
-              <base-textarea label="Ghi chú" name="ghichu"></base-textarea>
+            <div class="col-span-2">
+              <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
             </div>
           </div>
         </div>
@@ -110,11 +109,13 @@
   <script src="../../assets/scripts/common/transform.js"></script>
   <script src="../../assets/scripts/common/loading.js"></script>
   <script src="../../assets/scripts/common/formHanlde.js"></script>
+  <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="../../assets/scripts/pages/staffSideBar/listLaborContract.js"></script>
   <script src="/assets/scripts/common/registerComponent.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
   <script src="/assets/scripts/common/dateTime.js"></script>
+  <script src="/assets/scripts/common/popupConfirm.js"></script>
 
 </body>
 

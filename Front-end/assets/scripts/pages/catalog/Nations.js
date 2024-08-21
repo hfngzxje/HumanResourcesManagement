@@ -64,7 +64,7 @@ function fetchDanToc(id) {
     setLoading(true)
     idDanToc = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
+        url: 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanTocById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -83,13 +83,14 @@ function fetchDanToc(id) {
 
 async function handleCreate() {
     await showConfirm("Bạn có chắc chắn muốn thêm mới danh mục dân tộc ?")
-   
+    const valid = validateForm('editNation')
+    if (!valid) return
     const formValue = getFormValues('editNation')
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/addDanhMucDanToc',
+            url: 'https://localhost:7141/api/DanhMucDanToc/addDanhMucDanToc',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -97,7 +98,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục dân tộc: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNation')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -128,13 +129,13 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
+            url: 'https://localhost:7141/api/DanhMucDanToc/removeDanToc?id=' + idDanToc,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục dân tộc: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNation')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -149,13 +150,15 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục dân tộc ?")
+    const valid = validateForm('editNation')
+    if (!valid) return
     const formValue = getFormValues('editNation')
     formValue['id'] = idDanToc
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/updateDanToc',
+            url: 'https://localhost:7141/api/DanhMucDanToc/updateDanToc',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -163,7 +166,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục dân tộc: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNation')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -188,22 +191,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editNation');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucDanToc/getDanhMucDanToc'
+    return 'https://localhost:7141/api/DanhMucDanToc/getDanhMucDanToc'
 }
 
 function showPopup() {
@@ -212,13 +201,13 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editNation')
         }
     }
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editNation');
     }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Danh sách thuyên chuyển | Employee</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+    <link rel="stylesheet" href="../../assets/styles/pages/catalog/catalog.css" />
+    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <script>
+        (function() {
+            if (!localStorage.getItem('maNhanVien')) {
+                window.location.href = '/pages/authentic/login.html';
+                return; 
+            }
+        })();
+    </script>
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+
+    <!-- Navbar-->
+    <layout-header></layout-header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <layout-sidebar></layout-sidebar>
+    <main class="app-content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="app-title">
+                    <ul class="app-breadcrumb breadcrumb">
+                        <li class="breadcrumb-item"><a href="#"><b>Danh sách thuyên chuyển</b></a></li>
+                    </ul>
+                    <div id="clock"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!--Left-->
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent">
+                </div>
+            </div>
+        </div>
+        <custom-alert></custom-alert>
+        <custom-error></custom-error>
+        <custom-success></custom-success>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/common/transform.js"></script>
+    <script src="../../assets/scripts/common/loading.js"></script>
+    <script src="../../assets/scripts/common/formHanlde.js"></script>
+    <script src="../../assets/scripts/pages/employee/listTransfer.js"></script>
+    <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/dateTime.js"></script>
+    <script src="/assets/scripts/common/popupConfirm.js"></script>
+    <script src="/assets/scripts/common/popupHandle.js"></script>
+</body>
+
+</html>

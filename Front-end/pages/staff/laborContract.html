@@ -72,25 +72,22 @@
                                     <div class="input-container">
                                         <div class="grid grid-cols-3 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-select label="Chức danh công việc(*)" validateBy="required"
+                                                <base-select label="Chức danh công việc" validateBy="required"
                                                     name="chucdanh" keyValue="id" keyLabel="ten"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/chucDanh"></base-select>
+                                                    api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-select label="Loại hợp đồng(*)" validateBy="required" name="loaihopdong"
-                                                    keyValue="id" keyLabel="ten"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/loaiHopDong"></base-select>
+                                                <base-select label="Loại hợp đồng" validateBy="required"
+                                                    name="loaihopdong" keyValue="id" keyLabel="ten"
+                                                    api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
                                             </div>
+                                            <div class="col-span-2 sm:col-span-1 mt-2"></div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-select label="Trạng thái" name="trangThai"
-                                                    options="MaritalOptions" validateBy="required"></base-select>
-                                            </div>
-                                            <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker style="margin: 0;" label="Ngày hiệu lực(*)"
+                                                <base-datepicker style="margin: 0;" label="Ngày hiệu lực"
                                                     name="hopdongtungay" validateBy="required"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker style="margin: 0;" label="Ngày hết hạn(*)"
+                                                <base-datepicker style="margin: 0;" label="Ngày hết hạn"
                                                     name="hopdongdenngay" validateBy="required"></base-datepicker>
                                             </div>
                                         </div>
@@ -106,16 +103,18 @@
                             </form>
                         </div>
                     </div>
-                    <base-table sortType="DESC" sortBy="trangThai" api="buildApiUrl" columns="TableColumns" event="tableEvent">
-                        </base-table>
+                    <base-table sortType="DESC" sortBy="trangThai" api="buildApiUrl" columns="TableColumns"
+                        event="tableEvent">
+                    </base-table>
                 </div>
             </div>
-            
+
         </div>
         <layout-footer></layout-footer>
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>
+        <custom-navigation></custom-navigation>
     </main>
 
     <div class="modal" id="editLaborContract">
@@ -131,27 +130,24 @@
                 <div class="p-4">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2 sm:col-span-1">
-                            <base-select label="Chức danh công việc(*)" validateBy="required" name="chucdanh" keyValue="id"
-                            keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/chucDanh"></base-select>
+                            <base-select label="Chức danh công việc" validateBy="required" name="chucdanh" keyValue="id"
+                                keyLabel="ten"
+                                api="https://localhost:7141/api/HopDong/chucDanh"></base-select>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <base-select label="Loại hợp đồng" validateBy="required" name="loaihopdong" keyValue="id"
+                                keyLabel="ten"
+                                api="https://localhost:7141/api/HopDong/loaiHopDong"></base-select>
                         </div>
                         <div class="col-span-2 sm:col-span-1 ">
-                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực(*)"
-                            name="hopdongtungay" validateBy="required"></base-datepicker>
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hiệu lực"
+                                name="hopdongtungay" validateBy="required"></base-datepicker>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn(*)"
-                            name="hopdongdenngay" validateBy="required"></base-datepicker>
+                            <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
+                                name="hopdongdenngay" validateBy="required"></base-datepicker>
                         </div>
-                        <div class="col-span-2 sm:col-span-1 mt-2 ">
-                            <base-select label="Loại hợp đồng(*)" validateBy="required" name="loaihopdong" keyValue="id"
-                            keyLabel="ten" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/loaiHopDong"></base-select>
-                        </div>
-                        <div class="col-span-2 sm:col-span-1">
-                            <base-select label="Trạng thái" name="trangThai" options="MaritalOptions"
-                            validateBy="required"></base-select>
-                        </div>
-                        
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2">
                             <base-textarea label="Ghi chú" name="ghichu" cols="10"></base-textarea>
                         </div>
                     </div>
@@ -172,6 +168,7 @@
     <script src="../../assets/scripts/common/loading.js"></script>
     <script src="../../assets/scripts/pages/staff/common.js"></script>
     <script src="../../assets/scripts/common/formHanlde.js"></script>
+    <script src="/assets/scripts/common/popupHandle.js"></script>
     <script src="../../assets/scripts/pages/staff/laborContract.js"></script>
     <script src="/assets/scripts/common/popupConfirm.js"></script>
     <script src="../../assets/scripts/pages/history/recordHistory.js"></script>

@@ -73,13 +73,11 @@
                     <div class="grid grid-cols-4 gap-x-5">
                       <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select id="manhanvien" label="Mã Nhân Viên" name="MaNV" keyValue="ma" keyLabel="ma"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
-                          includeAll></base-select>
+                          api="apiMaNV" includeAll></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-2 ">
                         <base-select id="quanhe" label="Quan hệ" name="QuanHe" keyValue="id" keyLabel="ten"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucQuanHe/getDanhMucDanToc"
-                          includeAll></base-select>
+                          api="https://localhost:7141/api/DanhMucQuanHe/getDanhMucDanToc" includeAll></base-select>
                       </div>
                       <div class="col-span-2 sm:col-span-1 ">
                         <base-input-number id="tuoitu" label="Tuổi từ" name="TuoiTu"></base-input-number>
@@ -93,8 +91,7 @@
                       </div>
                       <div class="col-span-2 sm:col-span-1 mt-3">
                         <base-select id="phongban" label="Phòng ban" name="PhongBan" keyValue="id" keyLabel="ten"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"
-                          includeAll></base-select>
+                          api="https://localhost:7141/api/PhongBan/getAllPhongBan" includeAll></base-select>
                       </div>
                     </div>
 
@@ -112,13 +109,9 @@
       </div>
 
     </div>
-    <div class="text-center mt-5" style="font-size: 13px">
-      <p><b>Copyright
-          <script type="text/javascript">
-            document.write(new Date().getFullYear());
-          </script> Phần mềm quản lý nhân sự | HRM
-        </b></p>
-    </div>
+    <custom-alert></custom-alert>
+    <custom-error></custom-error>
+    <custom-success></custom-success>
   </main>
 
 
@@ -128,11 +121,13 @@
   <script src="../../assets/scripts/common/transform.js"></script>
   <script src="../../assets/scripts/common/loading.js"></script>
   <script src="../../assets/scripts/pages/staffSideBar/common.js"></script>
+  <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="../../assets/scripts/common/formHanlde.js"></script>
   <script src="../../assets/scripts/pages/staffSideBar/reportFamilyRelationship.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
   <script src="/assets/scripts/common/dateTime.js"></script>
+  <script src="/assets/scripts/common/popupConfirm.js"></script>
 </body>
 
 </html>

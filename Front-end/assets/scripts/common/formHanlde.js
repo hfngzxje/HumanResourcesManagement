@@ -235,19 +235,25 @@ function validateForm(formId) {
       if (validateBy === 'cmndValid') {
         if (!isValidVietnamID(value)) {
           valid = false;
-          element.classList.add(...inputErrClass);
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập cmnd hợp lệ";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập cmnd hợp lệ"; 
         }
         else if (!value) {
-          valid = false
-          element.classList.add(...inputErrClass)
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập thông tin";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          valid = false;
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập thông tin"; 
         }
         else {
           element.classList.remove(...inputErrClass);
@@ -260,19 +266,25 @@ function validateForm(formId) {
       else if (validateBy === 'emailValid') {
         if (!isValidGmailAddress(value)) {
           valid = false;
-          element.classList.add(...inputErrClass);
-          const errElement = document.createElement('div')
-          errElement.textContent = "Email không đúng định dạng";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Email không đúng định dạng"; 
         }
         else if (!value) {
-          valid = false
-          element.classList.add(...inputErrClass)
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập thông tin";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          valid = false;
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập thông tin"; 
         }
         else {
           element.classList.remove(...inputErrClass);
@@ -285,12 +297,16 @@ function validateForm(formId) {
       else if (validateBy === 'atmValid') {
         if (!isValidATMCardNumber(value)) {
           valid = false;
-          element.classList.add(...inputErrClass);
-          const errElement = document.createElement('div')
-          errElement.textContent = "Số thẻ không thể chứa chữ cái hoặc ký tự đặc biệt";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Số thẻ không thể chứa chữ cái hoặc ký tự đặc biệt"; 
         }
+        
 
         else {
           element.classList.remove(...inputErrClass);
@@ -303,11 +319,14 @@ function validateForm(formId) {
       else if (validateBy === 'cardValid') {
         if (!isValidInsuranceCardNumber(value)) {
           valid = false;
-          element.classList.add(...inputErrClass);
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập mã số thẻ đủ 15 ký tự";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập mã số thẻ đủ 15 ký tự"; 
         }
         else {
           element.classList.remove(...inputErrClass);
@@ -320,19 +339,26 @@ function validateForm(formId) {
       else if (validateBy === 'phoneValid') {
         if (!isValidVietnamPhoneNumber(value)) {
           valid = false;
-          element.classList.add(...inputErrClass);
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập số điện thoại hợp lệ";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập số điện thoại hợp lệ"; 
         }
         else if (!value) {
-          valid = false
-          element.classList.add(...inputErrClass)
-          const errElement = document.createElement('div')
-          errElement.textContent = "Vui lòng nhập thông tin";
-          errElement.setAttribute('class', 'error text-xs text-red-600')
-          element.parentNode.appendChild(errElement)
+          valid = false;
+          element.classList.add(...inputErrClass); // Thêm lớp lỗi
+          let errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
+          if (!errElement) {
+            errElement = document.createElement('div');
+            errElement.setAttribute('class', 'error text-xs text-red-600');
+            element.parentNode.appendChild(errElement);
+          }
+          errElement.textContent = "Vui lòng nhập thông tin"; 
+          
         }
         else {
           element.classList.remove(...inputErrClass);
@@ -342,19 +368,8 @@ function validateForm(formId) {
           }
         }
       }
-      // else if (!value) {
-      //   valid = false
-      //   element.classList.add(...inputErrClass)
-      //   const errElement = document.createElement('div')
-      //   errElement.textContent = "Vui lòng nhập thông tin";
-      //   errElement.setAttribute('class', 'error text-xs text-red-600')
-      //   element.parentNode.appendChild(errElement)
-      // }
-
       else if (validateBy === 'required') {
         if (value) {
-          // Nếu giá trị hợp lệ
-          valid = true; // Đảm bảo valid được đặt thành true
           element.classList.remove(...inputErrClass); // Xóa lớp lỗi
           const errElement = element.parentNode.querySelector('.error'); // Tìm thông báo lỗi
           if (errElement) {
@@ -386,6 +401,6 @@ function validateForm(formId) {
 
 
   }
-
   return valid
 }
+

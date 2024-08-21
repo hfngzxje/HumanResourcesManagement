@@ -1,4 +1,4 @@
-const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachDangVien";
+const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachDangVien";
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -76,7 +76,7 @@ async function handleExportExcel() {
   params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
-    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoDangVienToExecl', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToExecl', {
       method: 'POST',
       body: params,
       headers: {
@@ -119,7 +119,7 @@ async function handleExportPDF() {
   params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
-    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoDangVienToPDF', {
+    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToPDF', {
       method: 'POST',
       body: params,
       headers: {
@@ -204,11 +204,23 @@ function fromChange() {
     fromDateChanged = true;
     dateChange();
   });
+
+  const fromDatePicker1 = document.querySelector('#tungay input');
+  fromDatePicker1.addEventListener("changeDate", (event) => {
+    fromDateChanged = true;
+    dateChange();
+  });
 }
 
 function toChange() {
   const toDatePicker = document.querySelector('#denngay input');
   toDatePicker.addEventListener("change", (event) => {
+    toDateChanged = true;
+    dateChange();
+  });
+
+  const toDatePicker1 = document.querySelector('#denngay input');
+  toDatePicker1.addEventListener("changeDate", (event) => {
     toDateChanged = true;
     dateChange();
   });

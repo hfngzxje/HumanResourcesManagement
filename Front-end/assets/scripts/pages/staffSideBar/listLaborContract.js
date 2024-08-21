@@ -101,7 +101,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
+        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editHopDong', data)
@@ -126,14 +126,14 @@ function handleCreate() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
+            url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 alert('Tạo Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -166,12 +166,12 @@ function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+            url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
             method: 'DELETE',
             success: function (data) {
                 alert('Xóa Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -192,7 +192,7 @@ function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+            url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -200,7 +200,7 @@ function handleSave() {
                 console.log('fetchContract res :: ', data);
                 alert('Lưu Thành Công!');
                 closePopup()
-                clearFormValues()
+                clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -224,37 +224,13 @@ function handleSave() {
         });
     }, 1000);
 }
-function clearFormValues() {
-    const form = document.getElementById('editHopDong');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 
 
-function clearFormValues(formId) {
-    const form = document.getElementById('editHopDong');
-    const inputs = form.querySelectorAll('input, textarea, select');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        }
-        else {
-            input.value = '';
-            input.selectedIndex = 0;
-        }
-    });
-}
+
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong'
+    return 'https://localhost:7141/api/HopDong'
 }
 function showPopup() {
     var modal = document.getElementById("editHopDong");
@@ -262,7 +238,7 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues("editHopDong");
         }
     }
     var closeButton = modal.querySelector('.close');
@@ -303,6 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemove)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    popupClearBtn.addEventListener("click", clearFormValues("editHopDong"))
 })
 

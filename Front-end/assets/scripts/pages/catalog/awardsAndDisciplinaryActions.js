@@ -59,7 +59,7 @@ function fetchKhenThuong(id) {
     setLoading(true)
     idKhenThuong = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
+        url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuatById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editKhenThuong', data, 'fetch');
@@ -85,7 +85,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/addDanhMucKhenThuongKyLuat',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -93,7 +93,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục khen thưởng: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -123,13 +123,13 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/deleteDanhMucKhenThuongKyLuat/' + idKhenThuong,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục khen thưởng: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -151,7 +151,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
+            url: 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/updateDanhMucKhenThuongKyLuat?id=' + idKhenThuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -159,7 +159,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục khen thưởng: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editKhenThuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -184,21 +184,11 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editKhenThuong');
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
+
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
+    return 'https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat'
 }
 
 function showPopup() {
@@ -213,7 +203,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editKhenThuong');
     }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')
@@ -252,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    // popupClearBtn.addEventListener("click", clearFormValues)
     const inputTenKhenThuong = document.querySelector('base-input[name="ten"]');
     if (inputTenKhenThuong) {
         inputTenKhenThuong.addEventListener('input', checkValues);

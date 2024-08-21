@@ -15,7 +15,7 @@
     <!-- Font-icon css-->
     <script>
         // Đặt đoạn mã kiểm tra vào đây
-        (function() {
+        (function () {
             if (!localStorage.getItem('maNhanVien')) {
                 window.location.href = '/pages/authentic/login.html';
                 return; // Chuyển hướng nếu không có mã nhân viên
@@ -42,27 +42,33 @@
                 <div class="flex gap-x-2">
                     <div class="flex-1 h-full flex flex-col justify-start">
                         <div class="flex-1 grid grid-cols-1 gap-y-2 gap-x-5 overflow-auto">
-                            <base-table api="buildApiUrl" columns="TableColumns" >
-                        </base-table>
+                            <base-table api="buildApiUrl" columns="TableColumns">
+                            </base-table>
                         </div>
                     </div>
-                  
+
                 </div>
             </div>
         </div>
+        <layout-footer></layout-footer>
+        <custom-alert></custom-alert>
+        <custom-error></custom-error>
+        <custom-success></custom-success>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-  <script src="../../assets/scripts/common/transform.js"></script>
-  <script src="../../assets/scripts/common/loading.js"></script>
-  <script src="../../assets/scripts/common/formHanlde.js"></script>
-  <script src="../../assets/scripts/pages/employee/common.js"></script>
-  <script src="../../assets/scripts/pages/employee/salaryRecord.js"></script>
-  <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
-  <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
-  <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
-  <script src="/assets/scripts/common/dateTime.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+    <script src="../../assets/scripts/common/transform.js"></script>
+    <script src="../../assets/scripts/common/loading.js"></script>
+    <script src="../../assets/scripts/common/formHanlde.js"></script>
+    <script src="../../assets/scripts/pages/employee/common.js"></script>
+    <script src="../../assets/scripts/pages/employee/salaryRecord.js"></script>
+    <script src="../../assets/scripts/pages/employee/employeeComponent.js"></script>
+    <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
+    <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
+    <script src="/assets/scripts/common/dateTime.js"></script>
+    <script src="/assets/scripts/common/popupConfirm.js"></script>
+    <script src="/assets/scripts/common/popupHandle.js"></script>
 
 </body>
 

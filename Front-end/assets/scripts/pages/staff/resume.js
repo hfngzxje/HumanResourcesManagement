@@ -45,7 +45,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
+        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -64,7 +64,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
+        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -90,7 +90,7 @@ async function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
+        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maDetail,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -136,7 +136,7 @@ function uploadImage(anh) {
     payloadUploadImage.append('file', anh)
 
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/uploadImage',
+        url: 'https://localhost:7141/api/Image/uploadImage',
         method: 'POST',
         contentType: false,
         processData: false,
@@ -164,18 +164,6 @@ function uploadImage(anh) {
         },
         complete: () => {
             
-        }
-    });
-}
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
         }
     });
 }
@@ -214,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (maDetail) {
         fetchEmployee()
         getImage()
-        const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail;
+        const apiUrl = 'https://localhost:7141/api/NhanVien/GetById?id=' + maDetail;
 
         // Thực hiện yêu cầu API
         fetch(apiUrl)

@@ -26,16 +26,7 @@ class CustomHeader extends HTMLElement {
 class CustomFooter extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-     <footer class="footer" style="position: fixed; bottom: 0; left: 0; width: 100%; 
-              background-color: #f1f1f1; text-align: center; padding: 10px 0; font-size: 13px;">
-       <div class="text-center">
-          <p><b>Copyright
-            <script type="text/javascript">
-                document.write(new Date().getFullYear());
-            </script> Phần mềm quản lý nhân sự | HRM
-          </b></p>
-       </div>
-     </footer>
+     
 
       `;
 
@@ -73,6 +64,7 @@ class CustomSidebar extends HTMLElement {
             <li><a class="app-menu__item" href="resume.html"><i
                         class='app-menu__icon bx bx-file'></i><span class="app-menu__label">Sơ yếu lý lịch</span></a>
             </li>
+            
             <li><a class="app-menu__item" href="laborContract.html"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Hợp đồng</span></a>
             </li>
@@ -84,10 +76,10 @@ class CustomSidebar extends HTMLElement {
                         class='app-menu__icon bx bx-trophy'></i><span class="app-menu__label">Khen
                         thưởng-Kỷ luật</span></a>
             </li>
-            <li><a class="app-menu__item" href="#"><i
+            <li><a class="app-menu__item" href="listTransfer.html"><i
                         class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Thuyên chuyển </span></a>
             </li>
-            <li><a class="app-menu__item" href="#"><i
+            <li><a class="app-menu__item" href="reportFamilyRelationship.html"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
             </li>
             <li id="adminLink"><a class="app-menu__item" href="/pages/staff/index.html"><i
@@ -98,21 +90,27 @@ class CustomSidebar extends HTMLElement {
         </ul>
     </aside>
 
-   <div id="myModal" class="modal">
-            <div class="change-container">
-              <form id="change_form">
-              <span class="close">&times;</span>
-                  <div class="form-header">
-                     <h2>Đổi Mật Khẩu</h2>
-                  </div>
+  <div id="myModal" class="modal" class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        
+        <div class=" change-container w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+            <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Đổi mật khẩu
+            </h2>
+            <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+                <div>
+                  <base-input placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                </div>
+                <div>
+                  <base-input placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                </div>
+                <div>
+                  <base-input placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+                </div>
                 
-                <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
-                <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
-             </form>
-            <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-           </div>
-          </div>
+                <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+            </form>
+        </div>
+    </div>
           `;
     this.fetchAvatar();
     this.fetchTen();
@@ -130,7 +128,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -148,7 +146,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -222,7 +220,10 @@ class BaseInput extends HTMLElement {
     "required",
     "type",
     "value",
-    "disabled"
+    "readonly",
+    "disabled",
+    "validateBy",
+    "placeholder"
   ];
 
   connectedCallback() {
@@ -232,14 +233,19 @@ class BaseInput extends HTMLElement {
     const required = this.getAttribute("required");
     const type = this.getAttribute("type") || "text";
     const disabled = this.getAttribute("disabled") !== null;
+    this._readonly = this.hasAttribute("readonly");
+    const validateBy = this.getAttribute("validateBy") || "";
+    const placeholder = this.getAttribute("placeholder") || "";
+
 
     this.innerHTML = `
-      <div>
-        <label for="base-input" class="block  text-sm  text-gray-900 ${hideLabel ? "mt-" : "hidden"
+    <div>
+      <label for="base-input" class="block  text-sm  text-gray-900 ${hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-        <input type="${type}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-      </div>
-      `;
+      <input type="${type}" validateBy="${validateBy}" placeholder="${placeholder}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
+      }>
+    </div>
+    `;
   }
 }
 class BaseTextArea extends HTMLElement {
@@ -412,7 +418,8 @@ class BaseSelect extends HTMLElement {
     "keyValue",
     "keyLabel",
     "required",
-    "disabled"
+    "disabled",
+    "includeAll" // Thêm thuộc tính mới
   ];
 
   connectedCallback() {
@@ -424,23 +431,41 @@ class BaseSelect extends HTMLElement {
     const keyLabel = this.getAttribute("keyLabel") || "label";
     const required = this.getAttribute("required");
     const disabled = this.getAttribute("disabled") !== null;
+    const includeAll = this.getAttribute("includeAll") !== null; // Kiểm tra thuộc tính mới
 
-    function getApiUrl() {
+    const getApiUrl = () => {
       if (!window[api]) return api;
       return window[api]();
-    }
+    };
+
     const renderOption = () => {
-      this.querySelector('select').innerHTML = ""
-      if (!!api) {
+      const selectElement = this.querySelector('select');
+      selectElement.innerHTML = "";
+
+      if (includeAll) {
+        const allOption = document.createElement("option");
+        allOption.value = '';
+        allOption.innerText = 'Tất Cả';
+        selectElement.append(allOption);
+      }
+
+      if (api) {
+        const apiUrl = getApiUrl()
+        if(!apiUrl){
+          return
+        }
         $.ajax({
           url: getApiUrl(),
           method: "GET",
           success: (data) => {
+            if(!data || data.length === 0){
+              return
+            }
             data.forEach((item) => {
               const option = document.createElement("option");
               option.value = item[keyValue];
               option.innerText = item[keyLabel];
-              this.querySelector("select").append(option);
+              selectElement.append(option);
             });
           },
           error: (err) => {
@@ -449,29 +474,34 @@ class BaseSelect extends HTMLElement {
         });
         return;
       }
-      const options = window[optionsKey] || [];
+
+      // Ensure options is an array
+      const options = Array.isArray(window[optionsKey]) ? window[optionsKey] : [];
       options.forEach(({ value, label }) => {
         const option = document.createElement("option");
         option.value = value;
         option.innerText = label;
-        this.querySelector("select").append(option);
+        selectElement.append(option);
       });
-    }
-    this.renderOption = renderOption
+    };
+
+    this.renderOption = renderOption;
 
     document.addEventListener("DOMContentLoaded", () => {
-      renderOption()
+      renderOption();
     });
 
+
     this.innerHTML = `
-      <div class="max-w-sm" style="margin: 0;">
-        <label class="block mb-2 text-sm  text-gray-900">${label}</label>
-        <select name="${name}" required="${required}" ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-        </select>
-      </div>
-      `;
+    <div class="max-w-sm" style="margin: 0;">
+      <label class="block mb-2 text-sm text-gray-900">${label}</label>
+      <select name="${name}" ${required ? 'required' : ''} ${disabled ? 'disabled' : ''} class="h-[42px] bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+      </select>
+    </div>
+    `;
   }
 }
+
 class BaseCheckbox extends HTMLElement {
   static observedAttributes = ["label", "class", "value", "name"];
 
@@ -578,34 +608,22 @@ class BaseButton extends HTMLElement {
 
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html
-  static observedAttributes = ["api", "columns", "event", "pageSize", "method"];
+  static observedAttributes = ["api", "columns", "event", "pageSize", "method","sortBy","sortType"];
 
   connectedCallback() {
-    // Lấy giá trị các thuộc tính đã được khai báo <=> Tiên biến global tương ứng với các thuộc tính
     const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
     const columnsKey = this.getAttribute("columns"); // ... columns
     const eventKey = this.getAttribute("event"); // ... event
     const method = this.getAttribute("method") || "GET";
+    const sortBy = this.getAttribute("sortBy")|| "id"
+    const sortType = this.getAttribute("sortType")|| "ASC"
 
-    // api = 'buildApiUrl'
-
-    // Xử lý lấy thông tin api từ giá trị của thuộc tính api
     function getApiUrl() {
-      // window là biến toàn cục đại diện cho trang web
-
-      // const user = { name: "Duy" }
-      // const userKey = "name"
-      // user[userKey] <=> user.name
-
       window["buildApiUrl"];
+      if (window[api] === undefined) return api; 
+      return window[api](); 
+    } 
 
-      // không tồn tại biến khai báo thông tin api bên file js
-      if (window[api] === undefined) return api; // hoạt động với chế động url http:...
-
-      return window[api](); // http://.../123
-    } // http://...
-
-    // định dạng lại kiểu datetime
     function formatDateTime(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
       const year = dateTime.getFullYear();
@@ -636,7 +654,6 @@ class BaseTable extends HTMLElement {
 
       return `${month} `;
     }
-    // định dạg lại kiểu tiền tệ
     function formatCurrency(val) {
       return val.toLocaleString("it-IT", {
         style: "currency",
@@ -644,7 +661,6 @@ class BaseTable extends HTMLElement {
       });
     }
 
-    // addEventListener('DOMContentLoaded' : sự kiện sau khi nội dung trang wen đã hiện thị xong
     document.addEventListener("DOMContentLoaded", () => {
       const columns = window[columnsKey] || []; // lấy giá trị tương ứng của colums hoặc mặc định []
       const event = window[eventKey] || {}; // ... event hoặc ... {}
@@ -655,17 +671,14 @@ class BaseTable extends HTMLElement {
       const headTrEl = document.createElement("tr");
       columns.forEach((col) => {
         if (col.type === "disabled") {
-          return; // Skip adding header for disabled columns
+          return; 
         }
-        // cột mã hợp đồng, Lương cơ bản, Từ ngày, ...
-        // tạo 1 thẻ th đại hiện cho cột
         const thEl = document.createElement("th");
-        // ghi giá trị vào attribue của thẻ th đc tạo <th class="px-6 py-3"></th>
+
         thEl.setAttribute("class", "px-6 py-3");
 
-        // <th class="px-6 py-3">Mã hợp đồng</th>
         thEl.innerText = col.label;
-        // <tr><th class="px-6 py-3">Mã hợp đồng</th></tr>
+
         headTrEl.appendChild(thEl);
       });
       // <thead><tr><th class="px-6 py-3">Mã hợp đồng</th></tr></thead>
@@ -677,7 +690,6 @@ class BaseTable extends HTMLElement {
       // Danh sách các biến liên quan đến element BaseTable
       const bodyEl = this.querySelector("tbody");
       const paginationEl = this.querySelector(".pagination");
-      // Các biến lưu trữ thôn tin liên quan đến hiện thỉ bảng
       let sourceTableData = []; // Dữ liệu gốc của bảng chưa qua phâ trang
       let currentPage = 1; // Trang hiện tại dữ liệu hiển thị
       let totalPage = 0; // Tổng số trang bảng sẽ có
@@ -696,6 +708,13 @@ class BaseTable extends HTMLElement {
       }
       function getGenderIcon(value) {
         if (value) {
+          return '<i class="bx bx-male-sign male-icon"></i>'; // Icon nam
+        } else {
+          return '<i class="bx bx-female-sign female-icon"></i>'; // Icon nữ
+        }
+      }
+      function getGenderByString(value) {
+        if (value === "Nam") {
           return '<i class="bx bx-male-sign male-icon"></i>'; // Icon nam
         } else {
           return '<i class="bx bx-female-sign female-icon"></i>'; // Icon nữ
@@ -800,32 +819,43 @@ class BaseTable extends HTMLElement {
                 value = getMonth(value);
               }
               else if (col.type === "currency") {
-                if(value === 0 || value === null){
+                if (value === 0 || value === null) {
                   value = value
                 }
-                else{
+                else {
                   value = formatCurrency(value);
 
                 }
               } else if (col.type === "gender") {
-                value = getGenderIcon(value); // Sử dụng icon thay vì text
-                thEl.innerHTML = value;
-                trEl.appendChild(thEl);
-                return; // Kết thúc xử lý cho cột này
+                if (value === "Nam") {
+                  value = getGenderByString("Nam")
+                  thEl.innerHTML = value;
+                  trEl.appendChild(thEl);
+                  return;
+                }
+                else if (value === "Nữ") {
+                  value = getGenderByString("Nữ")
+                  thEl.innerHTML = value;
+                  trEl.appendChild(thEl);
+                  return;
+                }
+                else {
+                  value = getGenderIcon(value); // Sử dụng icon thay vì text
+                  thEl.innerHTML = value;
+                  trEl.appendChild(thEl);
+                  return; // Kết thúc xử lý cho cột này
+                }
+
               }
 
-              // định dạng lại giá trị theo function đưojc kahi báo trong cột tương ứng
               if (col.formatter) {
                 if (value === null) {
                   value = null
                 }
                 else {
-                  console.log(value);
                   value = col.formatter(value); // value
                 }
               }
-
-              // <th> nội dung đã được định dạng lại /th>
               thEl.innerText = value;
             }
 
@@ -945,15 +975,13 @@ class BaseTable extends HTMLElement {
           type: method, // phương thức
           data: payload,
           success: (tableData) => {
+            const arg = sortType === "ASC" ? 1 : -1;
             // Kiểm tra xem tableData có phải là một mảng không
             if (Array.isArray(tableData)) {
-              // Kiểm tra xem dữ liệu có thuộc tính 'id' để sắp xếp không
-              if (tableData.length > 0 && tableData[0].hasOwnProperty('id')) {
-                // Sắp xếp theo thuộc tính 'id'
-                const sortedData = tableData.sort((a, b) => b.id - a.id);
+              if (tableData.length > 0 && tableData[0].hasOwnProperty(sortBy)) {
+                const sortedData = tableData.sort((a, b) => (b[sortBy] - a[sortBy])*arg);
                 setTableData(sortedData);
               } else {
-                // Không có thuộc tính 'id', giữ nguyên thứ tự dữ liệu
                 setTableData(tableData);
               }
 
@@ -961,7 +989,7 @@ class BaseTable extends HTMLElement {
               renderPagination();
             } else {
               setTableData([]);
-              renderTable(); // Gọi lại renderTable để cập nhật bảng với dữ liệu rỗng
+              renderTable(); 
             }
           },
           error: (xhr, status, error) => {
@@ -982,38 +1010,6 @@ class BaseTable extends HTMLElement {
           },
         });
       };
-
-
-      // const handleCallFetchData = (payload) => {
-      //   $.ajax({
-      //     url: getApiUrl(), // lấy ra url api của bảng = http://...
-      //     type: method, // phương thức
-      //     data: payload,
-      //     success: (tableData) => {
-      //       // tableData : dữ liệu Api bảng trả về
-
-      //       setTableData(tableData);
-      //       renderTable();
-      //       renderPagination();
-      //     },
-      //     error: (xhr, status, error) => {
-      //       const hasEmptyEl = this.querySelector("#empty-data");
-      //       console.log("hasEmptyEl ", hasEmptyEl);
-      //       if (hasEmptyEl) return;
-      //       // Trường hợp thất bại
-      //       const wrapperTable = this.querySelector("#wrapper-table");
-
-      //       const divEl = document.createElement("div");
-      //       divEl.setAttribute("id", "empty-data");
-      //       divEl.setAttribute(
-      //         "class",
-      //         "text-center text-gray-400 mt-5 mb-5 text-sm"
-      //       );
-      //       divEl.innerText = "Không có dữ liệu!";
-      //       wrapperTable.append(divEl);
-      //     },
-      //   });
-      // };
 
       handleCallFetchData();
 

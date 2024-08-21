@@ -61,7 +61,7 @@ function fetchNgachCongChuc(id) {
     setLoading(true)
     idNgachCongChuc = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + id,
+        url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/ThemNgachCongChuc',
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/ThemNgachCongChuc',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -97,7 +97,7 @@ async function handleCreate() {
                 recordActivityAdmin(maNhanVien, `Thêm danh mục ngạch công chức: ${formValue.ten}`);
 
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -127,13 +127,13 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/XoaNgachCongChuc?id=' + idNgachCongChuc,
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/XoaNgachCongChuc?id=' + idNgachCongChuc,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngạch công chức: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -147,13 +147,15 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục ngạch công chức ?")
+    const valid = validateForm('editCivilServantRank')
+    if (!valid) return
     const formValue = getFormValues('editCivilServantRank')
     formValue['id'] = idNgachCongChuc
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/SuaNgachCongChuc',
+            url: 'https://localhost:7141/api/DanhMucNgachCongChuc/SuaNgachCongChuc',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -161,7 +163,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục ngạch công chức: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -186,21 +188,9 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editCivilServantRank');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgachCongChuc/getAllNgachCongChuc'
+    return 'https://localhost:7141/api/DanhMucNgachCongChuc/getAllNgachCongChuc'
 }
 
 function showPopup() {
@@ -209,13 +199,13 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editCivilServantRank')
         }
     }
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editCivilServantRank');
     }
 
 

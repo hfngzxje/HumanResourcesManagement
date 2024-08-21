@@ -59,7 +59,7 @@ function fetchNgoaiNgu(id) {
     setLoading(true)
     idNgoaiNgu = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/getDanhMucNgoaiNguById/' + id,
+        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data)
@@ -85,7 +85,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/addDanhMucNgoaiNgu',
+            url: 'https://localhost:7141/api/DanhMucNgoaiNgu/addDanhMucNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -94,7 +94,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục ngoại ngữ: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNgoaiNgu')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -124,14 +124,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + idNgoaiNgu,
+            url: 'https://localhost:7141/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục ngoại ngữ: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNgoaiNgu')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -153,7 +153,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
+        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -162,7 +162,7 @@ async function handleSave() {
             showSuccess('Lưu Thành Công!')
             recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
             closePopup()
-            clearFormValues()
+            clearFormValues('editNgoaiNgu')
             table.handleCallFetchData();
         },
         error: (err) => {
@@ -187,22 +187,8 @@ async function handleSave() {
 }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editNgoaiNgu');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
+    return 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
 }
 
 function showPopup() {
@@ -218,7 +204,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editNgoaiNgu');
     }
 
     if (isPopupEdit) {
@@ -230,7 +216,7 @@ function showPopup() {
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
-        popupTitle.textContent = "Thêm mới Tiêu Đề Tổ"
+        popupTitle.textContent = "Thêm mới Tiêu Đề Ngoại Ngữ"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')

@@ -93,7 +93,7 @@ function buildPayload(formValue) {
 async function getNgachCongChucByID(idNgachCongChuc) {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -110,7 +110,7 @@ async function fetchNhomLuong(id) {
 
     try {
         const data = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + id,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -143,7 +143,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/add',
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/add',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -152,7 +152,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm nhóm lương: Ngạch công chức=${formValue.ngachcongchuc}, Bậc lương=${formValue.bacluong}`)
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -183,13 +183,13 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/delete/' + idNhomLuong,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/delete/' + idNhomLuong,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -210,7 +210,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/update/' + idNhomLuong,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/update/' + idNhomLuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -218,7 +218,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!');
                 recordActivityAdmin(maNhanVien, `Sửa danh mục nhóm lương:Ngạch công chức = ${oldNgachCongChuc} , Bậc lương= ${oldBacLuong}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editNhomLuong')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -249,14 +249,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editNhomLuong')
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editNhomLuong');
     }
 
     if (isPopupEdit) {
@@ -276,18 +276,7 @@ function showPopup() {
         popupClearBtn.classList.remove('hidden')
     }
 }
-function clearFormValues() {
-    const form = document.getElementById('editNhomLuong');
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function closePopup(){
     var modal = document.getElementById("editNhomLuong");
     modal.style.display="none"
@@ -309,7 +298,7 @@ function checkValues() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/all'
+    return 'https://localhost:7141/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {
@@ -318,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues)
+    popupClearBtn.addEventListener("click", clearFormValues('editNhomLuong'))
 
 
     const selectNgach = document.querySelector('base-select[name="ngachcongchuc"]');

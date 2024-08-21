@@ -54,7 +54,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -90,24 +90,13 @@ async function handleCreate() {
     });
 }, 1000); 
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa khen thưởng ?")
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
         method: 'DELETE',
         success: function (data) {
             showSuccess('Xóa Thành Công!');
@@ -150,7 +139,7 @@ function buildApiUrlKhenThuong() {
         return false
     }
     
-    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
+    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Khen thưởng'
     return string1 + string2;
 }

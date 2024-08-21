@@ -62,7 +62,7 @@ function fetchTonGiao(id) {
     setLoading(true)
     idTonGiao = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
+        url: 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiaoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTonGiao', data, 'fetch');
@@ -89,7 +89,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/addDanhMucTonGiao',
+            url: 'https://localhost:7141/api/DanhMucTonGiao/addDanhMucTonGiao',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -98,7 +98,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục tôn giáo: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -129,14 +129,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
+            url: 'https://localhost:7141/api/DanhMucTonGiao/removeTonGiao?id=' + idTonGiao,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchTonGiao res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục tôn giáo: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -159,7 +159,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/updateTonGiao',
+            url: 'https://localhost:7141/api/DanhMucTonGiao/updateTonGiao',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -168,7 +168,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục tôn giáo: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTonGiao')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -193,23 +193,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editTonGiao');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-            input.checked = false;
-        }
-    });
-}
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTonGiao/getDanhMucTonGiao'
+    return 'https://localhost:7141/api/DanhMucTonGiao/getDanhMucTonGiao'
 }
 
 function showPopup() {
@@ -219,14 +204,14 @@ function showPopup() {
         if (event.target == modal) {
             modal.style.display = "none";
             // setFormValue('editTonGiao', {ten: "" })
-            clearFormValues();
+            clearFormValues('editTonGiao');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editTonGiao');
     }
 
     if (isPopupEdit) {

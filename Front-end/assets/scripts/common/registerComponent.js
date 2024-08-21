@@ -35,15 +35,6 @@ class CustomHeader extends HTMLElement {
 class CustomFooter extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
-     
-        <div class="text-center" style="font-size: 13px">
-            <p><b>Copyright
-                    <script type="text/javascript">
-                        document.write(new Date().getFullYear());
-                    </script> Phần mềm quản lý nhân sự | HRM
-                </b></p>
-        </div>
-
       `;
 
     //     <footer class="footer">
@@ -77,12 +68,12 @@ class CustomSidebar extends HTMLElement {
             class="app-menu__label">Quản lý nhân viên</span></a></li>
       <li><a class="app-menu__item" href="/pages/staffSideBar/listLaborContract.html"><i class='app-menu__icon bx bx-file'></i><span
             class="app-menu__label">Quản lý hợp đồng</span></a></li>
-      <li><a class="app-menu__item" href="table-data-product.html"><i
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listTransfer.html"><i
             class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Quản lý điều chuyển</span></a>
       </li>
-      <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-trophy'></i><span
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listAward.html"><i class='app-menu__icon bx bx-trophy'></i><span
             class="app-menu__label">Quản lý khen thưởng</span></a></li>
-      <li><a class="app-menu__item" href="table-data-banned.html"><i class='app-menu__icon bx bx-shield'></i><span
+      <li><a class="app-menu__item" href="/pages/staffSideBar/listDisciple.html"><i class='app-menu__icon bx bx-shield'></i><span
             class="app-menu__label">Quản lý kỷ luật</span></a></li>
       <li><a class="app-menu__item" href="/pages/catalog/catalog.html"><i class='app-menu__icon bx bx-category-alt'></i><span
             class="app-menu__label">Danh mục</span></a></li>
@@ -98,21 +89,27 @@ class CustomSidebar extends HTMLElement {
     </ul>
   </aside>
 
-   <div id="myModal" class="modal">
-            <div class="change-container">
-              <form id="change_form">
-              <span class="close">&times;</span>
-                  <div class="form-header">
-                     <h2>Đổi Mật Khẩu</h2>
-                  </div>
+   <div id="myModal" class="modal" class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        
+        <div class=" change-container w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+            <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Đổi mật khẩu
+            </h2>
+            <form id="change_form" class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+                <div>
+                  <base-input placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                </div>
+                <div>
+                  <base-input placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                </div>
+                <div>
+                  <base-input placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+                </div>
                 
-                <base-input type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
-                <base-input type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
-                <base-input type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
-             </form>
-            <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
-           </div>
-          </div>
+                <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
+            </form>
+        </div>
+    </div>
         `;
     this.fetchAvatar();
     this.fetchTen();
@@ -129,7 +126,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -147,7 +144,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -213,7 +210,8 @@ class BaseInput extends HTMLElement {
     "value",
     "readonly",
     "disabled",
-    "validateBy"
+    "validateBy",
+    "placeholder"
   ];
 
   connectedCallback() {
@@ -225,13 +223,14 @@ class BaseInput extends HTMLElement {
     const disabled = this.getAttribute("disabled") !== null;
     this._readonly = this.hasAttribute("readonly");
     const validateBy = this.getAttribute("validateBy") || "";
+    const placeholder = this.getAttribute("placeholder") || "";
 
 
     this.innerHTML = `
     <div>
       <label for="base-input" class="block  text-sm  text-gray-900 ${hideLabel ? "mt-" : "hidden"
       }">${label}</label>
-      <input type="${type}" validateBy="${validateBy}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
+      <input type="${type}" validateBy="${validateBy}" placeholder="${placeholder}" name="${name}" required="${required}" ${disabled ? 'disabled' : ''}  class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" ${this._readonly ? "readonly" : ""
       }>
     </div>
     `;
@@ -1158,6 +1157,42 @@ class CustomAlertSuccess extends HTMLElement {
   }
 }
 
+class CustomAlertNagivation extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+<div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupNavigation">
+    <div class="change-container" style="padding:0px">
+      <div
+        class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full"
+        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="flex items-center justify-center mb-4">
+          <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5-5-5 5m10-7v6" />
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="navigationMessage">
+            Xác Nhận Điều Hướng
+          </h3>
+        </div>
+        <div class="mt-4">
+          <button
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+            id="navigateButton">
+            Điều Hướng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+    `;
+  }
+}
+
+customElements.define('custom-navigation', CustomAlertNagivation);
 customElements.define('custom-alert', CustomAlert);
 customElements.define('custom-error', CustomAlertEror);
 customElements.define('custom-success', CustomAlertSuccess);

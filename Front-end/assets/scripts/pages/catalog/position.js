@@ -70,11 +70,9 @@ function fetchNgachCongChuc(id) {
     setLoading(true)
     idChucDanh = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getChucDanhById/' + id,
+        url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + id,
         method: 'GET',
         success: function (data) {
-
-            // setFormValue('editTeam', data, 'fetch');
             setFormValue('editCivilServantRank', data)
             oldValue = data.ten
             oldTen = data.ten
@@ -100,7 +98,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/addChucDanh',
+            url: 'https://localhost:7141/api/ChucDanh/addChucDanh',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -109,7 +107,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục chức danh: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -139,14 +137,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
+            url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục chức danh: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -161,13 +159,15 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục chức danh ?")
+    const valid = validateForm('editCivilServantRank')
+    if (!valid) return
     const formValue = getFormValues('editCivilServantRank')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
+            url: 'https://localhost:7141/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -176,7 +176,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục chức danh: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editCivilServantRank')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -201,22 +201,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editCivilServantRank');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh'
+    return 'https://localhost:7141/api/ChucDanh/getAllChucDanh'
 }
 
 function showPopup() {
@@ -225,14 +211,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues()
+            clearFormValues('editCivilServantRank')
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editCivilServantRank');
     }
 
     if (isPopupEdit) {

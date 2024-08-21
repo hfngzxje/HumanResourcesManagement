@@ -5,11 +5,6 @@ const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupSaveBtn = document.getElementById("updateBtn")
 var maDetail = localStorage.getItem('maDetail')
 
-var MaritalOptions = [
-    { label: 'Hợp đồng còn thời hạn', value: 1 },
-    { label: 'Hợp đồng quá hạn', value: 2 },
-];
-
 var TableColumns = [
     {
         label: 'Mã hợp đồng',
@@ -64,13 +59,6 @@ var TableColumns = [
     }
 ]
 
-
-function backToList() {
-    
-        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-  
-}
-
 function buildPayload(formValue) {
     const formClone = { ...formValue }
 
@@ -104,7 +92,7 @@ function fetchContract(mahopdong) {
     maHopDongHienTai = mahopdong
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
+        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
             setFormValue('editLaborContract', data, 'fetch');
@@ -133,14 +121,18 @@ async function handleCreate() {
     setTimeout(() => {
     $.ajax({
         
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
+        url: 'https://localhost:7141/api/HopDong/TaoMoiHopDong',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
-            showSuccess('Tạo Thành Công!');
+        success:async function (data) {
+           await showSuccess('Tạo Thành Công!');
             table.handleCallFetchData();
             clearFormValues("laborContract_form")
+            await closePopup()
+                await  showNavigation('Tạo mới hồ sơ lương cho hợp đồng !', 'salaryRecord.html')
+                resolve();
+      
         },
         error: (err) => {
             console.log('err ', err);
@@ -171,7 +163,7 @@ async function handleRemove() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/HopDong/xoaHopDong/' + maHopDongHienTai,
         method: 'DELETE',
         success: function (data) {
             showSuccess('Xóa Thành Công!');
@@ -191,15 +183,16 @@ async function handleRemove() {
 
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa hợp đồng ?")
+    const valid = validateForm('editLaborContract')
+    if (!valid) return
     const formValue = getFormValues('editLaborContract')
-
     formValue['ma'] = maDetail;
 
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        url: 'https://localhost:7141/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -230,18 +223,6 @@ async function handleSave() {
     });
 }, 1000); 
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('laborContract_form_action')
@@ -265,7 +246,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
+    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

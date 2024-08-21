@@ -61,7 +61,7 @@ function fetchChuyenMon(id) {
     setLoading(true)
     idChuyenMon = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMonById/' + id,
+        url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
         success: function (data) {
             // setFormValue('editChuyenMon', data, 'fetch');
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/addChuyenMon',
+            url: 'https://localhost:7141/api/ChuyenMon/addChuyenMon',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -97,7 +97,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục chuyên môn: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editChuyenMon')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -127,14 +127,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
+            url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchChuyenMon res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục chuyên môn: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editChuyenMon')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -149,6 +149,8 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục chuyên môn ?")
+    const valid = validateForm('editChuyenMon')
+    if (!valid) return
     const formValue = getFormValues('editChuyenMon')
     const payload = buildPayload(formValue)
     console.log("Ten Truong: " + payload["ten"])
@@ -156,7 +158,7 @@ async function handleSave() {
     console.log('maTo: ', idChuyenMon)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
+            url: 'https://localhost:7141/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -165,7 +167,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục chuyên môn: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editChuyenMon')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -190,21 +192,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editChuyenMon');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMon'
+    return 'https://localhost:7141/api/ChuyenMon/getChuyenMon'
 }
 
 function showPopup() {
@@ -219,7 +208,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editChuyenMon');
     }
     if (isPopupEdit) {
         const popupTitle = modal.querySelector('h2')

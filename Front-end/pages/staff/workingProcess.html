@@ -72,11 +72,11 @@
                                     <div class="input-container">
                                         <div class="grid grid-cols-4 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-input label="Phòng ban" name="phong" readonly>
+                                                <base-input  label="Phòng ban" name="phong" readonly>
                                                 </base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Tổ" name="to" readonly>
+                                                <base-input  label="Tổ" name="to" readonly>
                                                 </base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -103,18 +103,18 @@
                                     <div class="input-container">
                                         <div class="grid grid-cols-4 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-select label="Phòng ban điều chuyển" name="phong"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong" keyValue="id"
+                                                <base-select id="phong" label="Phòng ban điều chuyển" name="phong"
+                                                    api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-select label="Tổ điều chuyển" name="to"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to" keyValue="id"
+                                                <base-select id="to" label="Tổ điều chuyển" name="to"
+                                                    api="apiTo" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select label="Chức Vụ điều chuyển" name="chucvu"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh" keyValue="id"
+                                                    api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
                                                     keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
@@ -151,6 +151,7 @@
     <script src="../../assets/scripts/common/formHanlde.js"></script>
     <script src="../../assets/scripts/pages/staff/workingProcess.js"></script>
     <script src="/assets/scripts/common/popupConfirm.js"></script>
+    <script src="/assets/scripts/common/popupHandle.js"></script>
     <script src="../../assets/scripts/pages/history/recordHistory.js"></script>
     <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
     <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>

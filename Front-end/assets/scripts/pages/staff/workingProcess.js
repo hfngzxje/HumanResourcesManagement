@@ -58,15 +58,15 @@ var TableColumnsChuyenDen = [
         key: 'trangThai',
         formatGiaTri: (value) => {
             let result = { text: 'Đang chờ', color: 'green' };
-        if (value === 1) {
-            result.text = 'Đã điều chuyển';
-            result.color = 'blue';
-        }
-        else if(value === -1){
-            result.text = 'Đã hủy';
-            result.color = 'red';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Đã điều chuyển';
+                result.color = 'blue';
+            }
+            else if (value === -1) {
+                result.text = 'Đã hủy';
+                result.color = 'red';
+            }
+            return result;
         }
 
     },
@@ -83,10 +83,9 @@ var TableColumnsChuyenDen = [
     }
 ]
 
+let thongTinPhongBan = null
 function backToList() {
-    
-        const url = new URL("/pages/staff/laborContract.html", window.location.origin);
-  
+    const url = new URL("/pages/staff/laborContract.html", window.location.origin);
 }
 
 function buildPayload(formValue) {
@@ -96,12 +95,47 @@ function buildPayload(formValue) {
 
     return formClone
 }
+function apiTo() {
+    if (!thongTinPhongBan) {
+        return false
+    }
+    return 'https://localhost:7141/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+}
+function layThongTinTo() {
+    const to = document.getElementById('to')
+    to.renderOption()
+}
+async function getToTheoPhongBanDauTien() {
+    try {
+        const response = await $.ajax({
+            url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        const phongBanDauTien = response[0]
+        thongTinPhongBan = phongBanDauTien.id
+        layThongTinTo()
+    } catch (error) {
+        console.log("Error", "ajaj")
+    }
+}
+function handlePhongBan() {
+    const phongBan = document.querySelector('#phong select')
+    phongBan.addEventListener("change", (event) => {
+        thongTinPhongBan = event.target.value
+        layThongTinTo()
+    });
+}
+function inits() {
+    handlePhongBan()
+    getToTheoPhongBanDauTien()
+}
 
 function fetchDieuChuyen() {
     setLoading(true)
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/CongViecHienTai/' + maDetail,
+        url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + maDetail,
         method: 'GET',
         success: function (data) {
             setFormValue('workingProcessHienTai_form', data)
@@ -119,7 +153,7 @@ function fetchDieuChuyen() {
 async function apiGetDuLieu() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
+            url: 'https://localhost:7141/api/DieuChuyen/GetAllDieuChuyen?maNV=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -143,13 +177,13 @@ async function handleLuuLichSuDieuChuyen() {
 
     console.log(payload);
     setLoading(true);
-    setTimeout(async () => { 
+    setTimeout(async () => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/LuuLichSuDieuChuyen',
+            url: 'https://localhost:7141/api/DieuChuyen/LuuLichSuDieuChuyen',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: async function (data) { 
+            success: async function (data) {
                 showSuccess('Tạo Thành Công!');
                 console.log("Data", data);
                 table.handleCallFetchData();
@@ -180,33 +214,33 @@ async function handleHuyDieuChuyen(id) {
     await showConfirm("Bạn có chắc chắn muốn hủy lịch điều chuyển ?")
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
-        method: 'PUT',
-        success: function (data) {
-            showSuccess('Hủy Thành Công!');
-            table.handleCallFetchData();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    showError(err.responseText);
-                    return;
+        $.ajax({
+            url: 'https://localhost:7141/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
+            method: 'PUT',
+            success: function (data) {
+                showSuccess('Hủy Thành Công!');
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText);
+                        return;
+                    }
+                    const errObj = err.responseJSON.errors;
+                    const firtErrKey = Object.keys(errObj)[0];
+                    const message = errObj[firtErrKey][0];
+                    showError(message);
+                } catch (error) {
+                    showError("Hủy điều chuyển không thành công!");
                 }
-                const errObj = err.responseJSON.errors;
-                const firtErrKey = Object.keys(errObj)[0];
-                const message = errObj[firtErrKey][0];
-                showError(message);
-            } catch (error) {
-                showError("Hủy điều chuyển không thành công!");
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+        });
+    }, 1000);
 }
 
 function renderActionByStatus() {
@@ -227,10 +261,11 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlChuyenDen() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
+    return 'https://localhost:7141/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     fetchDieuChuyen()
     renderActionByStatus()
+    inits()
 })
 

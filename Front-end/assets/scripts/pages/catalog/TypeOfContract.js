@@ -59,11 +59,11 @@ function fetchHopDong(id) {
     setLoading(true)
     idHopDong = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/getLoaiHopDongById/' + id,
+        url: 'https://localhost:7141/api/LoaiHopDong/getLoaiHopDongById/' + id,
         method: 'GET',
         success: function (data) {
 
-            // setFormValue('editTeam', data, 'fetch');
+            // setFormValue('editTypeOfContract', data, 'fetch');
             setFormValue('editTypeOfContract', data)
             oldValue = data.ten
         },
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/addLoaiHopDong',
+            url: 'https://localhost:7141/api/LoaiHopDong/addLoaiHopDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -97,7 +97,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục loại hợp đồng: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -127,14 +127,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/removeLoaiHopDong?id=' + idHopDong,
+            url: 'https://localhost:7141/api/LoaiHopDong/removeLoaiHopDong?id=' + idHopDong,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục loại hợp đồng: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -149,13 +149,15 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục loại hợp đồng ?")
+    const valid = validateForm('editTypeOfContract')
+    if (!valid) return
     const formValue = getFormValues('editTypeOfContract')
     const payload = buildPayload(formValue)
     console.log('payload ', payload);
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/updateLoaiHopDong?id=' + idHopDong,
+            url: 'https://localhost:7141/api/LoaiHopDong/updateLoaiHopDong?id=' + idHopDong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -164,7 +166,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục loại hợp đồng: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTypeOfContract')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -189,22 +191,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editTypeOfContract');
-    const inputs = form.querySelectorAll('input, textarea, select');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-            input.checked = false;
-        } else {
-            input.value = '';
-            input.selectedIndex = 1;
-        }
-    });
-}
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/getLoaiHopDong'
+    return 'https://localhost:7141/api/LoaiHopDong/getLoaiHopDong'
 }
 
 function showPopup() {
@@ -213,14 +201,14 @@ function showPopup() {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues();
+            clearFormValues('editTypeOfContract');
         }
     }
 
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editTypeOfContract');
     }
 
     if (isPopupEdit) {
@@ -253,6 +241,7 @@ function checkValues() {
 function closePopup() {
     var modal = document.getElementById("editTypeOfContract");
     modal.style.display = "none"
+    clearFormValues('editTypeOfContract')
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {

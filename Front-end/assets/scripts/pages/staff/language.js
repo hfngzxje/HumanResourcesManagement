@@ -45,18 +45,7 @@ var TableColumns2 = [
         ]
     }
 ]
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
 
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function backToList() {
     const url = new URL("/pages/staff/qualifications.html", window.location.origin);
     window.location.replace(url.toString());
@@ -68,7 +57,6 @@ function showPopup(formId) {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues("editTrinhDo");
             clearFormValues("editNgoaiNgu")
         }
     }
@@ -80,7 +68,7 @@ function showPopup(formId) {
 function closePopup(formId) {
     var modal = document.getElementById(formId);
     modal.style.display = "none"
-    clearFormValues(formId)
+    clearFormValues("editNgoaiNgu")
 }
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -106,7 +94,7 @@ function fetchNgoaiNgu(id) {
     idNgoaiNgu = id
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguById/' + id,
+        url: 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data, 'fetch');
@@ -133,7 +121,7 @@ async function handleCreateNgoaiNgu() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/addNgoaiNgu',
+            url: 'https://localhost:7141/api/NgoaiNgu/addNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -172,7 +160,7 @@ async function handleRemoveNgoaiNgu(id) {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
+            url: 'https://localhost:7141/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
@@ -198,13 +186,15 @@ async function handleRemoveNgoaiNgu(id) {
 
 async function handleSaveNgoaiNgu() {
     await showConfirm("Bạn có chắc chắn muốn sửa ngoại ngữ ?")
+    const valid = validateForm('editNgoaiNgu')
+    if (!valid) return
     const formValue = getFormValues('editNgoaiNgu')
     formValue['id'] = idNgoaiNgu
     const payload = buildPayload1(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/updateNgoaiNgu',
+            url: 'https://localhost:7141/api/NgoaiNgu/updateNgoaiNgu',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -262,7 +252,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl2() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
+    return 'https://localhost:7141/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()

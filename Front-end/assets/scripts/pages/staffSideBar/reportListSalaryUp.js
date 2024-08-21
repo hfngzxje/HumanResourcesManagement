@@ -1,5 +1,8 @@
-const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getDanhSachLenLuong";
-const table = document.querySelector('base-table')
+const apiTable = "https://localhost:7141/api/DanhSachLenLuong/getDanhSachLenLuong";
+const apiTableBaoCao = "https://localhost:7141/api/DanhSachLenLuong/getAll";
+
+
+const table = document.querySelectorAll('base-table')
 var idNhomLuong = null
 var maDetail = null
 var TableColumns = [
@@ -38,41 +41,66 @@ var TableColumns = [
         ]
     }
 ]
+var TableColumnsBaoCao = [
+    {
+        label: 'Mã nhân viên',
+        key: 'manv',
+    },
+    {
+        label: 'Tên nhân viên',
+        key: 'tenNv',
+    },
+    {
+        label: 'Mã hợp đồng',
+        key: 'mahopdong',
+    },
+    {
+        label: 'Phòng',
+        key: 'phong',
+    },
+    {
+        label: 'Chức danh',
+        key: 'chucdanh',
+    }
+]
 async function handleCreate() {
-    const isConfirm = confirm('Bạn chắc chắn muốn thêm bảng lương?')
-    if (!isConfirm) return
+    await showConfirm('Bạn chắc chắn muốn thêm bảng lương?')
     const valid = validateForm('salaryRecord_form')
     if (!valid) return
     const formValue = getFormValues('salaryRecord_form')
     formValue['phucaptrachnhiem'] = parseCurrency(formValue['phucaptrachnhiem'])
     formValue['phucapkhac'] = parseCurrency(formValue['phucapkhac'])
     formValue['tongluong'] = parseCurrency(formValue['tongluong'])
-    // formValue['mahopdong'] = formValue['mahopdong']
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoMoiHoSoLuongKhongActive',
+            url: 'https://localhost:7141/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: function (data) {
-                alert('Tạo Thành Công!');
-                table.handleCallFetchData();
+            success:async function (data) {
+                await showSuccess('Tạo Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+                await closePopup()
             },
             error: (err) => {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
             },
             complete: () => {
@@ -81,6 +109,39 @@ async function handleCreate() {
         });
     }, 1000);
 }
+function closePopup(){
+    var modal = document.getElementById("showPopUp");
+    modal.style.display="none"
+}
+async function handleSearch() {
+    try {
+      const formValue = getFormValues("report_form");    
+      const tableReport = document.getElementById("tableReport1");
+      
+      const params = {
+        phongId: formValue.phongId || "",
+        chucDanhId: formValue.chucDanhId || ""
+      };
+     
+      await tableReport.handleCallFetchData(params);
+       
+    } catch (error) {
+      console.error("Error in handleSearch:", error);
+    }
+  }
+  function phongBanChange() {
+    const phongban = document.querySelector('#phongban select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+  function chucDanhChange() {
+    const phongban = document.querySelector('#chucdanh select')
+    phongban.addEventListener("change", (event) => {
+        handleSearch()
+    });
+  }
+  
 // ------------- Add nâng lương --------------------------
 var danhSachMaHopDong = []
 var phuCapInput = null
@@ -90,7 +151,7 @@ function buidApiBacLuong() {
     if(!thongTinNgachCongChuc){
         return false
     }
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
+    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
     phucapkhacInput = phucapkhacInput || 0;
@@ -100,10 +161,18 @@ function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
 }
 
 function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+    // Kiểm tra nếu giá trị là một số hợp lệ
+    if (val != null && !isNaN(val)) {
+        // Chuyển đổi giá trị thành số nếu nó không phải là số
+        const num = Number(val);
+        // Định dạng số thành chuỗi tiền tệ
+        return num.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    // Nếu giá trị không hợp lệ, trả về một chuỗi rỗng hoặc giá trị gốc tùy ý
+    return "";
 }
 function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
@@ -125,7 +194,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function getHopDong() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
+            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -152,7 +221,7 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -181,7 +250,7 @@ function layThongTinBacLuong() {
 async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
+            url: 'https://localhost:7141/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -221,7 +290,7 @@ function handleNgachCongChuc() {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
+            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
 
@@ -276,7 +345,7 @@ async function fetchSalaryToEdit(ma) {
     maDetail = ma;
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
+            url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -290,7 +359,7 @@ async function fetchSalaryToEdit(ma) {
             idNhomLuong = lastItem.nhomluong;
             document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
             document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
-            document.querySelector('#phuCapKhacPop input').value = formatCurrency(lastItem.phucapkhac);
+                document.querySelector('#phuCapKhacPop input').value = lastItem.phucapkhac;
             await getDuLieuNhomLuong();
             await getNgachCongChuc();
 
@@ -310,7 +379,7 @@ var idNgachCongChuc = null
 async function getDuLieuNhomLuong() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -323,7 +392,7 @@ async function getDuLieuNhomLuong() {
 async function getNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -343,33 +412,53 @@ function showPopup(formId) {
         }
     }
 }
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea,select');
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } 
-        else if (input.tagName.toLowerCase() === 'select') {
-            input.selectedIndex = 0; // Reset select về item đầu tiên
-        } else {
-            input.value = '';
-        }
-    });
-}
+
 function buildApiUrl() {
     return apiTable;
 }
-function formatCurrency(val) {
-    return val.toLocaleString("it-IT", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2
-    });
+function buildApiUrlBaoCao(){
+    return apiTableBaoCao
 }
+function formatCurrency(val) {
+    if (val != null && !isNaN(val)) {
+        const num = Number(val);
+        return num.toLocaleString("it-IT", {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2
+        });
+    }
+    return "";
+}
+
 function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
     return parseFloat(cleanedValue);
 }
-document.addEventListener("DOMContentLoaded", () => {
 
+function renderActionByStatus() {
+    const actionEl = document.getElementById("report_form_action");
+    const buildButton = (id, label, type, icon) => {
+      const btnEl = document.createElement("base-button");
+      btnEl.setAttribute('id', id)
+      btnEl.setAttribute("label", label);
+      btnEl.setAttribute("type", type);
+      btnEl.setAttribute("icon", icon);
+      return btnEl;
+    };
+    const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
+    const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  
+    // excelBtn.addEventListener("click", () => {
+    //   handleExportExcel();
+    // });
+  
+    // pdfBtn.addEventListener("click", () => {
+    //   handleExportPDF();
+    // });
+    actionEl.append(pdfBtn, excelBtn);
+  }
+document.addEventListener("DOMContentLoaded", () => {
+    renderActionByStatus()
+    phongBanChange()
+    chucDanhChange()
 });

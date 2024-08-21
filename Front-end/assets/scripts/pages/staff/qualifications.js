@@ -60,19 +60,6 @@ var TableColumns1 = [
     }
 ]
 
-
-function clearFormValues(formId) {
-    const form = document.getElementById(formId);
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
 function backToList() {
     const url = new URL("/pages/staff/qualifications.html", window.location.origin);
     window.location.replace(url.toString());
@@ -95,7 +82,7 @@ function showPopup(formId) {
 function closePopup(formId) {
     var modal = document.getElementById(formId);
     modal.style.display = "none"
-    clearFormValues(formId)
+    clearFormValues("editTrinhDo")
 }
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -107,9 +94,7 @@ function buildPayload(formValue) {
 
 function buildPayload1(formValue) {
     const formClone = { ...formValue }
-
     formClone['id'] = idNgoaiNgu
-
     return formClone
 }
 function fetchTrinhDo(id) {
@@ -117,7 +102,7 @@ function fetchTrinhDo(id) {
     idTrinhDo = id
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
+        url: 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data, 'fetch');
@@ -147,7 +132,7 @@ async function handleCreateTrinhDo() {
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/addTrinhDoVanHoa',
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/addTrinhDoVanHoa',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -187,7 +172,7 @@ async function handleRemoveTrinhDo() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
@@ -213,13 +198,15 @@ async function handleRemoveTrinhDo() {
 
 async function handleSaveTrinhDo() {
     await showConfirm("Bạn có chắc chắn muốn sửa trình độ ?")
+    const valid = validateForm('editTrinhDo')
+    if (!valid) return
     const formValue = getFormValues('editTrinhDo')
     formValue['id'] = idTrinhDo
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
+            url: 'https://localhost:7141/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -276,7 +263,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl1() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
+    return 'https://localhost:7141/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
 }
 
 document.addEventListener('DOMContentLoaded', () => {

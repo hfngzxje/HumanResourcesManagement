@@ -42,7 +42,7 @@
                   Tạo mới nhân viên</a>
               </div>
             </div>
-            <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
+            <base-table api="https://localhost:7141/api/NhanVien"
               columns="TableColumns" pagesize="5">
             </base-table>
           </div>
@@ -54,7 +54,7 @@
     <custom-error></custom-error>
     <custom-success></custom-success>
   </main>
-  <div id="createNhanVien" class="modal">
+  <!-- <div id="createNhanVien" class="modal">
     <div class="change-container"
       style="max-width: 900px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
       <span class="close">&times;</span>
@@ -74,25 +74,25 @@
                   </div>
                   <div class="row">
                     <div class="col">
-                      <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
+                      <base-input class="col-span-2" label="Họ và tên" name="ten"
                         validateBy="required"></base-input>
                     </div>
                     <div class="col">
-                      <base-input label="Email (*)" name="emailValid" validateBy="required"></base-input>
+                      <base-input label="Email" name="emailValid" validateBy="required"></base-input>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col">
-                      <base-input-phone label="Di động(*)" name="didong" validateBy="phoneValid"></base-input-phone>
+                      <base-input-phone label="Di động" name="didong" validateBy="phoneValid"></base-input-phone>
                     </div>
                     <div class="col">
-                      <base-datepicker label="Ngày sinh(*)" name="ngaysinh" validateBy="required"></base-datepicker>
+                      <base-datepicker  label="Ngày sinh" name="ngaysinh" validateBy="required"></base-datepicker>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col">
                       <div class="form-group">
-                        <label-form-item name="Giới tính(*)"></label-form-item>
+                        <label-form-item name="Giới tính"></label-form-item>
                         <div class="flex gap-5">
                           <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
                           <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
@@ -102,7 +102,7 @@
                   </div>
                   <div class="row">
                     <div class="col-md-4">
-                      <base-input-number label="CMND(*)" name="cmnd" validateBy="cmndValid"></base-input-number>
+                      <base-input-number label="CMND" name="cmnd" validateBy="cmndValid"></base-input-number>
                     </div>
                     <div class="col-md-4">
                       <base-datepicker label="Ngày cấp" name="cmndngaycap"></base-datepicker>
@@ -113,11 +113,11 @@
                   </div>
                   <div class="row">
                     <div class="col">
-                      <base-input class="col-span-2" label="Quê quán(*)" name="quequan"
+                      <base-input class="col-span-2" label="Quê quán" name="quequan"
                         validateBy="required"></base-input>
                     </div>
                     <div class="col">
-                      <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú(*)" name="thuongtru"
+                      <base-input class="col-span-2" label="Nơi đăng ký hộ khẩu thường trú" name="thuongtru"
                         validateBy="required"></base-input>
                     </div>
                   </div>
@@ -127,27 +127,27 @@
                   <div class="row">
                     <div class="col-md-4">
                       <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh"
+                        api="https://localhost:7141/api/NhanVien/chucDanh"
                         keyValue="id" keyLabel="ten"></base-select>
                     </div>
                     <div class="col-md-4">
                       <base-select label="Phòng" name="phong"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"
+                        api="https://localhost:7141/api/NhanVien/phong"
                         keyValue="id" keyLabel="ten"></base-select>
                     </div>
                     <div class="col-md-4">
                       <base-select label="Tổ" name="to"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to" keyValue="id"
+                        api="https://localhost:7141/api/NhanVien/to" keyValue="id"
                         keyLabel="ten"></base-select>
                     </div>
                   </div>
                   <br>
                   <div class="row">
                     <div class="col">
-                      <base-datepicker label="Ngày vào ban" name="ngayvaoban"></base-datepicker>
+                      <base-datepicker label="Ngày vào ban" name="ngayvaoban" validateBy="required"></base-datepicker>
                     </div>
                     <div class="col">
-                      <base-datepicker label="Ngày công tác" name="ngaychinhthuc"></base-datepicker>
+                      <base-datepicker label="Ngày công tác" name="ngaychinhthuc" validateBy="required"></base-datepicker>
                     </div>
 
                   </div>
@@ -171,7 +171,89 @@
       </div>
     </div>
 
+  </div> -->
+
+  <div id="createNhanVien" class="modal">
+    <div class="change-container"
+      style="max-width: 1000px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
+      <span class="close">&times;</span>
+
+      <form>
+        <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+          <h2 class=" font-semibold text-gray-900 dark:text-white">
+            Thêm mới nhân viên
+          </h2>
+        </div>
+        <div class="col-md-12 p-2">
+          <div class="grid gap-4 mb-4 grid-cols-2">
+            <div class="tile">
+              <div class="col-span-2 sm:col-span-1">
+                <base-input class="col-span-2" label="Họ và tên" name="ten" validateBy="required"></base-input>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <base-input label="Email" name="email" validateBy="emailValid"></base-input>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-2 ">
+                <base-input-phone label="Di động" name="didong" validateBy="phoneValid"></base-input-phone>
+              </div>
+              <div class="col-span-2  sm:col-span-1 mt-2">
+                <base-datepicker label="Ngày sinh" name="ngaysinh" validateBy="required"></base-datepicker>
+              </div>
+
+              <div class="col-span-2 sm:col-span-1">
+                <div class="form-group">
+                  <label-form-item name="Giới tính"></label-form-item>
+                  <div class="flex gap-5">
+                    <base-radio label="Nam" name="gioitinh" value="1" checked></base-radio>
+                    <base-radio label="Nữ" name="gioitinh" value="0"></base-radio>
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <base-input-number label="CMND" name="cmnd" validateBy="cmndValid"></base-input-number>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <base-input label="Nơi cấp" name="cmndnoicap"></base-input>
+              </div>
+            </div>
+            <div class="tile">
+              <div class="col-span-2 sm:col-span-1 mt-1">
+                <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
+                  api="https://localhost:7141/api/NhanVien/chucDanh" keyValue="id"
+                  keyLabel="ten"></base-select>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-3">
+                <base-select id="phong" label="Phòng" name="phong"
+                  api="https://localhost:7141/api/NhanVien/phong" keyValue="id"
+                  keyLabel="ten"></base-select>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-3">
+                <base-select id="to" label="Tổ" name="to" api="apiTo" keyValue="id" keyLabel="ten"></base-select>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-2">
+                <base-datepicker label="Ngày vào ban" name="ngayvaoban" validateBy="required"></base-datepicker>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-2">
+                <base-datepicker label="Ngày công tác" name="ngaychinhthuc" validateBy="required"></base-datepicker>
+              </div>
+
+              <div class="col-span-2  sm:col-span-1 mt-1">
+                <base-datepicker label="Ngày cấp" name="cmndngaycap"></base-datepicker>
+              </div>
+              <div class="col-span-2  sm:col-span-1">
+                <base-input class="col-span-2" label="Quê quán" name="quequan" validateBy="required"></base-input>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="flex gap-x-5  justify-center">
+        <base-button id="createBtn" label="Thêm mới" icon="bx bx-save" type="green"></base-button>
+        <base-button id="clearBtn" label="Làm Trống" icon="bx bx-eraser" type="black"></base-button>
+      </div>
+    </div>
   </div>
+
   <custom-alert></custom-alert>
   <custom-error></custom-error>
   <custom-success></custom-success>
@@ -185,6 +267,7 @@
   <script src="/assets/scripts/common/popupConfirm.js"></script>
   <script src="../../assets/scripts/pages/history/recordHistory.js"></script>
   <script src="/assets/scripts/common/registerComponent.js"></script>
+  <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="/assets/scripts/common/popupConfirm.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>

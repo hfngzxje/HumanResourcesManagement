@@ -29,7 +29,7 @@ const TAB_LIST = [
   {
     key: TAB.RAISE_SALARY,
     label: "Quyết định lên lương",
-    activeByPath: "/pages/staff/qualifications.html",
+    activeByPath: "/pages/staffSideBar/reportRaiseSalary.html",
   },
   {
     key: TAB.SALARY,

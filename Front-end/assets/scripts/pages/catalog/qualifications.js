@@ -63,7 +63,7 @@ function fetchTrinhDo(id) {
     setLoading(true)
     idTrinhDo = id
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/getTrinhDoById/' + id,
+        url: 'https://localhost:7141/api/TrinhDo/getTrinhDoById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editTrinhDo', data)
@@ -89,7 +89,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/addTrinhDo',
+            url: 'https://localhost:7141/api/TrinhDo/addTrinhDo',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -98,7 +98,7 @@ async function handleCreate() {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục trình độ: ${formValue.ten}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTrinhDo')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -128,14 +128,14 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/deleteTrinhDo/' + idTrinhDo,
+            url: 'https://localhost:7141/api/TrinhDo/deleteTrinhDo/' + idTrinhDo,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchTrinhDo res :: ', data);
                 showSuccess("Xóa thành công !")
                 recordActivityAdmin(maNhanVien, `Xóa danh mục trình độ: ${oldValue}`);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTrinhDo')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -150,12 +150,14 @@ async function handleRemoveRow() {
 }
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa danh mục trình độ ?")
+    const valid = validateForm('editTrinhDo')
+    if (!valid) return
     const formValue = getFormValues('editTrinhDo')
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/updateTrinhDo/' + idTrinhDo,
+            url: 'https://localhost:7141/api/TrinhDo/updateTrinhDo/' + idTrinhDo,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -164,7 +166,7 @@ async function handleSave() {
                 showSuccess('Lưu Thành Công!')
                 recordActivityAdmin(maNhanVien, `Sửa danh mục trình độ: ${oldValue} => ${payload.ten} `);
                 closePopup()
-                clearFormValues()
+                clearFormValues('editTrinhDo')
                 table.handleCallFetchData();
             },
             error: (err) => {
@@ -189,23 +191,8 @@ async function handleSave() {
     }, 1000);
 }
 
-function clearFormValues() {
-    const form = document.getElementById('editTrinhDo');
-    const inputs = form.querySelectorAll('input, textarea');
-
-    inputs.forEach(input => {
-        if (input.type === 'checkbox') {
-            input.checked = false;
-        } else {
-            input.value = '';
-        }
-    });
-}
-
-
-
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDo/getTrinhDo'
+    return 'https://localhost:7141/api/TrinhDo/getTrinhDo'
 }
 
 function showPopup() {
@@ -221,7 +208,7 @@ function showPopup() {
     var closeButton = modal.querySelector('.close');
     closeButton.onclick = function () {
         modal.style.display = "none";
-        clearFormValues();
+        clearFormValues('editTrinhDo');
     }
 
     if (isPopupEdit) {
