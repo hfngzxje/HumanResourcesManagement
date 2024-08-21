@@ -99,7 +99,7 @@ function fetchRelationship(id) {
     setLoading(true)
     idNguoiThan = id
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editFamily', data)
@@ -117,7 +117,7 @@ function clearError(formId) {
     const inputs = form.querySelectorAll('.error');
 
     inputs.forEach(input => {
-       input.value = null
+        input.value = null
     });
 }
 async function handleCreate() {
@@ -133,7 +133,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/addNguoiThan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/addNguoiThan',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -174,7 +174,7 @@ async function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/removeNguoiThan/' + idNguoiThan,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công!")
@@ -202,7 +202,7 @@ async function handleSave() {
     setTimeout(() => {
         setLoading(true)
         $.ajax({
-            url: 'https://localhost:7141/api/NguoiThan/updateNguoiThan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/updateNguoiThan',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -242,7 +242,7 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
     const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
@@ -254,7 +254,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus();

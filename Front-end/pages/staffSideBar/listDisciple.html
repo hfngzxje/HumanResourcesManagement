@@ -90,7 +90,7 @@
                             </form>
                         </div>
                     </div>
-                    <base-table  id="tableReport" api="buildApiUrlKyLuat" columns="TableColumns">
+                    <base-table id="tableReport" api="buildApiUrlKyLuat" columns="TableColumns">
                     </base-table>
                 </div>
             </div>
@@ -114,13 +114,13 @@
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div id="maNhanVien" class="col-span-2 sm:col-span-1 mt-3">
                             <base-select label="Mã Nhân Viên" name="ma" keyValue="ma" keyLabel="ma"
-                                api="https://localhost:7141/api/NhanVien">
+                                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien">
                             </base-select>
                         </div>
                         <div class="col-span-2 sm:col-span-1 mt-3"></div>
                         <div class="col-span-2 sm:col-span-1 mt-3">
                             <base-select label="Tên" name="ten" keyValue="id" keyLabel="ten"
-                                api="https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
+                                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
                         </div>
                         <div class="col-span-2 sm:col-span-1 mt-2 ">
                             <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian" name="ngay"

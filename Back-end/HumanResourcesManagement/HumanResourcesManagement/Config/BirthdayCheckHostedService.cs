@@ -26,7 +26,7 @@ namespace HumanResourcesManagement.Config
         private TimeSpan GetInitialDelay()
         {
             var now = DateTime.Now;
-            var nextRunTime = new DateTime(now.Year, now.Month, now.Day, 3, 3, 0, 0);
+            var nextRunTime = new DateTime(now.Year, now.Month, now.Day, 3, 0, 0, 0);
 
             if (now > nextRunTime)
             {

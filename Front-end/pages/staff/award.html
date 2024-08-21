@@ -77,7 +77,7 @@
                                         <div class="grid grid-cols-4 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 mt-3 ">
                                                 <base-select label="Tên" name="ten" keyValue="id" keyLabel="ten"
-                                                    api="https://localhost:7141/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucKhenThuongKyLuat/getDanhMucKhenThuongKyLuat"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker class="ml-auto" style="margin: 0;" label="Thời gian(*)"
@@ -88,7 +88,8 @@
                                                     name="noidung"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Lý do(*)" validateBy="required" name="lido"></base-input>
+                                                <base-input label="Lý do(*)" validateBy="required"
+                                                    name="lido"></base-input>
                                             </div>
                                             <!-- <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input id="trangthai" label="Trạng thái" value="Khen thưởng"
@@ -104,7 +105,7 @@
                         </div>
                     </div>
                     <base-table api="buildApiUrlKhenThuong" columns="TableColumns">
-                        </base-table>
+                    </base-table>
                 </div>
             </div>
 

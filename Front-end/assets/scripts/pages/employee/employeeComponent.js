@@ -128,7 +128,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const avatarUrl = data.anh;
       if (avatarUrl) {
@@ -146,7 +146,7 @@ class CustomSidebar extends HTMLElement {
     }
 
     try {
-      const response = await fetch(`https://localhost:7141/api/NhanVien/GetById?id=${maNhanVien}`);
+      const response = await fetch(`https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=${maNhanVien}`);
       const data = await response.json();
       const dataTen = data.ten;
       if (dataTen) {
@@ -194,10 +194,10 @@ class CustomSidebar extends HTMLElement {
       if (currentPath.includes(linkPath)) {
         item.classList.add('active');
       }
-      if ( currentPath.includes('discipline') && linkPath.includes('award.html')) {
+      if (currentPath.includes('discipline') && linkPath.includes('award.html')) {
         item.classList.add('active');
-    }
-      
+      }
+
     });
   }
 
@@ -451,14 +451,14 @@ class BaseSelect extends HTMLElement {
 
       if (api) {
         const apiUrl = getApiUrl()
-        if(!apiUrl){
+        if (!apiUrl) {
           return
         }
         $.ajax({
           url: getApiUrl(),
           method: "GET",
           success: (data) => {
-            if(!data || data.length === 0){
+            if (!data || data.length === 0) {
               return
             }
             data.forEach((item) => {
@@ -608,21 +608,21 @@ class BaseButton extends HTMLElement {
 
 class BaseTable extends HTMLElement {
   // khai báo các thuộc tính sẽ nhận vào từ bên file html
-  static observedAttributes = ["api", "columns", "event", "pageSize", "method","sortBy","sortType"];
+  static observedAttributes = ["api", "columns", "event", "pageSize", "method", "sortBy", "sortType"];
 
   connectedCallback() {
     const api = this.getAttribute("api"); // tên biến lưu trữ thông tin liên quan đến api
     const columnsKey = this.getAttribute("columns"); // ... columns
     const eventKey = this.getAttribute("event"); // ... event
     const method = this.getAttribute("method") || "GET";
-    const sortBy = this.getAttribute("sortBy")|| "id"
-    const sortType = this.getAttribute("sortType")|| "ASC"
+    const sortBy = this.getAttribute("sortBy") || "id"
+    const sortType = this.getAttribute("sortType") || "ASC"
 
     function getApiUrl() {
       window["buildApiUrl"];
-      if (window[api] === undefined) return api; 
-      return window[api](); 
-    } 
+      if (window[api] === undefined) return api;
+      return window[api]();
+    }
 
     function formatDateTime(dateTimeStr) {
       const dateTime = new Date(dateTimeStr);
@@ -671,7 +671,7 @@ class BaseTable extends HTMLElement {
       const headTrEl = document.createElement("tr");
       columns.forEach((col) => {
         if (col.type === "disabled") {
-          return; 
+          return;
         }
         const thEl = document.createElement("th");
 
@@ -979,7 +979,7 @@ class BaseTable extends HTMLElement {
             // Kiểm tra xem tableData có phải là một mảng không
             if (Array.isArray(tableData)) {
               if (tableData.length > 0 && tableData[0].hasOwnProperty(sortBy)) {
-                const sortedData = tableData.sort((a, b) => (b[sortBy] - a[sortBy])*arg);
+                const sortedData = tableData.sort((a, b) => (b[sortBy] - a[sortBy]) * arg);
                 setTableData(sortedData);
               } else {
                 setTableData(tableData);
@@ -989,7 +989,7 @@ class BaseTable extends HTMLElement {
               renderPagination();
             } else {
               setTableData([]);
-              renderTable(); 
+              renderTable();
             }
           },
           error: (xhr, status, error) => {

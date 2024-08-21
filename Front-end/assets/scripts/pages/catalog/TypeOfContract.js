@@ -59,7 +59,7 @@ function fetchHopDong(id) {
     setLoading(true)
     idHopDong = id
     $.ajax({
-        url: 'https://localhost:7141/api/LoaiHopDong/getLoaiHopDongById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/getLoaiHopDongById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/LoaiHopDong/addLoaiHopDong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/addLoaiHopDong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -127,7 +127,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/LoaiHopDong/removeLoaiHopDong?id=' + idHopDong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/removeLoaiHopDong?id=' + idHopDong,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
@@ -157,7 +157,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/LoaiHopDong/updateLoaiHopDong?id=' + idHopDong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/updateLoaiHopDong?id=' + idHopDong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -192,7 +192,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/LoaiHopDong/getLoaiHopDong'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LoaiHopDong/getLoaiHopDong'
 }
 
 function showPopup() {
@@ -216,7 +216,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Loại Hợp Đồng"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -231,10 +231,10 @@ function checkValues() {
     const newValue = formValue.ten;
     console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         console.log(popupSaveBtn)
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
         console.log(popupSaveBtn)
     }
 }

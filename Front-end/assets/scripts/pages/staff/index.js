@@ -46,11 +46,11 @@ var TableColumnsHopDong = [
         key: 'trangThai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     }
 ]
@@ -58,7 +58,7 @@ var TableColumnsHopDong = [
 async function soLuongNhanVien() {
     const soLuongNhanVien = document.querySelector('p#countNhanVien');
     try {
-        const response = await fetch('https://localhost:7141/api/NhanVien');
+        const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien');
         const nhanVien = await response.json();
         soLuongNhanVien.textContent = `${nhanVien.length} Nhân viên`;
     } catch (error) {
@@ -70,7 +70,7 @@ async function soLuongNhanVien() {
 async function soLuongHopDong() {
     const soLuongHopDong = document.querySelector('p#countHopDong');
     try {
-        const response = await fetch('https://localhost:7141/api/HopDong');
+        const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong');
         const hopDong = await response.json();
         soLuongHopDong.textContent = `${hopDong.length} Hợp đồng`;
     } catch (error) {
@@ -102,13 +102,13 @@ async function soLuongKyLuat() {
 async function getKhenThuongLength() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
             method: 'GET',
             contentType: 'application/json',
         });
         const awards = response.filter(item => item.khenthuongkiluat === 1)
 
-        return awards.length        
+        return awards.length
     } catch (error) {
         console.log("Error")
     }
@@ -117,19 +117,19 @@ async function getKhenThuongLength() {
 async function getKyLuatLength() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getAllKhenThuongKyLuat',
             method: 'GET',
             contentType: 'application/json',
         });
         const disciplines = response.filter(item => item.khenthuongkiluat === 2)
 
-        return disciplines.length        
+        return disciplines.length
     } catch (error) {
         console.log("Error")
     }
 }
 
-async function fetchData() {    
+async function fetchData() {
     const rewardData = await getKhenThuongLength();
     const disciplineData = await getKyLuatLength();
     return {
@@ -138,7 +138,7 @@ async function fetchData() {
     };
 }
 async function fetchDataHopDong() {
-    const response = await fetch('https://localhost:7141/api/HopDong');
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong');
     const contracts = await response.json();
 
     // Tính tổng số hợp đồng theo trạng thái

@@ -59,7 +59,7 @@ function fetchNgoaiNgu(id) {
     setLoading(true)
     idNgoaiNgu = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNguById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/getDanhMucNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editNgoaiNgu', data)
@@ -85,7 +85,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNgoaiNgu/addDanhMucNgoaiNgu',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/addDanhMucNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -124,7 +124,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + idNgoaiNgu,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/deleteDanhMucNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchKhenThuong res :: ', data);
@@ -152,43 +152,43 @@ async function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
-        method: 'PUT',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            console.log('fetchKhenThuong res :: ', data);
-            showSuccess('Lưu Thành Công!')
-            recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
-            closePopup()
-            clearFormValues('editNgoaiNgu')
-            table.handleCallFetchData();
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    showError(err.responseText)
-                    return
+        $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                console.log('fetchKhenThuong res :: ', data);
+                showSuccess('Lưu Thành Công!')
+                recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
+                closePopup()
+                clearFormValues('editNgoaiNgu')
+                table.handleCallFetchData();
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    showError(message)
+                } catch (error) {
+                    showError("Cập nhật thất bại!")
                 }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                showError(message)
-            } catch (error) {
-                showError("Cập nhật thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
             }
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000);
+        });
+    }, 1000);
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/getDanhMucNgoaiNgu'
 }
 
 function showPopup() {
@@ -212,7 +212,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Ngoại Ngữ"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -227,10 +227,10 @@ function checkValues() {
     const newValue = formValue.ten;
     console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         console.log(popupSaveBtn)
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
         console.log(popupSaveBtn)
     }
 }
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
 
-    
+
     const inputTenNgoaiNgu = document.querySelector('base-input[name="ten"]');
     if (inputTenNgoaiNgu) {
         inputTenNgoaiNgu.addEventListener('input', checkValues);

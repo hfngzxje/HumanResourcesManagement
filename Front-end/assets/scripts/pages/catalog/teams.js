@@ -68,7 +68,7 @@ function fetchTo(id) {
     setLoading(true)
     idToHienTai = id
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucTo/getDanhMucToById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucToById/' + id,
         method: 'GET',
         success: function (data) {
 
@@ -99,7 +99,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/addDanhMucTo',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/addDanhMucTo',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -138,7 +138,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/deleteDanhMucTo/' + idToHienTai,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
@@ -168,7 +168,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/updateDanhMucTo/' + idToHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -203,7 +203,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucTo/getDanhMucTo'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/getDanhMucTo'
 }
 
 function showPopup() {
@@ -241,7 +241,7 @@ function checkValues() {
     const formValue = getFormValues('editTeam');
     const newTen = formValue.ten;
     const newPhong = formValue.idphong
-    
+
     // console.log('Type of oldTen:',  oldTen);
     // console.log('Type of oldPhong:',  oldPhong);
     // console.log('Type of newTen:',  newTen);
