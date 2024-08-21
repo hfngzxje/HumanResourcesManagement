@@ -1,5 +1,5 @@
-const apiTable = "https://localhost:7141/api/DanhSachLenLuong/getDanhSachLenLuong";
-const apiTableBaoCao = "https://localhost:7141/api/DanhSachLenLuong/getAll";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getDanhSachLenLuong";
+const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
 
 
 const table = document.querySelectorAll('base-table')
@@ -75,7 +75,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -151,7 +151,7 @@ function buidApiBacLuong() {
     if(!thongTinNgachCongChuc){
         return false
     }
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
     phucapkhacInput = phucapkhacInput || 0;
@@ -194,7 +194,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function getHopDong() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -221,7 +221,7 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -250,7 +250,7 @@ function layThongTinBacLuong() {
 async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/ngachCongChuc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -290,7 +290,7 @@ function handleNgachCongChuc() {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
 
@@ -345,7 +345,7 @@ async function fetchSalaryToEdit(ma) {
     maDetail = ma;
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -379,7 +379,7 @@ var idNgachCongChuc = null
 async function getDuLieuNhomLuong() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -392,7 +392,7 @@ async function getDuLieuNhomLuong() {
 async function getNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
         });

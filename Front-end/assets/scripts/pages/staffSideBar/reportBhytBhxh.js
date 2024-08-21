@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachBaoHiem";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachBaoHiem";
 var TableColumns = [
     {
         label: 'Mã nhân viên',
@@ -41,7 +41,7 @@ async function handleExportExcel() {
     params.append('idPhongBan', formValue.idPhongBan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoBaoHiemToExcel', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoBaoHiemToExcel', {
       method: 'POST',
       body: params,
       headers: {
@@ -80,7 +80,7 @@ async function handleExportPDF() {
   params.append('idPhongBan', formValue.idPhongBan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoBaoHiemToPDF', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoBaoHiemToPDF', {
       method: 'POST',
       body: params,
       headers: {

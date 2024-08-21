@@ -1,4 +1,4 @@
-// const apiTable = "https://localhost:7141/api/NhanVien/getByPhongBan?idPhong="+idphong;
+// const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getByPhongBan?idPhong="+idphong;
 
 var idPhong = null
 const ma = localStorage.getItem('maNhanVien')
@@ -49,7 +49,7 @@ var gioiTinh = [
 async function getIdPhongNhanVien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/GetById?id=' + ma,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + ma,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -65,7 +65,7 @@ function buildApiUrl() {
         return false
     }
     
-    return 'https://localhost:7141/api/NhanVien/getByPhongBan?idPhong='+idPhong ;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getByPhongBan?idPhong='+idPhong ;
 }
 
 async function handleSearch() {

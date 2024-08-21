@@ -66,5 +66,5 @@ var TableColumns = [
 ]
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }

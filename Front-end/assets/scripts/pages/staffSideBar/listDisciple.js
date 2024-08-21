@@ -64,7 +64,7 @@ function closePopUp() {
 async function getMaNhanVienDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -96,7 +96,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -137,7 +137,7 @@ async function handleRemoveRow(id) {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
         method: 'DELETE',
         success: function (data) {
             showSuccess('Xóa Thành Công!');
@@ -176,7 +176,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKyLuat() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/ky-luat' 
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/ky-luat' 
     return string1 
 }
 

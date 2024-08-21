@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNhomLuong";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNhomLuong";
 var TableColumns = [
   {
     label: "Chức danh",
@@ -48,7 +48,7 @@ async function handleExportExcel() {
   params.append('BacLuong', formValue.BacLuong || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhomLuongToExcel', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhomLuongToExcel', {
       method: 'POST',
       body: params,
       headers: {
@@ -87,7 +87,7 @@ async function handleExportPDF() {
   params.append('BacLuong', formValue.BacLuong || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNhomLuongToPDF', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNhomLuongToPDF', {
       method: 'POST',
       body: params,
       headers: {

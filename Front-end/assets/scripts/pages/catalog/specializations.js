@@ -61,7 +61,7 @@ function fetchChuyenMon(id) {
     setLoading(true)
     idChuyenMon = id
     $.ajax({
-        url: 'https://localhost:7141/api/ChuyenMon/getChuyenMonById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMonById/' + id,
         method: 'GET',
         success: function (data) {
             // setFormValue('editChuyenMon', data, 'fetch');
@@ -88,7 +88,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/addChuyenMon',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/addChuyenMon',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -127,7 +127,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/deleteChuyenMon/' + idChuyenMon,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchChuyenMon res :: ', data);
@@ -158,7 +158,7 @@ async function handleSave() {
     console.log('maTo: ', idChuyenMon)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/updateChuyenMon/' + idChuyenMon,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -193,7 +193,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChuyenMon/getChuyenMon'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChuyenMon/getChuyenMon'
 }
 
 function showPopup() {

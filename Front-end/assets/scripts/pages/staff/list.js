@@ -123,7 +123,7 @@ async function handleCreate() {
   const payload = buildPayload(rest)
   setLoading(true)
   $.ajax({
-    url: 'https://localhost:7141/api/NhanVien/TaoMoiNhanVien',
+    url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/TaoMoiNhanVien',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(payload),
@@ -175,7 +175,7 @@ function apiTo() {
   if (!thongTinPhongBan) {
     return false
   }
-  return 'https://localhost:7141/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+  return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
 }
 function layThongTinTo() {
   const to = document.getElementById('to')
@@ -184,7 +184,7 @@ function layThongTinTo() {
 async function getToTheoPhongBanDauTien() {
   try {
     const response = await $.ajax({
-      url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
+      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
       method: 'GET',
       contentType: 'application/json',
     });

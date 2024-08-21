@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachNguoiThan";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNguoiThan";
 var TableColumns = [
   {
     label: 'Họ tên',
@@ -85,7 +85,7 @@ async function handleExportExcel() {
   params.append('PhongBan', formValue.PhongBan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
       method: 'POST',
       body: params,
       headers: {
@@ -128,7 +128,7 @@ async function handleExportPDF() {
   params.append('PhongBan', formValue.PhongBan || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoNguoiThanToPDF', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNguoiThanToPDF', {
       method: 'POST',
       body: params,
       headers: {
@@ -165,7 +165,7 @@ function apiMaNV() {
   if (!thongTinPhongBan) {
     return false
   }
-  return 'https://localhost:7141/api/NhanVien/getByPhongBan?idPhong=' + thongTinPhongBan
+  return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getByPhongBan?idPhong=' + thongTinPhongBan
 }
 function layThongTinMaNV() {
   const ma = document.getElementById('manhanvien')
@@ -174,7 +174,7 @@ function layThongTinMaNV() {
 async function getMaNVTheoPhongBanDauTien() {
   try {
     const response = await $.ajax({
-      url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
+      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
       method: 'GET',
       contentType: 'application/json',
     });

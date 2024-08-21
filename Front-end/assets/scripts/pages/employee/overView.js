@@ -69,17 +69,17 @@ var TableColumnsLaborContract = [
 
 function buildApiUrlSalary() {
     
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma
 }
 function buildApiUrlLaborContract() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + ma
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + ma
 }
 
 function fetchFamilyRelationshipCount() {
     const baseImageEl = document.querySelector('base-image[description="Quan Hệ Gia Đình"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
     $.ajax({
-        url: 'https://localhost:7141/api/NguoiThan/getNguoiThanByMaNV/'+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/'+ma,
         method: 'GET',
         success: function(data) {
             
@@ -109,7 +109,7 @@ function fetchLaborContractCount() {
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
    
     $.ajax({
-        url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id='+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id='+ma,
         method: 'GET',
         success: function(data) {
 
@@ -142,7 +142,7 @@ function fetchSalaryCount() {
     const baseImageEl = document.querySelector('base-image[description="Bảng lương"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
     $.ajax({
-        url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/'+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/'+ma,
         method: 'GET',
         success: function(data) {
             const salaryCount = data.length;
@@ -168,7 +168,7 @@ function fetchAwardCount() {
     const baseImageEl = document.querySelector('base-image[description="Khen Thưởng"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma 
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma 
     let string2 = '/1'
     $.ajax({
         url: string1 + string2,
@@ -199,7 +199,7 @@ function fetchDisciplineCount() {
     const baseImageEl = document.querySelector('base-image[description="Kỷ Luật"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/'+ma 
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/'+ma 
     let string2 = '/2'
     $.ajax({
         url: string1 + string2,
@@ -230,7 +230,7 @@ function fetchDisciplineCount() {
 //     const baseImageEl = document.querySelector('base-image[description="Xuất Báo Cáo"]');
 //     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
-//     let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/'+ma 
+//     let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/'+ma 
 //     let string2 = '/2'
 //     $.ajax({
 //         url: string1 + string2,

@@ -62,7 +62,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -103,7 +103,7 @@ async function handleRemoveRow(id) {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
         method: 'DELETE',
         success: function (data) {
             showSuccess('Xóa Thành Công!');
@@ -145,7 +145,7 @@ function buildApiUrlKyLuat() {
     if(!maDetail){
         return false
     }
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Kỷ luật'
     return string1 + string2;
 }

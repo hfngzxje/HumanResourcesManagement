@@ -41,7 +41,7 @@ function buildPayload(formValue) {
 
 function getImage() {
     $.ajax({
-        url: 'https://localhost:7141/api/Image/getImage?maNV=' + maNhanVien,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             const imgEl = document.querySelector('#employeeImage')
@@ -60,7 +60,7 @@ function getImage() {
 function fetchEmployee() {
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/GetById?id=' + maNhanVien,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maNhanVien,
         method: 'GET',
         success: function(data) {
             setFormValue('resume_form', data)
@@ -86,7 +86,7 @@ async function handleSave() {
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ChinhSuaNhanVien/' + maNhanVien,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -129,7 +129,7 @@ function uploadImage(anh) {
     payloadUploadImage.append('file', anh)
 
     $.ajax({
-        url: 'https://localhost:7141/api/Image/uploadImage',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/uploadImage',
         method: 'POST',
         contentType: false,
         processData: false,
@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (maNhanVien) {
         fetchEmployee()
         getImage()
-        const apiUrl = 'https://localhost:7141/api/NhanVien/GetById?id=' + maNhanVien;
+        const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maNhanVien;
 
         // Thực hiện yêu cầu API
         fetch(apiUrl)

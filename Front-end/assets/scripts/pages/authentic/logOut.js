@@ -8,7 +8,7 @@ async function handleLogOut() {
 
     setLoading(true)
     $.ajax({
-        url: 'https://localhost:7141/api/DangNhap/Logout',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/Logout',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({}),
