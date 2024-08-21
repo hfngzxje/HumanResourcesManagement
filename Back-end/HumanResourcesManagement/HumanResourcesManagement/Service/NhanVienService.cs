@@ -364,18 +364,23 @@ namespace HumanResourcesManagement.Service
             return to;
         }
 
-        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh)
+        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int? idPhong, bool? gioiTinh)
         {
             try
             {
-                var query = _context.TblNhanViens.Where(n => n.Phong == idPhong);
+                var query = await _context.TblNhanViens.ToListAsync();
+
+                if (idPhong.HasValue)
+                {
+                    query = query.Where(n => n.Phong == idPhong).ToList();
+                }
 
                 if (gioiTinh.HasValue)
                 {
-                    query = query.Where(n => n.Gioitinh == gioiTinh.Value);
+                    query = query.Where(n => n.Gioitinh == gioiTinh.Value).ToList();
                 }
 
-                var list = await query.ToListAsync();
+                var list = query.ToList();
 
                 if (list == null || !list.Any())
                 {
