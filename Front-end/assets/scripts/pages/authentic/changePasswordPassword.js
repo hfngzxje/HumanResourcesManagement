@@ -31,7 +31,7 @@ function handleChangePassword() {
   const payload = buildPayload(formValue)
   setLoading(true)
   $.ajax({
-    url: 'https://localhost:7141/api/DangNhap/ChangePassword',
+    url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/ChangePassword',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(payload),

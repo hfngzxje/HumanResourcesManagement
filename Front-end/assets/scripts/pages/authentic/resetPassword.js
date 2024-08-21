@@ -8,7 +8,7 @@ function buildPayload(formValue) {
     const formClone = { ...formValue }
     return formClone
 }
-function backToList(){
+function backToList() {
     window.location.replace(`/pages/authentic/login.html`);
 }
 
@@ -17,9 +17,9 @@ function handleReset() {
     const payload = buildPayload(formValue)
 
     payload['token'] = token;
-    console.log("payload: " , payload)
+    console.log("payload: ", payload)
     $.ajax({
-        url: 'https://localhost:7141/api/DangNhap/reset-password',
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/reset-password',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
@@ -56,20 +56,20 @@ function getCookie(name) {
 
 document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('maNhanVien')
-   layMatKhauBtn.addEventListener("click", handleReset)
+    layMatKhauBtn.addEventListener("click", handleReset)
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    
+
     const tokenURL = params.get('token');
-     console.log("Token: " , tokenURL)
-    
+    console.log("Token: ", tokenURL)
+
     if (tokenURL) {
         // Lưu token vào cookie (có thể sử dụng HttpOnly và Secure nếu cần)
         document.cookie = `AuthToken=${tokenURL}; path=/; secure; samesite=strict`;
-        
+
         // Xóa token khỏi URL
         window.history.replaceState({}, document.title, window.location.pathname);
-        
+
         // Sử dụng token (nếu cần)
         console.log("Token stored in cookie.");
     }

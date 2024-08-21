@@ -54,74 +54,74 @@ async function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('award_form')
 
-    
+
     formValue['ma'] = maDetail;
     formValue['khenthuongkiluat'] = '2'
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            showSuccess('Tạo Thành Công!');
-            table.forEach(table => {
-                if (table.handleCallFetchData) {
-                    table.handleCallFetchData();
+        $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                showSuccess('Tạo Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+                clearFormValues("award_form")
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    showError(message)
+                } catch (error) {
+                    showError("Tạo mới không thành công!")
                 }
-            });
-            clearFormValues("award_form")
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    showError(err.responseText)
-                    return
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                showError(message)
-            } catch (error) {
-                showError("Tạo mới không thành công!")
+
+
+            },
+            complete: () => {
+                setLoading(false)
             }
-
-
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+        });
+    }, 1000);
 }
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa kỷ luật ?")
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
-        method: 'DELETE',
-        success: function (data) {
-            showSuccess('Xóa Thành Công!');
-            table.forEach(table => {
-                if (table.handleCallFetchData) {
-                    table.handleCallFetchData();
-                }
-            });
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            showError("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+        $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+            method: 'DELETE',
+            success: function (data) {
+                showSuccess('Xóa Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+            },
+            error: (err) => {
+                console.log('fetchContract err :: ', err);
+                showError("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
 
@@ -142,16 +142,16 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKyLuat() {
-    if(!maDetail){
+    if (!maDetail) {
         return false
     }
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Kỷ luật'
     return string1 + string2;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-   
+
 })
 

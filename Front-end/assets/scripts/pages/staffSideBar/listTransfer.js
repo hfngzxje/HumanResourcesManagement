@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/DieuChuyen";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen";
 const table = document.querySelector('base-table')
 var manhanvien = null
 var TableColumns = [
@@ -106,7 +106,7 @@ function closePopUp() {
 async function getMaNhanVienDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -128,7 +128,7 @@ function fetchViTriHienTai() {
     setLoading(true)
     $.ajax({
 
-        url: 'https://localhost:7141/api/DieuChuyen/CongViecHienTai/' + manhanvien,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/CongViecHienTai/' + manhanvien,
         method: 'GET',
         success: function (data) {
             setFormValue('fetchTransfer', data)
@@ -156,7 +156,7 @@ async function handleLuuLichSuDieuChuyen() {
     setLoading(true);
     setTimeout(async () => {
         $.ajax({
-            url: 'https://localhost:7141/api/DieuChuyen/LuuLichSuDieuChuyen',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/LuuLichSuDieuChuyen',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -192,7 +192,7 @@ async function handleHuyDieuChuyen(id) {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/HuyDieuChuyen?idDieuChuyen=' + id,
             method: 'PUT',
             success: function (data) {
                 showSuccess('Hủy Thành Công!');
@@ -237,7 +237,7 @@ function apiTo() {
     if (!thongTinPhongBan) {
         return false
     }
-    return 'https://localhost:7141/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucTo/GetDanhMucToByPhong/' + thongTinPhongBan
 }
 function layThongTinTo() {
     const to = document.getElementById('to')
@@ -246,7 +246,7 @@ function layThongTinTo() {
 async function getToTheoPhongBanDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/PhongBan/getAllPhongBan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan',
             method: 'GET',
             contentType: 'application/json',
         });

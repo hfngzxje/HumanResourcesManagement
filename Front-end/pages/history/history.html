@@ -4,15 +4,15 @@
 <head>
   <title>Lịch sử hoạt động | Quản trị Admin</title>
   <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Main CSS-->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <!-- Font-icon css-->
-    <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../../assets/styles/common/changePassword.css" />
+  <link rel="stylesheet" type="text/css" href="/assets/styles/pages/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- Font-icon css-->
+  <script src="../../assets/scripts/pages/staff/checkRole.js"></script>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -35,16 +35,17 @@
           <div class="tile-body">
             <div class="row element-button">
             </div>
-            <base-table api="https://localhost:7141/api/LichSuHoatDong" columns="TableColumns"  >
+            <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/LichSuHoatDong"
+              columns="TableColumns">
             </base-table>
           </div>
         </div>
       </div>
     </div>
     <layout-footer></layout-footer>
-        <custom-alert></custom-alert>
-        <custom-error></custom-error>
-        <custom-success></custom-success>
+    <custom-alert></custom-alert>
+    <custom-error></custom-error>
+    <custom-success></custom-success>
   </main>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

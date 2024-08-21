@@ -52,14 +52,14 @@ var TableColumns = [
         key: 'trangthai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     }
 ]
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma;
 }

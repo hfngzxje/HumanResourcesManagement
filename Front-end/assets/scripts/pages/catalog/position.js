@@ -70,7 +70,7 @@ function fetchNgachCongChuc(id) {
     setLoading(true)
     idChucDanh = id
     $.ajax({
-        url: 'https://localhost:7141/api/ChucDanh/getChucDanhById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getChucDanhById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editCivilServantRank', data)
@@ -98,7 +98,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/addChucDanh',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/addChucDanh',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -137,7 +137,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/removeChucDanh?id=' + idChucDanh,
             method: 'DELETE',
             success: function (data) {
                 console.log('fetchPhongBan res :: ', data);
@@ -167,7 +167,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/updateChucDanh?id=' + idChucDanh,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -202,7 +202,7 @@ async function handleSave() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/ChucDanh/getAllChucDanh'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh'
 }
 
 function showPopup() {
@@ -245,7 +245,7 @@ function checkValues() {
     const formValue = getFormValues('editCivilServantRank');
     const newTen = formValue.ten;
     const newPhuCap = formValue.phucap
-    
+
     if (oldTen === newTen && oldPhuCap === parseInt(newPhuCap)) {
         popupSaveBtn.setAttribute('disabled', '');
     } else {

@@ -1,4 +1,4 @@
-const apiTable = "https://localhost:7141/api/BaoCao/getBaoCaoDanhSachDangVien";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachDangVien";
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -49,8 +49,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
@@ -76,7 +76,7 @@ async function handleExportExcel() {
   params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToExecl', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoDangVienToExecl', {
       method: 'POST',
       body: params,
       headers: {
@@ -119,7 +119,7 @@ async function handleExportPDF() {
   params.append('NamVaoDang', formValue.NamVaoDang || '');
 
   try {
-    const response = await fetch('https://localhost:7141/api/BaoCao/ExportBaoCaoDangVienToPDF', {
+    const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoDangVienToPDF', {
       method: 'POST',
       body: params,
       headers: {
@@ -173,25 +173,25 @@ async function handleSearch() {
 function queQuanChange() {
   const phongban = document.querySelector('#quequan input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function namTuoiDangChange() {
   const phongban = document.querySelector('#namtuoidang input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function namVaoDangChange() {
   const phongban = document.querySelector('#namvaodang input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 
@@ -225,12 +225,12 @@ function toChange() {
     dateChange();
   });
 }
-function dateChange(){
-  if(fromDateChanged && toDateChanged){
+function dateChange() {
+  if (fromDateChanged && toDateChanged) {
     handleSearch();
   }
 }
-function inits(){
+function inits() {
   queQuanChange()
   phongBanChange()
   namTuoiDangChange()

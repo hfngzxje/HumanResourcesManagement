@@ -65,7 +65,7 @@ function closePopUp() {
 async function getMaNhanVienDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -95,69 +95,69 @@ async function handleCreate() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/addKhenThuongKiLuat',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(payload),
-        success: function (data) {
-            showSuccess('Tạo Thành Công!');
-            table.forEach(table => {
-                if (table.handleCallFetchData) {
-                    table.handleCallFetchData();
+        $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function (data) {
+                showSuccess('Tạo Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+                clearFormValues("createAward")
+                closePopUp()
+            },
+            error: (err) => {
+                console.log('err ', err);
+                try {
+                    if (!err.responseJSON) {
+                        showError(err.responseText)
+                        return
+                    }
+                    const errObj = err.responseJSON.errors
+                    const firtErrKey = Object.keys(errObj)[0]
+                    const message = errObj[firtErrKey][0]
+                    showError(message)
+                } catch (error) {
+                    showError("Tạo mới không thành công!")
                 }
-            });
-            clearFormValues("createAward")
-            closePopUp()
-        },
-        error: (err) => {
-            console.log('err ', err);
-            try {
-                if (!err.responseJSON) {
-                    showError(err.responseText)
-                    return
-                }
-                const errObj = err.responseJSON.errors
-                const firtErrKey = Object.keys(errObj)[0]
-                const message = errObj[firtErrKey][0]
-                showError(message)
-            } catch (error) {
-                showError("Tạo mới không thành công!")
+
+
+            },
+            complete: () => {
+                setLoading(false)
             }
-
-
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+        });
+    }, 1000);
 }
 
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa khen thưởng ?")
     setLoading(true)
     setTimeout(() => {
-    $.ajax({
-        url: 'https://localhost:7141/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
-        method: 'DELETE',
-        success: function (data) {
-            showSuccess('Xóa Thành Công!');
-            table.forEach(table => {
-                if (table.handleCallFetchData) {
-                    table.handleCallFetchData();
-                }
-            });
-        },
-        error: (err) => {
-            console.log('fetchContract err :: ', err);
-            showError("Xóa thất bại!")
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+        $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+            method: 'DELETE',
+            success: function (data) {
+                showSuccess('Xóa Thành Công!');
+                table.forEach(table => {
+                    if (table.handleCallFetchData) {
+                        table.handleCallFetchData();
+                    }
+                });
+            },
+            error: (err) => {
+                console.log('fetchContract err :: ', err);
+                showError("Xóa thất bại!")
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
 
@@ -178,8 +178,8 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKhenThuong() {
-    let string1 = 'https://localhost:7141/api/KhenThuongKiLuat/khen-thuong' 
-    return string1 
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/khen-thuong'
+    return string1
 }
 
 async function handleSearch() {

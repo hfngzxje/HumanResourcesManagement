@@ -78,13 +78,13 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="ngachNhanVien"
-                                                    api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"
                                                     keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên"
                                                     name="nhomluong" disabled></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-select id="ngachCongChuc"
-                                                    api="https://localhost:7141/api/NhanVien/ngachCongChuc"
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
                                                     keyvalue="id" keylabel="ten" label="Ngạch công chức"
                                                     name="ngachcongchuc"></base-select>
                                             </div>
@@ -102,16 +102,17 @@
                                                     name="luongcoban" readonly></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number id="phuCap" label="Phụ cấp chúc vụ" validateBy="required"
-                                                    name="phucaptrachnhiem" readonly></base-input-number>
+                                                <base-input-number id="phuCap" label="Phụ cấp chúc vụ"
+                                                    validateBy="required" name="phucaptrachnhiem"
+                                                    readonly></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number id="phuCapKhac" label="Phụ cấp khác" 
+                                                <base-input-number id="phuCapKhac" label="Phụ cấp khác"
                                                     name="phucapkhac"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number id="tongLuong" label="Tiền lương" validateBy="required"
-                                                    name="tongluong" readonly
+                                                <base-input-number id="tongLuong" label="Tiền lương"
+                                                    validateBy="required" name="tongluong" readonly
                                                     style="color: red; font-weight: bold;"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -119,8 +120,9 @@
                                                     name="thoihanlenluong"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker class="ml-auto" style="margin: 0;" validateBy="required"
-                                                    label="Ngày hiệu lực" name="ngayBatDau"></base-datepicker>
+                                                <base-datepicker class="ml-auto" style="margin: 0;"
+                                                    validateBy="required" label="Ngày hiệu lực"
+                                                    name="ngayBatDau"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
@@ -172,7 +174,7 @@
                             <base-input id="maHopDongPop" label="Mã hợp đồng" name="mahopdong" readonly></base-input>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <!-- <base-select id="ngachNhanVienPop" api="https://localhost:7141/api/ChucDanh/getAllChucDanh"
+                            <!-- <base-select id="ngachNhanVienPop" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"
                                 keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên" name="nhomluong"
                                 disabled></base-select> -->
 
@@ -181,7 +183,7 @@
                         </div>
                         <div class="col-span-2 sm:col-span-1 mt-2 ">
                             <base-select id="ngachCongChucPop"
-                                api="https://localhost:7141/api/NhanVien/ngachCongChuc"
+                                api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
                                 keyvalue="id" keylabel="ten" label="Ngạch công chức" name="ngachcongchuc"></base-select>
                         </div>
                         <div class="col-span-2  sm:col-span-1 mt-2">
@@ -206,8 +208,8 @@
                                 name="phucapkhac"></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-input-number id="tongLuongPop" label="Tiền lương" validateBy="required" name="tongluong"
-                                style="color: red; font-weight: bold;" readonly></base-input-number>
+                            <base-input-number id="tongLuongPop" label="Tiền lương" validateBy="required"
+                                name="tongluong" style="color: red; font-weight: bold;" readonly></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
                             <base-input-number label="Thời hạn lên lương" validateBy="required"

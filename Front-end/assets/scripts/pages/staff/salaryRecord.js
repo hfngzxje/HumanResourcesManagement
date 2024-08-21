@@ -74,11 +74,11 @@ var TableColumns = [
         key: 'trangthai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     },
     {
@@ -87,13 +87,13 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: async (row) => {
-                     if(row.ngaybatdau === null && row.ngayketthuc === null && row.thoihanlenluong === null || row.trangthai === 1){
+                    if (row.ngaybatdau === null && row.ngayketthuc === null && row.thoihanlenluong === null || row.trangthai === 1) {
                         isPopupEdit = true
                         await fetchSalaryToEdit(row.id)
                         showPopup()
                     }
-                   else if (row.trangthai === 2) {
-                    showError('Hồ sơ lương đã hết hiệu lực, không thể sửa');
+                    else if (row.trangthai === 2) {
+                        showError('Hồ sơ lương đã hết hiệu lực, không thể sửa');
                         return;
                     }
                 }
@@ -150,7 +150,7 @@ async function fetchSalaryToEdit(id) {
     idLuongHienTai = id
     await $.ajax({
 
-        url: 'https://localhost:7141/api/HoSoLuong/getLuongById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getLuongById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editSalaryRecord', data)
@@ -198,7 +198,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/TaoMoiHoSoLuong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/TaoMoiHoSoLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -230,7 +230,7 @@ async function handleCreate() {
 
 async function fetchContractCodeStatus(mahopdong) {
     const response = await $.ajax({
-        url: 'https://localhost:7141/api/HopDong/id?id=' + mahopdong,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
     });
     return response.trangThai; // Giả sử API trả về trạng thái của mã hợp đồng trong phản hồi
@@ -241,7 +241,7 @@ async function handleRemove() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/xoaHoSoLuong/' + idLuongHienTai,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
@@ -272,7 +272,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/ChinhSuaHoSoLuong/' + idLuongHienTai,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -316,7 +316,7 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
     const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
@@ -328,26 +328,26 @@ function renderActionByStatus() {
 }
 
 function buildApiHopDong() {
-    return 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail;
 }
 async function buildApiHopDongA(id) {
-    return 'https://localhost:7141/api/HopDong/id?id=' + id;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + id;
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 function buidApiBacLuong() {
-    if(!thongTinNgachCongChuc){
+    if (!thongTinNgachCongChuc) {
         return false
     }
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 
 async function apiDanhSachHopDong() {
     try {
         const hopDong = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -378,7 +378,7 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -409,7 +409,7 @@ function layThongTinBacLuong() {
 async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/ngachCongChuc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -449,7 +449,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
 
@@ -513,13 +513,13 @@ function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
 }
 
 function formatCurrency(val) {
-    if(val){
+    if (val) {
         return val.toLocaleString("it-IT", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2
         });
     }
-    else{
+    else {
         return null
     }
 }
@@ -552,16 +552,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function buidApiBacLuongPop() {
-    if(!thongTinNgachCongChucPop){
+    if (!thongTinNgachCongChucPop) {
         return false
     }
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
 }
 
 async function apiDanhSachHopDongPop() {
     try {
         const hopDong = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -584,7 +584,7 @@ function datGiaTriMacDinhNgachNVPopUp(mahopdong) {
 async function fetchNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -631,7 +631,7 @@ async function getBacLuongTheoNgachDauTienPopUp() {
     try {
         ngachCongChucPop = null;
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -660,7 +660,7 @@ function handleNgachCongChucChange(event) {
 async function apiLuongHeSoPopUp() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -676,7 +676,7 @@ async function apiLuongHeSoPopUp() {
 async function apiLuongHeSoPopChangeNgach() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
             method: 'GET',
             contentType: 'application/json',
 
@@ -720,7 +720,7 @@ async function handleBacLuongPopUp() {
 async function getDanhSachluongCoBanHeSoPop() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop,
             method: 'GET',
             contentType: 'application/json',
 

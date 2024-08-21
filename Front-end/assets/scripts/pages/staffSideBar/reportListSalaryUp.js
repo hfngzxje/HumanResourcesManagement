@@ -1,5 +1,5 @@
-const apiTable = "https://localhost:7141/api/DanhSachLenLuong/getDanhSachLenLuong";
-const apiTableBaoCao = "https://localhost:7141/api/DanhSachLenLuong/getAll";
+const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getDanhSachLenLuong";
+const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
 
 
 const table = document.querySelectorAll('base-table')
@@ -75,11 +75,11 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success:async function (data) {
+            success: async function (data) {
                 await showSuccess('Tạo Thành Công!');
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
@@ -109,49 +109,49 @@ async function handleCreate() {
         });
     }, 1000);
 }
-function closePopup(){
+function closePopup() {
     var modal = document.getElementById("showPopUp");
-    modal.style.display="none"
+    modal.style.display = "none"
 }
 async function handleSearch() {
     try {
-      const formValue = getFormValues("report_form");    
-      const tableReport = document.getElementById("tableReport1");
-      
-      const params = {
-        phongId: formValue.phongId || "",
-        chucDanhId: formValue.chucDanhId || ""
-      };
-     
-      await tableReport.handleCallFetchData(params);
-       
+        const formValue = getFormValues("report_form");
+        const tableReport = document.getElementById("tableReport1");
+
+        const params = {
+            phongId: formValue.phongId || "",
+            chucDanhId: formValue.chucDanhId || ""
+        };
+
+        await tableReport.handleCallFetchData(params);
+
     } catch (error) {
-      console.error("Error in handleSearch:", error);
+        console.error("Error in handleSearch:", error);
     }
-  }
-  function phongBanChange() {
+}
+function phongBanChange() {
     const phongban = document.querySelector('#phongban select')
     phongban.addEventListener("change", (event) => {
         handleSearch()
     });
-  }
-  function chucDanhChange() {
+}
+function chucDanhChange() {
     const phongban = document.querySelector('#chucdanh select')
     phongban.addEventListener("change", (event) => {
         handleSearch()
     });
-  }
-  
+}
+
 // ------------- Add nâng lương --------------------------
 var danhSachMaHopDong = []
 var phuCapInput = null
 var thongTinNgachCongChuc = null
 var phuCapKhacInput = null
 function buidApiBacLuong() {
-    if(!thongTinNgachCongChuc){
+    if (!thongTinNgachCongChuc) {
         return false
     }
-    return 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
     phucapkhacInput = phucapkhacInput || 0;
@@ -194,7 +194,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function getHopDong() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -221,7 +221,7 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -250,7 +250,7 @@ function layThongTinBacLuong() {
 async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/ngachCongChuc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -290,7 +290,7 @@ function handleNgachCongChuc() {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
 
@@ -331,7 +331,7 @@ function handlePhuCapKhac() {
     });
 }
 
-async function inits(){
+async function inits() {
     await getHopDong()
     await handleNgachCongChuc()
     await getBacLuongTheoNgachDauTien()
@@ -345,7 +345,7 @@ async function fetchSalaryToEdit(ma) {
     maDetail = ma;
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/HoSoLuong/getAllLuongByMaNV/' + ma,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -359,7 +359,7 @@ async function fetchSalaryToEdit(ma) {
             idNhomLuong = lastItem.nhomluong;
             document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
             document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
-                document.querySelector('#phuCapKhacPop input').value = lastItem.phucapkhac;
+            document.querySelector('#phuCapKhacPop input').value = lastItem.phucapkhac;
             await getDuLieuNhomLuong();
             await getNgachCongChuc();
 
@@ -379,7 +379,7 @@ var idNgachCongChuc = null
 async function getDuLieuNhomLuong() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -392,7 +392,7 @@ async function getDuLieuNhomLuong() {
 async function getNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -416,7 +416,7 @@ function showPopup(formId) {
 function buildApiUrl() {
     return apiTable;
 }
-function buildApiUrlBaoCao(){
+function buildApiUrlBaoCao() {
     return apiTableBaoCao
 }
 function formatCurrency(val) {
@@ -438,25 +438,25 @@ function parseCurrency(value) {
 function renderActionByStatus() {
     const actionEl = document.getElementById("report_form_action");
     const buildButton = (id, label, type, icon) => {
-      const btnEl = document.createElement("base-button");
-      btnEl.setAttribute('id', id)
-      btnEl.setAttribute("label", label);
-      btnEl.setAttribute("type", type);
-      btnEl.setAttribute("icon", icon);
-      return btnEl;
+        const btnEl = document.createElement("base-button");
+        btnEl.setAttribute('id', id)
+        btnEl.setAttribute("label", label);
+        btnEl.setAttribute("type", type);
+        btnEl.setAttribute("icon", icon);
+        return btnEl;
     };
-    const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-    const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
-  
+    const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+    const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
+
     // excelBtn.addEventListener("click", () => {
     //   handleExportExcel();
     // });
-  
+
     // pdfBtn.addEventListener("click", () => {
     //   handleExportPDF();
     // });
     actionEl.append(pdfBtn, excelBtn);
-  }
+}
 document.addEventListener("DOMContentLoaded", () => {
     renderActionByStatus()
     phongBanChange()

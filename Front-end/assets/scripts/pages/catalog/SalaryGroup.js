@@ -54,7 +54,7 @@ var TableColumns = [
     {
         label: 'Lương cơ bản',
         key: 'luongcoban',
-        type:'currency'
+        type: 'currency'
     }
     ,
     {
@@ -73,16 +73,16 @@ var TableColumns = [
                 }
             }
         ]
-    } 
+    }
 ]
 
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
         isPopupEdit = true
         fetchNhomLuong(row.nhomluong)
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 
@@ -93,7 +93,7 @@ function buildPayload(formValue) {
 async function getNgachCongChucByID(idNgachCongChuc) {
     try {
         const response = await $.ajax({
-            url: 'https://localhost:7141/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json'
         });
@@ -110,13 +110,13 @@ async function fetchNhomLuong(id) {
 
     try {
         const data = await $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/' + id,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + id,
             method: 'GET',
             contentType: 'application/json'
         });
         oldBacLuong = data.bacluong
         idNgach = data.ngachcongchuc;
-        oldNgachCongChuc = await  getNgachCongChucByID(idNgach); 
+        oldNgachCongChuc = await getNgachCongChucByID(idNgach);
 
         oldNgach = data.ngachcongchuc
         oldBac = data.bacluong
@@ -131,7 +131,7 @@ async function fetchNhomLuong(id) {
         setLoading(false);
     }
 }
-   
+
 
 async function handleCreate() {
     await showConfirm("Bạn có chắc chắn muốn thêm danh mục nhóm lương ?")
@@ -143,7 +143,7 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/add',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/add',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -183,7 +183,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/delete/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/delete/' + idNhomLuong,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
@@ -210,7 +210,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/DanhMucNhomLuong/update/' + idNhomLuong,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/update/' + idNhomLuong,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -264,22 +264,22 @@ function showPopup() {
         popupTitle.textContent = "Sửa nhóm lương"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled', '');
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới nhóm lương"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
 
-function closePopup(){
+function closePopup() {
     var modal = document.getElementById("editNhomLuong");
-    modal.style.display="none"
+    modal.style.display = "none"
 }
 
 function checkValues() {
@@ -298,7 +298,7 @@ function checkValues() {
 }
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/DanhMucNhomLuong/all'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/all'
 }
 document.addEventListener('DOMContentLoaded', () => {
     popupSaveBtn.addEventListener("click", () => {

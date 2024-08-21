@@ -62,7 +62,7 @@ function fetchPhongBan(id) {
     setLoading(true)
     idPhongBan = id
     $.ajax({
-        url: 'https://localhost:7141/api/PhongBan/getPhongBanById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getPhongBanById/' + id,
         method: 'GET',
         success: function (data) {
             setFormValue('editPhongBan', data)
@@ -87,14 +87,14 @@ async function handleCreate() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/PhongBan/addPhongBan',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/addPhongBan',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 showSuccess("Thêm thành công !")
                 recordActivityAdmin(maNhanVien, `Thêm danh mục phòng ban: ${formValue.ten}`);
-             
+
                 closePopup()
                 clearFormValues('editPhongBan')
                 table.handleCallFetchData();
@@ -126,7 +126,7 @@ async function handleRemoveRow() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/PhongBan/removePhongBan?id=' + idPhongBan,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/removePhongBan?id=' + idPhongBan,
             method: 'DELETE',
             success: function (data) {
                 showSuccess("Xóa thành công !")
@@ -153,7 +153,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://localhost:7141/api/PhongBan/updatePhongBan?id=' + idPhongBan,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/updatePhongBan?id=' + idPhongBan,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -188,7 +188,7 @@ async function handleSave() {
 
 
 function buildApiUrl() {
-    return 'https://localhost:7141/api/PhongBan/getAllPhongBan'
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan'
 }
 
 function showPopup() {
@@ -211,7 +211,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Phòng Ban"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -225,9 +225,9 @@ function checkValues() {
     const formValue = getFormValues('editPhongBan');
     const newValue = formValue.ten;
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
     }
 }
 function closePopup() {
