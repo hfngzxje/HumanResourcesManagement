@@ -3406,19 +3406,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\TRAN DINH VINH\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\FPT University\\2024_SUMMER\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+      "projectUniqueName": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
       "projectName": "HumanResourcesManagement",
-      "projectPath": "F:\\FPT University\\2024_SUMMER\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
-      "packagesPath": "C:\\Users\\TRAN DINH VINH\\.nuget\\packages\\",
-      "outputPath": "F:\\FPT University\\2024_SUMMER\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
+      "projectPath": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\TRAN DINH VINH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3502,7 +3502,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   },

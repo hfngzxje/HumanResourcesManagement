@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {}
+    "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {}
   },
   "projects": {
-    "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {
+    "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+        "projectUniqueName": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
         "projectName": "HumanResourcesManagement",
-        "projectPath": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
+        "projectPath": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\HumanResourcesManagement.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "F:\\PJbranchMain\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
+        "outputPath": "F:\\PJTong\\HumanResourcesManagement\\HumanResourcesManagement\\Back-end\\HumanResourcesManagement\\HumanResourcesManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[12.0.0, )"
             },
+            "EPPlus": {
+              "target": "Package",
+              "version": "[7.2.1, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.27, )"
@@ -69,6 +73,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
+            },
+            "iTextSharp": {
+              "target": "Package",
+              "version": "[5.5.13.4, )"
             }
           },
           "imports": [
