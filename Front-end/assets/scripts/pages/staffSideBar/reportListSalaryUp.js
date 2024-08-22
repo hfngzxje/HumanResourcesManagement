@@ -1,3 +1,4 @@
+
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getDanhSachLenLuong";
 const apiTableBaoCao = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/getAll";
 
@@ -194,7 +195,7 @@ function setGiaTriNhomLuong(valueNhomLuong) {
 async function getHopDong() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id='+ maDetail,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -251,6 +252,7 @@ async function getBacLuongTheoNgachDauTien() {
     try {
         const response = await $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -290,6 +292,7 @@ function handleNgachCongChuc() {
 async function apiLuongHeSo() {
     try {
         const bacLuong = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',
@@ -345,6 +348,7 @@ async function fetchSalaryToEdit(ma) {
     maDetail = ma;
     try {
         const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
             method: 'GET',
             contentType: 'application/json',

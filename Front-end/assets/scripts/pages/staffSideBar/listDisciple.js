@@ -95,67 +95,67 @@ async function handleCreate() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function (data) {
-                showSuccess('Tạo Thành Công!');
-                table.forEach(table => {
-                    if (table.handleCallFetchData) {
-                        table.handleCallFetchData();
-                    }
-                });
-                clearFormValues("createDisciple")
-                closePopUp()
-            },
-            error: (err) => {
-                console.log('err ', err);
-                try {
-                    if (!err.responseJSON) {
-                        showError(err.responseText)
-                        return
-                    }
-                    const errObj = err.responseJSON.errors
-                    const firtErrKey = Object.keys(errObj)[0]
-                    const message = errObj[firtErrKey][0]
-                    showError(message)
-                } catch (error) {
-                    showError("Tạo mới không thành công!")
+    $.ajax({
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/addKhenThuongKiLuat',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (data) {
+            showSuccess('Tạo Thành Công!');
+            table.forEach(table => {
+                if (table.handleCallFetchData) {
+                    table.handleCallFetchData();
                 }
-            },
-            complete: () => {
-                setLoading(false)
-            }
-        });
-    }, 1000);
+            });
+            clearFormValues("createDisciple")
+            closePopUp()
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if (!err.responseJSON) {
+                    showError(err.responseText)
+                    return
+                }
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                showError(message)
+            } catch (error) {
+                showError("Tạo mới không thành công!")
+            }          
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}, 1000); 
 }
 
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa khen thưởng ?")
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
-            method: 'DELETE',
-            success: function (data) {
-                showSuccess('Xóa Thành Công!');
-                table.forEach(table => {
-                    if (table.handleCallFetchData) {
-                        table.handleCallFetchData();
-                    }
-                });
-            },
-            error: (err) => {
-                console.log('fetchContract err :: ', err);
-                showError("Xóa thất bại!")
-            },
-            complete: () => {
-                setLoading(false)
-            }
-        });
-    }, 1000);
+    $.ajax({
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/deleteKhenThuongKiLuat/' + id,
+        method: 'DELETE',
+        success: function (data) {
+            showSuccess('Xóa Thành Công!');
+            table.forEach(table => {
+                if (table.handleCallFetchData) {
+                    table.handleCallFetchData();
+                }
+            });
+        },
+        error: (err) => {
+            console.log('fetchContract err :: ', err);
+            showError("Xóa thất bại!")
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}, 1000); 
 }
 
 
@@ -176,8 +176,8 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKyLuat() {
-    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/ky-luat'
-    return string1
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/ky-luat' 
+    return string1 
 }
 
 async function handleSearch() {

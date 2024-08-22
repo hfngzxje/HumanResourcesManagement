@@ -35,15 +35,24 @@ function getImage() {
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
         success: function (data) {
-            const imgEl = document.querySelector('#employeeImage')
-            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
-            imgEl.classList.remove('opacity-0')
+            const imgEl = document.querySelector('#employeeImage');
+            if (!imgEl) {
+                console.error('Image element not found');
+                return;
+            }
+            if (data && typeof data === 'string' && data.trim() !== '') {
+                imgEl.setAttribute('src', `data:image/png;base64,${data}`);
+                imgEl.classList.remove('opacity-0');
+            } else {
+
+                imgEl.setAttribute('src', '');
+            }
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
+            console.error('fetchEmployee err :: ', err);
         },
         complete: () => {
-            setLoading(false)
+            setLoading(false);
         }
     });
 }
@@ -58,7 +67,6 @@ function fetchEmployee() {
             setTimeout(() => {
                 setFormValue('profile_form', data)
             }, 1000);
-            console.log("Chuc vu:", data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -182,10 +190,6 @@ function renderActionByStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // if (vaiTroID !== "1") {
-    //     window.location.href = "/pages/error.html";
-    //     return;
-    // }
     renderActionByStatus()
     fetchEmployee()
     getImage()

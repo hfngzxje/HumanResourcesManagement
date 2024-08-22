@@ -28,10 +28,6 @@ var TableColumns = [
         key: 'mahopdong'
     },
     {
-        label: 'Nhóm Lương',
-        key: 'nhomluong'
-    },
-    {
         label: 'Hệ Số Lương',
         key: 'heSoLuong'
     },

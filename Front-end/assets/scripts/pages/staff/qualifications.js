@@ -10,10 +10,6 @@ let oldTruong = null;
 let oldChuyenNganh = null;
 
 var TableColumns1 = [
-    // {
-    //     label: 'ID',
-    //     key: 'id'
-    // },
     {
         label: 'Mã nhân viên',
         key: 'ma'
@@ -247,14 +243,15 @@ async function handleSaveTrinhDo() {
 
 function renderActionByStatus() {
     const actionEl = document.getElementById('qualification_form_action')
-    const buildButton = (label, type, icon) => {
+    const buildButton = (id,label, type, icon) => {
         const btnEl = document.createElement('base-button')
+        btnEl.setAttribute('id', id)
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createTrinhDo = buildButton('Thêm', 'green', 'bx bx-plus')
+    const createTrinhDo = buildButton('themId','Thêm', 'green', 'bx bx-plus')
     // createTrinhDo.addEventListener('click', handleCreateTrinhDo)
     createTrinhDo.addEventListener('click', handleCreateTrinhDo)
 

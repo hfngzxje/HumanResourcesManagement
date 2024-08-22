@@ -173,12 +173,16 @@ function isValidInsuranceCardNumber(cardNumber) {
   if (cardNumber == null || cardNumber.trim() === '') {
     return true;
   }
-  const cleanedCardNumber = cardNumber.replace(/\D/g, '');
-
-  const cardRegex = /^\d{15}$/;
-
+  
+  // Loại bỏ các ký tự không phải chữ cái và số
+  const cleanedCardNumber = cardNumber.replace(/[^a-zA-Z0-9]/g, '');
+  
+  // Kiểm tra chuỗi đã làm sạch có đúng 15 ký tự không
+  const cardRegex = /^[a-zA-Z0-9]{15}$/;
+  
   return cardRegex.test(cleanedCardNumber);
 }
+
 
 function isValidATMCardNumber(cardNumber) {
   // Nếu giá trị đầu vào là null hoặc chuỗi rỗng, trả về true
@@ -194,10 +198,11 @@ function isValidATMCardNumber(cardNumber) {
   return cardRegex.test(cleanedCardNumber);
 }
 function isValidGmailAddress(email) {
-  // Biểu thức chính quy để kiểm tra định dạng Gmail
-  const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  return gmailRegex.test(email.trim());
+  // Biểu thức chính quy để kiểm tra định dạng Gmail hoặc FPT
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|fpt\.edu\.vn)$/;
+  return emailRegex.test(email.trim());
 }
+
 function nullData(varA, varB) {
   varA = false
   varB.classList.add(...inputErrClass)

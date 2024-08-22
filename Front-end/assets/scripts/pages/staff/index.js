@@ -148,8 +148,8 @@ async function fetchDataHopDong() {
     };
 
     contracts.forEach(contract => {
-        if (statusCount[contract.loaihopdongId] !== undefined) {
-            statusCount[contract.loaihopdongId]++;
+        if (statusCount[contract.trangThai] !== undefined) {
+            statusCount[contract.trangThai]++;
         }
     });
 

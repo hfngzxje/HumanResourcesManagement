@@ -91,7 +91,6 @@ function fetchContract(mahopdong) {
     setLoading(true)
     maHopDongHienTai = mahopdong
     $.ajax({
-
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/id?id=' + mahopdong,
         method: 'GET',
         success: function (data) {
@@ -119,18 +118,18 @@ async function handleCreate() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: async function (data) {
-                await showSuccess('Tạo Thành Công!');
-                table.handleCallFetchData();
-                clearFormValues("laborContract_form")
-                await closePopup()
-                await showNavigation('Tạo mới hồ sơ lương cho hợp đồng !', 'salaryRecord.html')
+    $.ajax({
+        
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/TaoMoiHopDong',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success:async function (data) {
+           await showSuccess('Tạo Thành Công!');
+            table.handleCallFetchData();
+            clearFormValues("laborContract_form")
+            await closePopup()
+                await  showNavigation('Tạo mới hồ sơ lương cho hợp đồng !', 'salaryRecord.html')
                 resolve();
 
             },
@@ -162,23 +161,23 @@ async function handleRemove() {
     await showConfirm("Bạn có chắc chắn muốn xóa hợp đồng ?")
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
-            method: 'DELETE',
-            success: function (data) {
-                showSuccess('Xóa Thành Công!');
-                closePopup();
-                table.handleCallFetchData();
-            },
-            error: (err) => {
-                console.log('fetchContract err :: ', err);
-                showError("Xóa thất bại!")
-            },
-            complete: () => {
-                setLoading(false)
-            }
-        });
-    }, 1000);
+    $.ajax({
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
+        method: 'DELETE',
+        success: function (data) {
+            showSuccess('Xóa Thành Công!');
+            closePopup();
+            table.handleCallFetchData();
+        },
+        error: (err) => {
+            console.log('fetchContract err :: ', err);
+            showError("Xóa thất bại!")
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}, 1000); 
 }
 
 async function handleSave() {
@@ -191,37 +190,37 @@ async function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
-            method: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function (data) {
-                console.log('fetchContract res :: ', data);
-                showSuccess('Lưu Thành Công!');
-                closePopup();
-                table.handleCallFetchData();
-            },
-            error: (err) => {
-                console.log('err ', err);
-                try {
-                    if (!err.responseJSON) {
-                        showError(err.responseText)
-                        return
-                    }
-                    const errObj = err.responseJSON.errors
-                    const firtErrKey = Object.keys(errObj)[0]
-                    const message = errObj[firtErrKey][0]
-                    showError(message)
-                } catch (error) {
-                    showError("Cập nhật thất bại!")
+    $.ajax({
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/SuaMoiHopDong/' + maHopDongHienTai,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (data) {
+            console.log('fetchContract res :: ', data);
+            showSuccess('Lưu Thành Công!');
+            closePopup();
+            table.handleCallFetchData();
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if (!err.responseJSON) {
+                    showError(err.responseText)
+                    return
                 }
-            },
-            complete: () => {
-                setLoading(false)
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                showError(message)
+            } catch (error) {
+                showError("Cập nhật thất bại!")
             }
-        });
-    }, 1000);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}, 1000); 
 }
 
 function renderActionByStatus() {
