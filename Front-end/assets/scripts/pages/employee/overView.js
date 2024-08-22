@@ -73,7 +73,6 @@ function buildApiUrlSalary() {
 }
 function buildApiUrlLaborContract() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + ma
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + ma
 }
 
 function fetchFamilyRelationshipCount() {

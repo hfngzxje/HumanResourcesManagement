@@ -77,7 +77,6 @@ async function handleCreate() {
     setTimeout(() => {
         $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/taoVaThemDanhSachNangLuong',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -154,7 +153,6 @@ function buidApiBacLuong() {
         return false
     }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
 }
 function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
     phucapkhacInput = phucapkhacInput || 0;
@@ -224,7 +222,6 @@ function datGiaTriMacDinhNgachNV(mahopdong) {
 async function apiPhuCap() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getPhuCapByChucDanh/' + thongTinNgachLuong,
             method: 'GET',
             contentType: 'application/json',
@@ -387,7 +384,6 @@ async function getDuLieuNhomLuong() {
     try {
         const response = await $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNhomLuong/' + idNhomLuong,
             method: 'GET',
             contentType: 'application/json',
         });
@@ -400,7 +396,6 @@ async function getDuLieuNhomLuong() {
 async function getNgachCongChuc() {
     try {
         const response = await $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getNgachCongChucById/' + idNgachCongChuc,
             method: 'GET',
             contentType: 'application/json',

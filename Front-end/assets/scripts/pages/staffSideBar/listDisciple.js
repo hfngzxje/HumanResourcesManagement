@@ -65,7 +65,6 @@ async function getMaNhanVienDauTien() {
     try {
         const response = await $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
             method: 'GET',
             contentType: 'application/json',
         });
