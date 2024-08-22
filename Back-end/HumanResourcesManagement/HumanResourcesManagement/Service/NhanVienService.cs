@@ -460,7 +460,8 @@ namespace HumanResourcesManagement.Service
                     Ten = "Administrator",
                     Email = "admin@example.com",
                     VaiTroId = 1, 
-                    MatKhau = "admin"
+                    MatKhau = "admin",
+                    Anh = default_avatar
                 };
 
                 newAdminUser.MatKhau = HashPassword("admin");
