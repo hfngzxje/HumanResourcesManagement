@@ -110,7 +110,7 @@ async function getKhenThuongLength() {
 
         return awards.length
     } catch (error) {
-        console.log("Error")
+        return 0
     }
 }
 
@@ -125,7 +125,7 @@ async function getKyLuatLength() {
 
         return disciplines.length
     } catch (error) {
-        console.log("Error")
+        return 0
     }
 }
 

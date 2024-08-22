@@ -25,10 +25,6 @@ var TableColumns = [
         formatter: (giatri) => giatri + ' năm'
     },
     {
-        label: "Nhóm lương",
-        key: "nhomluong",
-    },
-    {
         label: "Trạng thái",
         key: "trangthai",
         formatGiaTri: (value) => {
