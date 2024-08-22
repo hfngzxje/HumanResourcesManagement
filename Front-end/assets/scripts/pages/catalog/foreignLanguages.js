@@ -153,7 +153,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
     $.ajax({
-        url: 'https://localhost:7141/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
