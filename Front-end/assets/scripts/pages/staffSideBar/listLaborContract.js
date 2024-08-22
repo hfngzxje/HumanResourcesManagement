@@ -83,9 +83,7 @@ function RemovehiddenMaNhanVien() {
     const popupMa = modal.querySelector('base-select');
     popupMa.classList.remove('hidden');
 }
-function backToList() {
-    const url = new URL("/pages/staffSideBar.html", window.location.origin);
-}
+
 
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -115,8 +113,8 @@ function fetchContract(mahopdong) {
     });
 }
 
-function handleCreate() {
-    const valid = validateForm('editHopDong')
+async function handleCreate() {
+    await showConfirm('editHopDong')
     if (!valid) return
     const formValue = getFormValues('editHopDong')
 
@@ -130,8 +128,8 @@ function handleCreate() {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
-            success: function (data) {
-                alert('Tạo Thành Công!');
+            success:async function (data) {
+               await showSuccess('Tạo Thành Công!');
                 closePopup()
                 clearFormValues("editHopDong")
                 table.handleCallFetchData();
@@ -140,15 +138,15 @@ function handleCreate() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Tạo mới không thành công!")
+                    showError("Tạo mới không thành công!")
                 }
 
 
@@ -160,23 +158,23 @@ function handleCreate() {
     }, 1000);
 }
 
-function handleRemove() {
-    const isConfirm = confirm('Xác nhận xóa')
-    if (!isConfirm) return
+async function handleRemove() {
+    await showConfirm('Xác nhận xóa')
+   
     setLoading(true)
     setTimeout(() => {
         $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/xoaHopDong/' + maHopDongHienTai,
             method: 'DELETE',
-            success: function (data) {
-                alert('Xóa Thành Công!');
+            success:async function (data) {
+                await showSuccess('Xóa Thành Công!');
                 closePopup()
                 clearFormValues("editHopDong")
                 table.handleCallFetchData();
             },
             error: (err) => {
                 console.log('fetchContract err :: ', err);
-                alert("Xóa thất bại!")
+                showError("Xóa thất bại!")
             },
             complete: () => {
                 setLoading(false)
@@ -185,10 +183,14 @@ function handleRemove() {
     }, 1000);
 }
 
-function handleSave() {
+async function handleSave() {
+    await showConfirm("Bạn có chắc muốn sửa hợp đồng ?")
+    const valid = validateForm('editHopDong')
+  if (!valid) return
     const formValue = getFormValues('editHopDong')
 
     const payload = buildPayload(formValue)
+    payload['trangThai'] = payload['trangThai']
     setLoading(true)
     setTimeout(() => {
         $.ajax({
@@ -198,7 +200,7 @@ function handleSave() {
             data: JSON.stringify(payload),
             success: function (data) {
                 console.log('fetchContract res :: ', data);
-                alert('Lưu Thành Công!');
+                showSuccess('Lưu Thành Công!');
                 closePopup()
                 clearFormValues("editHopDong")
                 table.handleCallFetchData();
@@ -207,15 +209,15 @@ function handleSave() {
                 console.log('err ', err);
                 try {
                     if (!err.responseJSON) {
-                        alert(err.responseText)
+                        showError(err.responseText)
                         return
                     }
                     const errObj = err.responseJSON.errors
                     const firtErrKey = Object.keys(errObj)[0]
                     const message = errObj[firtErrKey][0]
-                    alert(message)
+                    showError(message)
                 } catch (error) {
-                    alert("Cập nhật thất bại!")
+                    showError("Cập nhật thất bại!")
                 }
             },
             complete: () => {

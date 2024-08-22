@@ -47,7 +47,6 @@ async function showPopup() {
     modal.style.display = "block";
     await getMaNhanVienDauTien()
     await maNhanVienChange()
-    await renderActionByStatus()
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
@@ -212,5 +211,6 @@ function dateChange() {
 
 document.addEventListener('DOMContentLoaded', () => {
     dateChange()
+    renderActionByStatus()
 })
 

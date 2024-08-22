@@ -87,7 +87,25 @@ function fetchEmployee() {
         }
     });
 }
-
+var isHopDong = false
+async function getHopDong() {
+    try {
+        const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        if (Array.isArray(response) && response.length > 0) {
+            
+            isHopDong = true
+        }
+        else {
+            isHopDong = false
+        }
+    } catch (error) {
+        console.log("Error")
+    }
+}
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa lý lịch tư pháp ?")
     const valid = validateForm('resume_form')
@@ -104,16 +122,23 @@ async function handleSave() {
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function (data) {
+        success: async function (data) {
             if (anh) {
                 uploadImage(anh);
-                showSuccess("Cập nhật thành công !")
+                await showSuccess("Cập nhật thành công !")
                 recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
+                if(!isHopDong){
+                    await showNavigation('Nhân viên chưa có hợp đồng, hãy tạo hợp đồng !', 'laborContract.html')
+                    resolve();
+                }
             } else {
                 setLoading(false);
-                showSuccess("Cập nhật thành công !")
+                await showSuccess("Cập nhật thành công !")
                 recordActivityAdmin(maNhanVien, `Cập nhập thông tin nhân viên: ${maDetail}`);
-                // backToListUpdate();
+                if(!isHopDong){
+                    await showNavigation('Nhân viên chưa có hợp đồng, hãy tạo hợp đồng !', 'laborContract.html')
+                    resolve();
+                }
             }
         },
         error: (err) => {
@@ -209,6 +234,7 @@ function formatDateTime(dateTimeStr) {
     return `${day}-${month}-${year} `;
 }
 document.addEventListener('DOMContentLoaded', () => {
+    getHopDong()
     renderActionByStatus()
     if (maDetail) {
         fetchEmployee()

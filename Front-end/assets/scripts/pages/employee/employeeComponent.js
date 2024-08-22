@@ -80,7 +80,7 @@ class CustomSidebar extends HTMLElement {
                         class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Thuyên chuyển </span></a>
             </li>
             <li><a class="app-menu__item" href="reportFamilyRelationship.html"><i
-                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo </span></a>
             </li>
             <li id="adminLink"><a class="app-menu__item" href="/pages/staff/index.html"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Quay về trang admin </span></a>
