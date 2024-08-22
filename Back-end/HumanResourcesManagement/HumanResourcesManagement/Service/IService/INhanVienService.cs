@@ -31,5 +31,7 @@ namespace HumanResourcesManagement.Service.IService
         Task<List<TblNhanVien>> SearchNhanVienAsync(string? search);
 
         Task<NhanVienResponse> GetNhanVienByIdAsync(string id);
+
+        Task SyncAdminAsync();
     }
 }

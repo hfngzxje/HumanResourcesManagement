@@ -265,6 +265,21 @@ namespace HumanResourcesManagement.Controllers
 
             return Ok(nhanViens);
         }
+
+        [HttpPost("admin-sync")]
+        public async Task<ActionResult> SyncAdmin()
+        {
+            try
+            {
+                await _nhanVienService.SyncAdminAsync();
+                return Ok("Tao thành công.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 
 }

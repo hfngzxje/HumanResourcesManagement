@@ -3,6 +3,7 @@ using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -449,5 +450,33 @@ namespace HumanResourcesManagement.Service
             response.tenTongiao = nhanVien.TongiaoNavigation?.Ten;
             return response;
         }
+
+
+        public async Task SyncAdminAsync()
+        {
+            var adminUser = await _context.TblNhanViens
+                .FirstOrDefaultAsync(u => u.Email == "admin@example.com");
+
+            if (adminUser == null)
+            {
+                var newAdminUser = new TblNhanVien
+                {
+                    Ma = "admin",
+                    Ten = "Administrator",
+                    Email = "admin@example.com",
+                    VaiTroId = 1, 
+                    MatKhau = "admin"
+                };
+
+                newAdminUser.MatKhau = HashPassword("admin");
+
+                await _context.TblNhanViens.AddAsync(newAdminUser);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+
+
     }
 }
