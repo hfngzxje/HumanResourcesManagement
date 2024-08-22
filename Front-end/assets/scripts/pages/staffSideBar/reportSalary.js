@@ -14,7 +14,7 @@ var TableColumns = [
     {
         label: 'Chức danh',
         key: '',
-        type:''
+        type: ''
     },
     {
         label: 'Phòng ban',
@@ -39,12 +39,12 @@ var TableColumns = [
     {
         label: 'Ngày hiệu lực',
         key: 'ngayhieuluc',
-        type:'datetime'
+        type: 'datetime'
     },
     {
         label: 'Ngày kết thúc',
         key: 'ngayketthuc',
-        type:'datetime'
+        type: 'datetime'
     },
 ]
 var locTheo = [
@@ -65,7 +65,7 @@ var gioiTinh = [
     { label: 'Nữ', value: 2 }
 ]
 
-  
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('reportSalary_form_action')
     const buildButton = (label, type, icon) => {
@@ -79,7 +79,7 @@ function renderActionByStatus() {
     const pdfBtn = buildButton('PDF', 'red', 'bx bx-file-blank')
     const excelBtn = buildButton('Excel', '', 'bx bx-spreadsheet')
 
-    actionEl.append(DisplayBtn,pdfBtn, excelBtn)
+    actionEl.append(DisplayBtn, pdfBtn, excelBtn)
 }
 
 function buildApiUrl() {

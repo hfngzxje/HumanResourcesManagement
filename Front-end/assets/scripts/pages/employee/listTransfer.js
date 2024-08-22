@@ -51,15 +51,15 @@ var TableColumns = [
         key: 'trangThai',
         formatGiaTri: (value) => {
             let result = { text: 'Đang chờ', color: 'green' };
-        if (value === 1) {
-            result.text = 'Đã điều chuyển';
-            result.color = 'blue';
-        }
-        else if(value === -1){
-            result.text = 'Đã hủy';
-            result.color = 'red';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Đã điều chuyển';
+                result.color = 'blue';
+            }
+            else if (value === -1) {
+                result.text = 'Đã hủy';
+                result.color = 'red';
+            }
+            return result;
         }
 
     }

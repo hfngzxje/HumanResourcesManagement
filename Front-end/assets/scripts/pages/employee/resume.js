@@ -27,15 +27,15 @@ var BankList = [
     { label: 'VIB', value: 'VIB' },
     { label: 'MSB', value: 'MSB' },
     { label: 'VP Bank', value: 'VPB' }
-  ];
+];
 
 function backToListDelete() {
     window.location.replace("/pages/staff/list.html");
 }
 
 function buildPayload(formValue) {
-    const formClone = {...formValue}
-  
+    const formClone = { ...formValue }
+
     return formClone
 }
 
@@ -43,7 +43,7 @@ function getImage() {
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maNhanVien,
         method: 'GET',
-        success: function(data) {
+        success: function (data) {
             const imgEl = document.querySelector('#employeeImage')
             imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
             imgEl.classList.remove('opacity-0')
@@ -62,7 +62,7 @@ function fetchEmployee() {
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maNhanVien,
         method: 'GET',
-        success: function(data) {
+        success: function (data) {
             setFormValue('resume_form', data)
         },
         error: (err) => {
@@ -77,9 +77,9 @@ function fetchEmployee() {
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa lý lịch tư pháp ?")
     const valid = validateForm('resume_form')
-    if(!valid) return
-    
-    const {anh, ...rest} = getFormValues('resume_form')
+    if (!valid) return
+
+    const { anh, ...rest } = getFormValues('resume_form')
 
     const formValue = getFormValues('resume_form')
     // formValue['ten'] = 
@@ -90,7 +90,7 @@ async function handleSave() {
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             if (anh) {
                 showSuccess("Sửa lý lịch tư pháp thành công")
                 uploadImage(anh);
@@ -102,10 +102,10 @@ async function handleSave() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     showError(err.responseText)
                     setLoading(false)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -118,7 +118,7 @@ async function handleSave() {
             }
         },
         complete: () => {
-            
+
         }
     });
 }
@@ -134,28 +134,29 @@ function uploadImage(anh) {
         contentType: false,
         processData: false,
         data: payloadUploadImage,
-        success: function(data) {
+        success: function (data) {
             setLoading(false);
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     showError(err.responseText)
                     setLoading(false)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 showError(message)
-                setLoading(false)            } catch (error) {
+                setLoading(false)
+            } catch (error) {
                 showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
         complete: () => {
-            
+
         }
     });
 }
@@ -173,7 +174,7 @@ function renderActionByStatus() {
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     saveBtn.addEventListener('click', handleSave)
-    clear.addEventListener('click', function() {
+    clear.addEventListener('click', function () {
         clearFormValues('resume_form');
     });
 
@@ -188,7 +189,7 @@ function formatDateTime(dateTimeStr) {
     const minutes = String(dateTime.getMinutes()).padStart(2, "0");
 
     return `${day}-${month}-${year} `;
-  }
+}
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
     if (maNhanVien) {
@@ -204,34 +205,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 const maText = document.getElementById('ma-text');
                 maText.textContent = data.ma; // Giả sử API trả về một thuộc tính `description`
                 const name = document.getElementById('name');
-                name.textContent = data.ten; 
+                name.textContent = data.ten;
                 const phong = document.getElementById('phong');
-                phong.textContent = data.tenPhongBan; 
+                phong.textContent = data.tenPhongBan;
                 const chucDanh = document.getElementById('chucdanh');
-                chucDanh.textContent = data.tenChucVu; 
+                chucDanh.textContent = data.tenChucVu;
                 const sdt = document.getElementById('sdt');
-                sdt.textContent = data.didong; 
+                sdt.textContent = data.didong;
                 const email = document.getElementById('email');
-                email.textContent = data.email; 
+                email.textContent = data.email;
                 const ngaysinh = document.getElementById('ngaysinh');
-                ngaysinh.textContent = formatDateTime(data.ngaysinh); 
+                ngaysinh.textContent = formatDateTime(data.ngaysinh);
                 const gioitinh = document.getElementById('gioitinh');
-                if(data.gioitinh === true){
+                if (data.gioitinh === true) {
                     gioitinh.textContent = "Nam";
                 }
-                else{
+                else {
                     gioitinh.textContent = "Nữ"
                 }
                 const ngayvaolam = document.getElementById('ngayvaolam');
                 ngayvaolam.textContent = formatDateTime(data.ngaychinhthuc);
-                
+
             })
             .catch(error => {
                 console.error('Error fetching the data:', error);
             });
     }
 
-    
+
 })
 
-                                        

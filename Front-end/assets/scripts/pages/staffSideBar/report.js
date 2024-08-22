@@ -57,8 +57,8 @@ var gioiTinh = [
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi );
-  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang );
+  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi);
+  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang);
   params.append('FromDate', formValue.FromDate || '');
   params.append('ToDate', formValue.ToDate || '');
   params.append('GioiTinh', formValue.GioiTinh || '');
@@ -142,9 +142,9 @@ function createDownloadLinkPDF(blob) {
 // _______________________________________________________________________________________________________
 async function handleSearch() {
   try {
-    const formValue = getFormValues("report_form");    
+    const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
-    
+
     // Khởi tạo đối tượng params
     const params = {
       GioiTinh: formValue.GioiTinh || "Tất cả",
@@ -155,44 +155,44 @@ async function handleSearch() {
       searchRulesDiaChi: formValue.searchRulesDiaChi,
       QueQuan: formValue.QueQuan || ""
     };
-   
+
     // Giả sử handleCallFetchData là một hàm không đồng bộ
     await tableReport.handleCallFetchData(params);
-     
+
   } catch (error) {
     console.error("Error in handleSearch:", error);
   }
-  
+
 }
 
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function gioiTinhChange() {
   const gioitinh = document.querySelector('#gioitinh select')
   gioitinh.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function queQuanSelectChange() {
   const queQuanSelect = document.querySelector('#selectquequan select')
   queQuanSelect.addEventListener("change", (event) => {
-      document.querySelector('#quequan input').value =""
+    document.querySelector('#quequan input').value = ""
   });
 }
 function queQuanChange() {
   const quequan = document.querySelector('#quequan input')
   quequan.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 let fromDateChanged = false;
 let toDateChanged = false;
 
-function selectDateChange(){
+function selectDateChange() {
   const selectDate = document.querySelector('#selectngaythang select')
   selectDate.addEventListener("change", (event) => {
     document.querySelector('#tungay input').value = ""
@@ -225,15 +225,15 @@ function toChange() {
     dateChange();
   });
 }
-function dateChange(){
-  if(fromDateChanged && toDateChanged){
+function dateChange() {
+  if (fromDateChanged && toDateChanged) {
     handleSearch();
   }
 }
 function buildApiUrl() {
   return apiTable;
 }
-function inits(){
+function inits() {
   phongBanChange()
   gioiTinhChange()
   queQuanSelectChange()
@@ -254,8 +254,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();

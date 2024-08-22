@@ -42,7 +42,7 @@ function handleSendEmail() {
         });
     }
 
-    
+
 document.addEventListener('DOMContentLoaded', () => {
     forgotBtn.addEventListener("click", handleSendEmail)
 })

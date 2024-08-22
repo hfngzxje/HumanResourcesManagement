@@ -83,12 +83,12 @@ async function handleCreate() {
             }
 
 
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 
 async function handleRemoveRow(id) {
@@ -135,7 +135,7 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKhenThuong() {
-    if(!maDetail){
+    if (!maDetail) {
         return false
     }
     

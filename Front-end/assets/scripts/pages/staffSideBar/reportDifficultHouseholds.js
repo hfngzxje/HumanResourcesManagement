@@ -1,48 +1,48 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachDienChinhSach";
 var TableColumns = [
-    {
-        label: 'Mã nhân viên',
-        key: 'maNV',
-    },
-    {
-        label: 'Họ tên',
-        key: 'tenNV',
-    },
-    {
-        label: 'Ngày sinh',
-        key: 'ngaySinh'
-    },
-    {
-        label: 'Giới tính',
-        key: 'gioiTinh',
-        type:'gender'
-    },
-    {
-        label: 'Điện thoại',
-        key: 'dienThoai'
-    },
-    {
-        label: 'Phòng ban',
-        key: 'phongBan',
-    },
-    {
-        label: 'Diện chính sách',
-        key: 'dienChinhSach',
-    }
-  ]
-  
-  var gioiTinh = [
-    { label: 'Tất cả', value: '' },
-    { label: 'Nam', value: 'true' },
-    { label: 'Nữ', value: 'false' }
-  ]
+  {
+    label: 'Mã nhân viên',
+    key: 'maNV',
+  },
+  {
+    label: 'Họ tên',
+    key: 'tenNV',
+  },
+  {
+    label: 'Ngày sinh',
+    key: 'ngaySinh'
+  },
+  {
+    label: 'Giới tính',
+    key: 'gioiTinh',
+    type: 'gender'
+  },
+  {
+    label: 'Điện thoại',
+    key: 'dienThoai'
+  },
+  {
+    label: 'Phòng ban',
+    key: 'phongBan',
+  },
+  {
+    label: 'Diện chính sách',
+    key: 'dienChinhSach',
+  }
+]
+
+var gioiTinh = [
+  { label: 'Tất cả', value: '' },
+  { label: 'Nam', value: 'true' },
+  { label: 'Nữ', value: 'false' }
+]
 
 // _____________________________________excel_________________________________________________________
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi );
-  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang );
+  params.append('searchRulesDiaChi', formValue.searchRulesDiaChi);
+  params.append('searchRulesNgayThang', formValue.searchRulesNgayThang);
   params.append('FromDate', formValue.FromDate || '');
   params.append('ToDate', formValue.ToDate || '');
   params.append('GioiTinh', formValue.GioiTinh || '');
@@ -126,41 +126,41 @@ function createDownloadLinkPDF(blob) {
 // _______________________________________________________________________________________________________
 async function handleSearch() {
   try {
-    const formValue = getFormValues("report_form");    
+    const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
-    
+
     // Khởi tạo đối tượng params
     const params = {
       GioiTinh: formValue.GioiTinh || "Tất cả",
       PhongBan: formValue.PhongBan || "",
     };
-   
+
     // Giả sử handleCallFetchData là một hàm không đồng bộ
     await tableReport.handleCallFetchData(params);
-     
+
   } catch (error) {
     console.error("Error in handleSearch:", error);
   }
-  
+
 }
 
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function gioiTinhChange() {
   const gioitinh = document.querySelector('#gioitinh select')
   gioitinh.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 
 function buildApiUrl() {
   return apiTable;
 }
-function inits(){
+function inits() {
   phongBanChange()
   gioiTinhChange()
 }
@@ -176,8 +176,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();

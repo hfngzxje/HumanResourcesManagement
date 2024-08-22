@@ -241,7 +241,7 @@ function checkValues() {
     const formValue = getFormValues('editTeam');
     const newTen = formValue.ten;
     const newPhong = formValue.idphong
-    
+
     // console.log('Type of oldTen:',  oldTen);
     // console.log('Type of oldPhong:',  oldPhong);
     // console.log('Type of newTen:',  newTen);

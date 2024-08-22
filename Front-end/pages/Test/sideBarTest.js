@@ -1,43 +1,44 @@
 // const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getByPhongBan?idPhong="+idphong;
+// const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/getByPhongBan?idPhong="+idphong;
 
 var idPhong = null
 const ma = localStorage.getItem('maNhanVien')
 var TableColumns = [
-    {
-        label: 'Mã nhân viên',
-        key: 'ma'
-      },
-      {
-        label: 'Họ và tên',
-        key: 'ten',
-      },
-      {
-        label: 'Ngày sinh',
-        key: 'ngaysinh',
-        type: 'datetime'
-      },
-      {
-        label: 'Giới tính',
-        key: 'gioitinh',
-        type: "gender"
-      },
-      {
-        label: 'Địa chỉ',
-        key: 'thuongtru',
-      },
-      {
-        label: 'SĐT',
-        key: 'didong',
-      },
-      {
-        label: 'Chức vụ',
-        key: 'tenChucVu',
-    
-      },
-      {
-        label: 'Phòng ban',
-        key: 'tenPhongBan',
-      }
+  {
+    label: 'Mã nhân viên',
+    key: 'ma'
+  },
+  {
+    label: 'Họ và tên',
+    key: 'ten',
+  },
+  {
+    label: 'Ngày sinh',
+    key: 'ngaysinh',
+    type: 'datetime'
+  },
+  {
+    label: 'Giới tính',
+    key: 'gioitinh',
+    type: "gender"
+  },
+  {
+    label: 'Địa chỉ',
+    key: 'thuongtru',
+  },
+  {
+    label: 'SĐT',
+    key: 'didong',
+  },
+  {
+    label: 'Chức vụ',
+    key: 'tenChucVu',
+
+  },
+  {
+    label: 'Phòng ban',
+    key: 'tenPhongBan',
+  }
 ];
 
 var gioiTinh = [
@@ -70,49 +71,49 @@ function buildApiUrl() {
 
 async function handleSearch() {
   try {
-    const formValue = getFormValues("report_form");    
+    const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
     getIdPhongNhanVien()
     // Khởi tạo đối tượng params
     const params = {
-        gioiTinh: formValue.gioiTinh || "",
-        idPhong: idPhong,
+      gioiTinh: formValue.gioiTinh || "",
+      idPhong: idPhong,
     };
-       await tableReport.handleCallFetchData(params);
-     
+    await tableReport.handleCallFetchData(params);
+
   } catch (error) {
     console.error("Error in handleSearch:", error);
   }
-  
+
 }
 
 function gioiTinhChange() {
   const gioitinh = document.querySelector('#gioitinh select')
   gioitinh.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 
 async function initialize() {
-    try {
-        await getIdPhongNhanVien(); // Đợi lấy idPhong trước
-        
-        // Sau khi có idPhong, xây dựng URL API
-        const apiUrl = buildApiUrl();
-        
-        console.log('API URL:', apiUrl);
-        // Thực hiện các hành động khác với apiUrl nếu cần
-        handleSearch()
-        gioiTinhChange()
-        
-        // Cập nhật tableReport với apiUrl
-        const tableReport = document.getElementById("tableReport");
-        if (tableReport && typeof tableReport.updateApiUrl === 'function') {
-            tableReport.updateApiUrl(apiUrl); // Gọi hàm để cập nhật URL API nếu có
-        }
-    } catch (error) {
-        console.error("Error initializing:", error);
+  try {
+    await getIdPhongNhanVien(); // Đợi lấy idPhong trước
+
+    // Sau khi có idPhong, xây dựng URL API
+    const apiUrl = buildApiUrl();
+
+    console.log('API URL:', apiUrl);
+    // Thực hiện các hành động khác với apiUrl nếu cần
+    handleSearch()
+    gioiTinhChange()
+
+    // Cập nhật tableReport với apiUrl
+    const tableReport = document.getElementById("tableReport");
+    if (tableReport && typeof tableReport.updateApiUrl === 'function') {
+      tableReport.updateApiUrl(apiUrl); // Gọi hàm để cập nhật URL API nếu có
     }
+  } catch (error) {
+    console.error("Error initializing:", error);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initialize);

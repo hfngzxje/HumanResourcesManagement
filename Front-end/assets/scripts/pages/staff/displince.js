@@ -54,7 +54,7 @@ async function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('award_form')
 
-    
+
     formValue['ma'] = maDetail;
     formValue['khenthuongkiluat'] = '2'
     console.log('formValue ', formValue);
@@ -91,12 +91,12 @@ async function handleCreate() {
             }
 
 
-        },
-        complete: () => {
-            setLoading(false)
-        }
-    });
-}, 1000); 
+            },
+            complete: () => {
+                setLoading(false)
+            }
+        });
+    }, 1000);
 }
 async function handleRemoveRow(id) {
     await showConfirm("Bạn có chắc chắn muốn xóa kỷ luật ?")
@@ -142,9 +142,10 @@ function renderActionByStatus() {
 }
 
 function buildApiUrlKyLuat() {
-    if(!maDetail){
+    if (!maDetail) {
         return false
     }
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + maDetail;
     let string2 = '/Kỷ luật'
     return string1 + string2;
@@ -152,6 +153,6 @@ function buildApiUrlKyLuat() {
 
 document.addEventListener('DOMContentLoaded', () => {
     renderActionByStatus()
-   
+
 })
 

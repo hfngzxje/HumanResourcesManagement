@@ -26,10 +26,12 @@ namespace HumanResourcesManagement.Service.IService
         List<TblDanhMucPhongBan> GetAllPhong();
         List<TblDanhMucTo> GetAllTo();
 
-        Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh);
+        Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int? idPhong, bool? gioiTinh);
         Task<IEnumerable<TblNhanVien>> getNhanVienByTo(int idTo);
         Task<List<TblNhanVien>> SearchNhanVienAsync(string? search);
 
         Task<NhanVienResponse> GetNhanVienByIdAsync(string id);
+
+        Task SyncAdminAsync();
     }
 }

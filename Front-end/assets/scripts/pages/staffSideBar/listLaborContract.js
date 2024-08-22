@@ -35,11 +35,11 @@ var TableColumns = [
         key: 'trangThai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     },
     ,

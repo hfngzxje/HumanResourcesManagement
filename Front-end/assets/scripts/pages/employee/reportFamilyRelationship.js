@@ -64,8 +64,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
   });
@@ -84,7 +84,7 @@ async function handleExportExcel() {
   params.append('QuanHe', formValue.QuanHe || '');
   params.append('TuoiTu', formValue.TuoiTu || '');
   params.append('TuoiDen', formValue.TuoiDen || '');
-  params.append('PhongBan',  '');
+  params.append('PhongBan', '');
 
   try {
     const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNguoiThanToExecl', {
@@ -127,7 +127,7 @@ async function handleExportPDF() {
   params.append('QuanHe', formValue.QuanHe || '');
   params.append('TuoiTu', formValue.TuoiTu || '');
   params.append('TuoiDen', formValue.TuoiDen || '');
-  params.append('PhongBan',  '');
+  params.append('PhongBan', '');
 
   try {
     const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoNguoiThanToPDF', {
@@ -171,7 +171,7 @@ async function handleSearch() {
     const tableReport = document.getElementById("tableReport");
     const params = {
       GioiTinh: formValue.GioiTinh || "",
-      MaNV: maNhanVien ,
+      MaNV: maNhanVien,
       QuanHe: formValue.QuanHe || "",
       TuoiTu: formValue.TuoiTu || "",
       TuoiDen: formValue.TuoiDen || "",
@@ -187,13 +187,13 @@ async function handleSearch() {
 function quanHeChange() {
   const phongban = document.querySelector('#quanhe select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function gioiTinhChange() {
   const phongban = document.querySelector('#gioitinh select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 let tuoiTuChanged = false;
@@ -214,13 +214,13 @@ function toChange() {
     dateChange();
   });
 }
-function dateChange(){
-  if(tuoiDenChanged && tuoiTuChanged){
+function dateChange() {
+  if (tuoiDenChanged && tuoiTuChanged) {
     handleSearch();
   }
 }
 
-function inits(){
+function inits() {
   quanHeChange()
   gioiTinhChange()
   fromChange()

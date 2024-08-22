@@ -16,12 +16,12 @@
   <script>
     // Đặt đoạn mã kiểm tra vào đây
     (function () {
-        if (!localStorage.getItem('maNhanVien')) {
-            window.location.href = '/pages/authentic/login.html';
-            return; // Chuyển hướng nếu không có mã nhân viên
-        }
+      if (!localStorage.getItem('maNhanVien')) {
+        window.location.href = '/pages/authentic/login.html';
+        return; // Chuyển hướng nếu không có mã nhân viên
+      }
     })();
-</script>
+  </script>
   <style>
     @media (max-width: 768px) {
       #tabList {
@@ -110,9 +110,9 @@
 
     </div>
     <layout-footer></layout-footer>
-        <custom-alert></custom-alert>
-        <custom-error></custom-error>
-        <custom-success></custom-success>
+    <custom-alert></custom-alert>
+    <custom-error></custom-error>
+    <custom-success></custom-success>
   </main>
 
 

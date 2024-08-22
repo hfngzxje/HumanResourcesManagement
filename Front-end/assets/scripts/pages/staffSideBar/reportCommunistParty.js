@@ -49,8 +49,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();
@@ -173,25 +173,25 @@ async function handleSearch() {
 function queQuanChange() {
   const phongban = document.querySelector('#quequan input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function namTuoiDangChange() {
   const phongban = document.querySelector('#namtuoidang input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function namVaoDangChange() {
   const phongban = document.querySelector('#namvaodang input')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 
@@ -225,12 +225,12 @@ function toChange() {
     dateChange();
   });
 }
-function dateChange(){
-  if(fromDateChanged && toDateChanged){
+function dateChange() {
+  if (fromDateChanged && toDateChanged) {
     handleSearch();
   }
 }
-function inits(){
+function inits() {
   queQuanChange()
   phongBanChange()
   namTuoiDangChange()

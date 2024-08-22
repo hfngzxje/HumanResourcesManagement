@@ -3,6 +3,7 @@ using HumanResourcesManagement.DTOS.Request;
 using HumanResourcesManagement.DTOS.Response;
 using HumanResourcesManagement.Models;
 using HumanResourcesManagement.Service.IService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -364,18 +365,23 @@ namespace HumanResourcesManagement.Service
             return to;
         }
 
-        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int idPhong, bool? gioiTinh)
+        public async Task<IEnumerable<TblNhanVien>> getNhanVienByPhongBan(int? idPhong, bool? gioiTinh)
         {
             try
             {
-                var query = _context.TblNhanViens.Where(n => n.Phong == idPhong);
+                var query = await _context.TblNhanViens.ToListAsync();
+
+                if (idPhong.HasValue)
+                {
+                    query = query.Where(n => n.Phong == idPhong).ToList();
+                }
 
                 if (gioiTinh.HasValue)
                 {
-                    query = query.Where(n => n.Gioitinh == gioiTinh.Value);
+                    query = query.Where(n => n.Gioitinh == gioiTinh.Value).ToList();
                 }
 
-                var list = await query.ToListAsync();
+                var list = query.ToList();
 
                 if (list == null || !list.Any())
                 {
@@ -444,5 +450,33 @@ namespace HumanResourcesManagement.Service
             response.tenTongiao = nhanVien.TongiaoNavigation?.Ten;
             return response;
         }
+
+
+        public async Task SyncAdminAsync()
+        {
+            var adminUser = await _context.TblNhanViens
+                .FirstOrDefaultAsync(u => u.Email == "admin@example.com");
+
+            if (adminUser == null)
+            {
+                var newAdminUser = new TblNhanVien
+                {
+                    Ma = "admin",
+                    Ten = "Administrator",
+                    Email = "admin@example.com",
+                    VaiTroId = 1, 
+                    MatKhau = "admin"
+                };
+
+                newAdminUser.MatKhau = HashPassword("admin");
+
+                await _context.TblNhanViens.AddAsync(newAdminUser);
+                await _context.SaveChangesAsync();
+
+            }
+        }
+
+
+
     }
 }

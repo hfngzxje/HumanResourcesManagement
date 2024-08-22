@@ -54,7 +54,7 @@ var TableColumns = [
     {
         label: 'Lương cơ bản',
         key: 'luongcoban',
-        type:'currency'
+        type: 'currency'
     }
     ,
     {
@@ -73,16 +73,16 @@ var TableColumns = [
                 }
             }
         ]
-    } 
+    }
 ]
 
 var tableEvent = {
-    
+
     rowDoubleClick: (row) => {
         isPopupEdit = true
         fetchNhomLuong(row.nhomluong)
         showPopup()
-        console.log('row double click ',row);
+        console.log('row double click ', row);
     }
 };
 
@@ -116,7 +116,7 @@ async function fetchNhomLuong(id) {
         });
         oldBacLuong = data.bacluong
         idNgach = data.ngachcongchuc;
-        oldNgachCongChuc = await  getNgachCongChucByID(idNgach); 
+        oldNgachCongChuc = await getNgachCongChucByID(idNgach);
 
         oldNgach = data.ngachcongchuc
         oldBac = data.bacluong
@@ -131,7 +131,7 @@ async function fetchNhomLuong(id) {
         setLoading(false);
     }
 }
-   
+
 
 async function handleCreate() {
     await showConfirm("Bạn có chắc chắn muốn thêm danh mục nhóm lương ?")
@@ -264,22 +264,22 @@ function showPopup() {
         popupTitle.textContent = "Sửa nhóm lương"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.setAttribute('disabled', '');
-        popupSaveBtn.classList.remove('hidden') 
-        popupCreateBtn.classList.add('hidden') 
+        popupSaveBtn.classList.remove('hidden')
+        popupCreateBtn.classList.add('hidden')
         popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới nhóm lương"
-        popupSaveBtn.classList.add('hidden') 
+        popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
-        popupCreateBtn.classList.remove('hidden') 
+        popupCreateBtn.classList.remove('hidden')
         popupClearBtn.classList.remove('hidden')
     }
 }
 
-function closePopup(){
+function closePopup() {
     var modal = document.getElementById("editNhomLuong");
-    modal.style.display="none"
+    modal.style.display = "none"
 }
 
 function checkValues() {

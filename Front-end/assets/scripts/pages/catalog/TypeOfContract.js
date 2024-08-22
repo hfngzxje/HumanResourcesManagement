@@ -216,7 +216,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Loại Hợp Đồng"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -231,10 +231,10 @@ function checkValues() {
     const newValue = formValue.ten;
     console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         console.log(popupSaveBtn)
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
         console.log(popupSaveBtn)
     }
 }

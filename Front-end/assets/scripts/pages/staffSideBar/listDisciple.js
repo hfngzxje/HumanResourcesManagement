@@ -65,6 +65,7 @@ async function getMaNhanVienDauTien() {
     try {
         const response = await $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
             method: 'GET',
             contentType: 'application/json',
         });
@@ -88,7 +89,7 @@ async function handleCreate() {
     if (!valid) return
     const formValue = getFormValues('createDisciple')
 
-    
+
     formValue['ma'] = maDetail;
     formValue['khenthuongkiluat'] = '2'
     console.log('formValue ', formValue);

@@ -236,7 +236,7 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
     const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)

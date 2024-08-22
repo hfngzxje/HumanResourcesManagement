@@ -154,7 +154,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
+            url: 'https://localhost:7141/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
@@ -213,7 +213,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Hình Thức Đào Tạo"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
@@ -228,10 +228,10 @@ function checkValues() {
     const newValue = formValue.ten;
     console.log("oldValue: ", oldValue, "newValue: ", newValue);
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         console.log(popupSaveBtn)
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
         console.log(popupSaveBtn)
     }
 }
@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
 
-    
+
     const inputTenHinhThucDaoTao = document.querySelector('base-input[name="ten"]');
     if (inputTenHinhThucDaoTao) {
         inputTenHinhThucDaoTao.addEventListener('input', checkValues);

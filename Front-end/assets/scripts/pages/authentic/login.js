@@ -86,7 +86,7 @@ function Login() {
 //   function clearFormValues(formId) {
 //     const form = document.getElementById('forgetPassword');
 //     const inputs = form.querySelectorAll('input, textarea, select');
-  
+
 //     inputs.forEach(input => {
 //         if (input.type === 'checkbox' || input.type === 'radio') {
 //             input.checked = false;

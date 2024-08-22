@@ -1,44 +1,44 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachBaoHiem";
 var TableColumns = [
-    {
-        label: 'Mã nhân viên',
-        key: 'maNV',
-    },
-    {
-        label: 'Họ tên',
-        key: 'tenNV',
-    },
-    {
-        label: 'Ngày sinh',
-        key: 'ngaySinh',
-        type: 'datetime'
-    },
-    {
-        label: 'BHYT',
-        key: 'bhyt'
-    },
-    {
-        label: 'BHXH',
-        key: 'bhxh'
-    },
-    {
-        label: 'Giới tính',
-        key: 'gioiTinh',
-        type:'gender'
-    },
-    {
-        label: 'Phòng ban',
-        key: 'tenPhongBan',
-    }
-  ]
+  {
+    label: 'Mã nhân viên',
+    key: 'maNV',
+  },
+  {
+    label: 'Họ tên',
+    key: 'tenNV',
+  },
+  {
+    label: 'Ngày sinh',
+    key: 'ngaySinh',
+    type: 'datetime'
+  },
+  {
+    label: 'BHYT',
+    key: 'bhyt'
+  },
+  {
+    label: 'BHXH',
+    key: 'bhxh'
+  },
+  {
+    label: 'Giới tính',
+    key: 'gioiTinh',
+    type: 'gender'
+  },
+  {
+    label: 'Phòng ban',
+    key: 'tenPhongBan',
+  }
+]
 
 
 // _____________________________________excel_________________________________________________________
 async function handleExportExcel() {
-    const formValue = getFormValues("report_form");
-    const params = new FormData();
-    params.append('MaNV', formValue.MaNV || '');
-    params.append('idPhongBan', formValue.idPhongBan || '');
+  const formValue = getFormValues("report_form");
+  const params = new FormData();
+  params.append('MaNV', formValue.MaNV || '');
+  params.append('idPhongBan', formValue.idPhongBan || '');
 
   try {
     const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoBaoHiemToExcel', {
@@ -112,41 +112,41 @@ function createDownloadLinkPDF(blob) {
 // _______________________________________________________________________________________________________
 async function handleSearch() {
   try {
-    const formValue = getFormValues("report_form");    
+    const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
-    
+
     // Khởi tạo đối tượng params
     const params = {
-        MaNV: formValue.MaNV || "",
-        idPhongBan: formValue.idPhongBan || "",
+      MaNV: formValue.MaNV || "",
+      idPhongBan: formValue.idPhongBan || "",
     };
-   
+
     // Giả sử handleCallFetchData là một hàm không đồng bộ
     await tableReport.handleCallFetchData(params);
-     
+
   } catch (error) {
     console.error("Error in handleSearch:", error);
   }
-  
+
 }
 
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')
   phongban.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 function maNhanVienChange() {
   const gioitinh = document.querySelector('#manhanvien select')
   gioitinh.addEventListener("change", (event) => {
-      handleSearch()
+    handleSearch()
   });
 }
 
 function buildApiUrl() {
   return apiTable;
 }
-function inits(){
+function inits() {
   phongBanChange()
   maNhanVienChange()
 }
@@ -162,8 +162,8 @@ function renderActionByStatus() {
     btnEl.setAttribute("icon", icon);
     return btnEl;
   };
-  const pdfBtn = buildButton("PDFId","PDF", "red", "bx bx-file-blank");
-  const excelBtn = buildButton("ExcelId","Excel", "", "bx bx-spreadsheet");
+  const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
+  const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
   excelBtn.addEventListener("click", () => {
     handleExportExcel();

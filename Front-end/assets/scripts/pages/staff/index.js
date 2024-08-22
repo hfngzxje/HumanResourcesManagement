@@ -46,11 +46,11 @@ var TableColumnsHopDong = [
         key: 'trangThai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     }
 ]
@@ -108,7 +108,7 @@ async function getKhenThuongLength() {
         });
         const awards = response.filter(item => item.khenthuongkiluat === 1)
 
-        return awards.length        
+        return awards.length
     } catch (error) {
         console.log("Error")
     }
@@ -123,13 +123,13 @@ async function getKyLuatLength() {
         });
         const disciplines = response.filter(item => item.khenthuongkiluat === 2)
 
-        return disciplines.length        
+        return disciplines.length
     } catch (error) {
         console.log("Error")
     }
 }
 
-async function fetchData() {    
+async function fetchData() {
     const rewardData = await getKhenThuongLength();
     const disciplineData = await getKyLuatLength();
     return {

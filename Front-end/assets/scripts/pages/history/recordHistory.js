@@ -1,4 +1,4 @@
-function recordActivityAdmin(actor, action){
+function recordActivityAdmin(actor, action) {
     setLoading(true)
     setLoading(true);
 

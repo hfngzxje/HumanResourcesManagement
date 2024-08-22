@@ -210,7 +210,7 @@ function showPopup() {
         popupTitle.textContent = "Sửa Tiêu Đề Khen Thưởng - Kỷ Luật"
         popupRemoveBtn.classList.remove('hidden')
         popupSaveBtn.classList.remove('hidden')
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
         popupCreateBtn.classList.add('hidden')
         // popupClearBtn.classList.add('hidden')
     } else {
@@ -226,9 +226,9 @@ function checkValues() {
     const formValue = getFormValues('editKhenThuong');
     const newValue = formValue.ten;
     if (oldValue === newValue) {
-        popupSaveBtn.setAttribute('disabled','');
+        popupSaveBtn.setAttribute('disabled', '');
     } else {
-        popupSaveBtn.removeAttribute('disabled') ; 
+        popupSaveBtn.removeAttribute('disabled');
     }
 }
 function closePopup() {

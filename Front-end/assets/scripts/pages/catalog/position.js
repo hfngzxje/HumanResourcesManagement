@@ -245,7 +245,7 @@ function checkValues() {
     const formValue = getFormValues('editCivilServantRank');
     const newTen = formValue.ten;
     const newPhuCap = formValue.phucap
-    
+
     if (oldTen === newTen && oldPhuCap === parseInt(newPhuCap)) {
         popupSaveBtn.setAttribute('disabled', '');
     } else {

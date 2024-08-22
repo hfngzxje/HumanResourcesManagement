@@ -70,11 +70,11 @@ var TableColumns = [
         key: 'trangthai',
         formatGiaTri: (value) => {
             let result = { text: 'Hết hạn', color: 'red' };
-        if (value === 1) {
-            result.text = 'Còn hạn';
-            result.color = 'blue';
-        }
-        return result;
+            if (value === 1) {
+                result.text = 'Còn hạn';
+                result.color = 'blue';
+            }
+            return result;
         }
     },
     {
@@ -83,13 +83,13 @@ var TableColumns = [
         actions: [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: async (row) => {
-                     if(row.ngaybatdau === null && row.ngayketthuc === null && row.thoihanlenluong === null || row.trangthai === 1){
+                    if (row.ngaybatdau === null && row.ngayketthuc === null && row.thoihanlenluong === null || row.trangthai === 1) {
                         isPopupEdit = true
                         await fetchSalaryToEdit(row.id)
                         showPopup()
                     }
-                   else if (row.trangthai === 2) {
-                    showError('Hồ sơ lương đã hết hiệu lực, không thể sửa');
+                    else if (row.trangthai === 2) {
+                        showError('Hồ sơ lương đã hết hiệu lực, không thể sửa');
                         return;
                     }
                 }
@@ -312,7 +312,7 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createBtn = buildButton('createId','Thêm', 'green', 'bx bx-plus')
+    const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
     const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
@@ -334,7 +334,7 @@ function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + maDetail;
 }
 function buidApiBacLuong() {
-    if(!thongTinNgachCongChuc){
+    if (!thongTinNgachCongChuc) {
         return false
     }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChuc;
@@ -509,13 +509,13 @@ function tinhLuong(luongcobanInput, hesoInput, phucapInput, phucapkhacInput) {
 }
 
 function formatCurrency(val) {
-    if(val){
+    if (val) {
         return val.toLocaleString("it-IT", {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2
         });
     }
-    else{
+    else {
         return null
     }
 }
@@ -548,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 function buidApiBacLuongPop() {
-    if(!thongTinNgachCongChucPop){
+    if (!thongTinNgachCongChucPop) {
         return false
     }
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getBacLuongByNgachCongChuc/' + thongTinNgachCongChucPop;
