@@ -2,6 +2,7 @@ const vaiTroID = localStorage.getItem("vaiTroID")
 const popupCreateBtn = document.getElementById("createBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const maNhanVien = localStorage.getItem("maNhanVien")
+const table = document.querySelector('base-table')
 var MaritalOptions = [
   { label: 'Đã kết hôn', value: 1 },
   { label: 'Chưa kết hôn', value: 0 },
@@ -49,7 +50,7 @@ var TableColumns = [
   },
   {
     label: 'Địa chỉ',
-    key: 'thuongtru',
+    key: 'quequan',
   },
   {
     label: 'SĐT',
@@ -79,7 +80,10 @@ var TableColumns = [
     ]
   }
 ]
-
+var vaiTro = [
+  { label: 'Nhân viên', value: 1 },
+  { label: 'HR', value: 2 }
+];
 
 window.history.pushState(null, null, window.location.href);
 window.onpopstate = function () {
@@ -113,7 +117,10 @@ function showPopup() {
   const popupTitle = modal.querySelector('h2')
   popupTitle.textContent = "Thêm mới nhân viên"
 }
-
+function closePopup() {
+  var modal = document.getElementById("createNhanVien");
+  modal.style.display = "none"
+}
 
 async function handleCreate() {
   await showConfirm("Bạn có chắc chắn muốn thêm mới nhân viên ?")
@@ -127,10 +134,14 @@ async function handleCreate() {
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(payload),
-    success: function (data) {
-      showSuccess("Thêm mới thành công !")
+    success: async function (data) {
+      await showSuccess("Thêm mới thành công !")
+      table.handleCallFetchData()
+      clearFormValues("createNhanVien")
       recordActivityAdmin(maNhanVien, `Thêm mới nhân viên: ${payload.ten}`)
-      backToListAfterCreate()
+      await closePopup()
+      await showNavigation('Thêm mới lý lịch tư pháp cho nhân viên !', 'resume.html')
+      resolve();
     },
 
     error: (err) => {

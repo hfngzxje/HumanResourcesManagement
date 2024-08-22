@@ -212,6 +212,9 @@
               <div class="col-span-2 sm:col-span-1">
                 <base-input-number label="CMND" name="cmnd" validateBy="cmndValid"></base-input-number>
               </div>
+              <div class="col-span-2  sm:col-span-1 mt-1">
+                <base-datepicker label="Ngày cấp" name="cmndngaycap"></base-datepicker>
+              </div>
               <div class="col-span-2 sm:col-span-1">
                 <base-input label="Nơi cấp" name="cmndnoicap"></base-input>
               </div>
@@ -236,12 +239,12 @@
               <div class="col-span-2 sm:col-span-1 mt-2">
                 <base-datepicker label="Ngày công tác" name="ngaychinhthuc" validateBy="required"></base-datepicker>
               </div>
-
               <div class="col-span-2  sm:col-span-1 mt-1">
-                <base-datepicker label="Ngày cấp" name="cmndngaycap"></base-datepicker>
-              </div>
-              <div class="col-span-2  sm:col-span-1">
                 <base-input class="col-span-2" label="Quê quán" name="quequan" validateBy="required"></base-input>
+              </div>
+              <div class="col-span-2 sm:col-span-1 mt-3 ">
+                <base-select label="Vai trò(*)" name="vaitroId" options="vaiTro" validateBy="required"
+                  style="margin-top: 20px;"></base-select>
               </div>
             </div>
           </div>
@@ -257,6 +260,7 @@
   <custom-alert></custom-alert>
   <custom-error></custom-error>
   <custom-success></custom-success>
+  <custom-navigation></custom-navigation>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>

@@ -23,7 +23,7 @@ var BankList = [
     { label: 'VIB', value: 'VIB' },
     { label: 'MSB', value: 'MSB' },
     { label: 'VP Bank', value: 'VPB' }
-  ];
+];
 
 function backToListUpdate() {
     const url = new URL("/pages/staff/profile.html", window.location.origin);
@@ -34,16 +34,25 @@ function getImage() {
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
-        success: function(data) {
-            const imgEl = document.querySelector('#employeeImage')
-            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
-            imgEl.classList.remove('opacity-0')
+        success: function (data) {
+            const imgEl = document.querySelector('#employeeImage');
+            if (!imgEl) {
+                console.error('Image element not found');
+                return;
+            }
+            if (data && typeof data === 'string' && data.trim() !== '') {
+                imgEl.setAttribute('src', `data:image/png;base64,${data}`);
+                imgEl.classList.remove('opacity-0');
+            } else {
+
+                imgEl.setAttribute('src', '');
+            }
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
+            console.error('fetchEmployee err :: ', err);
         },
         complete: () => {
-            setLoading(false)
+            setLoading(false);
         }
     });
 }
@@ -53,12 +62,11 @@ function fetchEmployee() {
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
-        success: function(data) {
-           
+        success: function (data) {
+
             setTimeout(() => {
                 setFormValue('profile_form', data)
             }, 1000);
-            console.log("Chuc vu:", data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);
@@ -82,29 +90,30 @@ function uploadImage(anh) {
         contentType: false,
         processData: false,
         data: payloadUploadImage,
-        success: function(data) {
+        success: function (data) {
             setLoading(false);
             backToListUpdate();
         },
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     showError(err.responseText)
                     setLoading(false)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
                 const message = errObj[firtErrKey][0]
                 showError(message)
-                setLoading(false)            } catch (error) {
+                setLoading(false)
+            } catch (error) {
                 showError("Cập nhật thất bại!")
                 setLoading(false)
             }
         },
         complete: () => {
-            
+
         }
     });
 }
@@ -112,8 +121,8 @@ function uploadImage(anh) {
 async function handleSave() {
     await showConfirm("Bạn có chắc chắn muốn sửa thông tin nhân viên ?")
     const valid = validateForm('profile_form')
-    if(!valid) return
-    const {anh, ...rest} = getFormValues('profile_form')
+    if (!valid) return
+    const { anh, ...rest } = getFormValues('profile_form')
 
     const formValue = getFormValues('profile_form')
     const payload = buildPayload(rest)
@@ -123,7 +132,7 @@ async function handleSave() {
         method: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(data) {
+        success: function (data) {
             if (anh) {
                 uploadImage(anh);
                 showSuccess("Cập nhật thành công !")
@@ -138,10 +147,10 @@ async function handleSave() {
         error: (err) => {
             console.log('err ', err);
             try {
-                if(!err.responseJSON) {
+                if (!err.responseJSON) {
                     showError(err.responseText)
                     setLoading(false)
-                    return 
+                    return
                 }
                 const errObj = err.responseJSON.errors
                 const firtErrKey = Object.keys(errObj)[0]
@@ -154,7 +163,7 @@ async function handleSave() {
             }
         },
         complete: () => {
-            
+
         }
     });
 }
@@ -173,7 +182,7 @@ function renderActionByStatus() {
     const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
 
     saveBtn.addEventListener('click', handleSave)
-    clear.addEventListener('click', function() {
+    clear.addEventListener('click', function () {
         clearFormValues('profile_form');
     });
 
@@ -181,14 +190,10 @@ function renderActionByStatus() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // if (vaiTroID !== "1") {
-    //     window.location.href = "/pages/error.html";
-    //     return;
-    // }
     renderActionByStatus()
-        fetchEmployee()
-        getImage()
-        
+    fetchEmployee()
+    getImage()
+
     // const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/id?id=' + maDetail;
 
     // // Thực hiện yêu cầu API

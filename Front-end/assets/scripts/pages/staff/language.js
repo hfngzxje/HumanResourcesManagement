@@ -234,8 +234,9 @@ async function handleSaveNgoaiNgu() {
 // -----------------------------------------------------------------------------------------------------------------------------------
 function renderActionByStatus() {
     const actionEl = document.getElementById('qualification_form_action')
-    const buildButton = (label, type, icon) => {
+    const buildButton = (id,label, type, icon) => {
         const btnEl = document.createElement('base-button')
+        btnEl.setAttribute('id', id)
         btnEl.setAttribute('label', label)
         btnEl.setAttribute('type', type)
         btnEl.setAttribute('icon', icon)
@@ -244,8 +245,7 @@ function renderActionByStatus() {
 
     const actionE2 = document.getElementById('Language_form_action')
 
-    const createNgoaiNgu = buildButton('Thêm', 'green', 'bx bx-plus')
-    // createNgoaiNgu.addEventListener('click', handleCreateNgoaiNgu)
+    const createNgoaiNgu = buildButton('themId','Thêm', 'green', 'bx bx-plus')
     createNgoaiNgu.addEventListener('click', handleCreateNgoaiNgu)
 
     actionE2.append(createNgoaiNgu)
