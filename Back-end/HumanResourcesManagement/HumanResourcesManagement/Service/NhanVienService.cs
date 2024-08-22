@@ -369,26 +369,21 @@ namespace HumanResourcesManagement.Service
         {
             try
             {
-                var query = await _context.TblNhanViens.ToListAsync();
+                var query = _context.TblNhanViens.AsQueryable();
 
                 if (idPhong.HasValue)
                 {
-                    query = query.Where(n => n.Phong == idPhong).ToList();
+                    query = query.Where(n => n.Phong == idPhong.Value);
                 }
 
                 if (gioiTinh.HasValue)
                 {
-                    query = query.Where(n => n.Gioitinh == gioiTinh.Value).ToList();
+                    query = query.Where(n => n.Gioitinh == gioiTinh.Value);
                 }
 
-                var list = query.ToList();
+                var list = await query.ToListAsync();
 
-                if (list == null || !list.Any())
-                {
-                    return null;
-                }
-
-                return list;
+                return list.Any() ? list : null;
             }
             catch (Exception ex)
             {
