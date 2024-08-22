@@ -781,13 +781,13 @@ namespace HumanResourcesManagement.Models
                     .HasColumnName("atm");
 
                 entity.Property(e => e.Bhxh)
-                    .HasMaxLength(10)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("bhxh")
                     .IsFixedLength();
 
                 entity.Property(e => e.Bhyt)
-                    .HasMaxLength(10)
+                    .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("bhyt")
                     .IsFixedLength();
