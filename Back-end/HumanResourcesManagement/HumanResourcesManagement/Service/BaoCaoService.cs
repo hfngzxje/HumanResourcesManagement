@@ -472,7 +472,12 @@ namespace HumanResourcesManagement.Service
         //bao hiem
         public async Task<IEnumerable<DanhSachBaoHiemResponse>> getDanhSachBaoHiem(DanhSachBaoHiemRequest req)
         {
-            var all = await _context.TblNhanViens.Where(nv => nv.Bhxh != null || nv.Bhyt != null).ToListAsync();
+            var all = await _context.TblNhanViens.Where(nv => !string.IsNullOrEmpty(nv.Bhxh.Trim()) || !string.IsNullOrEmpty(nv.Bhyt.Trim())).ToListAsync();
+
+            if (!string.IsNullOrEmpty(req.MaNV))
+            {
+                all = all.Where(n => n.Ma.Trim() == req.MaNV.Trim()).ToList();
+            }
 
             if (req.idPhongBan.HasValue)
             {
@@ -522,6 +527,11 @@ namespace HumanResourcesManagement.Service
         public async Task<IEnumerable<DanhSachHoSoLuongResponse>> getDanhSachHoSoLuong(DanhSachHoSoLuongRequest req)
         {
             var all = await _context.TblLuongs.ToListAsync();
+            if (!string.IsNullOrEmpty(req.MaNV))
+            {
+                var hopDongNhanVien = await _context.TblHopDongs.FirstOrDefaultAsync(hd => hd.Ma == req.MaNV);
+                all = all.Where(l=>l.Mahopdong == hopDongNhanVien.Mahopdong).ToList();
+            }
             if (req.TongLuongTu.HasValue)
             {
                 all = all.Where(l => l.Tongluong >= req.TongLuongTu.Value).ToList();
@@ -603,41 +613,63 @@ namespace HumanResourcesManagement.Service
                 Font headerFont = new Font(baseFont, 12, Font.BOLD);
                 Font dataFont = new Font(baseFont, 10, Font.NORMAL);
 
-                Paragraph titleParagraph = new Paragraph(new Chunk(title, titleFont));
-                titleParagraph.Alignment = Element.ALIGN_CENTER;
+                Paragraph titleParagraph = new Paragraph(new Chunk(title, titleFont))
+                {
+                    Alignment = Element.ALIGN_CENTER
+                };
                 document.Add(titleParagraph);
 
                 document.Add(new Paragraph("\n"));
 
-                PdfPTable table = new PdfPTable(headers.Length);
-                table.WidthPercentage = 100;
+                PdfPTable table = new PdfPTable(headers.Length)
+                {
+                    WidthPercentage = 100
+                };
 
                 foreach (var header in headers)
                 {
-                    PdfPCell cell = new PdfPCell(new Phrase(header, headerFont));
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    PdfPCell cell = new PdfPCell(new Phrase(header, headerFont))
+                    {
+                        HorizontalAlignment = Element.ALIGN_CENTER
+                    };
                     table.AddCell(cell);
                 }
 
-                foreach (var item in data)
+                if (data != null && data.Any())
                 {
-                    var properties = item.GetType().GetProperties();
-                    foreach (var prop in properties)
+                    foreach (var item in data)
                     {
-                        var value = prop.GetValue(item)?.ToString() ?? string.Empty;
-                        PdfPCell cell = new PdfPCell(new Phrase(value, dataFont));
-                        cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                        table.AddCell(cell);
+                        var properties = item.GetType().GetProperties();
+                        foreach (var prop in properties)
+                        {
+                            var value = prop.GetValue(item)?.ToString() ?? string.Empty;
+                            PdfPCell cell = new PdfPCell(new Phrase(value, dataFont))
+                            {
+                                HorizontalAlignment = Element.ALIGN_CENTER
+                            };
+                            table.AddCell(cell);
+                        }
                     }
+                }
+                else
+                {
+                    PdfPCell noDataCell = new PdfPCell(new Phrase("No data available", dataFont))
+                    {
+                        Colspan = headers.Length,
+                        HorizontalAlignment = Element.ALIGN_CENTER
+                    };
+                    table.AddCell(noDataCell);
                 }
 
                 document.Add(table);
+
                 document.Close();
                 writer.Close();
 
                 return (memoryStream.ToArray(), fileName);
             }
         }
+
         //excel
         private async Task<(byte[] fileContent, string fileName)> ExportToExcel<T>(Stream templateStream, IEnumerable<T> data, string fileName)
         {

@@ -37,6 +37,14 @@ namespace HumanResourcesManagement.Service
 
         public async Task<TblDieuChuyen> AddDieuChuyen(InsertDieuChuyenRequest req)
         {
+            var dieuChuyen0 = await _context.TblLichSuDieuChuyens.Where(dc => dc.Ma == req.Ma).ToListAsync();
+            foreach (var item in dieuChuyen0)
+            {
+                if(item.TrangThai == 0)
+                {
+                    throw new Exception("Nhân viên này có lệnh điều chuyển đang chờ. Không thể tạo lệnh điều chuyển khác.");
+                }
+            }
 
             var hopDong = await _context.TblHopDongs.Where(hd => hd.Ma == req.Ma).OrderByDescending(hd => hd.Mahopdong).FirstOrDefaultAsync();
 

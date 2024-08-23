@@ -381,7 +381,7 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportDanhSachLenLuongToPdf(int? phongId, int? chucDanhId)
         {
             var data = await GetAllAsync(phongId, chucDanhId);
-            string[] headers = { "Mã NV", "Tên NV", "Mã Hợp Đồng", "Phòng", "Chức Danh","Trạng Thái" };
+            string[] headers = { "ID", "Mã HĐ", "Mã NV", "Tên NV", "Phòng","Chức Danh", "Trạng Thái" };
             return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_DanhSachNhanVienLenLuong.pdf", headers);
         }
 
@@ -491,7 +491,7 @@ namespace HumanResourcesManagement.Service
         public async Task<(byte[] fileContent, string fileName)> ExportQuyetDinhLenLuongToPdf(int? phongId, int? chucDanhId)
         {
             var data = await GetAllStatus1And3Async(phongId, chucDanhId);
-            string[] headers = { "Mã NV", "Tên NV", "Mã Hợp Đồng", "Phòng", "Chức Danh", "Trạng Thái" };
+            string[] headers = { "ID", "Mã HĐ", "Mã NV", "Tên NV", "Phòng", "Chức Danh", "Trạng Thái" };
             return await ExportToPdf("Báo Cáo Danh Sách Lên Lương", data, "BaoCao_QuyetDinhLenLuong.pdf", headers);
         }
 

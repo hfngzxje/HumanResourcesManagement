@@ -2,7 +2,7 @@
 {
     public class NhanVienResponse
     {
-        public string Ma { get; set; } = null!;
+        public string Ma { get; set; }
         public string? Ten { get; set; }
         public short Honnhan { get; set; }
         public DateTime? Ngaysinh { get; set; }
