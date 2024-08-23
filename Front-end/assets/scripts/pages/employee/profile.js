@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //     return;
     // }
     renderActionByStatus()
-    fetchEmployee()
-    getImage()
-
+        fetchEmployee()
+        getImage()
+        
     // const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/id?id=' + maNhanVien;
 
     // // Thực hiện yêu cầu API

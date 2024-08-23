@@ -1,8 +1,8 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNhomLuong";
 var TableColumns = [
   {
-    label: "Chức danh",
-    key: "chucDanh",
+    label: "Ngạch công chức",
+    key: "ngachCongChuc",
   },
   {
     label: "Bậc lương",

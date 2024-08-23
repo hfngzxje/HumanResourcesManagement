@@ -152,39 +152,39 @@ async function handleSave() {
     const payload = buildPayload(formValue)
     setLoading(true)
     setTimeout(() => {
-        $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
-            method: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(payload),
-            success: function (data) {
-                console.log('fetchKhenThuong res :: ', data);
-                showSuccess('Lưu Thành Công!')
-                recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
-                closePopup()
-                clearFormValues('editNgoaiNgu')
-                table.handleCallFetchData();
-            },
-            error: (err) => {
-                console.log('err ', err);
-                try {
-                    if (!err.responseJSON) {
-                        showError(err.responseText)
-                        return
-                    }
-                    const errObj = err.responseJSON.errors
-                    const firtErrKey = Object.keys(errObj)[0]
-                    const message = errObj[firtErrKey][0]
-                    showError(message)
-                } catch (error) {
-                    showError("Cập nhật thất bại!")
+    $.ajax({
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucNgoaiNgu/updateDanhMucNgoaiNgu/' + idNgoaiNgu,
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(payload),
+        success: function (data) {
+            console.log('fetchKhenThuong res :: ', data);
+            showSuccess('Lưu Thành Công!')
+            recordActivityAdmin(maNhanVien, `Sửa danh mục ngoại ngữ: ${oldValue} => ${payload.ten} `);
+            closePopup()
+            clearFormValues('editNgoaiNgu')
+            table.handleCallFetchData();
+        },
+        error: (err) => {
+            console.log('err ', err);
+            try {
+                if (!err.responseJSON) {
+                    showError(err.responseText)
+                    return
                 }
-            },
-            complete: () => {
-                setLoading(false)
+                const errObj = err.responseJSON.errors
+                const firtErrKey = Object.keys(errObj)[0]
+                const message = errObj[firtErrKey][0]
+                showError(message)
+            } catch (error) {
+                showError("Cập nhật thất bại!")
             }
-        });
-    }, 1000);
+        },
+        complete: () => {
+            setLoading(false)
+        }
+    });
+}, 1000);
 }
 
 function buildApiUrl() {

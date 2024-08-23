@@ -154,7 +154,7 @@ async function handleSave() {
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id=' + idDaoTao,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhMucHinhThucDaoTao/updateDanhMucHinhThucDaoTao?id='+idDaoTao,
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),

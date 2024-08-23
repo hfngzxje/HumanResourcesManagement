@@ -47,16 +47,26 @@ function getImage() {
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Image/getImage?maNV=' + maDetail,
         method: 'GET',
-        success: function (data) {
-            const imgEl = document.querySelector('#employeeImage')
-            imgEl.setAttribute('src', `data:image/png;base64, ${data}`)
-            imgEl.classList.remove('opacity-0')
+        success: function(data) {
+            const imgEl = document.querySelector('#employeeImage');
+            if (!imgEl) {
+                console.error('Image element not found');
+                return;
+            }
+            // Check if data is defined and is a valid base64 string
+            if (data && typeof data === 'string' && data.trim() !== '') {
+                imgEl.setAttribute('src', `data:image/png;base64,${data}`);
+                imgEl.classList.remove('opacity-0');
+            } else {
+                // console.log('Invalid or empty base64 data');
+                imgEl.setAttribute('src', ''); // Optionally, set a placeholder or error image
+            }
         },
         error: (err) => {
-            console.log('fetchEmployee err :: ', err);
+            console.error('fetchEmployee err :: ', err);
         },
         complete: () => {
-            setLoading(false)
+            setLoading(false);
         }
     });
 }

@@ -166,6 +166,14 @@
                                         <base-select label="Tổ" name="to"
                                             api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+                                        <div class="col-span-2 sm:col-span-1 mt-2">
+                                            <base-datepicker label="Ngày vào ban" name="ngayvaoban"
+                                                disabled  style="display: none;"></base-datepicker>
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1 mt-2 ">
+                                            <base-datepicker label="Ngày công tác" name="ngaychinhthuc"
+                                                disabled  style="display: none;"></base-datepicker>
+                                        </div>
                                         <!-- --------------------------------------------- -->
                                         <div class="grid grid-cols-4 gap-x-4">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
@@ -306,6 +314,7 @@
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>
+        <custom-navigation></custom-navigation>
     </main>
 
 
