@@ -13,6 +13,7 @@ function handleSendEmail() {
         const payload = buildPayload(formValue)
         console.log('Payload:', payload); 
         console.log("Email value: " + email)
+        setLoading(true)
         $.ajax({
             url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/forgot-password?email=' + email ,
             method: 'POST',

@@ -116,7 +116,7 @@
                                                     style="color: red; font-weight: bold;"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input-number label="Thời hạn lên lương" validateBy="required"
+                                                <base-input-number label="Thời hạn lên lương (năm)" validateBy="required"
                                                     name="thoihanlenluong"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
@@ -124,10 +124,10 @@
                                                     validateBy="required" label="Ngày hiệu lực"
                                                     name="ngayBatDau"></base-datepicker>
                                             </div>
-                                            <div class="col-span-2 sm:col-span-1 mt-2">
+                                            <!-- <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker class="ml-auto" style="margin: 0;" label="Ngày hết hạn"
                                                     name="ngayketthuc" disabled></base-datepicker>
-                                            </div>
+                                            </div> -->
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input-number id="nhomluong" label="Nhóm lương" name="nhomluong"
                                                     readonly style="display: none;"></base-input-number>
@@ -154,6 +154,7 @@
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>
+        <custom-navigation-alert></custom-navigation-alert>
     </main>
 
     <div id="editSalaryRecord" class="modal">
@@ -169,15 +170,9 @@
                 <div class="p-4">
                     <div class="grid gap-4 mb-4 grid-cols-4">
                         <div class="col-span-2 sm:col-span-1">
-                            <!-- <base-select id="maHopDongPop" label="Mã hợp đồng" name="mahopdong" keyValue="mahopdong"
-                                validateBy="required" keyLabel="mahopdong" api="buildApiHopDong" disabled></base-select> -->
                             <base-input id="maHopDongPop" label="Mã hợp đồng" name="mahopdong" readonly></base-input>
                         </div>
                         <div class="col-span-2 sm:col-span-1">
-                            <!-- <base-select id="ngachNhanVienPop" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"
-                                keyvalue="id" keylabel="ten" label="Nhóm ngạch nhân viên" name="nhomluong"
-                                disabled></base-select> -->
-
                             <base-input id="ngachNhanVienPop" label="Nhóm ngạch nhân viên" name="nhomluong"
                                 readonly></base-input>
                         </div>
@@ -212,7 +207,7 @@
                                 name="tongluong" style="color: red; font-weight: bold;" readonly></base-input-number>
                         </div>
                         <div class="col-span-2  sm:col-span-1">
-                            <base-input-number label="Thời hạn lên lương" validateBy="required"
+                            <base-input-number label="Thời hạn lên lương (năm)" validateBy="required"
                                 name="thoihanlenluong"></base-input-number>
                         </div>
                         <div class="col-span-2 sm:col-span-1">

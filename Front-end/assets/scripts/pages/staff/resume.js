@@ -214,7 +214,7 @@ function renderActionByStatus() {
         return btnEl
     }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
     saveBtn.addEventListener('click', handleSave)
     clear.addEventListener('click', function () {

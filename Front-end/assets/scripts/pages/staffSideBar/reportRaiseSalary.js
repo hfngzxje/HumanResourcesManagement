@@ -362,6 +362,84 @@ function formatCurrency(val) {
     // Nếu giá trị không hợp lệ, trả về một chuỗi rỗng hoặc giá trị gốc tùy ý
     return "";
 }
+
+async function handleExportExcel() {
+    const formValue = getFormValues("report_form");
+    const params = new FormData();
+    params.append('phongban', formValue.phongban || '');
+    params.append('MaNV', formValue.chucdanh || '');
+  
+    try {
+      const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/ExportQuyetDinhNhanVienLenLuongToExcel', {
+        method: 'POST',
+        body: params,
+        headers: {
+          'accept': '*/*',
+        }
+      });
+  
+      if (response.ok) {
+        const blob = await response.blob();
+        createDownloadLinkExcel(blob);
+      } else {
+        console.error('Export failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+  
+  function createDownloadLinkExcel(blob) {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'BaoCao_QuyetDinhLenLuong.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+  // _________________________________________________________________________________________________
+  
+  // ____________________________________________PDF____________________________________________________
+  async function handleExportPDF() {
+    const formValue = getFormValues("report_form");
+    const params = new FormData();
+    params.append('phongban', formValue.phongban || '');
+    params.append('MaNV', formValue.chucdanh || '');
+  
+    try {
+      const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DanhSachLenLuong/ExportQuyetDinhNhanVienLenLuongToPdf', {
+        method: 'POST',
+        body: params,
+        headers: {
+          'accept': '*/*',
+        }
+      });
+  
+      if (response.ok) {
+        const blob = await response.blob();
+        createDownloadLinkPDF(blob);
+      } else {
+        console.error('Export failed:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+  
+  function createDownloadLinkPDF(blob) {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'BaoCao_QuyetDinhLenLuong.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+
 function renderActionByStatus() {
     const actionEl = document.getElementById("report_form_action");
     const buildButton = (id, label, type, icon) => {
@@ -375,13 +453,13 @@ function renderActionByStatus() {
     const pdfBtn = buildButton("PDFId", "PDF", "red", "bx bx-file-blank");
     const excelBtn = buildButton("ExcelId", "Excel", "", "bx bx-spreadsheet");
 
-    // excelBtn.addEventListener("click", () => {
-    //   handleExportExcel();
-    // });
+    excelBtn.addEventListener("click", () => {
+      handleExportExcel();
+    });
 
-    // pdfBtn.addEventListener("click", () => {
-    //   handleExportPDF();
-    // });
+    pdfBtn.addEventListener("click", () => {
+      handleExportPDF();
+    });
     actionEl.append(pdfBtn, excelBtn);
 }
 document.addEventListener("DOMContentLoaded", () => {

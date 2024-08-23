@@ -92,18 +92,19 @@ class CustomSidebar extends HTMLElement {
    <div id="myModal" class="modal" class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         
         <div class=" change-container w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+        <span class="close">&times;</span>
             <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Đổi mật khẩu
             </h2>
             <form id="change_form" class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
                 <div>
-                  <base-input placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
                 </div>
                 <div>
-                  <base-input placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
                 </div>
                 <div>
-                  <base-input placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
                 </div>
                 
                 <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
@@ -1193,6 +1194,43 @@ class CustomAlertNagivation extends HTMLElement {
   }
 }
 
+class CustomAlertNagivationAlert extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = `
+  <div class="modal fixed z-10 inset-0 overflow-y-auto" id="popupNavigationAlert">
+    <div class="change-container" style="padding:0px">
+      <div
+        class="relative bg-white rounded-lg px-6 py-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-md sm:w-full"
+        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="flex items-center justify-center mb-4">
+          <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5-5-5 5m10-7v6" />
+            </svg>
+          </div>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg leading-6 font-medium text-gray-900" id="navigationMessageAlert">
+            Xác Nhận Điều Hướng
+          </h3>
+        </div>
+        <div class="mt-4">
+          <button
+            class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm"
+            id="navigateButtonAlert">
+            Điều Hướng
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    `;
+  }
+}
+customElements.define('custom-navigation-alert', CustomAlertNagivationAlert);
 customElements.define('custom-navigation', CustomAlertNagivation);
 customElements.define('custom-alert', CustomAlert);
 customElements.define('custom-error', CustomAlertEror);

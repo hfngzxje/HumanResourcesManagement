@@ -243,6 +243,24 @@ async function handleHuyDieuChuyen(id) {
     }, 1000);
 }
 
+async function getHopDong() {
+    try {
+        const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        if (Array.isArray(response) && response.length > 0) { 
+            console.log("Hợp lệ")
+        }
+        else {
+            showNavigationAlert("Nhân viên chưa có hợp đồng chính thức, vui lòng tạo hợp đồng trước tiên", "laborContract.html")
+        }
+    } catch (error) {
+        console.log("Error")
+    }
+}
+
 function renderActionByStatus() {
     const actionEl = document.getElementById('workingProcessChuyenDen_form_action')
     const buildButton = (label, type, icon) => {
@@ -264,6 +282,7 @@ function buildApiUrlChuyenDen() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
 document.addEventListener('DOMContentLoaded', () => {
+    getHopDong()
     fetchDieuChuyen()
     renderActionByStatus()
     inits()

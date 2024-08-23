@@ -1,4 +1,5 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoHoSoLuong";
+const maDetail = localStorage.getItem('maNhanVien')
 var TableColumns = [
     {
         label: "Mã hợp đồng",
@@ -64,6 +65,8 @@ async function handleExportExcel() {
     params.append('NgayBatDau', formValue.NgayBatDau || "");
     params.append('NgayKetThuc', formValue.NgayKetThuc || "");
     params.append('TrangThai', formValue.TrangThai || "");
+    params.append('MaNV', maDetail || "");
+    
 
     try {
         const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoHoSoLuongToExcel', {
@@ -106,6 +109,7 @@ async function handleExportPDF() {
     params.append('NgayBatDau', formValue.NgayBatDau || "");
     params.append('NgayKetThuc', formValue.NgayKetThuc || "");
     params.append('TrangThai', formValue.TrangThai || "");
+    params.append('MaNV', maDetail || "");
 
     try {
         const response = await fetch('https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/ExportBaoCaoHoSoLuongToPDF', {
@@ -149,7 +153,8 @@ async function handleSearch() {
             TongLuongDen: parseCurrency(formValue.TongLuongDen) || "",
             NgayBatDau: formValue.NgayBatDau || "",
             NgayKetThuc: formValue.NgayKetThuc || "",
-            TrangThai: formValue.TrangThai || ""
+            TrangThai: formValue.TrangThai || "",
+            MaNV: maDetail
         };
 
         // Giả sử handleCallFetchData là một hàm không đồng bộ

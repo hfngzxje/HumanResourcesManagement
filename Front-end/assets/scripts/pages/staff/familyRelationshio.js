@@ -61,19 +61,50 @@ var TableColumns = [
 ]
 
 
-var tableEvent = { // global: ở đau cũng truy cập được
+var tableEvent = { 
     rowClick: (row) => {
         console.log('row click ', row);
         fetchRelationship(row.id)
     }
 }
+
+function clearFormRelationShip(formId) {
+    const form = document.getElementById(formId);
+    if (!form) {
+        console.error("Form not found");
+        return;
+    }
+    const inputs = form.querySelectorAll('input, textarea, select');
+    const errors = form.querySelectorAll('.error');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else if (input.type === 'radio') {
+            // Để lại giá trị radio button
+            input.checked = false;
+        } else {
+            input.value = '';
+            input.selectedIndex = 0;
+        }
+    });
+    if (errors) {
+        errors.forEach(error => error.remove());
+    }
+    const elements = form.querySelectorAll("input, select, textarea");
+    for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        element.classList.remove(...inputErrClass)
+    }
+  }
+
+  
 function showPopup() {
     var modal = document.getElementById("editFamily");
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues("editFamily");
+            clearFormRelationShip("editFamily");
         }
     }
     var closeButton = modal.querySelector('.close');
@@ -141,7 +172,7 @@ async function handleCreate() {
                 if (table) {
                     showSuccess("Thêm thành công!");
                     table.handleCallFetchData();
-                    clearFormValues("relationship_form")
+                    clearFormRelationShip("relationship_form")
                 }
                 else {
                     console.err("Không tìm thấy")
@@ -243,11 +274,11 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
-    const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
+    const clear = buildButton('clearId', 'Clear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     clear.addEventListener('click', function () {
-        clearFormValues('relationship_form');
+        clearFormRelationShip('relationship_form');
     });
 
     actionEl.append(createBtn, clear)

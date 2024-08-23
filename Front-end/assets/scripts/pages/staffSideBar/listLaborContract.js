@@ -114,8 +114,7 @@ function fetchContract(mahopdong) {
 }
 
 async function handleCreate() {
-    await showConfirm('editHopDong')
-    if (!valid) return
+    await showConfirm('Bạn chắc chăn muốn thêm mới hợp đồng ?')
     const formValue = getFormValues('editHopDong')
 
     console.log('formValue ', formValue);
@@ -159,7 +158,7 @@ async function handleCreate() {
 }
 
 async function handleRemove() {
-    await showConfirm('Xác nhận xóa')
+    await showConfirm('Bạn có chắc muốn xóa hợp đồng ?')
    
     setLoading(true)
     setTimeout(() => {
