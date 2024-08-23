@@ -1,4 +1,5 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoSinhNhat";
+const apiTableHistory = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/Birthday/email-history"
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -31,6 +32,25 @@ var TableColumns = [
   },
 ];
 
+var historyTableColumns = [
+  {
+    label: "Mã nhân viên",
+    key: "ma",
+  },
+  {
+    label: "Email",
+    key: "email",
+  },
+  {
+    label: "Ngày sinh nhật",
+    key: "sentDataTime",
+    type: 'datetime'
+  },
+  {
+    label: "Lời chúc",
+    key: "greeting"
+  }
+];
 
 var thangSinh = [
   { label: "Tất cả", value: "" },
@@ -141,6 +161,22 @@ function createDownloadLinkPDF(blob) {
 }
 // _______________________________________________________________________________________________________
 
+function showPopup(){
+  var modal = document.getElementById("viewHistory");
+  modal.style.display = "block";
+  window.onclick = function (event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+  }
+  var closeButton = modal.querySelector('.close');
+  closeButton.onclick = function () {
+      modal.style.display = "none";
+  }
+
+
+  
+}
 function renderActionByStatus() {
   const actionEl = document.getElementById("report_form_action");
   const buildButton = (id, label, type, icon) => {
@@ -185,6 +221,9 @@ async function handleSearch() {
 }
 function buildApiUrl() {
   return apiTable;
+}
+function buildApiUrlHistory() {
+  return apiTableHistory;
 }
 function phongBanChange() {
   const phongban = document.querySelector('#phongban select')

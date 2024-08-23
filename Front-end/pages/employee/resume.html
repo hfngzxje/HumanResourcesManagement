@@ -30,6 +30,10 @@
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <layout-sidebar></layout-sidebar>
     <main class="app-content">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="app-title">
@@ -46,7 +50,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="tile">
-                            <h3 class="tile-title">Sơ yếu lý lịch</h3>
+                            <h3 class="tile-title">Thông tin nhân viên</h3>
                             <div>
                                 <form id="a">
                                     <div class="col-span-1 h-[300px]">
@@ -149,11 +153,19 @@
                                         <base-select label="Tổ" name="to"
                                             api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
                                             keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+                                        <div class="col-span-2 sm:col-span-1 mt-2">
+                                            <base-datepicker label="Ngày vào ban" name="ngayvaoban"
+                                                disabled  style="display: none;"></base-datepicker>
+                                        </div>
+                                        <div class="col-span-2 sm:col-span-1 mt-2 ">
+                                            <base-datepicker label="Ngày công tác" name="ngaychinhthuc"
+                                                disabled  style="display: none;"></base-datepicker>
+                                        </div>
                                         <!-- --------------------------------------------- -->
                                         <div class="grid grid-cols-4 gap-x-4">
                                             <div class="col-span-2 sm:col-span-1 mt-2 ">
-                                                <base-input-number label="CMND(*)" name="cmnd"
-                                                    validateBy="cmndValid"></base-input-number>
+                                                <base-input-number validateBy="cmndValid" label="CMND(*)"
+                                                    name="cmnd"></base-input-number>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker label="Ngày cấp(*)" name="cmndngaycap"
@@ -216,8 +228,8 @@
                                                     keyValue="id" keyLabel="ten"></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-datepicker label="Ngày tham gia tổ chức chính trị xã hội"
-                                                    name="social_political_organization_join_date"></base-datepicker>
+                                                <base-datepicker label="Ngày vào đoàn"
+                                                    name="ngayvaodoan"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input class="ml-auto" label="Nơi tham gia"
@@ -242,7 +254,7 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input class="col-span-2"
-                                                    label="Danh hiệu được phong tặng cao nhất"
+                                                    label="Danh hiệu cao nhất"
                                                     name="danhhieucaonhat"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-2 mt-2 ">
@@ -255,7 +267,7 @@
                                                 <base-checkbox label="Gia đình chính sách" class="!mb-0"
                                                     name="laconchinhsach"></base-checkbox>
                                                 <base-input class="w-full" hide-label="true"
-                                                    name="chinhsach"></base-input>
+                                                    name="conchinhsach"></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input validateBy="cardValid" label="Mã số BHXH"
@@ -274,7 +286,6 @@
                                                     validateBy="required" style="margin-top: 20px;"></base-select>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </form>
@@ -285,17 +296,13 @@
                 </div>
 
             </div>
-
-            <!--END right-->
         </div>
-
-
         <layout-footer></layout-footer>
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>
+        <custom-navigation></custom-navigation>
     </main>
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>

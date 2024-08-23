@@ -26,7 +26,10 @@ var BankList = [
     { label: 'MSB', value: 'MSB' },
     { label: 'VP Bank', value: 'VPB' }
 ];
-
+var MaritalOptions = [
+    { label: 'Đã kết hôn', value: 1 },
+    { label: 'Chưa kết hôn', value: 0 },
+]
 
 function getImage() {
     $.ajax({
