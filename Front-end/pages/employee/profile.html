@@ -32,6 +32,10 @@
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <layout-sidebar></layout-sidebar>
     <main class="app-content">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
+        </div>
         <!-- margin-right: -15px; -->
 
         <div class="row">
@@ -61,19 +65,19 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
-                                                    validateBy="required" disabled></base-input>
+                                                    required="true" disabled></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input-phone label="Di động(*)" name="didong"
-                                                    validateBy="phoneValid"></base-input-phone>
+                                                    required="true"></base-input-phone>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-datepicker label="Ngày sinh(*)" name="ngaysinh"
-                                                    validateBy="required"></base-datepicker>
+                                                    required="true"></base-datepicker>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
-                                                <base-input label="Email " name="email" validateBy="emailValid"
-                                                    disabled></base-input>
+                                                <base-input validateBy="emailValid" label="Email (*)" name="email"
+                                                    required="true" disabled></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-3 ">
                                                 <label-form-item name="Giới tính(*)"></label-form-item>
@@ -154,6 +158,34 @@
                     <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
                         api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
                         keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+
+                    <base-datepicker label="Ngày vào đoàn" name="ngayvaodoan" style="display: none;"></base-datepicker>
+                    <base-input class="ml-auto" label="Nơi tham gia" name="noithamgia"
+                        style="display: none;"></base-input>
+                    <base-select label="Tình trạng hôn nhân(*)" name="honnhan" options="MaritalOptions"
+                        validateBy="required" style="display: none;"></base-select>
+                    <base-input class="flex-1" label="Cơ quan tuyển dụng" name="coquantuyendung" style="display: none;"></base-input>
+                    <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung" class="flex-1" style="display: none;"></base-datepicker>
+                    <base-input class="flex-2" label="Công việc chính" name="congviecchinh" style="display: none;"></base-input>
+                    <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
+                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
+                        keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+                    <base-datepicker label="Ngày vào đảng" name="ngayvaodang" style="display: none;"></base-datepicker>
+                    <base-datepicker label="Ngày nhập ngũ" name="ngaynhapngu" style="display: none;"></base-datepicker>
+                    <base-datepicker label="Ngày xuất ngũ" name="ngayxuatngu" style="display: none;"></base-datepicker>
+                    <base-input label="Quân hàm cao nhất" name="quanhamcaonhat" style="display: none;"></base-input>
+                    <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất"
+                        name="danhhieucaonhat" style="display: none;"></base-input>
+                    <base-checkbox label="Thương binh hạng" class="!mb-0" name="lathuongbinh" style="display: none;"></base-checkbox>
+                    <base-input class="flex-1" hide-label="true" name="thuongbinh" style="display: none;"></base-input>
+                    <base-checkbox label="Gia đình chính sách" class="!mb-0" name="laconchinhsach" style="display: none;"></base-checkbox>
+                    <base-input class="w-full" hide-label="true" name="conchinhsach" style="display: none;"></base-input>
+                    <base-input validateBy="cardValid" label="Mã số BHXH" name="bhxh" style="display: none;"></base-input>
+                    <base-input validateBy="cardValid" label="Mã số BHYT" name="bhyt" style="display: none;"></base-input>
+                    <base-input validateBy="atmValid" label="Số thẻ ATM" name="atm" style="display: none;"></base-input>
+                    <base-select label="Ngân hàng(*)" name="nganhang" options="BankList" validateBy="required"
+                        style="margin-top: 20px;display: none;" ></base-select>
+
                 </div>
                 <!-- ----------------------------------------- -->
             </form>
@@ -162,7 +194,7 @@
             <div id="profile_form_action" class=" justify-end">
             </div>
         </div>
-        <layout-footer></layout-footer>
+        <!-- <layout-footer></layout-footer> -->
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>

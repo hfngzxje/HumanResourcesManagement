@@ -17,7 +17,7 @@ const TAB_LIST = [
   {
     key: TAB.SALARY_RECORD,
     label: "Danh sách bảng lương",
-    activeByPath: "/pages/staffSideBar/reportSalaryRecord.html",
+    activeByPath: "/pages/employee/reportSalaryRecord.html",
   }
   
 ];
@@ -51,7 +51,7 @@ function handleSelectChange() {
     const selectedValue = event.target.value;
     const selectedTab = TAB_LIST.find(tab => tab.key === Number(selectedValue));
     if (selectedTab) {
-      const href = '../..' + selectedTab.activeByPath + '?id=' + id;
+      const href = '../..' + selectedTab.activeByPath 
       window.location.href = href; // Chuyển hướng đến trang mới
     }
   });

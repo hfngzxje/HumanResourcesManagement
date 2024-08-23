@@ -31,7 +31,7 @@ var TableColumns = [
     },
     {
         label: 'Từ Chức vụ',
-        key: 'tuChucVu',
+        key: 'tenChucVuCu',
 
     },
     {

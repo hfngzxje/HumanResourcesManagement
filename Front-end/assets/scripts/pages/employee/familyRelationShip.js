@@ -1,10 +1,8 @@
-const vaiTroID = localStorage.getItem("vaiTroID")
 let idNguoiThan = null
 const table = document.querySelector('base-table')
 const popupRemoveBtn = document.getElementById("deleteBtn")
 const popupUpdatebtn = document.getElementById("updateBtn")
-const maNhanVien = localStorage.getItem('maNhanVien')
-
+var maDetail = localStorage.getItem('maNhanVien')
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
     { label: 'Hợp đồng quá hạn', value: 0 },
@@ -62,18 +60,50 @@ var TableColumns = [
 ]
 
 
-var tableEvent = { // global: ở đau cũng truy cập được
+var tableEvent = { 
     rowClick: (row) => {
         console.log('row click ', row);
         fetchRelationship(row.id)
     }
 }
+
+function clearFormRelationShip(formId) {
+    const form = document.getElementById(formId);
+    if (!form) {
+        console.error("Form not found");
+        return;
+    }
+    const inputs = form.querySelectorAll('input, textarea, select');
+    const errors = form.querySelectorAll('.error');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            input.checked = false;
+        } else if (input.type === 'radio') {
+            // Để lại giá trị radio button
+            input.checked = false;
+        } else {
+            input.value = '';
+            input.selectedIndex = 0;
+        }
+    });
+    if (errors) {
+        errors.forEach(error => error.remove());
+    }
+    const elements = form.querySelectorAll("input, select, textarea");
+    for (let i = 0; i < elements.length; i++) {
+        const element = elements[i];
+        element.classList.remove(...inputErrClass)
+    }
+  }
+
+  
 function showPopup() {
     var modal = document.getElementById("editFamily");
     modal.style.display = "block";
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            clearFormRelationShip("editFamily");
         }
     }
     var closeButton = modal.querySelector('.close');
@@ -112,13 +142,20 @@ function fetchRelationship(id) {
         }
     });
 }
+function clearError(formId) {
+    const form = document.getElementById(formId);
+    const inputs = form.querySelectorAll('.error');
 
+    inputs.forEach(input => {
+        input.value = null
+    });
+}
 async function handleCreate() {
     await showConfirm("Bạn có chắc chắn muốn thêm mới quan hệ ?")
     const valid = validateForm('relationship_form')
     if (!valid) return
     const formValue = getFormValues('relationship_form')
-    const employeeId = maNhanVien
+    const employeeId = maDetail
     formValue['ma'] = employeeId;
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -134,7 +171,7 @@ async function handleCreate() {
                 if (table) {
                     showSuccess("Thêm thành công!");
                     table.handleCallFetchData();
-                    clearFormValues("relationship_form")
+                    clearFormRelationShip("relationship_form")
                 }
                 else {
                     console.err("Không tìm thấy")
@@ -225,7 +262,6 @@ async function handleSave() {
         });
     }, 1000);
 }
-
 function renderActionByStatus() {
     const actionEl = document.getElementById('relationship_form_action')
     const buildButton = (id, label, type, icon) => {
@@ -237,42 +273,20 @@ function renderActionByStatus() {
         return btnEl
     }
     const createBtn = buildButton('createId', 'Thêm', 'green', 'bx bx-plus')
-    const clear = buildButton('clearId', 'cLear', 'plain', 'bx bx-eraser')
+    const clear = buildButton('clearId', 'Clear', 'plain', 'bx bx-eraser')
 
     createBtn.addEventListener('click', handleCreate)
     clear.addEventListener('click', function () {
-        clearFormValues('relationship_form');
+        clearFormRelationShip('relationship_form');
     });
 
     actionEl.append(createBtn, clear)
 }
 
 function buildApiUrl() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maNhanVien
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + maDetail
 }
-
-function getNameQuanHe() {
-
-    $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getDanhMucNguoiThan',
-        method: 'GET',
-        success: function (data) {
-            relationshipOptions = data;
-        },
-        error: (err) => {
-            console.log('fetchEmployee err :: ', err);
-        }
-    });
-}
-
-getNameQuanHe()
-
-
 document.addEventListener('DOMContentLoaded', () => {
-    // if (vaiTroID !== "1") {
-    //     window.location.href = "/pages/error.html";
-    //     return;
-    // }
     renderActionByStatus();
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupUpdatebtn.addEventListener("click", handleSave)

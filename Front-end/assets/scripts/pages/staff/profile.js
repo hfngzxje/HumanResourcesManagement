@@ -24,6 +24,10 @@ var BankList = [
     { label: 'MSB', value: 'MSB' },
     { label: 'VP Bank', value: 'VPB' }
 ];
+var MaritalOptions = [
+    { label: 'Đã kết hôn', value: 1 },
+    { label: 'Chưa kết hôn', value: 0 },
+]
 
 function backToListUpdate() {
     const url = new URL("/pages/staff/profile.html", window.location.origin);
@@ -63,7 +67,7 @@ function fetchEmployee() {
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function (data) {
-
+            
             setTimeout(() => {
                 setFormValue('profile_form', data)
             }, 1000);
@@ -179,7 +183,7 @@ function renderActionByStatus() {
         return btnEl
     }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const clear = buildButton('cLear', 'plain', 'bx bx-eraser')
+    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
 
     saveBtn.addEventListener('click', handleSave)
     clear.addEventListener('click', function () {

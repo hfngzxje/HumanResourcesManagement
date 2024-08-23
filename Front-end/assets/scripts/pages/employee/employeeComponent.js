@@ -80,7 +80,7 @@ class CustomSidebar extends HTMLElement {
                         class='app-menu__icon bx bx-transfer'></i><span class="app-menu__label">Thuyên chuyển </span></a>
             </li>
             <li><a class="app-menu__item" href="reportFamilyRelationship.html"><i
-                        class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Báo cáo </span></a>
+                        class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Báo cáo </span></a>
             </li>
             <li id="adminLink"><a class="app-menu__item" href="/pages/staff/index.html"><i
                         class='app-menu__icon bx bx-file-find'></i><span class="app-menu__label">Quay về trang admin </span></a>
@@ -90,21 +90,22 @@ class CustomSidebar extends HTMLElement {
         </ul>
     </aside>
 
-  <div id="myModal" class="modal" class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+ <div id="myModal" class="modal" class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         
         <div class=" change-container w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8">
+        <span class="close">&times;</span>
             <h2 class="mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Đổi mật khẩu
             </h2>
-            <form class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
+            <form id="change_form" class="mt-4 space-y-4 lg:mt-5 md:space-y-5" action="#">
                 <div>
-                  <base-input placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........."  type="password" label="Mật Khẩu Cũ" name="matKhauCu" required="true"></base-input>
                 </div>
                 <div>
-                  <base-input placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........." type="password" label="Mật Khẩu Mới" name="matKhauMoi" required="true"></base-input>
                 </div>
                 <div>
-                  <base-input placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
+                  <base-input validateBy="required" placeholder="........." type="password" label="Xác Nhận Mật Khẩu Mới" name="xacNhanMatKhauMoi" required="true"></base-input>
                 </div>
                 
                 <div id="change_form_action" class="flex gap-x-5 mt-5 justify-center"></div>
@@ -276,44 +277,48 @@ class BaseTextArea extends HTMLElement {
 
 
 class BaseDatePicker extends HTMLElement {
-  static observedAttributes = ["label", "name", "required", "disabled"];
+  static observedAttributes = ["label", "name", "required", "disabled", "validateBy","value"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
     const disabled = this.getAttribute("disabled") !== null;
+    const validateBy = this.getAttribute("validateBy") || "";
+    const value = this.getAttribute("value") || "";
 
     this.innerHTML = `
-      <div class="flex flex-col h-full w-full">
-        <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
-        <div class="relative max-w-sm">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-            </svg>
-          </div>
-          <input datepicker type="text" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date" ${disabled ? 'disabled' : ''}>
+    <div class="flex flex-col h-full w-full">
+      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+      <div class="relative max-w-sm">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+          <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+          </svg>
         </div>
+        <input datepicker type="text" value="${value}"  validateBy= "${validateBy}" name="${name}" required="${required}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 " placeholder="Select date" ${disabled ? 'disabled' : ''}>
       </div>
-      `;
+    </div>
+    `;
   }
 }
 
+
 class BaseInputPhone extends HTMLElement {
-  static observedAttributes = ["label", "name", "required"];
+  static observedAttributes = ["label", "name", "required", "validateBy"];
 
   connectedCallback() {
     const label = this.getAttribute("label") || "Base input";
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
+    const validateBy = this.getAttribute("validateBy") || "";
 
     this.innerHTML = `
-      <div class="">
-        <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
-        <input type="tel" name="${name}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
-      </div>
-      `;
+    <div class="">
+      <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
+      <input type="tel" name="${name}" validateBy="${validateBy}" required="${required}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" class="bg-ffffff border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"placeholder="Nhập số điện thoại"  >
+    </div>
+    `;
   }
 }
 class BaseInputNumber extends HTMLElement {

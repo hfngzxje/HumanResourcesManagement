@@ -68,7 +68,7 @@ var TableColumnsLaborContract = [
 ]
 
 function buildApiUrlSalary() {
-    
+
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma
 }
 function buildApiUrlLaborContract() {
@@ -79,7 +79,7 @@ function fetchFamilyRelationshipCount() {
     const baseImageEl = document.querySelector('base-image[description="Quan Hệ Gia Đình"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/'+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NguoiThan/getNguoiThanByMaNV/' + ma,
         method: 'GET',
         success: function (data) {
 
@@ -88,7 +88,6 @@ function fetchFamilyRelationshipCount() {
             if (baseImageEl) {
                 let newTitle = `${familyCount}`;
 
-                console.log("Ma: ", ma)
                 baseImageEl.setAttribute('title', newTitle);
 
 
@@ -109,30 +108,28 @@ function fetchLaborContractCount() {
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id='+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + ma,
         method: 'GET',
         success: function (data) {
+            if (data && Array.isArray(data)) {
+                const laborCount = data.length;
 
-            const laborCount = data.length;
+                if (baseImageEl) {
+                    let newTitle = `${laborCount}`;
 
-            if (baseImageEl) {
-                let newTitle = `${laborCount}`;
+                    baseImageEl.setAttribute('title', newTitle);
 
-                console.log(newTitle)
-                baseImageEl.setAttribute('title', newTitle);
-
-                if (h2Element) {
-                    if (laborCount === 0) {
-                        h2Element.textContent = "0"
-                    }
-                    else {
+                    if (h2Element) {
                         h2Element.textContent = newTitle;
                     }
                 }
             }
+            else {
+                h2Element.textContent = "0"
+            }
+
         },
         error: (err) => {
-            h2Element.textContent = "0"
             console.log('fetchFamilyRelationshipCount err :: ', err);
         }
     });
@@ -142,25 +139,28 @@ function fetchSalaryCount() {
     const baseImageEl = document.querySelector('base-image[description="Bảng lương"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
     $.ajax({
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/'+ma,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HoSoLuong/getAllLuongByMaNV/' + ma,
         method: 'GET',
         success: function (data) {
-            const salaryCount = data.length;
-            if (baseImageEl) {
-                let newTitle = `${salaryCount}`;
+            if (data && Array.isArray(data)) {
+                const salaryCount = data.length;
+                if (baseImageEl) {
+                    let newTitle = `${salaryCount}`;
 
-                console.log(newTitle)
-                baseImageEl.setAttribute('title', newTitle);
+                    baseImageEl.setAttribute('title', newTitle);
 
 
-                if (h2Element) {
-                    h2Element.textContent = newTitle;
+                    if (h2Element) {
+                        h2Element.textContent = newTitle;
+                    }
                 }
+            }
+            else {
+                h2Element.textContent = "0"
             }
         },
         error: (err) => {
             console.log('fetchFamilyRelationshipCount err :: ', err);
-            h2Element.textContent = 0;
         }
     });
 }
@@ -168,29 +168,32 @@ function fetchAwardCount() {
     const baseImageEl = document.querySelector('base-image[description="Khen Thưởng"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
-    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma 
-    let string2 = '/1'
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma
+    let string2 = '/Khen thưởng'
     $.ajax({
         url: string1 + string2,
         method: 'GET',
         success: function (data) {
+            if (data && Array.isArray(data)) {
 
-            const awardCount = data.length;
+                const awardCount = data.length;
 
-            if (baseImageEl) {
-                let newTitle = `${awardCount}`;
+                if (baseImageEl) {
+                    let newTitle = `${awardCount}`;
 
-                console.log(newTitle)
-                baseImageEl.setAttribute('title', newTitle);
+                    baseImageEl.setAttribute('title', newTitle);
 
 
-                if (h2Element) {
-                    h2Element.textContent = newTitle;
+                    if (h2Element) {
+                        h2Element.textContent = newTitle;
+                    }
                 }
+            }
+            else {
+                h2Element.textContent = "0"
             }
         },
         error: (err) => {
-            h2Element.textContent = "0"
             console.log('fetchFamilyRelationshipCount err :: ', err);
         }
     });
@@ -199,29 +202,32 @@ function fetchDisciplineCount() {
     const baseImageEl = document.querySelector('base-image[description="Kỷ Luật"]');
     const h2Element = baseImageEl.querySelector('h2.text-7xl');
 
-    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/'+ma 
-    let string2 = '/2'
+    let string1 = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/KhenThuongKiLuat/getKhenThuongKiLuatByMaNV/' + ma
+    let string2 = '/Kỷ luật'
     $.ajax({
         url: string1 + string2,
         method: 'GET',
         success: function (data) {
+            if (data && Array.isArray(data)) {
+                const disciplineCount = data.length;
 
-            const disciplineCount = data.length;
+                if (baseImageEl) {
+                    let newTitle = `${disciplineCount}`;
 
-            if (baseImageEl) {
-                let newTitle = `${disciplineCount}`;
-
-                console.log(newTitle)
-                baseImageEl.setAttribute('title', newTitle);
+                    console.log(newTitle)
+                    baseImageEl.setAttribute('title', newTitle);
 
 
-                if (h2Element) {
-                    h2Element.textContent = newTitle;
+                    if (h2Element) {
+                        h2Element.textContent = newTitle;
+                    }
                 }
+            }
+            else {
+                h2Element.textContent = "0"
             }
         },
         error: (err) => {
-            h2Element.textContent = "0"
             console.log('fetchFamilyRelationshipCount err :: ', err);
         }
     });

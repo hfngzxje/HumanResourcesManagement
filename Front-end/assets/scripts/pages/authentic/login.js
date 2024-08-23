@@ -25,7 +25,7 @@ function Login() {
 
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
-    // setLoading(true)
+    setLoading(true)
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/Login',
         method: 'POST',
@@ -71,68 +71,6 @@ function Login() {
     });
 }
 
-// function showPopup() {
-//     var modal = document.getElementById("forgetPassword");
-//     modal.style.display = "block";
-//     window.onclick = function (event) {
-//         if (event.target == modal) {
-//             modal.style.display = "none";
-//             clearFormValues();
-//         }
-//     }
-//         const popupTitle = modal.querySelector('h2')
-//         popupTitle.textContent = "Quên mật khẩu" 
-//   }
-//   function clearFormValues(formId) {
-//     const form = document.getElementById('forgetPassword');
-//     const inputs = form.querySelectorAll('input, textarea, select');
-
-//     inputs.forEach(input => {
-//         if (input.type === 'checkbox' || input.type === 'radio') {
-//             input.checked = false;
-//         } 
-//         else {
-//             input.value = '';
-//             input.selectedIndex = 0;
-//         }
-//     });
-//   }
-
-//   function handleCreate() {
-//     const formValue = getFormValues('forgetPassword')
-//     const email = formValue['email']
-//     const payload = buildPayload(formValue)
-//     console.log('Payload:', payload); 
-//     console.log("Email value: " + email)
-//     setLoading(true)
-//     $.ajax({
-//         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/forgot-password?email=' + email ,
-//         method: 'POST',
-//         contentType: 'application/json',
-//         data: JSON.stringify(payload),
-//         success: function(data) {
-//             alert("Vui lòng kiểm tra email để lấy lại mật khẩu")
-//         },
-//         error: (err) => {
-//             console.log('err ', err);
-//             try {
-//                 if(!err.responseJSON) {
-//                     alert(err.responseText)
-//                     return 
-//                 }
-//                 const errObj = err.responseJSON.errors
-//                 const firtErrKey = Object.keys(errObj)[0]
-//                 const message = errObj[firtErrKey][0]
-//                 alert(message)
-//             } catch (error) {
-//                 alert("Gửi email thất bại")
-//             }
-//         },
-//         complete: () => {
-//             setLoading(false)
-//         }
-//     });
-// }
 
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -36,7 +36,9 @@ var bacLuong = [
   { label: "Bậc 4", value: 4 },
   { label: "Bậc 5", value: 5 },
   { label: "Bậc 6", value: 6 },
-  { label: "Bậc 7", value: 7 }
+  { label: "Bậc 7", value: 7 },
+  { label: "Bậc 8", value: 8 },
+  { label: "Bậc 9", value: 9 }
 ];
 
 
@@ -44,7 +46,7 @@ var bacLuong = [
 async function handleExportExcel() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('NgachCongChuc', formValue.NgachCongChuc || '');
   params.append('BacLuong', formValue.BacLuong || '');
 
   try {
@@ -83,7 +85,7 @@ function createDownloadLinkExcel(blob) {
 async function handleExportPDF() {
   const formValue = getFormValues("report_form");
   const params = new FormData();
-  params.append('ChucDanh', formValue.ChucDanh || '');
+  params.append('NgachCongChuc', formValue.NgachCongChuc || '');
   params.append('BacLuong', formValue.BacLuong || '');
 
   try {
@@ -124,7 +126,7 @@ async function handleSearch() {
     const formValue = getFormValues("report_form");
     const tableReport = document.getElementById("tableReport");
     const params = {
-      ChucDanh: formValue.ChucDanh || "",
+      NgachCongChuc: formValue.NgachCongChuc || "",
       BacLuong: formValue.BacLuong || ""
     };
     await tableReport.handleCallFetchData(params);
@@ -134,7 +136,7 @@ async function handleSearch() {
   }
 }
 function chucDanhChange() {
-  const phongban = document.querySelector('#chucdanh select')
+  const phongban = document.querySelector('#ngachcongchuc select')
   phongban.addEventListener("change", (event) => {
     handleSearch()
   });

@@ -22,27 +22,6 @@
       }
     })();
   </script>
-  <style>
-    @media (max-width: 768px) {
-      #tabList {
-        display: none;
-      }
-
-      #tabDropdown {
-        display: block;
-      }
-    }
-
-    @media (min-width: 769px) {
-      #tabList {
-        display: flex;
-      }
-
-      #tabDropdown {
-        display: none;
-      }
-    }
-  </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -89,7 +68,7 @@
                       <div class="col-span-2 sm:col-span-1 ">
                         <base-input-number id="tuoiden" label="Tuổi đến" name="TuoiDen"></base-input-number>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-3">
+                      <div class="col-span-2 sm:col-span-1 mt-2">
                         <base-select id="gioitinh" label="Giới tính" name="GioiTinh" options="gioiTinh"
                           style="margin-top: 9px"></base-select>
                       </div>

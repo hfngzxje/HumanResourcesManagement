@@ -6,19 +6,18 @@ btn.onclick = function () {
   modal.style.display = "block";
 
 }
-
-
-
-window.onclick = function (event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+var closeButton = modal.querySelector('.close');
+closeButton.onclick = function () {
+  modal.style.display = "none";
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+      location = reload()
+    }
   }
 }
-
-
 function buildPayload(formValue) {
   const formClone = { ...formValue }
-
   return formClone
 }
 

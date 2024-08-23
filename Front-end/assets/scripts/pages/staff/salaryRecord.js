@@ -523,6 +523,23 @@ function parseCurrency(value) {
     const cleanedValue = value.replace(/[^0-9,]/g, '').replace(',', '.');
     return parseFloat(cleanedValue);
 }
+async function getHopDong() {
+    try {
+        const response = await $.ajax({
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongActiveByMaNV/id?id=' + maDetail,
+            method: 'GET',
+            contentType: 'application/json',
+        });
+        if (Array.isArray(response) && response.length > 0) { 
+            console.log("Hợp lệ")
+        }
+        else {
+            showNavigationAlert("Nhân viên chưa có hợp đồng chính thức, vui lòng tạo hợp đồng trước tiên", "laborContract.html")
+        }
+    } catch (error) {
+        console.log("Error")
+    }
+}
 
 function inits() {
     apiDanhSachHopDong()
@@ -532,7 +549,8 @@ function inits() {
     handleBacLuong()
     handlePhuCapKhac()
 }
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+   await getHopDong()
     renderActionByStatus()
     inits()
     popupRemoveBtn.addEventListener("click", handleRemove)
@@ -745,10 +763,6 @@ function handlePhuCapKhacPop() {
             heSoVal = document.querySelector('#hesoluongPop input').value
             phuCapKhacInputPop = 0;
         }
-        // console.log("Luong", luongVal)
-        // console.log("he so", heSoVal)
-        // console.log("phu cap ", phuCapInputPop)
-        // console.log("phu cap khac", phuCapKhacInputPop)
 
         tinhLuongPopUp(luongVal, heSoVal, phuCapInputPop, phuCapKhacInputPop);
     });

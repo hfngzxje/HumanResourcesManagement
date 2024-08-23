@@ -18,6 +18,7 @@ function handleReset() {
 
     payload['token'] = token;
     console.log("payload: ", payload)
+    setLoading(true)
     $.ajax({
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DangNhap/reset-password',
         method: 'POST',

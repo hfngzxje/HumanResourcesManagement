@@ -121,7 +121,31 @@ function closePopup() {
   var modal = document.getElementById("createNhanVien");
   modal.style.display = "none"
 }
-
+async function getMaNew(email) {
+  try {
+    const response = await $.ajax({
+      url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien',
+      method: 'GET',
+      contentType: 'application/json',
+    });
+    if (Array.isArray(response) && response.length > 0) {
+      const nhanVien = response.find(nv => nv.email === email);
+      if (nhanVien) {
+        return nhanVien.ma
+      }
+      else {
+        console.error("Không tìm thấy nhân viên với email:", email);
+        return null
+      }
+    }
+    else {
+      console.error("Danh sách nhân viên rỗng hoặc không phải là mảng.");
+      return null
+    }
+  } catch (error) {
+    console.log("Error")
+  }
+}
 async function handleCreate() {
   await showConfirm("Bạn có chắc chắn muốn thêm mới nhân viên ?")
   const valid = validateForm('createNhanVien')
@@ -135,11 +159,14 @@ async function handleCreate() {
     contentType: 'application/json',
     data: JSON.stringify(payload),
     success: async function (data) {
+
       await showSuccess("Thêm mới thành công !")
       table.handleCallFetchData()
       clearFormValues("createNhanVien")
       recordActivityAdmin(maNhanVien, `Thêm mới nhân viên: ${payload.ten}`)
       await closePopup()
+      var ma = await getMaNew(payload.email)
+      localStorage.setItem("maDetail", ma);
       await showNavigation('Thêm mới lý lịch tư pháp cho nhân viên !', 'resume.html')
       resolve();
     },

@@ -65,49 +65,44 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">Danh sách lương</h3>
+            <h3 class="tile-title">Danh sách nhóm lương</h3>
             <div>
               <form id="report_form">
                 <div class="">
                   <div class="input-container">
                     <div class="grid grid-cols-4 gap-x-5">
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select id="loctheo" label="Lọc theo" options="locTheo" name="searchRules"></base-select>
-                      </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-select label="Mã nhân viên" name="ma" keyValue="ma" keyLabel="ma"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"></base-select>
+                        <base-input-number id="tongluongtu" label="Tổng lương từ" name="TongLuongTu"></base-input-number>
                       </div>
                       <div class="col-span-2 sm:col-span-1 ">
-                        <base-select label="Phòng ban" name="phongban" keyValue="id" keyLabel="ten"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/PhongBan/getAllPhongBan"></base-select>
+                        <base-input-number id="tongluongden" label="Tổng lương đến" name="TongLuongDen"></base-input-number>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày hiệu lực"
-                          name=""></base-datepicker>
+                      <div class="col-span-2 sm:col-span-1 ">
+                        <base-datepicker id="tungay" class="ml-auto" style="margin: 0; margin-top: 9px;" label="Từ ngày"
+                          name="NgayBatDau"></base-datepicker>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-datepicker class="ml-auto" style="margin: 0" label="Ngày kết thúc"
-                          name=""></base-datepicker>
+                      <div class="col-span-2 sm:col-span-1 ">
+                        <base-datepicker id="denngay" class="ml-auto" style="margin: 0; margin-top: 9px;" label="Đến ngày"
+                        name="NgayKetThuc"></base-datepicker>
                       </div>
-                      <div class="col-span-2 sm:col-span-1 mt-2">
-                        <base-select label="Chức danh" name="chucdanh" keyValue="id" keyLabel="ten"
-                          api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/ChucDanh/getAllChucDanh"></base-select>
+                      <div class="col-span-2 sm:col-span-1 ">
+                        <base-select id="trangthai" label="Trạng thái" name="TrangThai"
+                        options="trangthaiselect"></base-select>
                       </div>
+                      <div class="col-span-2 sm:col-span-1 mt-2"></div>
                     </div>
                     <div class="col-span-2 sm:col-span-1">
-                      <div id="reportSalary_form_action" class="flex flex-wrap mt-3 justify-center"></div>
+                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
-          <base-table api="buildApiUrl" columns="TableColumns" event="tableEvent">
-          </base-table>
+          <base-table sortType="DESC" sortBy="trangthai" id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4"
+            method="POST">
         </div>
       </div>
-
     </div>
     <custom-alert></custom-alert>
     <custom-error></custom-error>
@@ -121,8 +116,8 @@
   <script src="../../assets/scripts/common/transform.js"></script>
   <script src="../../assets/scripts/common/loading.js"></script>
   <script src="../../assets/scripts/pages/staffSideBar/common.js"></script>
-  <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="../../assets/scripts/common/formHanlde.js"></script>
+  <script src="/assets/scripts/common/popupHandle.js"></script>
   <script src="../../assets/scripts/pages/staffSideBar/reportSalary.js"></script>
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>

@@ -178,7 +178,7 @@ function isValidInsuranceCardNumber(cardNumber) {
   const cleanedCardNumber = cardNumber.replace(/[^a-zA-Z0-9]/g, '');
   
   // Kiểm tra chuỗi đã làm sạch có đúng 15 ký tự không
-  const cardRegex = /^[a-zA-Z0-9]{15}$/;
+  const cardRegex = /^[a-zA-Z0-9]{10}$/;
   
   return cardRegex.test(cleanedCardNumber);
 }

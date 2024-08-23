@@ -31,6 +31,10 @@
     <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
     <layout-sidebar></layout-sidebar>
     <main class="app-content">
+        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mt-3">
+            <ul id="tabList" class="flex flex-wrap text-sm font-medium text-center text-gray-500"></ul>
+            <base-select id="tabDropdown" label=" " class="hidden"></base-select>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="app-title">
@@ -106,7 +110,7 @@
 
 
         </div>
-        <layout-footer></layout-footer>
+        <!-- <layout-footer></layout-footer> -->
         <custom-alert></custom-alert>
         <custom-error></custom-error>
         <custom-success></custom-success>
@@ -167,7 +171,6 @@
             </div>
         </div>
     </div>
-
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

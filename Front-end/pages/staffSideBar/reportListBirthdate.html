@@ -93,18 +93,25 @@
                         </base-select>
                       </div>
                     </div>
-
-                    <div class="col-span-2 sm:col-span-1">
-                      <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
-                    </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
+          <div class="col-span-2 sm:col-span-1">
+            <div id="report_form_action" class="flex flex-wrap mt-3 justify-center space-x-6"></div>
+            <button onclick="showPopup()" class="text-2xl text-blue-500 hover:text-blue-700">
+              <!-- Icon cuốn sách -->
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51m16.5 1.615a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V8.844a2.25 2.25 0 0 1 1.183-1.981l7.5-4.039a2.25 2.25 0 0 1 2.134 0l7.5 4.039a2.25 2.25 0 0 1 1.183 1.98V19.5Z" />
+              </svg>                        
+              
+          </button>
+          </div>
           <base-table id="tableReport" api="buildApiUrl" columns="TableColumns" event="tableEvent" pageSize="4"
-            method="POST">
+            method="POST"> </base-table>
         </div>
+        
       </div>
 
     </div>
@@ -113,6 +120,23 @@
     <custom-success></custom-success>
   </main>
 
+  <div class="modal" id="viewHistory">
+    <div class="change-container"
+      style="max-width: 900px; width: 100%; margin: 10px auto; padding: 10px; background-color: #f0f0f0;">
+      <span class="close">&times;</span>
+      <form>
+        <div class="flex items-center justify-between p-4 md:p-5 border-b-2 border-black rounded-t ">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Lịch sử gửi email chúc sinh nhật
+          </h2>
+        </div>
+        <div class="p-4">
+          <base-table id="tableHistory" api="buildApiUrlHistory" columns="historyTableColumns" pageSize="4" >
+        </base-table>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

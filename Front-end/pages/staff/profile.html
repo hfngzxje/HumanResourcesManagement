@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-input class="col-span-2" label="Họ và tên (*)" name="ten"
-                                                    required="true"></base-input>
+                                                    required="true" disabled></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input-phone label="Di động(*)" name="didong"
@@ -90,7 +90,7 @@
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-input validateBy="emailValid" label="Email (*)" name="email"
-                                                    required="true"></base-input>
+                                                    required="true" disabled></base-input>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-3 ">
                                                 <label-form-item name="Giới tính(*)"></label-form-item>
@@ -117,18 +117,18 @@
                                         <div class="grid grid-cols-3 gap-x-5">
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-select label="Chức Vụ Hiện Tại" name="chucvuhientai"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh" keyValue="id"
-                                                    keyLabel="ten" disabled></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/chucDanh"
+                                                    keyValue="id" keyLabel="ten" disabled></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-select label="Phòng" name="phong"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong" keyValue="id"
-                                                    keyLabel="ten" disabled></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/phong"
+                                                    keyValue="id" keyLabel="ten" disabled></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 ">
                                                 <base-select label="Tổ" name="to"
-                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to" keyValue="id"
-                                                    keyLabel="ten" disabled></base-select>
+                                                    api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/to"
+                                                    keyValue="id" keyLabel="ten" disabled></base-select>
                                             </div>
                                             <div class="col-span-2 sm:col-span-1 mt-2">
                                                 <base-datepicker label="Ngày vào ban" name="ngayvaoban"
@@ -150,7 +150,8 @@
                 <!-- ---------hidden Item--------------- -->
                 <div>
                     <base-input-number label="CMND(*)" name="cmnd" style="display: none;"></base-input-number>
-                    <base-select label="Dân tộc(*)" name="dantoc" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/danToc"
+                    <base-select label="Dân tộc(*)" name="dantoc"
+                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/danToc"
                         keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                     <base-input class="col-span-2" label="Nơi ở hiện nay(*)" name="tamtru"
                         style="display: none;"></base-input>
@@ -164,11 +165,40 @@
                         style="display: none;"></base-input>
                     <base-datepicker label="Ngày cấp(*)" name="cmndngaycap" style="display: none;"></base-datepicker>
                     <base-input label="Nơi cấp(*)" name="cmndnoicap" style="display: none;"></base-input>
-                    <base-select label="Tôn giáo" name="tongiao" api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/tonGiao"
+                    <base-select label="Tôn giáo" name="tongiao"
+                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/tonGiao"
                         keyValue="id" keyLabel="ten" style="display: none;"></base-select>
                     <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
-                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc" keyValue="id" keyLabel="ten"
-                        style="display: none;"></base-select>
+                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
+                        keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+
+                    <base-datepicker label="Ngày vào đoàn" name="ngayvaodoan" style="display: none;"></base-datepicker>
+                    <base-input class="ml-auto" label="Nơi tham gia" name="noithamgia"
+                        style="display: none;"></base-input>
+                    <base-select label="Tình trạng hôn nhân(*)" name="honnhan" options="MaritalOptions"
+                        validateBy="required" style="display: none;"></base-select>
+                    <base-input class="flex-1" label="Cơ quan tuyển dụng" name="coquantuyendung" style="display: none;"></base-input>
+                    <base-datepicker label="Ngày tuyển dụng" name="ngaytuyendung" class="flex-1" style="display: none;"></base-datepicker>
+                    <base-input class="flex-2" label="Công việc chính" name="congviecchinh" style="display: none;"></base-input>
+                    <base-select class="flex-1" label="Ngạch công chức" name="ngachcongchuc"
+                        api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/ngachCongChuc"
+                        keyValue="id" keyLabel="ten" style="display: none;"></base-select>
+                    <base-datepicker label="Ngày vào đảng" name="ngayvaodang" style="display: none;"></base-datepicker>
+                    <base-datepicker label="Ngày nhập ngũ" name="ngaynhapngu" style="display: none;"></base-datepicker>
+                    <base-datepicker label="Ngày xuất ngũ" name="ngayxuatngu" style="display: none;"></base-datepicker>
+                    <base-input label="Quân hàm cao nhất" name="quanhamcaonhat" style="display: none;"></base-input>
+                    <base-input class="col-span-2" label="Danh hiệu được phong tặng cao nhất"
+                        name="danhhieucaonhat" style="display: none;"></base-input>
+                    <base-checkbox label="Thương binh hạng" class="!mb-0" name="lathuongbinh" style="display: none;"></base-checkbox>
+                    <base-input class="flex-1" hide-label="true" name="thuongbinh" style="display: none;"></base-input>
+                    <base-checkbox label="Gia đình chính sách" class="!mb-0" name="laconchinhsach" style="display: none;"></base-checkbox>
+                    <base-input class="w-full" hide-label="true" name="conchinhsach" style="display: none;"></base-input>
+                    <base-input validateBy="cardValid" label="Mã số BHXH" name="bhxh" style="display: none;"></base-input>
+                    <base-input validateBy="cardValid" label="Mã số BHYT" name="bhyt" style="display: none;"></base-input>
+                    <base-input validateBy="atmValid" label="Số thẻ ATM" name="atm" style="display: none;"></base-input>
+                    <base-select label="Ngân hàng(*)" name="nganhang" options="BankList" validateBy="required"
+                        style="margin-top: 20px;display: none;" ></base-select>
+
                 </div>
                 <!-- ----------------------------------------- -->
             </form>
