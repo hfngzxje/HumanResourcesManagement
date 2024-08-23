@@ -153,7 +153,7 @@ namespace HumanResourcesManagement.Service
             {
                 Id = cm.Id,
                 Ten = cm.Ten,
-                TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(nv => nv.Id == cm.Id).Ten,
+                TenPhong = _context.TblDanhMucPhongBans.FirstOrDefault(nv => nv.Id == cm.Idphong).Ten,
                 Idphong = cm.Idphong,
                 Ma = cm.Ma.Trim()
             }).ToList();

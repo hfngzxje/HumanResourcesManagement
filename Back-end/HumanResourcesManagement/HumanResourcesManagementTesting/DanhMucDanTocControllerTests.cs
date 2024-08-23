@@ -38,7 +38,7 @@ namespace HumanResourcesManagement.Tests.Controllers
             // Setup mock service trả về danh sách
             _danhMucDanTocServiceMock.Setup(s => s.GetAllDanToc()).ReturnsAsync(_danhMucDanTocs);
         }
-
+        //Get all
         [Test]
         public async Task GetDanhMucDanToc_ReturnsOkResult_WithListOfDanToc()
         {
@@ -57,7 +57,7 @@ namespace HumanResourcesManagement.Tests.Controllers
                 Console.WriteLine($"Id: {dt.Id}, Tên: {dt.Ten}");
             }
         }
-
+        //get by id
         [Test]
         public async Task GetDanhMucDanTocById_ReturnsOkResult_WithDanhMucDanToc()
         {
@@ -81,7 +81,8 @@ namespace HumanResourcesManagement.Tests.Controllers
         public async Task RemoveDanToc_ReturnsStatusCode200_WhenDeletionIsSuccessful()
         {
             // Act
-            var result = await _controller.RemoveDanToc(1);
+            int id = 4;
+            var result = await _controller.RemoveDanToc(id);
 
             // Assert
             Assert.IsInstanceOf<ObjectResult>(result);
@@ -90,7 +91,7 @@ namespace HumanResourcesManagement.Tests.Controllers
             Assert.AreEqual("xoa dan toc thanh cong", objectResult.Value);
 
             // Xóa dân tộc có Id = 1 khỏi danh sách
-            var deletedDanToc = _danhMucDanTocs.FirstOrDefault(d => d.Id == 1);
+            var deletedDanToc = _danhMucDanTocs.FirstOrDefault(d => d.Id == id);
             _danhMucDanTocs.Remove(deletedDanToc);
 
             // In lại danh sách dân tộc sau khi xóa
@@ -100,12 +101,14 @@ namespace HumanResourcesManagement.Tests.Controllers
                 Console.WriteLine($"Id: {dt.Id}, Tên: {dt.Ten}");
             }
         }
-
+       
+        //Update success
         [Test]
         public async Task UpdateDanToc_ReturnsStatusCode200_WhenUpdateIsSuccessful()
         {
+            int id = 1;
             // Arrange
-            var req = new UpdateDanTocRequest { Id = 1, Ten = "Tà Ôi" };
+            var req = new UpdateDanTocRequest { Id = id, Ten = "Tà Ôi" };
 
             // Act
             var result = await _controller.UpdateDanToc(req);
@@ -117,7 +120,7 @@ namespace HumanResourcesManagement.Tests.Controllers
             Assert.AreEqual("cap nhat dan toc thanh cong", objectResult.Value);
 
             // Cập nhật dân tộc trong danh sách
-            var updatedDanToc = _danhMucDanTocs.FirstOrDefault(d => d.Id == 1);
+            var updatedDanToc = _danhMucDanTocs.FirstOrDefault(d => d.Id == id);
             if (updatedDanToc != null)
             {
                 updatedDanToc.Ten = req.Ten;
@@ -135,7 +138,7 @@ namespace HumanResourcesManagement.Tests.Controllers
         public async Task AddDanToc_ReturnsStatusCode200_WhenAdditionIsSuccessful()
         {
             // Arrange
-            var req = new InsertDanTocRequest { Ten = "Dao" };
+            var req = new InsertDanTocRequest { Ten = "Kinh" };
 
             // Act
             var result = await _controller.AddDanToc(req);
@@ -147,9 +150,9 @@ namespace HumanResourcesManagement.Tests.Controllers
             Assert.AreEqual("add thanh cong", objectResult.Value);
 
             // Thêm dân tộc mới vào danh sách
-            /*var newId = _danhMucDanTocs.Max(d => d.Id) + 1;
+            var newId = _danhMucDanTocs.Max(d => d.Id) + 1;
             var newDanToc = new TblDanhMucDanToc { Id = newId, Ten = req.Ten };
-            _danhMucDanTocs.Add(newDanToc);*/
+            _danhMucDanTocs.Add(newDanToc);
 
             // In danh sách dân tộc sau khi thêm mới
             Console.WriteLine("Danh sách dân tộc sau khi thêm mới:");
@@ -158,6 +161,5 @@ namespace HumanResourcesManagement.Tests.Controllers
                 Console.WriteLine($"Id: {dt.Id}, Tên: {dt.Ten}");
             }
         }
-
     }
 }

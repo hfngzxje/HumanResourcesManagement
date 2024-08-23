@@ -226,7 +226,7 @@ namespace HumanResourcesManagement.Controllers
         }
 
         [HttpGet("getByPhongBan")]
-        public async Task<IActionResult> GetByPhongBan(int idPhong, bool? gioiTinh)
+        public async Task<IActionResult> GetByPhongBan(int? idPhong, bool? gioiTinh)
         {
             try
             {
