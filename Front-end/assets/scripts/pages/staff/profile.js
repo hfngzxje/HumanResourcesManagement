@@ -24,6 +24,10 @@ var BankList = [
     { label: 'MSB', value: 'MSB' },
     { label: 'VP Bank', value: 'VPB' }
 ];
+var MaritalOptions = [
+    { label: 'Đã kết hôn', value: 1 },
+    { label: 'Chưa kết hôn', value: 0 },
+]
 
 function backToListUpdate() {
     const url = new URL("/pages/staff/profile.html", window.location.origin);
