@@ -7,6 +7,7 @@
         public DateTime? NgayBatDau { get; set; }
         public DateTime? NgayKetThuc { get; set; }
         public int? TrangThai { get; set; }
+        public string? MaNV { get; set; }
 
     }
 }

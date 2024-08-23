@@ -54,16 +54,16 @@ namespace HumanResourcesManagement.Service
                 throw new ArgumentException("Mã nhân viên không được để trống", nameof(maNV));
             }
 
-            var exists = await _context.TblKhenThuongKyLuats.AnyAsync(nv => nv.Ma == maNV);
-            if (!exists)
-            {
-                throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {maNV}");
-            }
+            //var exists = await _context.TblKhenThuongKyLuats.AnyAsync(nv => nv.Ma == maNV);
+            //if (!exists)
+            //{
+            //    throw new KeyNotFoundException($"Không tìm thấy nhân viên với mã {maNV}");
+            //}
 
-            if (_context.TblKhenThuongKyLuats == null)
-            {
-                return null;
-            }
+            //if (_context.TblKhenThuongKyLuats == null)
+            //{
+            //    return null;
+            //}
 
             var query = _context.TblKhenThuongKyLuats.Where(nv => nv.Ma == maNV);
 

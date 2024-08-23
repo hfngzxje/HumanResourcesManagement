@@ -42,18 +42,18 @@ namespace HumanResourcesManagement.Service
             {
                 throw new ArgumentNullException(nameof(req), "DanhMucTo không được để trống.");
             }
-            //var exists = await _context.TblDanhMucTos.AnyAsync(cm => cm.Ma == req.Ma);
-            //if (exists)
-            //{
-            //    throw new InvalidOperationException($"Mã '{req.Ma}' đã tồn tại.");
-            //}
-            var cdTen = await _context.TblDanhMucTos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
-            if (cdTen != null)
+
+            var existingToInSamePhong = await _context.TblDanhMucTos
+                .AnyAsync(to => to.Ten == req.Ten && to.Idphong == req.Idphong); 
+
+            if (existingToInSamePhong)
             {
-                throw new Exception($"Tên '{req.Ten}' đã tồn tại");
+                throw new Exception($"Tổ '{req.Ten}' đã tồn tại trong phòng này.");
             }
+
             var danhMucTo = _mapper.Map<TblDanhMucTo>(req);
             danhMucTo.Ma = GenerateCodeFromName(req.Ten);
+
             _context.TblDanhMucTos.Add(danhMucTo);
             await _context.SaveChangesAsync();
         }
@@ -124,15 +124,16 @@ namespace HumanResourcesManagement.Service
                 {
                     throw new KeyNotFoundException($"Không tìm thấy tổ với id {id}");
                 }
-                var cdTen = await _context.TblDanhMucTos.FirstOrDefaultAsync(d => d.Ten == req.Ten);
-                if (cdTen != null)
+
+                var cdTenInSamePhong = await _context.TblDanhMucTos
+                    .FirstOrDefaultAsync(d => d.Ten == req.Ten && d.Idphong == req.Idphong && d.Id != id); 
+
+                if (cdTenInSamePhong != null)
                 {
-                    throw new Exception($"Tên '{req.Ten}' đã tồn tại");
+                    throw new Exception($"Tên '{req.Ten}' đã tồn tại trong phòng này.");
                 }
 
                 _mapper.Map(req, danhMucTo);
-
-                danhMucTo.Id = id;
 
                 _context.TblDanhMucTos.Update(danhMucTo);
                 await _context.SaveChangesAsync();
@@ -142,6 +143,7 @@ namespace HumanResourcesManagement.Service
                 throw new Exception(ex.Message);
             }
         }
+
 
         public async Task<IEnumerable<DanhMucToResponse>> GetDanhMucToByPhong(int phongId)
         {

@@ -27,18 +27,6 @@ namespace HumanResourcesManagement.Controllers
                 var listKhenThuongKiLuat = await _khenThuongKiLuatService.GetKhenThuongKyLuatByMaNV(maNV, khenThuongOrKiLuat);
                 return Ok(listKhenThuongKiLuat);
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
