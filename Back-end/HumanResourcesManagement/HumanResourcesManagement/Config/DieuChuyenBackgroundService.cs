@@ -20,7 +20,9 @@ namespace HumanResourcesManagement.Config
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var currentTime = DateTime.Now;
-            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 3, 0, 0);
+            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 1, 30, 0);
+
+            if (currentTime > scheduledTime)
             {
                 scheduledTime = scheduledTime.AddDays(1);
             }
@@ -38,7 +40,7 @@ namespace HumanResourcesManagement.Config
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var dieuChuyenService = scope.ServiceProvider.GetRequiredService<DieuChuyenService>();
-                    dieuChuyenService.CheckAndProcessDieuChuyen().Wait(); 
+                    dieuChuyenService.CheckAndProcessDieuChuyen().Wait();
                 }
             }
             catch (Exception ex)
