@@ -1,4 +1,4 @@
-﻿using HumanResourcesManagement.Service;
+﻿﻿using HumanResourcesManagement.Service;
 
 namespace HumanResourcesManagement.Config
 {
@@ -15,7 +15,7 @@ namespace HumanResourcesManagement.Config
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var currentTime = DateTime.Now;
-            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day, 3, 0, 0);
+            var scheduledTime = new DateTime(currentTime.Year, currentTime.Month, currentTime.Day,  0, 51, 0);
 
             if (currentTime > scheduledTime)
             {
