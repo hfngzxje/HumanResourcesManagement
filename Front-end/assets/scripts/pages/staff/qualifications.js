@@ -263,7 +263,9 @@ function buildApiUrl1() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
     renderActionByStatus()
     popupRemoveTrinhDoBtn.addEventListener("click", handleRemoveTrinhDo)
     popupUpdateTrinhDobtn.addEventListener("click", handleSaveTrinhDo)

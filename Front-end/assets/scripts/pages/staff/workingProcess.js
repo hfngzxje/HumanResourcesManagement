@@ -281,8 +281,10 @@ function renderActionByStatus() {
 function buildApiUrlChuyenDen() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen/getLichSuDieuChuyen?maNV=' + maDetail
 }
-document.addEventListener('DOMContentLoaded', () => {
-    getHopDong()
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await getHopDong()
     fetchDieuChuyen()
     renderActionByStatus()
     inits()

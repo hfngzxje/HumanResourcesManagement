@@ -53,13 +53,11 @@ function getImage() {
                 console.error('Image element not found');
                 return;
             }
-            // Check if data is defined and is a valid base64 string
             if (data && typeof data === 'string' && data.trim() !== '') {
                 imgEl.setAttribute('src', `data:image/png;base64,${data}`);
                 imgEl.classList.remove('opacity-0');
             } else {
-                // console.log('Invalid or empty base64 data');
-                imgEl.setAttribute('src', ''); // Optionally, set a placeholder or error image
+                imgEl.setAttribute('src', ''); 
             }
         },
         error: (err) => {
@@ -114,7 +112,6 @@ async function handleSave() {
     const { anh, ...rest } = getFormValues('resume_form')
 
     const formValue = getFormValues('resume_form')
-    // formValue['ten'] = 
     const payload = buildPayload(rest)
     setLoading(true)
     $.ajax({

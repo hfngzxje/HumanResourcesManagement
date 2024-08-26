@@ -43,7 +43,7 @@ var historyTableColumns = [
   },
   {
     label: "Ngày sinh nhật",
-    key: "sentDataTime",
+    key: "sentDateTime",
     type: 'datetime'
   },
   {

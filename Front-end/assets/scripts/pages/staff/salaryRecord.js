@@ -530,7 +530,7 @@ async function getHopDong() {
             method: 'GET',
             contentType: 'application/json',
         });
-        if (Array.isArray(response) && response.length > 0) { 
+        if (Array.isArray(response) && response.length > 0) {
             console.log("Hợp lệ")
         }
         else {
@@ -549,8 +549,10 @@ function inits() {
     handleBacLuong()
     handlePhuCapKhac()
 }
-document.addEventListener('DOMContentLoaded',async () => {
-   await getHopDong()
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await getHopDong()
     renderActionByStatus()
     inits()
     popupRemoveBtn.addEventListener("click", handleRemove)

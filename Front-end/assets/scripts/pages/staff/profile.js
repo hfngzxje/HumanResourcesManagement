@@ -193,26 +193,9 @@ function renderActionByStatus() {
     actionEl.append(saveBtn, clear)
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
     renderActionByStatus()
     fetchEmployee()
     getImage()
-
-    // const apiUrl = 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/id?id=' + maDetail;
-
-    // // Thực hiện yêu cầu API
-    // fetch(apiUrl)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         // Cập nhật nội dung của thẻ <p>
-    //         const nameText = document.getElementById('name-text');
-    //         nameText.textContent = data.ten; // Giả sử API trả về một thuộc tính `description`
-    //         const emailText = document.getElementById('email-text');
-    //         emailText.textContent = data.email; 
-    //         const anh = document.getElementById('anh_text');
-    //         // anh.alt = data.anh; 
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching the data:', error);
-    //     });
 })

@@ -254,7 +254,9 @@ function renderActionByStatus() {
 function buildApiUrl2() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
     renderActionByStatus()
 
     popupRemoveNgoaiNguBtn.addEventListener("click", handleRemoveNgoaiNgu)

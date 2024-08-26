@@ -81,8 +81,8 @@ var TableColumns = [
   }
 ]
 var vaiTro = [
-  { label: 'Nhân viên', value: 1 },
-  { label: 'HR', value: 2 }
+  { label: 'Nhân viên', value: 2 },
+  { label: 'HR', value: 1 }
 ];
 
 window.history.pushState(null, null, window.location.href);

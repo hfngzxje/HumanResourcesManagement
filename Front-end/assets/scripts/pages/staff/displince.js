@@ -150,7 +150,9 @@ function buildApiUrlKyLuat() {
     return string1 + string2;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
     renderActionByStatus()
 
 })

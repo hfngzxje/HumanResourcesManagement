@@ -249,7 +249,8 @@ function buildApiUrl() {
     return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/HopDong/GetHopDongByMaNV/id?id=' + maDetail
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
     renderActionByStatus()
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupSaveBtn.addEventListener("click", handleSave)
