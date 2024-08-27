@@ -85,7 +85,7 @@ class CustomSidebar extends HTMLElement {
       <li><a class="app-menu__item" href="/pages/history/history.html"><i class='app-menu__icon bx bx-history'></i><span
             class="app-menu__label">Lịch sử hoạt động </span></a>
       </li>
-      <li><a id="btn" class="app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
+      <li><a id="btn" class="changePassword app-menu__item" href="#"><i class='app-menu__icon bx bx-key'></i><span class="app-menu__label">Đổi mật khẩu</span></a></li>
     </ul>
   </aside>
 
@@ -195,6 +195,10 @@ class CustomSidebar extends HTMLElement {
 
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
+        console.log("Item: ", item)
+        const isChangePassBtn =  item.classList.contains('changePassword')
+        if(isChangePassBtn) return
+
         menuItems.forEach(el => el.classList.remove('active'));
         item.classList.add('active');
       });
@@ -278,7 +282,7 @@ class BaseDatePicker extends HTMLElement {
     <div class="flex flex-col h-full w-full">
       <label for="base-input" class="block  text-sm  text-gray-900">${label}</label>
       <div class="relative max-w-sm">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none h-[55px]">
           <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
           </svg>
@@ -527,11 +531,11 @@ class BaseUpload extends HTMLElement {
 
     this.innerHTML = `
      <div class="flex items-center justify-center w-full h-full">
-    <label for="dropzone-file" class="flex flex-col items-center justify-center  min-h-60  border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-ffffff relative overflow-hidden">
+    <label for="dropzone-file" class="flex flex-col items-center justify-center  h-60 w-60 border-2 border-gray-300 border-dashed rounded-full cursor-pointer bg-ffffff relative overflow-hidden">
         <img 
             id="${idImage}"
             src="" 
-            class="absolute h-full w-full object-cover rounded-full opacity-0 bg-ffffff"
+            class="absolute h-full w-full object-cover rounded-full h-60 w-60 opacity-0 bg-ffffff"
         />
         <div class="flex flex-col items-center justify-center pt-5 pb-6">
             <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -871,6 +875,7 @@ class BaseTable extends HTMLElement {
       // xử lý phần hiển thị phân trang
       function renderPagination() {
         paginationEl.innerHTML = "";
+        if(totalPage === 0) return
         // Nút "Previous"
         // Nút "Previous"
         const prevButton = document.createElement("button");
@@ -978,6 +983,8 @@ class BaseTable extends HTMLElement {
           type: method, // phương thức
           data: payload,
           success: (tableData) => {
+            console.log('tableData ', tableData);
+            
             const arg = sortType === "ASC" ? 1 : -1;
             // Kiểm tra xem tableData có phải là một mảng không
             if (Array.isArray(tableData)) {
@@ -993,6 +1000,7 @@ class BaseTable extends HTMLElement {
             } else {
               setTableData([]);
               renderTable();
+              renderPagination();
             }
           },
           error: (xhr, status, error) => {

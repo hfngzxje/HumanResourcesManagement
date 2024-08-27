@@ -75,7 +75,17 @@ function fetchEmployee() {
         url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/GetById?id=' + maDetail,
         method: 'GET',
         success: function (data) {
+            if(!data.dantoc){
+                data.dantoc = 1
+            }
+            if(!data.tongiao){
+                data.tongiao = 1
+            }
+            if(!data.ngachcongchuc){
+                data.ngachcongchuc = 1
+            }
             setFormValue('resume_form', data)
+            console.log("Data: ", data)
         },
         error: (err) => {
             console.log('fetchEmployee err :: ', err);

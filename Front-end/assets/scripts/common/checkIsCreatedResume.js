@@ -1,5 +1,9 @@
 const redirectUrlLabor = '../staff/laborContract.html'
 async function checkIsCreatedLabor() {
+    if(!maDetail){
+        console.log("Khong co ma detail")
+        return
+    }
     console.log(maDetail)
     try {
         const response = await $.ajax({
@@ -21,6 +25,10 @@ async function checkIsCreatedLabor() {
 }
 const redirectUrlResume = '../staff/resume.html'
 async function checkIsUpdateResume() {
+    if(!maDetail){
+        console.log("Khong co ma detail")
+        return
+    }
     console.log(maDetail)
     try {
         const response = await $.ajax({
@@ -43,6 +51,10 @@ async function checkIsUpdateResume() {
 
 const redirectUrlSalary = '../staff/salaryRecord.html'
 async function checkIsCreatedSalary() {
+    if(!maDetail){
+        console.log("Khong co ma detail")
+        return
+    }
     console.log(maDetail)
     try {
         const response = await $.ajax({

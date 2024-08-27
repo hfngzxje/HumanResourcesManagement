@@ -69,10 +69,15 @@ var TableColumns = [
         label: 'Trạng thái',
         key: 'trangthai',
         formatGiaTri: (value) => {
+            console.log("Value:", value)
             let result = { text: 'Hết hạn', color: 'red' };
             if (value === 1) {
                 result.text = 'Còn hạn';
                 result.color = 'blue';
+            }
+            else if(!value){
+                result.text = 'Chờ duyệt';
+                result.color = 'orange';
             }
             return result;
         }
