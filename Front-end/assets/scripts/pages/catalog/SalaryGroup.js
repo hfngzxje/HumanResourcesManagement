@@ -307,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    // popupClearBtn.addEventListener("click", clearFormValues('editNhomLuong'))
 
 
     const selectNgach = document.querySelector('base-select[name="ngachcongchuc"]');

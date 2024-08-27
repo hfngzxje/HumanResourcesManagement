@@ -145,6 +145,15 @@ async function handleSave() {
         contentType: 'application/json',
         data: JSON.stringify(payload),
         success: function (data) {
+            if(!data.dantoc){
+                data.dantoc = 1
+            }
+            if(!data.tongiao){
+                data.tongiao = 1
+            }
+            if(!data.ngachcongchuc){
+                data.ngachcongchuc = 1
+            }
             if (anh) {
                 uploadImage(anh);
                 showSuccess("Cập nhật thành công !")

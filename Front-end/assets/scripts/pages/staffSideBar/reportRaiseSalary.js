@@ -241,12 +241,12 @@ async function fetchSalaryRecent(ma) {
 
         if (Array.isArray(filteredData) && filteredData.length > 0) {
             const lastItem = filteredData[filteredData.length - 1];
+            console.log(lastItem)
             setFormValue('editSalaryUp', lastItem);
             idNhomLuong = lastItem.nhomluong;
             document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
             document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
             document.querySelector('#phuCapKhacPop input').value = formatCurrency(lastItem.phucapkhac);
-            document.querySelector('#tongLuongNangLuong input').value = formatCurrency(lastItem.tongluong);
             await getDuLieuNhomLuong('#luongCoBanPop input');
             await getNgachCongChuc('#ngachCongChucPop input');
         } else {
@@ -276,9 +276,9 @@ async function fetchSalaryUp(ma) {
             const lastItem = filteredData[filteredData.length - 1];
             setFormValue('salaryRecord_form', lastItem);
             idNhomLuong = lastItem.nhomluong;
-            document.querySelector('#tongLuongPop input').value = formatCurrency(lastItem.tongluong);
-            document.querySelector('#phuCapPop input').value = formatCurrency(lastItem.phucaptrachnhiem);
-            document.querySelector('#phuCapKhacPop input').value = formatCurrency(lastItem.phucapkhac);
+            document.querySelector('#tongLuongNangLuong input').value = formatCurrency(lastItem.tongluong);
+            document.querySelector('#phuCapNangLuong input').value = formatCurrency(lastItem.phucaptrachnhiem);
+            document.querySelector('#phuCapKhacNangLuong input').value = formatCurrency(lastItem.phucapkhac);
             await getDuLieuNhomLuong('#luongCoBanNangLuong input');
             await getNgachCongChuc('#ngachCongChucNangLuong input');
         } else {
