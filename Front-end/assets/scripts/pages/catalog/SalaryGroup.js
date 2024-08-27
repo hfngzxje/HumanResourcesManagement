@@ -3,7 +3,7 @@ let isPopupEdit = false
 const popupCreateBtn = document.getElementById("createBtn")
 const popupSaveBtn = document.getElementById("saveBtn")
 const popupRemoveBtn = document.getElementById("removeBtn")
-const popupClearBtn = document.getElementById("clearBtn")
+// const popupClearBtn = document.getElementById("clearBtn")
 const table = document.querySelector('base-table')
 const maNhanVien = localStorage.getItem('maNhanVien')
 
@@ -266,14 +266,14 @@ function showPopup() {
         popupSaveBtn.setAttribute('disabled', '');
         popupSaveBtn.classList.remove('hidden')
         popupCreateBtn.classList.add('hidden')
-        popupClearBtn.classList.add('hidden')
+        // popupClearBtn.classList.add('hidden')
     } else {
         const popupTitle = modal.querySelector('h2')
         popupTitle.textContent = "Thêm mới nhóm lương"
         popupSaveBtn.classList.add('hidden')
         popupRemoveBtn.classList.add('hidden')
         popupCreateBtn.classList.remove('hidden')
-        popupClearBtn.classList.remove('hidden')
+        // popupClearBtn.classList.remove('hidden')
     }
 }
 
@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     popupCreateBtn.addEventListener("click", handleCreate)
     popupRemoveBtn.addEventListener("click", handleRemoveRow)
-    popupClearBtn.addEventListener("click", clearFormValues('editNhomLuong'))
+    // popupClearBtn.addEventListener("click", clearFormValues('editNhomLuong'))
 
 
     const selectNgach = document.querySelector('base-select[name="ngachcongchuc"]');

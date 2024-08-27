@@ -183,14 +183,11 @@ function renderActionByStatus() {
         return btnEl
     }
     const saveBtn = buildButton('Lưu', '', 'bx bx-save')
-    const clear = buildButton('Clear', 'plain', 'bx bx-eraser')
-
+   
     saveBtn.addEventListener('click', handleSave)
-    clear.addEventListener('click', function () {
-        clearFormValues('profile_form');
-    });
+    
 
-    actionEl.append(saveBtn, clear)
+    actionEl.append(saveBtn)
 }
 
 document.addEventListener('DOMContentLoaded',async () => {
