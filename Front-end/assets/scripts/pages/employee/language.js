@@ -1,44 +1,35 @@
 
-let idTrinhDo = null
+let idNgoaiNgu = null
 let isPopupEdit = false
 const vaiTroID = localStorage.getItem("vaiTroID")
-const maDetail = localStorage.getItem("maDetail")
+const maDetail = localStorage.getItem("maNhanVien")
 const table = document.querySelectorAll('base-table')
-const popupRemoveTrinhDoBtn = document.getElementById("deleteBtn")
-const popupUpdateTrinhDobtn = document.getElementById("updateBtn")
-let oldTruong = null;
-let oldChuyenNganh = null;
 
-var TableColumns1 = [
+const popupRemoveNgoaiNguBtn = document.getElementById("deleteNgoaiNguBtn")
+const popupUpdateNgoaiNgubtn = document.getElementById("updateNgoaiNguBtn")
+
+
+var TableColumns2 = [
     {
         label: 'Mã nhân viên',
         key: 'ma'
     },
     {
-        label: 'Tên trường',
-        key: 'tentruong'
+        label: 'Ngoại ngữ',
+        key: 'tenNgoaiNgu'
     },
     {
-        label: 'Chuyên ngành',
-        key: 'tenChuyenNganh',
+        label: 'Ngày cấp',
+        key: 'ngaycap',
+        type: 'datetime'
+    },
+    {
+        label: 'Nơi cấp',
+        key: 'noicap'
     },
     {
         label: 'Trình độ',
-        key: 'tenTrinhDo'
-    },
-    {
-        label: 'Từ',
-        key: 'tuthoigian',
-        type: 'datetime'
-    },
-    {
-        label: 'Đến',
-        key: 'denthoigian',
-        type: 'datetime'
-    },
-    {
-        label: 'Hình thức đào tạo',
-        key: 'tenHinhThuc'
+        key: 'trinhdo'
     },
     {
         label: 'Hành động',
@@ -47,9 +38,8 @@ var TableColumns1 = [
             {
                 type: 'plain', icon: 'bx bx-save', label: 'Sửa', onClick: (row) => {
                     isPopupEdit = true
-                    console.log('row click ', row);
-                    fetchTrinhDo(row.id);
-                    showPopup("editTrinhDo")
+                    fetchNgoaiNgu(row.id);
+                    showPopup("editNgoaiNgu")
                 }
             }
         ]
@@ -67,7 +57,7 @@ function showPopup(formId) {
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            clearFormValues("editTrinhDo");
+            clearFormValues("editNgoaiNgu")
         }
     }
     var closeButton = modal.querySelector('.close');
@@ -78,7 +68,7 @@ function showPopup(formId) {
 function closePopup(formId) {
     var modal = document.getElementById(formId);
     modal.style.display = "none"
-    clearFormValues("editTrinhDo")
+    clearFormValues("editNgoaiNgu")
 }
 function buildPayload(formValue) {
     const formClone = { ...formValue }
@@ -90,21 +80,25 @@ function buildPayload(formValue) {
 
 function buildPayload1(formValue) {
     const formClone = { ...formValue }
+
     formClone['id'] = idNgoaiNgu
+
     return formClone
 }
-function fetchTrinhDo(id) {
+
+// -------------------------------------------------------------------------------------------------------------------------------
+
+
+function fetchNgoaiNgu(id) {
     setLoading(true)
-    idTrinhDo = id
+    idNgoaiNgu = id
     $.ajax({
 
-        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaById/' + id,
+        url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguById/' + id,
         method: 'GET',
         success: function (data) {
-            setFormValue('editTrinhDo', data, 'fetch');
-            setFormValue('editTrinhDo', data)
-            oldTruong = data.tentruong
-            oldChuyenNganh = data.chuyennganh
+            setFormValue('editNgoaiNgu', data, 'fetch');
+            setFormValue('editNgoaiNgu', data)
         },
         error: (err) => {
             console.log('fetchContract err :: ', err);
@@ -115,26 +109,24 @@ function fetchTrinhDo(id) {
     });
 }
 
-async function handleCreateTrinhDo() {
-    await showConfirm("Bạn có chắc chắn muốn thêm mới trình độ ?")
-    const valid = validateForm('trinhDo_form')
+async function handleCreateNgoaiNgu() {
+    await showConfirm("Bạn có chắc chắn muốn thêm mới ngoại ngữ ?")
+    const valid = validateForm('ngoaiNgu_form')
     if (!valid) return
-    const formValue = getFormValues('trinhDo_form')
-
+    const formValue = getFormValues('ngoaiNgu_form')
     formValue['ma'] = maDetail;
     console.log('formValue ', formValue);
-    const payload = buildPayload(formValue)
+    const payload = buildPayload1(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
 
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/addTrinhDoVanHoa',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/addNgoaiNgu',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
                 showSuccess('Tạo Thành Công!');
-                recordActivityAdmin(maNhanVien, `Thêm mới trình độ nhân viên ${maDetail}: Trường_${formValue.tentruong}`);
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
@@ -163,17 +155,17 @@ async function handleCreateTrinhDo() {
     }, 1000);
 }
 
-async function handleRemoveTrinhDo() {
-    await showConfirm("Bạn có chắc chắn muốn xóa trình độ ?")
+async function handleRemoveNgoaiNgu(id) {
+    await showConfirm("Bạn có chắc chắn muốn xóa ngoại ngữ ?")
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/deleteTrinhDoVanHoa/' + idTrinhDo,
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/deleteNgoaiNgu/' + idNgoaiNgu,
             method: 'DELETE',
             success: function (data) {
                 showSuccess('Xóa Thành Công!');
-                recordActivityAdmin(maNhanVien, `Xóa trình độ nhân viên ${maDetail} : ${oldTruong}`);
-                closePopup("editTrinhDo")
+                // recordActivityAdmin(maNhanVien, `Xóa ngoại ngữ ${maDetail} : ${oldng}`);
+                closePopup("editNgoaiNgu")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
@@ -192,25 +184,24 @@ async function handleRemoveTrinhDo() {
     }, 1000);
 }
 
-async function handleSaveTrinhDo() {
-    await showConfirm("Bạn có chắc chắn muốn sửa trình độ ?")
-    const valid = validateForm('editTrinhDo')
+async function handleSaveNgoaiNgu() {
+    await showConfirm("Bạn có chắc chắn muốn sửa ngoại ngữ ?")
+    const valid = validateForm('editNgoaiNgu')
     if (!valid) return
-    const formValue = getFormValues('editTrinhDo')
-    formValue['id'] = idTrinhDo
-    const payload = buildPayload(formValue)
+    const formValue = getFormValues('editNgoaiNgu')
+    formValue['id'] = idNgoaiNgu
+    const payload = buildPayload1(formValue)
     setLoading(true)
     setTimeout(() => {
         $.ajax({
-            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/updateTrinhDoVanHoa',
+            url: 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/updateNgoaiNgu',
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(payload),
             success: function (data) {
-                console.log('fetchTrinhDo res :: ', data);
-                showSuccess('Lưu Thành Công!')
-                recordActivityAdmin(maNhanVien, `Sửa trình độ nhân viên ${maDetail}: ${payload.tentruong}`);
-                closePopup("editTrinhDo")
+                console.log('fetchNgoaiNgu res :: ', data);
+                showSuccess('Lưu Thành Công!');
+                closePopup("editNgoaiNgu")
                 table.forEach(table => {
                     if (table.handleCallFetchData) {
                         table.handleCallFetchData();
@@ -239,8 +230,8 @@ async function handleSaveTrinhDo() {
     }, 1000);
 }
 
-// -------------------------------------------------------------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------------------------------------------------------------
 function renderActionByStatus() {
     const actionEl = document.getElementById('qualification_form_action')
     const buildButton = (id,label, type, icon) => {
@@ -251,26 +242,23 @@ function renderActionByStatus() {
         btnEl.setAttribute('icon', icon)
         return btnEl
     }
-    const createTrinhDo = buildButton('themId','Thêm', 'green', 'bx bx-plus')
-    // createTrinhDo.addEventListener('click', handleCreateTrinhDo)
-    createTrinhDo.addEventListener('click', handleCreateTrinhDo)
 
-    actionEl.append(createTrinhDo)
+    const actionE2 = document.getElementById('Language_form_action')
 
+    const createNgoaiNgu = buildButton('themId','Thêm', 'green', 'bx bx-plus')
+    createNgoaiNgu.addEventListener('click', handleCreateNgoaiNgu)
+
+    actionE2.append(createNgoaiNgu)
 }
 
-function buildApiUrl1() {
-    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/TrinhDoVanHoa/getTrinhDoVanHoaByMaNV/' + maDetail
+function buildApiUrl2() {
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NgoaiNgu/getNgoaiNguByMaNV/' + maDetail
 }
-
 document.addEventListener('DOMContentLoaded',async () => {
-    await checkIsUpdateResume()
-    await checkIsCreatedLabor()
-    await checkIsCreatedSalary()
     renderActionByStatus()
-    popupRemoveTrinhDoBtn.addEventListener("click", handleRemoveTrinhDo)
-    popupUpdateTrinhDobtn.addEventListener("click", handleSaveTrinhDo)
+
+    popupRemoveNgoaiNguBtn.addEventListener("click", handleRemoveNgoaiNgu)
+    popupUpdateNgoaiNgubtn.addEventListener("click", handleSaveNgoaiNgu)
 
 })
-
 

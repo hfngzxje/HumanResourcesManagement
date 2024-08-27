@@ -1,6 +1,6 @@
-var maDetail = null
+var ma = null
 const table = document.querySelectorAll('base-table')
-
+const maDetail = localStorage.getItem('maDetail')
 let maHopDongHienTai = null
 var TableColumns = [
     {
@@ -68,7 +68,7 @@ async function getMaNhanVienDauTien() {
             contentType: 'application/json',
         });
         const nhanVienDauTien = response[0]
-        maDetail = nhanVienDauTien.ma
+        ma = nhanVienDauTien.ma
 
     } catch (error) {
         console.log("Error", "ajaj")
@@ -77,7 +77,7 @@ async function getMaNhanVienDauTien() {
 async function maNhanVienChange() {
     const ma = document.querySelector('#maNhanVien select')
     ma.addEventListener("change", (event) => {
-        maDetail = event.target.value;
+        ma = event.target.value;
     });
 }
 
@@ -88,7 +88,7 @@ async function handleCreate() {
     const formValue = getFormValues('createDisciple')
 
 
-    formValue['ma'] = maDetail;
+    formValue['ma'] = ma;
     formValue['khenthuongkiluat'] = '2'
     console.log('formValue ', formValue);
     const payload = buildPayload(formValue)
@@ -209,7 +209,10 @@ function dateChange() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',  async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     dateChange()
     renderActionByStatus()
 })

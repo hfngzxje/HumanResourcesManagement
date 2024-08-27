@@ -2,7 +2,7 @@
 let idTrinhDo = null
 let isPopupEdit = false
 const vaiTroID = localStorage.getItem("vaiTroID")
-const maDetail = localStorage.getItem("maDetail")
+const maDetail = localStorage.getItem("maNhanVien")
 const table = document.querySelectorAll('base-table')
 const popupRemoveTrinhDoBtn = document.getElementById("deleteBtn")
 const popupUpdateTrinhDobtn = document.getElementById("updateBtn")
@@ -264,9 +264,7 @@ function buildApiUrl1() {
 }
 
 document.addEventListener('DOMContentLoaded',async () => {
-    await checkIsUpdateResume()
-    await checkIsCreatedLabor()
-    await checkIsCreatedSalary()
+
     renderActionByStatus()
     popupRemoveTrinhDoBtn.addEventListener("click", handleRemoveTrinhDo)
     popupUpdateTrinhDobtn.addEventListener("click", handleSaveTrinhDo)

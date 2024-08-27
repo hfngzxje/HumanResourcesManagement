@@ -19,3 +19,10 @@ var TableColumns = [
         key: 'createdBy'
     }
 ]
+const maDetail = localStorage.getItem('maDetail')
+
+document.addEventListener("DOMContentLoaded",async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
+});

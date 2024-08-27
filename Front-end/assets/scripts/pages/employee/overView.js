@@ -1,5 +1,6 @@
 const isEdit = !!id;
 // const ma = localStorage.getItem("maNhanVien");
+const maDetail = localStorage.getItem('maDetail')
 let idNguoiThan = null;
 const ma = localStorage.getItem("maNhanVien")
 
@@ -265,11 +266,13 @@ function fetchDisciplineCount() {
 //     });
 // }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     fetchFamilyRelationshipCount();
     fetchLaborContractCount();
     fetchSalaryCount();
     fetchAwardCount();
     fetchDisciplineCount();
-    // fetchBaoCao();
 });

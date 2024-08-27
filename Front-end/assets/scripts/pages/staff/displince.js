@@ -153,6 +153,7 @@ function buildApiUrlKyLuat() {
 document.addEventListener('DOMContentLoaded',async () => {
     await checkIsUpdateResume()
     await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     renderActionByStatus()
 
 })

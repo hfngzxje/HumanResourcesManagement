@@ -284,6 +284,7 @@ function buildApiUrlChuyenDen() {
 document.addEventListener('DOMContentLoaded',async () => {
     await checkIsUpdateResume()
     await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     await getHopDong()
     fetchDieuChuyen()
     renderActionByStatus()

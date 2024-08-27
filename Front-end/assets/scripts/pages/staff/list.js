@@ -3,6 +3,7 @@ const popupCreateBtn = document.getElementById("createBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 const maNhanVien = localStorage.getItem("maNhanVien")
 const table = document.querySelector('base-table')
+const maDetail = localStorage.getItem('maDetail')
 var MaritalOptions = [
   { label: 'Đã kết hôn', value: 1 },
   { label: 'Chưa kết hôn', value: 0 },
@@ -244,10 +245,48 @@ function inits() {
   handlePhongBan()
   getToTheoPhongBanDauTien()
 }
+async function handleSearch() {
+  try {
+    const formValue = getFormValues("report_form");
+    const tableReport = document.getElementById("tableReport");
+
+    // Khởi tạo đối tượng params
+    const params = {
+      search: formValue.search || ""
+    };
+    await tableReport.handleCallFetchData(params);
+
+  } catch (error) {
+    console.error("Error in handleSearch:", error);
+  }
+}
+var keySearch = null
+function searchChange() {
+  const searchInput = document.querySelector('#search input');
+  if (searchInput) {
+    searchInput.addEventListener("input", (event) => {
+      keySearch = event.target.value;
+      handleSearch();
+    });
+  }
+}
 
 
-document.addEventListener('DOMContentLoaded', () => {
+function ReturnApi(){
+  if(keySearch === null){
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/Search?search' 
+  }
+  else{
+    return 'https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien/Search?search='+keySearch 
+  }
+}
+document.addEventListener('DOMContentLoaded',async () => {
+  await checkIsUpdateResume()
+  await checkIsCreatedLabor()
+  await checkIsCreatedSalary()
+  await searchChange()
+  await inits()
   popupCreateBtn.addEventListener("click", handleCreate)
   popupClearBtn.addEventListener("click", clearFormValue)
-  inits()
+  
 })

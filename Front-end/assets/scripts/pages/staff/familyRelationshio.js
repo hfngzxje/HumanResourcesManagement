@@ -290,6 +290,7 @@ function buildApiUrl() {
 document.addEventListener('DOMContentLoaded',async () => {
     await checkIsUpdateResume()
     await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     renderActionByStatus();
     popupRemoveBtn.addEventListener("click", handleRemove)
     popupUpdatebtn.addEventListener("click", handleSave)

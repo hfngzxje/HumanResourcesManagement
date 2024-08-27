@@ -257,6 +257,7 @@ function buildApiUrl2() {
 document.addEventListener('DOMContentLoaded',async () => {
     await checkIsUpdateResume()
     await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     renderActionByStatus()
 
     popupRemoveNgoaiNguBtn.addEventListener("click", handleRemoveNgoaiNgu)

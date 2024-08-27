@@ -1,4 +1,5 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/BaoCao/getBaoCaoDanhSachNhanVien";
+const maDetail = localStorage.getItem('maDetail')
 var TableColumns = [
   {
     label: "Mã nhân viên",
@@ -267,7 +268,10 @@ function renderActionByStatus() {
   actionEl.append(pdfBtn, excelBtn);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",async () => {
+  await checkIsUpdateResume()
+  await checkIsCreatedLabor()
+  await checkIsCreatedSalary()
   renderActionByStatus()
   handleSearch()
   inits()

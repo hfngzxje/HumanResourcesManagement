@@ -216,7 +216,7 @@ class BaseInput extends HTMLElement {
   ];
 
   connectedCallback() {
-    const label = this.getAttribute("label") || "Base input";
+    const label = this.getAttribute("label") || "";
     const hideLabel = !this.getAttribute("hide-label");
     const name = this.getAttribute("name");
     const required = this.getAttribute("required");
@@ -1235,8 +1235,7 @@ customElements.define('custom-navigation', CustomAlertNagivation);
 customElements.define('custom-alert', CustomAlert);
 customElements.define('custom-error', CustomAlertEror);
 customElements.define('custom-success', CustomAlertSuccess);
-//  1 : Tên thẻ mình tự địnch nghĩa dùng trong các file html phải nhúng file registerComponent.js này vào file js mới dùng được
-customElements.define(/** 1*/ "layout-header", /** 2*/ CustomHeader); // 2 Class định nghĩa rằng khi dùng thẻ có tên được định nghĩa kia thì màn hình sẽ hiện thị như thế nào
+customElements.define(/** 1*/ "layout-header", /** 2*/ CustomHeader); 
 customElements.define(/** 1*/ "layout-footer", /** 2*/ CustomFooter);
 customElements.define("layout-sidebar", CustomSidebar);
 customElements.define("base-input", BaseInput);

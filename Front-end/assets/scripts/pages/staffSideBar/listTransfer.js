@@ -1,5 +1,6 @@
 const apiTable = "https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/DieuChuyen";
 const table = document.querySelector('base-table')
+const maDetail = localStorage.getItem('maDetail')
 var manhanvien = null
 var TableColumns = [
     {
@@ -311,7 +312,10 @@ function inits() {
     ngayDieuChuyenChangeDate()
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     handleSearch()
     inits()
 });

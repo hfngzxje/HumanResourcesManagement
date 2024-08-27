@@ -35,15 +35,23 @@
         <div class="tile">
           <div class="tile-body">
 
-            <div class="row element-button">
-              <div class="col-sm-2">
-
+            <div class="grid grid-cols-3 gap-x-5">
+              <div class="col-span-2 sm:col-span-1 mt-2 ">
                 <a class="btn btn-add btn-sm" onclick="showPopup()" title="Thêm"><i class="fas fa-plus"></i>
                   Tạo mới nhân viên</a>
               </div>
+              <div class="col-span-2 sm:col-span-1 mt-2 "></div>
+              <div class="col-span-2 sm:col-span-1 mt-2 ">
+              <form id="report_form">
+                <base-input id="search" class="col-span-2" placeholder="Tìm kiếm nhân viên" label="" name="search"></base-input>
+              </form>
+              </div>
             </div>
-            <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
+            <!-- <base-table api="https://hrm70-b4etbsfqg7b7eecg.eastasia-01.azurewebsites.net/api/NhanVien"
               columns="TableColumns" pagesize="10">
+            </base-table> -->
+
+            <base-table id="tableReport" api="ReturnApi" columns="TableColumns" pagesize="10">
             </base-table>
           </div>
         </div>
@@ -53,6 +61,7 @@
     <custom-alert></custom-alert>
     <custom-error></custom-error>
     <custom-success></custom-success>
+    <custom-navigation></custom-navigation>
   </main>
 
 
@@ -159,6 +168,7 @@
   <script src="../../assets/scripts/pages/authentic/logOut.js"></script>
   <script src="../../assets/scripts/pages/authentic/changePasswordPassword.js"></script>
   <script src="/assets/scripts/common/dateTime.js"></script>
+  <script src="/assets/scripts/common/checkIsCreatedResume.js"></script>
 
 </body>
 

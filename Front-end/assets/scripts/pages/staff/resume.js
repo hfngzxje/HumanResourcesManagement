@@ -230,8 +230,9 @@ function formatDateTime(dateTimeStr) {
 
     return `${day}-${month}-${year} `;
 }
-document.addEventListener('DOMContentLoaded', () => {
-    getHopDong()
+document.addEventListener('DOMContentLoaded',async () => {
+
+    await getHopDong()
     renderActionByStatus()
     if (maDetail) {
         fetchEmployee()

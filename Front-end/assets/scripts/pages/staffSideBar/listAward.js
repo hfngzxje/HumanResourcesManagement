@@ -1,6 +1,6 @@
-var maDetail = null
+var ma = null
 const table = document.querySelectorAll('base-table')
-
+const maDetail = localStorage.getItem('maDetail')
 let maHopDongHienTai = null
 var TableColumns = [
     {
@@ -47,7 +47,7 @@ async function showPopup() {
     var modal = document.getElementById("createAward");
     modal.style.display = "block";
     await getMaNhanVienDauTien()
-    await maNhanVienChange()
+    await maChange()
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
@@ -69,16 +69,16 @@ async function getMaNhanVienDauTien() {
             contentType: 'application/json',
         });
         const nhanVienDauTien = response[0]
-        maDetail = nhanVienDauTien.ma
+        ma = nhanVienDauTien.ma
 
     } catch (error) {
         console.log("Error", "ajaj")
     }
 }
-async function maNhanVienChange() {
-    const ma = document.querySelector('#maNhanVien select')
+async function maChange() {
+    const ma = document.querySelector('#ma select')
     ma.addEventListener("change", (event) => {
-        maDetail = event.target.value;
+        ma = event.target.value;
     });
 }
 
@@ -89,7 +89,7 @@ async function handleCreate() {
     if (!valid) return
 
     const formValue = getFormValues('createAward')
-    formValue['ma'] = maDetail;
+    formValue['ma'] = ma;
     formValue['khenthuongkiluat'] = '1'
     const payload = buildPayload(formValue)
     setLoading(true)
@@ -211,7 +211,10 @@ function dateChange() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
     dateChange()
      renderActionByStatus()
 })

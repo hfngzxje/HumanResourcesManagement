@@ -7,6 +7,7 @@ const popupRemoveBtn = document.getElementById("removeBtn")
 const popupClearBtn = document.getElementById("clearBtn")
 
 const table = document.querySelector('base-table')
+const maDetail = localStorage.getItem('maDetail')
 
 var MaritalOptions = [
     { label: 'Hợp đồng còn thời hạn', value: 1 },
@@ -272,7 +273,10 @@ function closePopup() {
     modal.style.display = "none"
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded',async () => {
+    await checkIsUpdateResume()
+    await checkIsCreatedLabor()
+    await checkIsCreatedSalary()
 
     popupSaveBtn.addEventListener("click", () => {
         console.log('save click');
