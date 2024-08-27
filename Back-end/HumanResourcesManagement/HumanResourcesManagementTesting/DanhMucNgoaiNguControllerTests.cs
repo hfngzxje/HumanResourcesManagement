@@ -10,161 +10,106 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using HumanResourcesManagement.Models;
+using AutoMapper;
+using HumanResourcesManagement.Service;
+using HumanResourcesManagement.Config.Mapper;
 
 namespace HumanResourcesManagement.Tests.Controllers
 {
     [TestFixture]
     public class DanhMucNgoaiNguControllerTests
     {
-        private Mock<IDanhMucNgoaiNguService> _danhMucNgoaiNguServiceMock;
-        private DanhMucNgoaiNguController _controller;
-        private List<DanhMucNgoaiNguResponse> _danhMucNgoaiNguResponses;
+        private NhanSuContext _context;
+        private IDanhMucNgoaiNguService _danhMucNgoaiNguService;
+        private DanhMucNgoaiNguController _danhMucNgoaiNguController;
 
         [SetUp]
         public void Setup()
         {
-            _danhMucNgoaiNguServiceMock = new Mock<IDanhMucNgoaiNguService>();
-            _controller = new DanhMucNgoaiNguController(_danhMucNgoaiNguServiceMock.Object, new Mock<NhanSuContext>(new DbContextOptions<NhanSuContext>()).Object);
+            var options = new DbContextOptionsBuilder<NhanSuContext>()
+                .UseInMemoryDatabase(databaseName: "NhanSu")
+                .Options;
 
-            // Khai báo danh sách ngoại ngữ
-            _danhMucNgoaiNguResponses = new List<DanhMucNgoaiNguResponse>
-            {
-                new DanhMucNgoaiNguResponse { Id = 1, Ten = "Tiếng Anh" },
-                new DanhMucNgoaiNguResponse { Id = 2, Ten = "Tiếng Nhật" },
-                new DanhMucNgoaiNguResponse { Id = 3, Ten = "Tiếng Pháp" },
-                new DanhMucNgoaiNguResponse { Id = 4, Ten = "Tiếng Đức" }
-            };
+            _context = new NhanSuContext(options);
 
-            // Setup mock service trả về danh sách
-            _danhMucNgoaiNguServiceMock.Setup(s => s.GetDanhMucNgoaiNgu()).ReturnsAsync(_danhMucNgoaiNguResponses);
+            _context.TblDanhMucNgoaiNgus.AddRange(
+                new TblDanhMucNgoaiNgu { Id = 1, Ma = "TA1", Ten = "Tiếng Anh" },
+                new TblDanhMucNgoaiNgu { Id = 2, Ma = "TP1", Ten = "Tiếng Pháp" }
+            );
+            _context.SaveChanges();
+
+            var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile<NhanVienMapper>());
+            var mapper = mapperConfig.CreateMapper();
+            _danhMucNgoaiNguService = new DanhMucNgoaiNguService(mapper, _context);
+            _danhMucNgoaiNguController = new DanhMucNgoaiNguController(_danhMucNgoaiNguService, _context);
         }
 
-        // Get all
         [Test]
-        public async Task GetDanhMucNgoaiNgu_ReturnsOkResult_WithListOfNgoaiNgu()
+        public async Task GetDanhMucNgoaiNgu_ShouldReturnAllNgoaiNgus()
         {
-            // Act
-            var result = await _controller.GetDanhMucNgoaiNgu();
+            var result = await _danhMucNgoaiNguController.GetDanhMucNgoaiNgu();
 
-            // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
-            Assert.AreEqual(_danhMucNgoaiNguResponses, okResult.Value);
-
-            // In danh sách ngoại ngữ
-            Console.WriteLine("Danh sách ngoại ngữ:");
-            foreach (var nn in _danhMucNgoaiNguResponses)
-            {
-                Console.WriteLine($"Id: {nn.Id}, Tên: {nn.Ten}");
-            }
+            var ngoaiNgus = okResult?.Value as IEnumerable<DanhMucNgoaiNguResponse>;
+            Assert.AreEqual(2, ngoaiNgus?.Count());
         }
 
-        // Get by Id
         [Test]
-        public async Task GetDanhMucNgoaiNguById_ReturnsOkResult_WithNgoaiNgu()
+        public async Task GetDanhMucNgoaiNguById_ShouldReturnCorrectNgoaiNgu()
         {
-            int id = 2;
-            // Arrange
-            var ngoaiNgu = _danhMucNgoaiNguResponses.FirstOrDefault(c => c.Id == id);
-            _danhMucNgoaiNguServiceMock.Setup(s => s.GetDanhMucNgoaiNguById(id)).ReturnsAsync(ngoaiNgu);
-
-            // Act
-            var result = await _controller.GetDanhMucNgoaiNguById(id);
-
-            // Assert
+            var result = await _danhMucNgoaiNguController.GetDanhMucNgoaiNguById(1);
             Assert.IsInstanceOf<OkObjectResult>(result);
             var okResult = result as OkObjectResult;
-            Assert.AreEqual(ngoaiNgu, okResult.Value);
-
-            // In thông tin ngoại ngữ với Id tương ứng
-            Console.WriteLine($"Ngoại ngữ Id: {ngoaiNgu.Id}, Tên: {ngoaiNgu.Ten}");
+            var ngoaiNgu = okResult?.Value as DanhMucNgoaiNguResponse;
+            Assert.AreEqual("TA1", ngoaiNgu?.Ma);
+            Assert.AreEqual("Tiếng Anh", ngoaiNgu?.Ten);
         }
 
-        // Add NgoaiNgu
         [Test]
-        public async Task AddDanhMucNgoaiNgu_ReturnsStatusCode200_WhenAdditionIsSuccessful()
+        public async Task AddDanhMucNgoaiNgu_ShouldAddNewNgoaiNgu()
         {
-            // Arrange
-            var req = new DanhMucNgoaiNguRequest { Ten = "Tiếng Hàn" };
+            var newNgoaiNgu = new DanhMucNgoaiNguRequest { Ten = "Tiếng Nhật" };
 
-            // Act
-            var result = await _controller.AddDanhMucNgoaiNgu(req);
+            var result = await _danhMucNgoaiNguController.AddDanhMucNgoaiNgu(newNgoaiNgu);
 
-            // Assert
             Assert.IsInstanceOf<ObjectResult>(result);
-            var objectResult = result as ObjectResult;
-            Assert.AreEqual(200, objectResult.StatusCode);
-            Assert.AreEqual("Thêm thành công", objectResult.Value);
+            var okResult = result as ObjectResult;
+            Assert.AreEqual(200, okResult?.StatusCode);
 
-            // Thêm ngoại ngữ mới vào danh sách
-            var newId = _danhMucNgoaiNguResponses.Max(c => c.Id) + 1;
-            var newNgoaiNgu = new DanhMucNgoaiNguResponse { Id = newId, Ten = req.Ten };
-            _danhMucNgoaiNguResponses.Add(newNgoaiNgu);
-
-            // In danh sách ngoại ngữ sau khi thêm mới
-            Console.WriteLine("Danh sách ngoại ngữ sau khi thêm mới:");
-            foreach (var nn in _danhMucNgoaiNguResponses)
-            {
-                Console.WriteLine($"Id: {nn.Id}, Tên: {nn.Ten}");
-            }
+            var ngoaiNgus = await _context.TblDanhMucNgoaiNgus.ToListAsync();
+            Assert.AreEqual(3, ngoaiNgus.Count);
+            Assert.IsTrue(ngoaiNgus.Any(ng => ng.Ten == "Tiếng Nhật"));
         }
 
-        // Update NgoaiNgu
         [Test]
-        public async Task UpdateDanhMucNgoaiNgu_ReturnsStatusCode200_WhenUpdateIsSuccessful()
+        public async Task DeleteDanhMucNgoaiNgu_ShouldRemoveNgoaiNgu()
         {
-            int id = 3;
-            // Arrange
-            var req = new DanhMucNgoaiNguRequest { Ten = "Tiếng Tây Ban Nha" };
+            var result = await _danhMucNgoaiNguController.DeleteDanhMucNgoaiNgu(1);
 
-            // Act
-            var result = await _controller.UpdateDanhMucNgoaiNgu(req, id);
-
-            // Assert
             Assert.IsInstanceOf<ObjectResult>(result);
-            var objectResult = result as ObjectResult;
-            Assert.AreEqual(200, objectResult.StatusCode);
-            Assert.AreEqual("Sửa thành công", objectResult.Value);
+            var okResult = result as ObjectResult;
+            Assert.AreEqual(200, okResult?.StatusCode);
 
-            // Cập nhật ngoại ngữ trong danh sách
-            var updatedNgoaiNgu = _danhMucNgoaiNguResponses.FirstOrDefault(c => c.Id == id);
-            if (updatedNgoaiNgu != null)
-            {
-                updatedNgoaiNgu.Ten = req.Ten;
-            }
-
-            // In danh sách ngoại ngữ sau khi cập nhật
-            Console.WriteLine("Danh sách ngoại ngữ sau khi cập nhật:");
-            foreach (var nn in _danhMucNgoaiNguResponses)
-            {
-                Console.WriteLine($"Id: {nn.Id}, Tên: {nn.Ten}");
-            }
+            var ngoaiNgus = await _context.TblDanhMucNgoaiNgus.ToListAsync();
+            Assert.AreEqual(1, ngoaiNgus.Count);
+            Assert.IsFalse(ngoaiNgus.Any(ng => ng.Id == 1));
         }
 
-        // Delete NgoaiNgu
         [Test]
-        public async Task DeleteDanhMucNgoaiNgu_ReturnsStatusCode200_WhenDeletionIsSuccessful()
+        public async Task UpdateDanhMucNgoaiNgu_ShouldUpdateExistingNgoaiNgu()
         {
-            int id = 4;
-            // Act
-            var result = await _controller.DeleteDanhMucNgoaiNgu(id);
+            var updateRequest = new DanhMucNgoaiNguRequest { Ten = "Tiếng Nhật" };
 
-            // Assert
+            var result = await _danhMucNgoaiNguController.UpdateDanhMucNgoaiNgu(updateRequest, 2);
+
             Assert.IsInstanceOf<ObjectResult>(result);
-            var objectResult = result as ObjectResult;
-            Assert.AreEqual(200, objectResult.StatusCode);
-            Assert.AreEqual("Xóa thành công", objectResult.Value);
+            var okResult = result as ObjectResult;
+            Assert.AreEqual(200, okResult?.StatusCode);
 
-            // Xóa ngoại ngữ có Id = 4 khỏi danh sách
-            var deletedNgoaiNgu = _danhMucNgoaiNguResponses.FirstOrDefault(c => c.Id == id);
-            _danhMucNgoaiNguResponses.Remove(deletedNgoaiNgu);
-
-            // In lại danh sách ngoại ngữ sau khi xóa
-            Console.WriteLine("Danh sách ngoại ngữ sau khi xóa:");
-            foreach (var nn in _danhMucNgoaiNguResponses)
-            {
-                Console.WriteLine($"Id: {nn.Id}, Tên: {nn.Ten}");
-            }
+            var updatedNgoaiNgu = await _context.TblDanhMucNgoaiNgus.FindAsync(2);
+            Assert.AreEqual("Tiếng Nhật", updatedNgoaiNgu?.Ten);
         }
     }
+
 }

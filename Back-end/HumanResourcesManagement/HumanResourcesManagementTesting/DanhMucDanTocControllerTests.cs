@@ -101,7 +101,7 @@ namespace HumanResourcesManagement.Tests.Controllers
                 Console.WriteLine($"Id: {dt.Id}, Tên: {dt.Ten}");
             }
         }
-       
+
         //Update success
         [Test]
         public async Task UpdateDanToc_ReturnsStatusCode200_WhenUpdateIsSuccessful()
